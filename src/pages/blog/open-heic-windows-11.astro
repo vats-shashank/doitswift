@@ -1,0 +1,152 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const title = 'How to Open HEIC Files on Windows 11 in 2026 (3 Free Methods)';
+const description =
+  'Three free ways to view and convert HEIC photos from your iPhone on a Windows 11 PC — including a browser option with no install.';
+---
+
+<MainLayout
+  title={`${title} | DoItSwift Blog`}
+  {description}
+  keywords="heic windows 11, open heic, convert heic to jpg, iphone photos pc"
+  canonical={new URL(Astro.url.pathname, Astro.site).toString()}
+>
+  <article class="content-page blog-post">
+    <div class="container">
+      <p class="blog-post-breadcrumb">
+        <a href="/blog" class="link-back">Blog</a>
+        <span aria-hidden="true"> / </span>
+        <span class="blog-post-crumb-current">Tutorial</span>
+      </p>
+      <header class="blog-post-header">
+        <p class="blog-post-meta">
+          <span class="blog-post-chip">Tutorial</span>
+          <time datetime="2026-04-12">April 12, 2026</time>
+        </p>
+        <h1>{title}</h1>
+        <p class="lead">
+          Your iPhone saves photos as HEIC (or HEIF) by default. Windows 11 does not always preview them out of the box.
+          Here are three free ways to open or convert them — including one that runs entirely in your browser with no
+          installation.
+        </p>
+      </header>
+
+      <div class="blog-post-body">
+        <h2>1. Use the browser (no install): DoItSwift HEIC to JPG</h2>
+        <p>
+          Upload or drop your <code>.heic</code> files into our{' '}
+          <a href="/image/heic-to-jpg" class="link-back">HEIC to JPG converter</a>. Conversion happens locally in your
+          browser when supported; you get standard JPG files you can open anywhere. Best when you want a quick fix without
+          installing software.
+        </p>
+
+        <h2>2. Install the HEIF extensions from Microsoft</h2>
+        <p>
+          Microsoft offers optional codecs so the Photos app and File Explorer can show HEIC thumbnails and open files.
+          Search the Microsoft Store for <strong>HEIF Image Extensions</strong> and <strong>HEVC Video Extensions</strong>
+          (HEIC still images often need the HEIF pack). They are free or low-cost depending on region. After installation,
+          double-clicking a <code>.heic</code> file may open in Photos.
+        </p>
+
+        <h2>3. Use the Photos app after codecs, or “Open with” another viewer</h2>
+        <p>
+          Once HEIF support is installed, <strong>Photos</strong> can often display HEIC files. You can also try other free
+          viewers you trust. If you only need to share images online or with apps that expect JPG, converting to JPG (method
+          1) remains the most compatible route.
+        </p>
+
+        <h2>Quick comparison</h2>
+        <ul>
+          <li><strong>Fastest with no install:</strong> browser conversion (method 1).</li>
+          <li><strong>Best for native Windows preview:</strong> Microsoft codecs (method 2).</li>
+          <li><strong>Best for archiving iPhone originals:</strong> keep HEIC and add codecs, or convert copies to JPG for sharing.</li>
+        </ul>
+
+        <p>
+          Ready to convert? Go to the <a href="/image/heic-to-jpg" class="link-back">HEIC to JPG tool</a> or browse all{' '}
+          <a href="/image/" class="link-back">image tools</a>.
+        </p>
+      </div>
+
+      <p class="section-tail">
+        <a href="/blog" class="link-back">← All posts</a>
+      </p>
+    </div>
+  </article>
+
+  <style>
+    .blog-post-breadcrumb {
+      font-size: 14px;
+      margin-bottom: 12px;
+      color: var(--text-muted);
+    }
+    .blog-post-crumb-current {
+      color: var(--text);
+      font-weight: 500;
+    }
+    .blog-post-header .lead {
+      margin-bottom: 0;
+    }
+    .blog-post-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 14px;
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .blog-post-chip {
+      display: inline-flex;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--blue);
+      background: var(--blue-light);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+    [data-theme='dark'] .blog-post-chip {
+      background: rgba(0, 102, 255, 0.18);
+      color: #93c5fd;
+    }
+    .blog-post-body {
+      margin-top: 28px;
+    }
+    .blog-post-body h2 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-top: 28px;
+      margin-bottom: 12px;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .blog-post-body h2:first-child {
+      margin-top: 0;
+    }
+    .blog-post-body p,
+    .blog-post-body li {
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+    .blog-post-body ul {
+      margin: 0 0 16px 1.25rem;
+      max-width: 42rem;
+    }
+    .blog-post-body li {
+      margin-bottom: 8px;
+    }
+    .blog-post-body code {
+      font-size: 0.9em;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--gray-100);
+      color: var(--text);
+    }
+    [data-theme='dark'] .blog-post-body code {
+      background: var(--gray-200);
+    }
+  </style>
+</MainLayout>

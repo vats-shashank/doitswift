@@ -1,47 +1,147 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+
+/** Newest first — add new entries at the top */
+const posts = [
+  {
+    title: 'How to Open HEIC Files on Windows 11 in 2026 (3 Free Methods)',
+    href: '/blog/open-heic-windows-11',
+    category: 'Tutorial',
+    date: 'April 12, 2026',
+    dateIso: '2026-04-12',
+    excerpt:
+      "Your iPhone photos won't open on your Windows 11 PC. Here are the three simplest free methods to view and convert HEIC files, including one that requires zero installation.",
+  },
+];
 ---
 
 <MainLayout
   title="Blog — DoItSwift"
   description="Guides and practical tips on image formats, privacy, and getting the most out of DoItSwift tools."
   keywords="doitswift blog, image converter tips, heic webp guides"
+  canonical={new URL(Astro.url.pathname, Astro.site).toString()}
 >
-  <section class="content-page">
+  <section class="content-page blog-index">
     <div class="container">
       <h1>Blog</h1>
       <p class="lead">
-        We are preparing articles and short guides on image formats, compression, and privacy-minded workflows. New
-        posts will appear here first — no newsletter required.
-      </p>
-      <p>
-        In the meantime, our <a href="/image/" class="link-back">image tools hub</a> and the <a href="/" class="link-back">home page</a> include on-page help and FAQs to
-        get you unstuck quickly.
+        Practical guides on image formats, compression, and privacy-minded workflows. New posts appear here first — no
+        newsletter required.
       </p>
 
-      <h2>Topics we are writing about</h2>
-      <div class="topic-grid">
-        <div class="topic-card">
-          <h3>HEIC &amp; iPhone photos</h3>
-          <p>Opening HEIC on Windows, when to convert to JPG, and quality tradeoffs for sharing online.</p>
-        </div>
-        <div class="topic-card">
-          <h3>WebP &amp; AVIF</h3>
-          <p>Modern formats for the web, browser support, and when JPG is still the right choice.</p>
-        </div>
-        <div class="topic-card">
-          <h3>Privacy-first workflows</h3>
-          <p>Why local processing matters, and how to verify that tools are not uploading your files.</p>
-        </div>
-        <div class="topic-card">
-          <h3>Icons &amp; favicons</h3>
-          <p>Creating crisp favicons and understanding ICO sizes for different browsers and devices.</p>
-        </div>
-      </div>
+      <h2 class="blog-list-heading">Latest posts</h2>
+      <ul class="blog-card-list">
+        {
+          posts.map((post) => (
+            <li>
+              <a href={post.href} class="blog-card">
+                <span class="blog-card-meta">
+                  <span class="blog-card-category">{post.category}</span>
+                  <time datetime={post.dateIso} class="blog-card-date">
+                    {post.date}
+                  </time>
+                </span>
+                <h3 class="blog-card-title">{post.title}</h3>
+                <p class="blog-card-excerpt">{post.excerpt}</p>
+                <span class="blog-card-cta">Read article →</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
 
       <p class="section-tail">
         <a href="/image/" class="link-back">Browse image tools →</a>
+        {' · '}
+        <a href="/" class="link-back">Home</a>
       </p>
     </div>
   </section>
+
+  <style>
+    .blog-index .blog-list-heading {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 8px;
+      margin-bottom: 18px;
+    }
+    .blog-card-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 16px;
+      max-width: 720px;
+    }
+    .blog-card {
+      display: block;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+      box-shadow: var(--shadow);
+      transition:
+        border-color 0.2s,
+        box-shadow 0.2s,
+        transform 0.2s;
+    }
+    .blog-card:hover {
+      border-color: rgba(0, 102, 255, 0.28);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    [data-theme='dark'] .blog-card:hover {
+      border-color: rgba(96, 165, 250, 0.35);
+    }
+    .blog-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 14px;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+    .blog-card-category {
+      display: inline-flex;
+      align-items: center;
+      font-weight: 600;
+      color: var(--blue);
+      background: var(--blue-light);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+    [data-theme='dark'] .blog-card-category {
+      background: rgba(0, 102, 255, 0.18);
+      color: #93c5fd;
+    }
+    .blog-card-date {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .blog-card-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+      margin: 0 0 10px;
+      color: var(--text);
+    }
+    .blog-card-excerpt {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin: 0 0 14px;
+    }
+    .blog-card-cta {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--blue);
+    }
+    .blog-card:hover .blog-card-cta {
+      text-decoration: underline;
+    }
+  </style>
 </MainLayout>
