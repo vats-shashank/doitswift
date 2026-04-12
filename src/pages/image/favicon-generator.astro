@@ -1,0 +1,513 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+---
+
+<MainLayout
+  title="Favicon Generator — ICO 16, 32, 48 | Free & Private | DoItSwift"
+  description="Build favicon.ico with 16×16, 32×32, and 48×48 PNG frames from any image — in your browser with DoItSwift. No upload, batch-friendly."
+  keywords="favicon generator, favicon ico, create favicon, ico generator, browser favicon, free favicon"
+  canonical={new URL(Astro.url.pathname, Astro.site).toString()}
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Is the favicon generator free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Generate ICO files locally with no limits or signup." }},
+      { "@type": "Question", "name": "Are my images uploaded?", "acceptedAnswer": { "@type": "Answer", "text": "No. Resizing and ICO packing happen entirely on your device." }},
+      { "@type": "Question", "name": "What sizes are inside the ICO?", "acceptedAnswer": { "@type": "Answer", "text": "Each ICO includes 16×16, 32×32, and 48×48 PNG-encoded frames for broad browser and OS support." }},
+      { "@type": "Question", "name": "Can I use any source image?", "acceptedAnswer": { "@type": "Answer", "text": "JPG, PNG, WebP, GIF, and other formats your browser can decode work best. Very large files may be slow." }},
+      { "@type": "Question", "name": "Batch mode?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Each image produces its own favicon.ico; download all at once as a ZIP." }}
+    ]
+  })} />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" is:inline></script>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🔒 100% Private — Files Never Leave Your Device</div>
+      <h1>Favicon Generator</h1>
+      <p class="subtitle">
+        Turn any image into favicon.ico with 16×16, 32×32, and 48×48 sizes — packed as one download per file.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> Unlimited files</span>
+        <span><span class="check">✓</span> No size limit</span>
+        <span><span class="check">✓</span> Works offline</span>
+        <span><span class="check">✓</span> No watermarks</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="converter-section">
+    <div class="container">
+      <div id="successBanner" class="banner" style="display:none">
+        <span id="bannerText">Ready</span>
+      </div>
+
+      <div class="dropzone" id="dropzone">
+        <div class="dropzone-icon">📁</div>
+        <div class="dropzone-text">Drop images here or click to browse</div>
+        <div class="dropzone-sub">Each image becomes one favicon.ico (16 / 32 / 48)</div>
+        <input type="file" id="fileInput" multiple accept="image/*" />
+      </div>
+
+      <div class="controls">
+        <p class="controls-hint">Square sources look best. ICO uses PNG frames inside the Windows ICO container (Vista+).</p>
+      </div>
+
+      <div id="resultsHeader" class="results-header" style="display:none">
+        Favicon files (<span id="fileCount">0</span>):
+      </div>
+      <div id="fileResultsRoot">
+        <div id="resultsToolbar" class="results-toolbar" style="display:none">
+          <label class="gallery-toggle">
+            <input type="checkbox" id="galleryViewToggle" />
+            Show thumbnails in list
+          </label>
+          <p class="toolbar-note" id="galleryToolbarNote" hidden></p>
+        </div>
+        <div class="results" id="results"></div>
+        <div id="resultsMoreBlock" class="results-more-block" style="display:none">
+          <button type="button" class="more-files-btn" id="moreFilesBtn">
+            <span id="moreFilesLabel"></span>
+          </button>
+          <div id="resultsMore" class="results results-more-inner" hidden></div>
+        </div>
+      </div>
+
+      <div class="actions" id="actions" style="display:none">
+        <button class="btn btn-lg" id="downloadAll">⬇ Download All as ZIP</button>
+        <button class="btn btn-secondary btn-lg" id="clearAll">Clear All</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner">
+        <div class="affiliate-icon">⭐</div>
+        <div class="affiliate-content">
+          <h3>Need a full brand kit?</h3>
+          <p>Canva Pro includes logos, color palettes, and easy exports for web and print.</p>
+        </div>
+        <a href="https://www.canva.com/" class="btn btn-orange" target="_blank" rel="sponsored noopener">
+          Try Canva →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>Is this free?</h4><p>Yes. Unlimited favicon.ico generation with no watermarks or accounts.</p></div>
+        <div class="faq-item"><h4>How is the ICO built?</h4><p>We render your image to three PNGs at 16, 32, and 48 pixels, then combine them into a standard multi-size .ico file.</p></div>
+        <div class="faq-item"><h4>Will it work in all browsers?</h4><p>Modern browsers and Windows read PNG-based ICOs well. Very old systems may prefer legacy BMP icons, but this format works for typical web use.</p></div>
+        <div class="faq-item"><h4>Non-square logos?</h4><p>Images are scaled to fit each square frame; extra space is filled with white unless your image already fills the canvas.</p></div>
+        <div class="faq-item"><h4>Multiple sites / icons?</h4><p>Drop several images — each gets its own favicon.ico, or grab everything in one ZIP.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      const SIZES = [16, 32, 48];
+
+      function buildIcoFromPngs(pngArrayBuffers, dims) {
+        const n = pngArrayBuffers.length;
+        const header = new Uint8Array(6);
+        const hv = new DataView(header.buffer);
+        hv.setUint16(0, 0, true);
+        hv.setUint16(2, 1, true);
+        hv.setUint16(4, n, true);
+
+        let offset = 6 + n * 16;
+        const entryChunks = [];
+        for (let i = 0; i < n; i++) {
+          const png = new Uint8Array(pngArrayBuffers[i]);
+          const w = dims[i].w;
+          const h = dims[i].h;
+          const entry = new ArrayBuffer(16);
+          const ev = new DataView(entry);
+          ev.setUint8(0, w >= 256 ? 0 : w);
+          ev.setUint8(1, h >= 256 ? 0 : h);
+          ev.setUint8(2, 0);
+          ev.setUint8(3, 0);
+          ev.setUint16(4, 1, true);
+          ev.setUint16(6, 32, true);
+          ev.setUint32(8, png.byteLength, true);
+          ev.setUint32(12, offset, true);
+          offset += png.byteLength;
+          entryChunks.push(new Uint8Array(entry));
+        }
+
+        const total =
+          6 +
+          n * 16 +
+          pngArrayBuffers.reduce((s, ab) => s + new Uint8Array(ab).byteLength, 0);
+        const out = new Uint8Array(total);
+        let pos = 0;
+        out.set(header, pos);
+        pos += 6;
+        for (const e of entryChunks) {
+          out.set(e, pos);
+          pos += e.length;
+        }
+        for (const ab of pngArrayBuffers) {
+          const u8 = new Uint8Array(ab);
+          out.set(u8, pos);
+          pos += u8.byteLength;
+        }
+        return out.buffer;
+      }
+
+      function loadImage(file) {
+        return new Promise((resolve, reject) => {
+          const url = URL.createObjectURL(file);
+          const img = new Image();
+          img.onload = () => {
+            URL.revokeObjectURL(url);
+            resolve(img);
+          };
+          img.onerror = () => {
+            URL.revokeObjectURL(url);
+            reject(new Error('Could not decode image'));
+          };
+          img.crossOrigin = 'anonymous';
+          img.src = url;
+        });
+      }
+
+      function canvasToPngBlob(canvas) {
+        return new Promise((resolve, reject) => {
+          canvas.toBlob(
+            b => {
+              if (!b) {
+                reject(new Error('toBlob failed'));
+                return;
+              }
+              b.arrayBuffer().then(resolve, reject);
+            },
+            'image/png'
+          );
+        });
+      }
+
+      async function imageToSizedPng(img, size) {
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, size, size);
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        const nw = img.naturalWidth || img.width;
+        const nh = img.naturalHeight || img.height;
+        const scale = Math.min(size / nw, size / nh);
+        const dw = Math.round(nw * scale);
+        const dh = Math.round(nh * scale);
+        const dx = Math.floor((size - dw) / 2);
+        const dy = Math.floor((size - dh) / 2);
+        ctx.drawImage(img, dx, dy, dw, dh);
+        return canvasToPngBlob(canvas);
+      }
+
+      async function makeFaviconIcoBlob(img) {
+        const buffers = [];
+        const dims = [];
+        for (const s of SIZES) {
+          const ab = await imageToSizedPng(img, s);
+          buffers.push(ab);
+          dims.push({ w: s, h: s });
+        }
+        return buildIcoFromPngs(buffers, dims);
+      }
+
+      const dropzone = document.getElementById('dropzone');
+      const fileInput = document.getElementById('fileInput');
+      const results = document.getElementById('results');
+      const resultsMore = document.getElementById('resultsMore');
+      const actions = document.getElementById('actions');
+      const banner = document.getElementById('successBanner');
+      const bannerText = document.getElementById('bannerText');
+      const resultsHeader = document.getElementById('resultsHeader');
+      const fileCount = document.getElementById('fileCount');
+      let converted = [];
+
+      dropzone.addEventListener('click', () => fileInput.click());
+      dropzone.addEventListener('dragover', e => {
+        e.preventDefault();
+        dropzone.classList.add('drag');
+      });
+      dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag'));
+      dropzone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropzone.classList.remove('drag');
+        handleFiles(Array.from(e.dataTransfer.files));
+      });
+      fileInput.addEventListener('change', e => {
+        const fs = Array.from(e.target.files);
+        e.target.value = '';
+        handleFiles(fs);
+      });
+
+      function icoName(originalName) {
+        const base = originalName.replace(/\.[^.]+$/, '');
+        return (base || 'favicon') + '.ico';
+      }
+
+      async function handleFiles(files) {
+        if (!files || !files.length) return;
+        const list = files.filter(f => (f.type || '').startsWith('image/'));
+        if (!list.length) {
+          alert('Please choose image files.');
+          return;
+        }
+
+        const total = list.length;
+        converted = [];
+        results.innerHTML = '';
+        if (resultsMore) resultsMore.innerHTML = '';
+        const moreBlock = document.getElementById('resultsMoreBlock');
+        if (moreBlock) moreBlock.style.display = 'none';
+        const toolbar = document.getElementById('resultsToolbar');
+        if (toolbar) toolbar.style.display = 'none';
+        const note = document.getElementById('galleryToolbarNote');
+        if (note) note.hidden = true;
+
+        banner.style.display = 'block';
+        banner.className = 'banner banner-info';
+        bannerText.textContent = '⏳ Building ' + total + ' favicon.ico file(s)...';
+
+        let idx = 0;
+        for (const file of list) {
+          const parent = window.DoItSwiftFileResults
+            ? DoItSwiftFileResults.getAppendParent(results, resultsMore, idx)
+            : results;
+          idx += 1;
+
+          const item = document.createElement('div');
+          item.className = 'file-item';
+          item.innerHTML = `
+            <div class="file-item-main">
+              <div class="file-thumb" aria-hidden="true">🖼️</div>
+              <div class="file-info">
+                <div class="file-name"></div>
+                <div class="file-status">Building ICO…</div>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+              </div>
+              <div class="file-actions-col">
+                <button type="button" class="btn-text btn-preview" disabled style="visibility:hidden">Preview</button>
+              </div>
+            </div>
+            <div class="file-preview-panel" hidden>
+              <img alt="ICO preview" />
+            </div>
+          `;
+          item.querySelector('.file-name').textContent = file.name;
+          parent.appendChild(item);
+          const fill = item.querySelector('.progress-fill');
+          const status = item.querySelector('.file-status');
+          fill.style.width = '40%';
+
+          try {
+            const img = await loadImage(file);
+            const icoBuffer = await makeFaviconIcoBlob(img);
+            const finalBlob = new Blob([icoBuffer], { type: 'image/x-icon' });
+            const url = URL.createObjectURL(finalBlob);
+            const newName = icoName(file.name);
+            converted.push({ name: newName, blob: finalBlob });
+            fill.style.width = '100%';
+            status.className = 'file-status done';
+            status.textContent = 'Done · 16+32+48 · ' + (finalBlob.size / 1024).toFixed(1) + ' KB';
+            const actionsCol = item.querySelector('.file-actions-col');
+            const dl = document.createElement('a');
+            dl.href = url;
+            dl.download = newName;
+            dl.className = 'btn';
+            dl.textContent = 'Download';
+            actionsCol.appendChild(dl);
+            if (window.DoItSwiftFileResults) {
+              DoItSwiftFileResults.initCompletedRow(item, url, { alt: 'ICO preview' });
+            }
+          } catch (err) {
+            fill.style.width = '100%';
+            fill.style.background = '#ef4444';
+            status.className = 'file-status error';
+            status.textContent = 'Error: ' + (err.message || 'Failed');
+          }
+        }
+
+        if (converted.length) {
+          actions.style.display = 'flex';
+          resultsHeader.style.display = 'block';
+          fileCount.textContent = String(converted.length);
+          banner.className = 'banner banner-success';
+          bannerText.textContent = '✓ ' + converted.length + ' favicon.ico ready — see list below';
+          banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const batchOver10 = total > 10;
+          if (window.DoItSwiftFileResults) {
+            DoItSwiftFileResults.setupToolbar({
+              toolbar: document.getElementById('resultsToolbar'),
+              galleryToggle: document.getElementById('galleryViewToggle'),
+              note: document.getElementById('galleryToolbarNote'),
+              batchOver10,
+              galleryRoot: document.getElementById('fileResultsRoot'),
+            });
+            if (total > 10) {
+              DoItSwiftFileResults.setupMoreFilesSection({
+                moreBlock: document.getElementById('resultsMoreBlock'),
+                moreInner: document.getElementById('resultsMore'),
+                moreBtn: document.getElementById('moreFilesBtn'),
+                moreLabel: document.getElementById('moreFilesLabel'),
+                extraCount: total - 10,
+              });
+            }
+          }
+        }
+      }
+
+      document.getElementById('clearAll').addEventListener('click', () => {
+        [results, resultsMore].forEach((root) => {
+          if (!root) return;
+          root.querySelectorAll('a[href^="blob:"], img[src^="blob:"]').forEach((el) => {
+            const u = el.href || el.src;
+            try {
+              URL.revokeObjectURL(u);
+            } catch (_) {}
+          });
+        });
+        results.innerHTML = '';
+        if (resultsMore) resultsMore.innerHTML = '';
+        const moreBlock = document.getElementById('resultsMoreBlock');
+        if (moreBlock) moreBlock.style.display = 'none';
+        const tb = document.getElementById('resultsToolbar');
+        if (tb) tb.style.display = 'none';
+        const gt = document.getElementById('galleryViewToggle');
+        if (gt) {
+          gt.checked = false;
+          gt.disabled = false;
+        }
+        const note = document.getElementById('galleryToolbarNote');
+        if (note) note.hidden = true;
+        converted = [];
+        actions.style.display = 'none';
+        banner.style.display = 'none';
+        resultsHeader.style.display = 'none';
+      });
+
+      document.getElementById('downloadAll').addEventListener('click', async () => {
+        if (typeof JSZip === 'undefined') return alert('ZIP library not loaded.');
+        const zip = new JSZip();
+        converted.forEach(f => zip.file(f.name, f.blob));
+        const content = await zip.generateAsync({ type: 'blob' });
+        const url = URL.createObjectURL(content);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'doitswift-favicons.zip';
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      void (async () => {
+        try {
+          const pending = await window.DoItSwiftPending?.consume?.();
+          if (pending) await handleFiles([pending]);
+        } catch (e) {
+          console.warn(e);
+        }
+      })();
+    });
+  </script>
+
+  <style>
+    .hero { padding: 60px 0 20px; text-align: center; }
+    .subtitle { font-size: 19px; color: var(--text-muted); max-width: 620px; margin: 0 auto 28px; }
+
+    .converter-section { padding: 30px 0; }
+    .converter-section .container { max-width: 820px; }
+
+    .banner {
+      padding: 14px 20px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .banner-info { background: #dbeafe; color: #1e40af; }
+    .banner-success { background: #d1fae5; color: #065f46; }
+    [data-theme="dark"] .banner-info { background: rgba(30, 64, 175, .2); color: #93c5fd; }
+    [data-theme="dark"] .banner-success { background: rgba(6, 95, 70, .2); color: #6ee7b7; }
+
+    .dropzone {
+      background: var(--card);
+      border: 2px dashed var(--gray-300);
+      border-radius: var(--radius-lg);
+      padding: 70px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .2s;
+      box-shadow: var(--shadow);
+    }
+    .dropzone:hover, .dropzone.drag {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+    [data-theme="dark"] .dropzone.drag { background: rgba(0, 102, 255, .1); }
+    .dropzone-icon { font-size: 56px; margin-bottom: 14px; }
+    .dropzone-text { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+    .dropzone-sub { font-size: 14px; color: var(--text-muted); }
+    #fileInput { display: none; }
+
+    .controls {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-top: 16px;
+    }
+    .controls-hint {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .affiliate { padding: 40px 0; }
+    .affiliate .container { max-width: 820px; }
+    .affiliate-inner {
+      background: linear-gradient(135deg, #fff7ed, #ffedd5);
+      border: 1px solid #fed7aa;
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    [data-theme="dark"] .affiliate-inner {
+      background: linear-gradient(135deg, rgba(249, 115, 22, .1), rgba(245, 158, 11, .1));
+      border-color: rgba(249, 115, 22, .3);
+    }
+    .affiliate-icon { font-size: 42px; }
+    .affiliate-content { flex: 1; min-width: 200px; }
+    .affiliate-content h3 { font-size: 18px; margin-bottom: 4px; }
+    .affiliate-content p { font-size: 14px; color: var(--text-muted); }
+
+    .faq { padding: 60px 0; }
+    .faq .container { max-width: 820px; }
+    .section-title { text-align: center; margin-bottom: 32px; }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
+    }
+    .faq-item h4 { font-size: 16px; margin-bottom: 6px; }
+    .faq-item p { font-size: 14px; color: var(--text-muted); }
+  </style>
+</MainLayout>

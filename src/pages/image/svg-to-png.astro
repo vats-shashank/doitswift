@@ -1,0 +1,511 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+---
+
+<MainLayout
+  title="SVG to PNG Converter — Free, Private & Batch | DoItSwift"
+  description="Render SVG files to PNG in your browser with DoItSwift. Choose output width and height. No upload, unlimited batch conversion."
+  keywords="svg to png, convert svg, svg raster, vector to png, free svg converter, batch svg"
+  canonical={new URL(Astro.url.pathname, Astro.site).toString()}
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Is SVG to PNG conversion free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Unlimited conversions run locally in your browser." }},
+      { "@type": "Question", "name": "Are my SVG files private?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Nothing is sent to a server; rendering uses an offscreen canvas on your device." }},
+      { "@type": "Question", "name": "How do size options work?", "acceptedAnswer": { "@type": "Answer", "text": "You set canvas width and height in pixels. The SVG is drawn to fill that bitmap for crisp exports." }},
+      { "@type": "Question", "name": "Will external images in SVG load?", "acceptedAnswer": { "@type": "Answer", "text": "Embedded or same-origin resources work best. Remote URLs may be blocked by browser security (CORS)." }},
+      { "@type": "Question", "name": "Can I convert many SVGs at once?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Drop multiple .svg files and download each PNG or a single ZIP archive." }}
+    ]
+  })} />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" is:inline></script>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🔒 100% Private — Files Never Leave Your Device</div>
+      <h1>SVG to PNG Converter</h1>
+      <p class="subtitle">
+        Draw SVG on a canvas and export PNG. Pick width and height for icons, slides, or the web.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> Unlimited files</span>
+        <span><span class="check">✓</span> No size limit</span>
+        <span><span class="check">✓</span> Works offline</span>
+        <span><span class="check">✓</span> No watermarks</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="converter-section">
+    <div class="container">
+      <div id="successBanner" class="banner" style="display:none">
+        <span id="bannerText">Ready</span>
+      </div>
+
+      <div class="dropzone" id="dropzone">
+        <div class="dropzone-icon">📁</div>
+        <div class="dropzone-text">Drop SVG files here or click to browse</div>
+        <div class="dropzone-sub">Convert as many SVGs as you want — all at once</div>
+        <input type="file" id="fileInput" multiple accept=".svg,image/svg+xml" />
+      </div>
+
+      <div class="controls controls-grid">
+        <div class="control-row">
+          <label for="outW">Width (px)</label>
+          <input type="number" id="outW" min="1" max="8192" value="512" />
+        </div>
+        <div class="control-row">
+          <label for="outH">Height (px)</label>
+          <input type="number" id="outH" min="1" max="8192" value="512" />
+        </div>
+        <div class="presets">
+          <span class="presets-label">Quick:</span>
+          <button type="button" class="preset-btn" data-w="256" data-h="256">256²</button>
+          <button type="button" class="preset-btn" data-w="512" data-h="512">512²</button>
+          <button type="button" class="preset-btn" data-w="1024" data-h="1024">1024²</button>
+          <button type="button" class="preset-btn" data-w="1920" data-h="1080">1920×1080</button>
+        </div>
+      </div>
+
+      <div id="resultsHeader" class="results-header" style="display:none">
+        PNG files (<span id="fileCount">0</span>):
+      </div>
+      <div id="fileResultsRoot">
+        <div id="resultsToolbar" class="results-toolbar" style="display:none">
+          <label class="gallery-toggle">
+            <input type="checkbox" id="galleryViewToggle" />
+            Show thumbnails in list
+          </label>
+          <p class="toolbar-note" id="galleryToolbarNote" hidden></p>
+        </div>
+        <div class="results" id="results"></div>
+        <div id="resultsMoreBlock" class="results-more-block" style="display:none">
+          <button type="button" class="more-files-btn" id="moreFilesBtn">
+            <span id="moreFilesLabel"></span>
+          </button>
+          <div id="resultsMore" class="results results-more-inner" hidden></div>
+        </div>
+      </div>
+
+      <div class="actions" id="actions" style="display:none">
+        <button class="btn btn-lg" id="downloadAll">⬇ Download All as ZIP</button>
+        <button class="btn btn-secondary btn-lg" id="clearAll">Clear All</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner">
+        <div class="affiliate-icon">🎨</div>
+        <div class="affiliate-content">
+          <h3>Edit vectors and brand kits</h3>
+          <p>Adobe Illustrator is the industry standard for SVG logos and precise vector work.</p>
+        </div>
+        <a href="https://www.adobe.com/products/illustrator.html" class="btn btn-orange" target="_blank" rel="sponsored noopener">
+          See Illustrator →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>Is this tool free?</h4><p>Yes. No accounts, limits, or watermarks — processing stays in your browser.</p></div>
+        <div class="faq-item"><h4>How is SVG turned into PNG?</h4><p>We load your SVG as an image source, draw it on a canvas at your chosen size, and read pixels back as PNG.</p></div>
+        <div class="faq-item"><h4>Why set width and height?</h4><p>SVG is resolution-independent; the output PNG needs a pixel grid. Larger sizes are sharper but heavier files.</p></div>
+        <div class="faq-item"><h4>Are fonts preserved?</h4><p>Text outlined or using web-safe/system fonts usually renders well. Missing fonts may fall back or look wrong.</p></div>
+        <div class="faq-item"><h4>Batch conversion?</h4><p>Select multiple SVGs; each exports at the same width and height you configured.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      const dropzone = document.getElementById('dropzone');
+      const fileInput = document.getElementById('fileInput');
+      const results = document.getElementById('results');
+      const actions = document.getElementById('actions');
+      const banner = document.getElementById('successBanner');
+      const bannerText = document.getElementById('bannerText');
+      const resultsHeader = document.getElementById('resultsHeader');
+      const fileCount = document.getElementById('fileCount');
+      const resultsMore = document.getElementById('resultsMore');
+      const outW = document.getElementById('outW');
+      const outH = document.getElementById('outH');
+      let converted = [];
+
+      function formatSizeForCompare(bytes) {
+        const mb = bytes / (1024 * 1024);
+        if (mb >= 0.01) return mb.toFixed(2) + ' MB';
+        return (bytes / 1024).toFixed(1) + ' KB';
+      }
+
+      document.querySelectorAll('.preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          outW.value = btn.getAttribute('data-w');
+          outH.value = btn.getAttribute('data-h');
+        });
+      });
+
+      dropzone.addEventListener('click', () => fileInput.click());
+      dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag'); });
+      dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag'));
+      dropzone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropzone.classList.remove('drag');
+        handleFiles(Array.from(e.dataTransfer.files));
+      });
+      fileInput.addEventListener('change', e => {
+        const fs = Array.from(e.target.files);
+        e.target.value = '';
+        handleFiles(fs);
+      });
+
+      function parseDim(el) {
+        const v = parseInt(el.value, 10);
+        return Number.isFinite(v) && v > 0 ? Math.min(v, 8192) : 512;
+      }
+
+      function svgFileToPngBlob(file, w, h) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            try {
+              const text = typeof reader.result === 'string' ? reader.result : '';
+              const blob = new Blob([text], { type: 'image/svg+xml;charset=utf-8' });
+              const url = URL.createObjectURL(blob);
+              const img = new Image();
+              img.onload = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = w;
+                canvas.height = h;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, w, h);
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
+                ctx.drawImage(img, 0, 0, w, h);
+                URL.revokeObjectURL(url);
+                canvas.toBlob(
+                  b => (b ? resolve(b) : reject(new Error('toBlob failed'))),
+                  'image/png'
+                );
+              };
+              img.onerror = () => {
+                URL.revokeObjectURL(url);
+                reject(new Error('Could not render SVG'));
+              };
+              img.crossOrigin = 'anonymous';
+              img.src = url;
+            } catch (e) {
+              reject(e);
+            }
+          };
+          reader.onerror = () => reject(new Error('Read failed'));
+          reader.readAsText(file);
+        });
+      }
+
+      async function handleFiles(files) {
+        if (!files || !files.length) return;
+        const list = files.filter(f => f.type === 'image/svg+xml' || /\.svg$/i.test(f.name));
+        if (!list.length) {
+          alert('Please choose SVG files.');
+          return;
+        }
+
+        const w = parseDim(outW);
+        const h = parseDim(outH);
+
+        const total = list.length;
+        results.innerHTML = '';
+        if (resultsMore) resultsMore.innerHTML = '';
+        const moreBlock = document.getElementById('resultsMoreBlock');
+        if (moreBlock) moreBlock.style.display = 'none';
+        const toolbar = document.getElementById('resultsToolbar');
+        if (toolbar) toolbar.style.display = 'none';
+        const note = document.getElementById('galleryToolbarNote');
+        if (note) note.hidden = true;
+
+        banner.style.display = 'block';
+        banner.className = 'banner banner-info';
+        bannerText.textContent = '⏳ Converting ' + total + ' file(s)...';
+
+        let idx = 0;
+        for (const file of list) {
+          const parent = window.DoItSwiftFileResults
+            ? DoItSwiftFileResults.getAppendParent(results, resultsMore, idx)
+            : results;
+          idx += 1;
+
+          const item = document.createElement('div');
+          item.className = 'file-item';
+          item.innerHTML = `
+            <div class="file-item-main">
+              <div class="file-thumb" aria-hidden="true">🖼️</div>
+              <div class="file-info">
+                <div class="file-name"></div>
+                <div class="file-status">Rendering…</div>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+              </div>
+              <div class="file-actions-col">
+                <button type="button" class="btn-text btn-preview" disabled style="visibility:hidden">Preview</button>
+              </div>
+            </div>
+            <div class="file-preview-panel" hidden>
+              <img alt="Preview" />
+            </div>
+          `;
+          item.querySelector('.file-name').textContent = file.name;
+          parent.appendChild(item);
+          const fill = item.querySelector('.progress-fill');
+          const status = item.querySelector('.file-status');
+          fill.style.width = '40%';
+
+          try {
+            const finalBlob = await svgFileToPngBlob(file, w, h);
+            const url = URL.createObjectURL(finalBlob);
+            const newName = file.name.replace(/\.svg$/i, '.png');
+            converted.push({ name: newName, blob: finalBlob });
+            fill.style.width = '100%';
+            status.className = 'file-status done';
+            status.innerHTML =
+              '<span class="size-compare">Original: ' +
+              formatSizeForCompare(file.size) +
+              ' → Converted: ' +
+              formatSizeForCompare(finalBlob.size) +
+              '</span><span class="dim-note">' +
+              w +
+              '×' +
+              h +
+              ' px</span>';
+            const actionsCol = item.querySelector('.file-actions-col');
+            const dl = document.createElement('a');
+            dl.href = url;
+            dl.download = newName;
+            dl.className = 'btn';
+            dl.textContent = 'Download';
+            actionsCol.appendChild(dl);
+            if (window.DoItSwiftFileResults) {
+              DoItSwiftFileResults.initCompletedRow(item, url);
+            }
+          } catch (err) {
+            fill.style.width = '100%';
+            fill.style.background = '#ef4444';
+            status.className = 'file-status error';
+            status.textContent = 'Error: ' + (err.message || 'Failed');
+          }
+        }
+
+        if (converted.length) {
+          actions.style.display = 'flex';
+          resultsHeader.style.display = 'block';
+          fileCount.textContent = String(converted.length);
+          banner.className = 'banner banner-success';
+          bannerText.textContent = '✓ ' + converted.length + ' file(s) ready — see list below';
+          banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const batchOver10 = total > 10;
+          if (window.DoItSwiftFileResults) {
+            DoItSwiftFileResults.setupToolbar({
+              toolbar: document.getElementById('resultsToolbar'),
+              galleryToggle: document.getElementById('galleryViewToggle'),
+              note: document.getElementById('galleryToolbarNote'),
+              batchOver10,
+              galleryRoot: document.getElementById('fileResultsRoot'),
+            });
+            if (total > 10) {
+              DoItSwiftFileResults.setupMoreFilesSection({
+                moreBlock: document.getElementById('resultsMoreBlock'),
+                moreInner: document.getElementById('resultsMore'),
+                moreBtn: document.getElementById('moreFilesBtn'),
+                moreLabel: document.getElementById('moreFilesLabel'),
+                extraCount: total - 10,
+              });
+            }
+          }
+        }
+      }
+
+      document.getElementById('clearAll').addEventListener('click', () => {
+        results.innerHTML = '';
+        if (resultsMore) resultsMore.innerHTML = '';
+        const moreBlock = document.getElementById('resultsMoreBlock');
+        if (moreBlock) moreBlock.style.display = 'none';
+        const tb = document.getElementById('resultsToolbar');
+        if (tb) tb.style.display = 'none';
+        const gt = document.getElementById('galleryViewToggle');
+        if (gt) {
+          gt.checked = false;
+          gt.disabled = false;
+        }
+        const note = document.getElementById('galleryToolbarNote');
+        if (note) note.hidden = true;
+        converted = [];
+        actions.style.display = 'none';
+        banner.style.display = 'none';
+        resultsHeader.style.display = 'none';
+      });
+
+      document.getElementById('downloadAll').addEventListener('click', async () => {
+        if (typeof JSZip === 'undefined') return alert('ZIP library not loaded.');
+        const zip = new JSZip();
+        converted.forEach(f => zip.file(f.name, f.blob));
+        const content = await zip.generateAsync({ type: 'blob' });
+        const url = URL.createObjectURL(content);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'doitswift-svg-to-png.zip';
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      void (async () => {
+        try {
+          const pending = await window.DoItSwiftPending?.consume?.();
+          if (pending) await handleFiles([pending]);
+        } catch (e) {
+          console.warn(e);
+        }
+      })();
+    });
+  </script>
+
+  <style>
+    .hero { padding: 60px 0 20px; text-align: center; }
+    .subtitle { font-size: 19px; color: var(--text-muted); max-width: 620px; margin: 0 auto 28px; }
+
+    .converter-section { padding: 30px 0; }
+    .converter-section .container { max-width: 820px; }
+
+    .banner {
+      padding: 14px 20px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .banner-info { background: #dbeafe; color: #1e40af; }
+    .banner-success { background: #d1fae5; color: #065f46; }
+    [data-theme="dark"] .banner-info { background: rgba(30, 64, 175, .2); color: #93c5fd; }
+    [data-theme="dark"] .banner-success { background: rgba(6, 95, 70, .2); color: #6ee7b7; }
+
+    .dropzone {
+      background: var(--card);
+      border: 2px dashed var(--gray-300);
+      border-radius: var(--radius-lg);
+      padding: 70px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .2s;
+      box-shadow: var(--shadow);
+    }
+    .dropzone:hover, .dropzone.drag {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+    [data-theme="dark"] .dropzone.drag { background: rgba(0, 102, 255, .1); }
+    .dropzone-icon { font-size: 56px; margin-bottom: 14px; }
+    .dropzone-text { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+    .dropzone-sub { font-size: 14px; color: var(--text-muted); }
+    #fileInput { display: none; }
+
+    .controls {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-top: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .controls-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .control-row label { font-size: 14px; font-weight: 600; min-width: 90px; }
+    .control-row input[type="number"] {
+      width: 120px;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+    }
+    .presets {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .presets-label { font-size: 13px; font-weight: 600; color: var(--text-muted); }
+    .preset-btn {
+      background: var(--gray-100);
+      color: var(--text);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+    }
+    .preset-btn:hover { background: var(--gray-200); }
+
+    .size-compare {
+      display: block;
+      line-height: 1.45;
+    }
+    .dim-note {
+      display: block;
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .affiliate { padding: 40px 0; }
+    .affiliate .container { max-width: 820px; }
+    .affiliate-inner {
+      background: linear-gradient(135deg, #fff7ed, #ffedd5);
+      border: 1px solid #fed7aa;
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    [data-theme="dark"] .affiliate-inner {
+      background: linear-gradient(135deg, rgba(249, 115, 22, .1), rgba(245, 158, 11, .1));
+      border-color: rgba(249, 115, 22, .3);
+    }
+    .affiliate-icon { font-size: 42px; }
+    .affiliate-content { flex: 1; min-width: 200px; }
+    .affiliate-content h3 { font-size: 18px; margin-bottom: 4px; }
+    .affiliate-content p { font-size: 14px; color: var(--text-muted); }
+
+    .faq { padding: 60px 0; }
+    .faq .container { max-width: 820px; }
+    .section-title { text-align: center; margin-bottom: 32px; }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
+    }
+    .faq-item h4 { font-size: 16px; margin-bottom: 6px; }
+    .faq-item p { font-size: 14px; color: var(--text-muted); }
+  </style>
+</MainLayout>

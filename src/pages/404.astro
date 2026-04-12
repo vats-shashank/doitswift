@@ -1,0 +1,57 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout
+  title="Page not found — DoItSwift"
+  description="The page you requested does not exist or has moved. Return to DoItSwift home or browse our tools."
+  keywords="404, page not found, doitswift"
+>
+  <section class="not-found">
+    <div class="container">
+      <p class="not-found-code">404</p>
+      <h1>Page not found</h1>
+      <p class="not-found-lead">
+        That link may be outdated, or the page was removed. Try the home page or pick a tool below.
+      </p>
+      <div class="not-found-actions">
+        <a href="/" class="btn btn-lg">← Back to home</a>
+        <a href="/image/" class="btn btn-secondary btn-lg">Image tools</a>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  .not-found {
+    padding: 72px 0 100px;
+    text-align: center;
+  }
+  .not-found .container {
+    max-width: 520px;
+  }
+  .not-found-code {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--blue);
+    margin-bottom: 12px;
+  }
+  .not-found h1 {
+    font-size: 34px;
+    margin-bottom: 14px;
+    letter-spacing: -0.03em;
+  }
+  .not-found-lead {
+    font-size: 17px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 28px;
+  }
+  .not-found-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+  }
+</style>

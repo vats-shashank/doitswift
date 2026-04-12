@@ -1,0 +1,357 @@
+---
+// src/layouts/MainLayout.astro
+// Shared layout used by every page on the site.
+// Pass title, description, optional keywords. Canonical defaults to site + current path (see astro.config `site`).
+export interface Props {
+  title: string;
+  description: string;
+  keywords?: string;
+  /** Override computed canonical URL (rare). */
+  canonical?: string;
+  /** Absolute URL, or site-root path (e.g. `/og-default.svg`) for Open Graph / Twitter image. */
+  ogImage?: string;
+}
+
+const {
+  title,
+  description,
+  keywords = "doitswift, free online tools, browser utilities, privacy tools, file converter",
+  canonical: canonicalOverride,
+  ogImage: ogImageProp,
+} = Astro.props;
+
+const site = Astro.site;
+const canonical =
+  canonicalOverride ??
+  (site ? new URL(Astro.url.pathname, site).href : undefined);
+
+const ogImageUrl =
+  site &&
+  (ogImageProp
+    ? ogImageProp.startsWith('http')
+      ? ogImageProp
+      : new URL(ogImageProp.startsWith('/') ? ogImageProp : `/${ogImageProp}`, site).href
+    : new URL('/og-default.svg', site).href);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="DoItSwift" />
+    <meta name="twitter:card" content="summary_large_image" />
+    {ogImageUrl && (
+      <>
+        <meta property="og:image" content={ogImageUrl} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:image" content={ogImageUrl} />
+      </>
+    )}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles/global.css" />
+    <script src="/pending-transfer.js" defer></script>
+    <script src="/js/file-results-ui.js" defer></script>
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav class="nav">
+      <div class="nav-inner container">
+        <a href="/" class="logo">
+          <span class="logo-mark">D</span>DoItSwift
+        </a>
+        <button
+          type="button"
+          class="nav-burger"
+          id="navBurger"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="navMenu"
+        >
+          <svg class="nav-burger-icon" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              fill="currentColor"
+              d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"
+            />
+          </svg>
+        </button>
+        <div class="nav-links" id="navMenu" role="navigation" aria-label="Main">
+          <a href="/image/">Image</a>
+          <a href="/#categories">Categories</a>
+          <a href="/#tools">All Tools</a>
+          <a href="/blog">Blog</a>
+          <a href="/#faq">FAQ</a>
+          <button type="button" id="themeToggle" class="theme-toggle" aria-label="Switch to dark mode">🌙</button>
+          <a href="/pro" class="btn-pro">Get Pro</a>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <slot />
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-inner container">
+        <div class="footer-col">
+          <a href="/" class="logo footer-logo">
+            <span class="logo-mark">D</span>DoItSwift
+          </a>
+          <p class="footer-tag">
+            Fast, privacy-first utilities. Everything runs in your browser when possible — your files stay on your device.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h5>Image tools</h5>
+          <a href="/image/">All image tools</a>
+          <a href="/image/heic-to-jpg">HEIC to JPG</a>
+          <a href="/image/webp-to-jpg">WEBP to JPG</a>
+          <a href="/image/image-compressor">Image Compressor</a>
+          <a href="/image/image-resizer">Image Resizer</a>
+          <a href="/image/svg-to-png">SVG to PNG</a>
+          <a href="/image/favicon-generator">Favicon Generator</a>
+          <a href="/image/avif-to-jpg">AVIF to JPG</a>
+          <a href="/image/image-to-base64">Image to Base64</a>
+        </div>
+        <div class="footer-col">
+          <h5>Company</h5>
+          <a href="/about">About</a>
+          <a href="/blog">Blog</a>
+          <a href="/pro">Pro</a>
+          <a href="/contact">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h5>Legal</h5>
+          <a href="/privacy">Privacy</a>
+          <a href="/terms">Terms</a>
+          <a href="/cookies">Cookies</a>
+        </div>
+      </div>
+      <div class="footer-bottom container">
+        © {new Date().getFullYear()} DoItSwift. Built with care for privacy.
+      </div>
+    </footer>
+
+    <script is:inline>
+      (function () {
+        function updateThemeButton() {
+          const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+          const btn = document.getElementById('themeToggle');
+          if (!btn) return;
+          btn.textContent = isDark ? '☀️' : '🌙';
+          btn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+        }
+        const saved = localStorage.getItem('theme');
+        if (saved === 'dark' || (!saved && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+        updateThemeButton();
+        document.getElementById('themeToggle')?.addEventListener('click', () => {
+          const current = document.documentElement.getAttribute('data-theme');
+          const next = current === 'dark' ? 'light' : 'dark';
+          if (next === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+          else document.documentElement.removeAttribute('data-theme');
+          localStorage.setItem('theme', next);
+          updateThemeButton();
+        });
+
+        const burger = document.getElementById('navBurger');
+        const menu = document.getElementById('navMenu');
+        function closeMenu() {
+          if (!menu || !burger) return;
+          menu.classList.remove('is-open');
+          burger.setAttribute('aria-expanded', 'false');
+          burger.setAttribute('aria-label', 'Open menu');
+        }
+        function openMenu() {
+          if (!menu || !burger) return;
+          menu.classList.add('is-open');
+          burger.setAttribute('aria-expanded', 'true');
+          burger.setAttribute('aria-label', 'Close menu');
+        }
+        burger?.addEventListener('click', function (e) {
+          e.stopPropagation();
+          if (menu?.classList.contains('is-open')) closeMenu();
+          else openMenu();
+        });
+        menu?.querySelectorAll('a').forEach(function (a) {
+          a.addEventListener('click', closeMenu);
+        });
+        document.addEventListener('click', function (e) {
+          if (!menu?.classList.contains('is-open')) return;
+          if (menu.contains(e.target) || burger?.contains(e.target)) return;
+          closeMenu();
+        });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') closeMenu();
+        });
+      })();
+    </script>
+
+    <style>
+      .nav {
+        background: rgba(255, 255, 255, .9);
+        border-bottom: 1px solid var(--border);
+        padding: 14px 0;
+        padding-top: max(14px, env(safe-area-inset-top));
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        backdrop-filter: blur(10px);
+      }
+      :global([data-theme="dark"]) .nav { background: rgba(10, 10, 10, .9); }
+      .nav-inner {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+      }
+      .nav-burger {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: var(--radius-sm, 8px);
+        background: transparent;
+        line-height: 1;
+        color: var(--text);
+      }
+      .nav-burger-icon {
+        display: block;
+      }
+      .nav-burger:hover {
+        background: var(--gray-100);
+      }
+      :global([data-theme='dark']) .nav-burger:hover {
+        background: var(--gray-200);
+      }
+      .logo {
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--blue);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .logo-mark {
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, #0066ff, #00aaff);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 18px;
+        font-weight: 800;
+      }
+      .nav-links {
+        display: flex;
+        gap: 24px;
+        align-items: center;
+        font-size: 14px;
+      }
+      .nav-links a { color: var(--text); font-weight: 500; }
+      .nav-links a:hover { color: var(--blue); }
+      .theme-toggle {
+        background: transparent;
+        font-size: 18px;
+        padding: 4px 8px;
+        border-radius: 6px;
+      }
+      .theme-toggle:hover { background: var(--gray-100); }
+      :global([data-theme='dark']) .theme-toggle:hover {
+        background: var(--gray-200);
+      }
+      .btn-pro {
+        background: linear-gradient(135deg, #f59e0b, #f97316);
+        color: #fff !important;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 600 !important;
+      }
+
+      footer {
+        background: var(--gray-900);
+        color: #94a3b8;
+        padding: 50px 0 30px;
+        margin-top: 80px;
+      }
+      .footer-inner {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 40px;
+      }
+      .footer-col h5 {
+        color: #fff;
+        font-size: 13px;
+        margin-bottom: 14px;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+      }
+      .footer-col a {
+        display: block;
+        color: #94a3b8;
+        font-size: 14px;
+        margin-bottom: 8px;
+      }
+      .footer-col a:hover { color: #fff; }
+      .footer-logo { color: #fff !important; margin-bottom: 14px; }
+      .footer-tag { font-size: 13px; max-width: 280px; }
+      .footer-bottom {
+        margin-top: 30px;
+        padding-top: 24px;
+        border-top: 1px solid #1f2937;
+        text-align: center;
+        font-size: 13px;
+      }
+
+      @media (max-width: 768px) {
+        .nav-burger {
+          display: inline-flex;
+        }
+        .nav-links {
+          display: none;
+          width: 100%;
+          flex-direction: column;
+          align-items: stretch;
+          gap: 0;
+          padding: 8px 0 4px;
+          margin-top: 4px;
+          border-top: 1px solid var(--border);
+        }
+        .nav-links.is-open {
+          display: flex;
+        }
+        .nav-links > a,
+        .nav-links > .btn-pro {
+          padding: 12px 8px;
+          border-radius: var(--radius-sm, 8px);
+        }
+        .nav-links > .theme-toggle {
+          align-self: flex-start;
+          padding: 12px 8px;
+        }
+        .footer-inner { grid-template-columns: 1fr 1fr; gap: 30px; }
+      }
+    </style>
+  </body>
+</html>

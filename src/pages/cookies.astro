@@ -1,0 +1,85 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+
+const lastUpdated = 'April 12, 2026';
+---
+
+<MainLayout
+  title="Cookie Policy — DoItSwift"
+  description="How DoItSwift uses cookies and similar technologies, and how you can control them."
+  keywords="doitswift cookies, cookie policy"
+>
+  <section class="legal-doc">
+    <div class="container">
+      <h1>Cookie Policy</h1>
+      <p class="meta">Last updated: {lastUpdated}</p>
+
+      <p>
+        This Cookie Policy explains how DoItSwift (“we,” “us,” or “our”) uses cookies and similar technologies when you
+        visit our website. It should be read together with our <a href="/privacy" class="link-back">Privacy Policy</a>.
+      </p>
+
+      <h2>What are cookies?</h2>
+      <p>
+        Cookies are small text files stored on your device when you visit a site. Similar technologies include local
+        storage, session storage, and pixels. They help sites remember preferences, keep you signed in, or measure
+        traffic.
+      </p>
+
+      <h2>How we use cookies and storage</h2>
+      <p>Depending on how the Site is configured, we may use:</p>
+      <ul>
+        <li>
+          <strong>Strictly necessary.</strong> Functions required for the Site to work, such as remembering your theme
+          preference. We may store a theme value in <code>localStorage</code> so the page looks the same on your next
+          visit.
+        </li>
+        <li>
+          <strong>Analytics (optional).</strong> If you enable analytics (for example, to understand traffic), those
+          vendors may set cookies to distinguish sessions and devices. List the specific tools you use (name, purpose,
+          retention) when you add them.
+        </li>
+        <li>
+          <strong>Marketing (optional).</strong> If you use advertising or remarketing, third parties may set cookies
+          subject to consent requirements in your region. Describe those partners here when deployed.
+        </li>
+      </ul>
+
+      <h2>Third-party cookies</h2>
+      <p>
+        We may load fonts, scripts, or widgets from third parties (for example, a font CDN or a JavaScript library). Those
+        providers may set their own cookies or read their own storage. Their use is governed by their privacy notices.
+      </p>
+
+      <h2>Your choices</h2>
+      <p>
+        Most browsers let you block or delete cookies. You can also clear <code>localStorage</code> for the Site in your
+        browser’s developer or site settings. Note that blocking necessary storage may break features such as theme
+        persistence.
+      </p>
+      <p>
+        In regions that require it (for example the EEA or UK), you may need a consent banner or preference center for
+        non-essential cookies before they are set. Implement that flow to match your legal review.
+      </p>
+
+      <h2>Changes</h2>
+      <p>
+        We may update this Cookie Policy when our practices or partners change. Check the “Last updated” date above for
+        the latest version.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        Questions? Use the <a href="/contact" class="link-back">contact page</a>.
+      </p>
+
+      <p class="disclaimer">
+        <strong>General information.</strong> This policy is a practical outline for a small site. It is not legal
+        advice. Align it with your actual scripts, analytics, ads, and regional requirements after review by a qualified
+        professional.
+      </p>
+
+      <p><a href="/" class="link-back">← Back to home</a></p>
+    </div>
+  </section>
+</MainLayout>

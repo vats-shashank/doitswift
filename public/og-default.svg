@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-labelledby="og-title og-desc">
+  <title id="og-title">DoItSwift</title>
+  <desc id="og-desc">Free Online Tools. Zero Friction.</desc>
+  <defs>
+    <linearGradient id="og-mark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e8f0ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#0066ff"/>
+  <!-- Centered brand block -->
+  <g transform="translate(600 248)">
+    <rect x="-44" y="-44" width="88" height="88" rx="18" fill="url(#og-mark)"/>
+    <text
+      x="0"
+      y="14"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-family="system-ui, -apple-system, 'Segoe UI', sans-serif"
+      font-size="48"
+      font-weight="800"
+      fill="#0066ff"
+    >D</text>
+  </g>
+  <text
+    x="600"
+    y="360"
+    text-anchor="middle"
+    font-family="system-ui, -apple-system, 'Segoe UI', sans-serif"
+    font-size="68"
+    font-weight="800"
+    fill="#ffffff"
+    letter-spacing="-0.03em"
+  >DoItSwift</text>
+  <text
+    x="600"
+    y="418"
+    text-anchor="middle"
+    font-family="system-ui, -apple-system, 'Segoe UI', sans-serif"
+    font-size="28"
+    font-weight="500"
+    fill="#ffffff"
+    opacity="0.95"
+    letter-spacing="-0.01em"
+  >Free Online Tools. Zero Friction.</text>
+</svg>

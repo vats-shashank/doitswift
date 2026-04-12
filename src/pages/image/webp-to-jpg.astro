@@ -1,0 +1,556 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+---
+
+<MainLayout
+  title="WEBP to JPG Converter — Free, Private & Unlimited | DoItSwift"
+  description="Convert WebP to JPG instantly in your browser with DoItSwift. 100% private — files never leave your device. Unlimited batch conversion, no signup."
+  keywords="webp to jpg, webp to jpeg, convert webp, webp converter, free webp converter, batch webp"
+  canonical={new URL(Astro.url.pathname, Astro.site).toString()}
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Is the WEBP to JPG converter free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Unlimited conversions with no signup, watermarks, or server uploads." }},
+      { "@type": "Question", "name": "Are my images private?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Processing happens entirely in your browser; files never leave your device." }},
+      { "@type": "Question", "name": "Why convert WEBP to JPG?", "acceptedAnswer": { "@type": "Answer", "text": "JPG is supported everywhere — email, older software, and print workflows often need JPEG instead of WebP." }},
+      { "@type": "Question", "name": "Will transparency be preserved?", "acceptedAnswer": { "@type": "Answer", "text": "JPEG does not support transparency. Transparent areas are typically filled with a solid background when drawn to the canvas." }},
+      { "@type": "Question", "name": "Does batch conversion work?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Drop or select multiple WEBP files and download them individually or as one ZIP." }}
+    ]
+  })} />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" is:inline></script>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🔒 100% Private — Files Never Leave Your Device</div>
+      <h1>WEBP to JPG Converter</h1>
+      <p class="subtitle">
+        Turn WebP images into JPG using the Canvas API. No uploads, no limits, no signup.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> Unlimited files</span>
+        <span><span class="check">✓</span> No size limit</span>
+        <span><span class="check">✓</span> Works offline</span>
+        <span><span class="check">✓</span> No watermarks</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="converter-section">
+    <div class="container">
+      <div id="successBanner" class="banner" style="display:none">
+        <span id="bannerText">Ready</span>
+      </div>
+
+      <div class="dropzone" id="dropzone">
+        <div class="dropzone-icon">📁</div>
+        <div class="dropzone-text">Drop WEBP files here or click to browse</div>
+        <div class="dropzone-sub">Convert as many files as you want — all at once</div>
+        <input type="file" id="fileInput" multiple accept=".webp,image/webp" />
+      </div>
+
+      <p class="converter-hint">
+        <span id="hintMain">Converting at maximum quality</span>
+        ·
+        <button type="button" class="hint-toggle" id="toggleAdvanced" aria-expanded="false" aria-controls="advancedPanel">
+          Change settings
+        </button>
+      </p>
+      <div id="advancedPanel" class="advanced-panel" hidden>
+        <p class="advanced-title">Advanced options</p>
+        <div class="preset-buttons" role="radiogroup" aria-label="JPEG quality preset">
+          <button type="button" class="preset-btn is-selected" data-q="100" role="radio" aria-checked="true">Maximum</button>
+          <button type="button" class="preset-btn" data-q="85" role="radio" aria-checked="false">Balanced</button>
+          <button type="button" class="preset-btn" data-q="70" role="radio" aria-checked="false">Small file</button>
+        </div>
+        <p class="preset-desc" id="presetDesc">100% quality — best fidelity, largest JPEGs.</p>
+      </div>
+
+      <div id="resultsHeader" class="results-header" style="display:none">
+        Converted files (<span id="fileCount">0</span>):
+      </div>
+      <div id="fileResultsRoot">
+        <div id="resultsToolbar" class="results-toolbar" style="display:none">
+          <label class="gallery-toggle">
+            <input type="checkbox" id="galleryViewToggle" />
+            Show thumbnails in list
+          </label>
+          <p class="toolbar-note" id="galleryToolbarNote" hidden></p>
+        </div>
+        <div class="results" id="results"></div>
+        <div id="resultsMoreBlock" class="results-more-block" style="display:none">
+          <button type="button" class="more-files-btn" id="moreFilesBtn">
+            <span id="moreFilesLabel"></span>
+          </button>
+          <div id="resultsMore" class="results results-more-inner" hidden></div>
+        </div>
+      </div>
+
+      <div class="actions" id="actions" style="display:none">
+        <button class="btn btn-lg" id="downloadAll">⬇ Download All as ZIP</button>
+        <button class="btn btn-secondary btn-lg" id="clearAll">Clear All</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner">
+        <div class="affiliate-icon">✨</div>
+        <div class="affiliate-content">
+          <h3>Polish images for social and web</h3>
+          <p>Adobe Express makes it easy to edit, resize, and share graphics in your browser.</p>
+        </div>
+        <a href="https://www.adobe.com/express/" class="btn btn-orange" target="_blank" rel="sponsored noopener">
+          Try Adobe Express →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>Is this WEBP to JPG tool free and unlimited?</h4><p>Yes. There are no caps, accounts, or watermarks. Everything runs locally in your browser.</p></div>
+        <div class="faq-item"><h4>Are my files safe?</h4><p>Yes. Images are never uploaded. DoItSwift cannot see or store your files.</p></div>
+        <div class="faq-item"><h4>How does conversion work?</h4><p>Your WEBP is decoded in the browser, drawn to a canvas, and exported as a JPEG blob — the same approach many desktop apps use under the hood.</p></div>
+        <div class="faq-item"><h4>What about transparent WEBP files?</h4><p>JPEG does not support alpha. Transparent pixels are composited on a white (or default) background when rasterized.</p></div>
+        <div class="faq-item"><h4>Can I convert many files at once?</h4><p>Yes. Use multi-select or drag a folder of WEBP files, then download all as a ZIP.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      const dropzone = document.getElementById('dropzone');
+      const fileInput = document.getElementById('fileInput');
+      const results = document.getElementById('results');
+      const actions = document.getElementById('actions');
+      const banner = document.getElementById('successBanner');
+      const bannerText = document.getElementById('bannerText');
+      const resultsHeader = document.getElementById('resultsHeader');
+      const fileCount = document.getElementById('fileCount');
+      const resultsMore = document.getElementById('resultsMore');
+      let converted = [];
+
+      function formatSizeForCompare(bytes) {
+        const mb = bytes / (1024 * 1024);
+        if (mb >= 0.01) return mb.toFixed(2) + ' MB';
+        return (bytes / 1024).toFixed(1) + ' KB';
+      }
+
+      function getJpegQuality() {
+        const btn = document.querySelector('.preset-btn.is-selected');
+        return btn ? parseInt(btn.dataset.q, 10) / 100 : 1;
+      }
+
+      function wireQualityPresets() {
+        const hintMain = document.getElementById('hintMain');
+        const presetDesc = document.getElementById('presetDesc');
+        const toggleAdvanced = document.getElementById('toggleAdvanced');
+        const advancedPanel = document.getElementById('advancedPanel');
+        const HINT = {
+          '100': 'Converting at maximum quality',
+          '85': 'Converting at balanced quality (85%)',
+          '70': 'Converting for smallest file size (70%)',
+        };
+        const DESC = {
+          '100': '100% quality — best fidelity, largest JPEGs.',
+          '85': '85% — smaller files with minimal visible loss.',
+          '70': '70% — smallest files; more compression visible.',
+        };
+
+        function syncPresetLabels() {
+          const sel = document.querySelector('.preset-btn.is-selected');
+          const q = sel ? sel.dataset.q : '100';
+          if (hintMain) hintMain.textContent = HINT[q] || HINT['100'];
+          if (presetDesc) presetDesc.textContent = DESC[q] || DESC['100'];
+        }
+
+        document.querySelectorAll('.preset-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.preset-btn').forEach((b) => {
+              b.classList.remove('is-selected');
+              b.setAttribute('aria-checked', 'false');
+            });
+            btn.classList.add('is-selected');
+            btn.setAttribute('aria-checked', 'true');
+            syncPresetLabels();
+          });
+        });
+
+        toggleAdvanced?.addEventListener('click', () => {
+          const open = advancedPanel.hidden;
+          advancedPanel.hidden = !open;
+          toggleAdvanced.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+
+        syncPresetLabels();
+      }
+
+      wireQualityPresets();
+
+      dropzone.addEventListener('click', () => fileInput.click());
+      dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag'); });
+      dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag'));
+      dropzone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropzone.classList.remove('drag');
+        handleFiles(Array.from(e.dataTransfer.files));
+      });
+      fileInput.addEventListener('change', e => {
+        const fs = Array.from(e.target.files);
+        e.target.value = '';
+        handleFiles(fs);
+      });
+
+      function loadImageBitmap(file) {
+        return new Promise((resolve, reject) => {
+          const url = URL.createObjectURL(file);
+          const img = new Image();
+          img.onload = () => {
+            URL.revokeObjectURL(url);
+            resolve(img);
+          };
+          img.onerror = () => {
+            URL.revokeObjectURL(url);
+            reject(new Error('Could not decode WEBP'));
+          };
+          img.crossOrigin = 'anonymous';
+          img.src = url;
+        });
+      }
+
+      function webpToJpegBlob(img, quality) {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth || img.width;
+        canvas.height = img.naturalHeight || img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+        return new Promise((resolve, reject) => {
+          canvas.toBlob(
+            blob => (blob ? resolve(blob) : reject(new Error('toBlob failed'))),
+            'image/jpeg',
+            quality
+          );
+        });
+      }
+
+      async function handleFiles(files) {
+        if (!files || !files.length) return;
+        const list = files.filter(f => f.type === 'image/webp' || /\.webp$/i.test(f.name));
+        if (!list.length) {
+          alert('Please choose WEBP image files.');
+          return;
+        }
+
+        const total = list.length;
+        results.innerHTML = '';
+        if (resultsMore) resultsMore.innerHTML = '';
+        const moreBlock = document.getElementById('resultsMoreBlock');
+        if (moreBlock) moreBlock.style.display = 'none';
+        const toolbar = document.getElementById('resultsToolbar');
+        if (toolbar) toolbar.style.display = 'none';
+        const note = document.getElementById('galleryToolbarNote');
+        if (note) note.hidden = true;
+
+        banner.style.display = 'block';
+        banner.className = 'banner banner-info';
+        bannerText.textContent = '⏳ Converting ' + total + ' file(s)...';
+
+        const quality = getJpegQuality();
+        let idx = 0;
+
+        for (const file of list) {
+          const parent = window.DoItSwiftFileResults
+            ? DoItSwiftFileResults.getAppendParent(results, resultsMore, idx)
+            : results;
+          idx += 1;
+
+          const item = document.createElement('div');
+          item.className = 'file-item';
+          item.innerHTML = `
+            <div class="file-item-main">
+              <div class="file-thumb" aria-hidden="true">🖼️</div>
+              <div class="file-info">
+                <div class="file-name"></div>
+                <div class="file-status">Converting…</div>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+              </div>
+              <div class="file-actions-col">
+                <button type="button" class="btn-text btn-preview" disabled style="visibility:hidden">Preview</button>
+              </div>
+            </div>
+            <div class="file-preview-panel" hidden>
+              <img alt="Preview" />
+            </div>
+          `;
+          item.querySelector('.file-name').textContent = file.name;
+          parent.appendChild(item);
+          const fill = item.querySelector('.progress-fill');
+          const status = item.querySelector('.file-status');
+          fill.style.width = '40%';
+
+          try {
+            const img = await loadImageBitmap(file);
+            const finalBlob = await webpToJpegBlob(img, quality);
+            const url = URL.createObjectURL(finalBlob);
+            const newName = file.name.replace(/\.webp$/i, '.jpg');
+            converted.push({ name: newName, blob: finalBlob });
+            fill.style.width = '100%';
+            status.className = 'file-status done';
+            status.innerHTML =
+              '<span class="size-compare">Original: ' +
+              formatSizeForCompare(file.size) +
+              ' → Converted: ' +
+              formatSizeForCompare(finalBlob.size) +
+              '</span>';
+            const actionsCol = item.querySelector('.file-actions-col');
+            const dl = document.createElement('a');
+            dl.href = url;
+            dl.download = newName;
+            dl.className = 'btn';
+            dl.textContent = 'Download';
+            actionsCol.appendChild(dl);
+            if (window.DoItSwiftFileResults) {
+              DoItSwiftFileResults.initCompletedRow(item, url);
+            }
+          } catch (err) {
+            fill.style.width = '100%';
+            fill.style.background = '#ef4444';
+            status.className = 'file-status error';
+            status.textContent = 'Error: ' + (err.message || 'Failed');
+          }
+        }
+
+        if (converted.length) {
+          actions.style.display = 'flex';
+          resultsHeader.style.display = 'block';
+          fileCount.textContent = String(converted.length);
+          banner.className = 'banner banner-success';
+          bannerText.textContent = '✓ ' + converted.length + ' file(s) ready — see list below';
+          banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const batchOver10 = total > 10;
+          if (window.DoItSwiftFileResults) {
+            DoItSwiftFileResults.setupToolbar({
+              toolbar: document.getElementById('resultsToolbar'),
+              galleryToggle: document.getElementById('galleryViewToggle'),
+              note: document.getElementById('galleryToolbarNote'),
+              batchOver10,
+              galleryRoot: document.getElementById('fileResultsRoot'),
+            });
+            if (total > 10) {
+              DoItSwiftFileResults.setupMoreFilesSection({
+                moreBlock: document.getElementById('resultsMoreBlock'),
+                moreInner: document.getElementById('resultsMore'),
+                moreBtn: document.getElementById('moreFilesBtn'),
+                moreLabel: document.getElementById('moreFilesLabel'),
+                extraCount: total - 10,
+              });
+            }
+          }
+        }
+      }
+
+      document.getElementById('clearAll').addEventListener('click', () => {
+        results.innerHTML = '';
+        if (resultsMore) resultsMore.innerHTML = '';
+        const moreBlock = document.getElementById('resultsMoreBlock');
+        if (moreBlock) moreBlock.style.display = 'none';
+        const tb = document.getElementById('resultsToolbar');
+        if (tb) tb.style.display = 'none';
+        const gt = document.getElementById('galleryViewToggle');
+        if (gt) {
+          gt.checked = false;
+          gt.disabled = false;
+        }
+        const note = document.getElementById('galleryToolbarNote');
+        if (note) note.hidden = true;
+        converted = [];
+        actions.style.display = 'none';
+        banner.style.display = 'none';
+        resultsHeader.style.display = 'none';
+      });
+
+      document.getElementById('downloadAll').addEventListener('click', async () => {
+        if (typeof JSZip === 'undefined') return alert('ZIP library not loaded.');
+        const zip = new JSZip();
+        converted.forEach(f => zip.file(f.name, f.blob));
+        const content = await zip.generateAsync({ type: 'blob' });
+        const url = URL.createObjectURL(content);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'doitswift-webp-to-jpg.zip';
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      void (async () => {
+        try {
+          const pending = await window.DoItSwiftPending?.consume?.();
+          if (pending) await handleFiles([pending]);
+        } catch (e) {
+          console.warn(e);
+        }
+      })();
+    });
+  </script>
+
+  <style>
+    .hero { padding: 60px 0 20px; text-align: center; }
+    .subtitle { font-size: 19px; color: var(--text-muted); max-width: 620px; margin: 0 auto 28px; }
+
+    .converter-section { padding: 30px 0; }
+    .converter-section .container { max-width: 820px; }
+
+    .banner {
+      padding: 14px 20px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .banner-info { background: #dbeafe; color: #1e40af; }
+    .banner-success { background: #d1fae5; color: #065f46; }
+    [data-theme="dark"] .banner-info { background: rgba(30, 64, 175, .2); color: #93c5fd; }
+    [data-theme="dark"] .banner-success { background: rgba(6, 95, 70, .2); color: #6ee7b7; }
+
+    .dropzone {
+      background: var(--card);
+      border: 2px dashed var(--gray-300);
+      border-radius: var(--radius-lg);
+      padding: 70px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .2s;
+      box-shadow: var(--shadow);
+    }
+    .dropzone:hover, .dropzone.drag {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+    [data-theme="dark"] .dropzone.drag { background: rgba(0, 102, 255, .1); }
+    .dropzone-icon { font-size: 56px; margin-bottom: 14px; }
+    .dropzone-text { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+    .dropzone-sub { font-size: 14px; color: var(--text-muted); }
+    #fileInput { display: none; }
+
+    .converter-hint {
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 14px;
+      margin-bottom: 0;
+    }
+    .hint-toggle {
+      background: none;
+      border: none;
+      padding: 0;
+      font: inherit;
+      color: var(--blue);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .hint-toggle:hover {
+      color: var(--blue-dark);
+    }
+    .advanced-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      margin-top: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    .advanced-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .preset-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .preset-btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .preset-btn:hover {
+      border-color: var(--blue);
+    }
+    .preset-btn.is-selected {
+      border-color: var(--blue);
+      background: var(--blue-light);
+      color: var(--blue);
+    }
+    [data-theme='dark'] .preset-btn.is-selected {
+      background: rgba(0, 102, 255, 0.15);
+    }
+    .preset-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 12px;
+      margin-bottom: 0;
+      line-height: 1.45;
+    }
+    .size-compare {
+      display: block;
+      line-height: 1.45;
+    }
+
+    .affiliate { padding: 40px 0; }
+    .affiliate .container { max-width: 820px; }
+    .affiliate-inner {
+      background: linear-gradient(135deg, #fff7ed, #ffedd5);
+      border: 1px solid #fed7aa;
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    [data-theme="dark"] .affiliate-inner {
+      background: linear-gradient(135deg, rgba(249, 115, 22, .1), rgba(245, 158, 11, .1));
+      border-color: rgba(249, 115, 22, .3);
+    }
+    .affiliate-icon { font-size: 42px; }
+    .affiliate-content { flex: 1; min-width: 200px; }
+    .affiliate-content h3 { font-size: 18px; margin-bottom: 4px; }
+    .affiliate-content p { font-size: 14px; color: var(--text-muted); }
+
+    .faq { padding: 60px 0; }
+    .faq .container { max-width: 820px; }
+    .section-title { text-align: center; margin-bottom: 32px; }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
+    }
+    .faq-item h4 { font-size: 16px; margin-bottom: 6px; }
+    .faq-item p { font-size: 14px; color: var(--text-muted); }
+  </style>
+</MainLayout>

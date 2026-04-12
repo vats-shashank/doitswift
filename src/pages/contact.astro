@@ -1,0 +1,38 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+
+const contactEmail =
+  import.meta.env.PUBLIC_CONTACT_EMAIL?.trim() || 'hello@doitswift.com';
+const mailto = `mailto:${contactEmail}?subject=${encodeURIComponent('DoItSwift inquiry')}`;
+---
+
+<MainLayout
+  title="Contact — DoItSwift"
+  description="Contact DoItSwift for feedback, partnerships, or questions about our free browser-based tools."
+  keywords="contact doitswift, doitswift support, online tools"
+>
+  <section class="content-page">
+    <div class="container">
+      <h1>Contact</h1>
+      <p class="lead">
+        We read every message we get. Whether you have feedback on a tool, a bug report, or an idea for a partnership,
+        we are glad to hear from you.
+      </p>
+
+      <h2>Email</h2>
+      <p>For general inquiries, email us directly:</p>
+      <p>
+        <a href={mailto} class="contact-email">{contactEmail}</a>
+      </p>
+
+      <h2>What to include</h2>
+      <ul>
+        <li>Which tool or page you are writing about</li>
+        <li>Your browser and operating system (for technical issues)</li>
+        <li>Steps to reproduce a problem, if applicable</li>
+      </ul>
+
+      <p><a href="/" class="link-back">← Back to home</a></p>
+    </div>
+  </section>
+</MainLayout>

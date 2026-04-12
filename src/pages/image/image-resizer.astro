@@ -1,0 +1,674 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+---
+
+<MainLayout
+  title="Free Image Resizer — Width, Height, Aspect Ratio | DoItSwift"
+  description="Resize JPG, PNG, and WebP images in your browser with DoItSwift. Set width and height, optionally lock aspect ratio. Private batch resizing with no upload."
+  keywords="image resizer, resize photo, resize jpg, resize png, batch resize images, aspect ratio resize"
+  canonical={new URL(Astro.url.pathname, Astro.site).toString()}
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Is the image resizer free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Resize unlimited images locally in your browser at no cost." }},
+      { "@type": "Question", "name": "Do you store my images?", "acceptedAnswer": { "@type": "Answer", "text": "No. Files never leave your device." }},
+      { "@type": "Question", "name": "How does maintain aspect ratio work?", "acceptedAnswer": { "@type": "Answer", "text": "When enabled, changing width updates height (and vice versa) using each image's own proportions." }},
+      { "@type": "Question", "name": "What output format do I get?", "acceptedAnswer": { "@type": "Answer", "text": "Resized images are exported as high-quality JPEG by default for smaller downloads." }},
+      { "@type": "Question", "name": "Can I resize many photos at once?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Batch select or drag multiple images; each is scaled with the same target dimensions logic." }}
+    ]
+  })} />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" is:inline></script>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🔒 100% Private — Files Never Leave Your Device</div>
+      <h1>Image Resizer</h1>
+      <p class="subtitle">
+        Set target width and height for JPG, PNG, or WebP. Lock aspect ratio to avoid stretching.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> Unlimited files</span>
+        <span><span class="check">✓</span> No size limit</span>
+        <span><span class="check">✓</span> Works offline</span>
+        <span><span class="check">✓</span> No watermarks</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="converter-section">
+    <div class="container">
+      <div id="successBanner" class="banner" style="display:none">
+        <span id="bannerText">Ready</span>
+      </div>
+
+      <div class="dropzone" id="dropzone">
+        <div class="dropzone-icon">📁</div>
+        <div class="dropzone-text">Drop images here or click to browse</div>
+        <div class="dropzone-sub">JPG, PNG, WebP — as many as you want</div>
+        <input type="file" id="fileInput" multiple accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" />
+      </div>
+
+      <p class="converter-hint">
+        <span id="hintMain">Exporting at maximum JPEG quality</span>
+        ·
+        <button type="button" class="hint-toggle" id="toggleAdvanced" aria-expanded="false" aria-controls="advancedPanel">
+          Change settings
+        </button>
+      </p>
+      <div id="advancedPanel" class="advanced-panel" hidden>
+        <p class="advanced-title">Advanced options</p>
+        <div class="preset-buttons" role="radiogroup" aria-label="JPEG quality preset">
+          <button type="button" class="preset-btn is-selected" data-q="100" role="radio" aria-checked="true">Maximum</button>
+          <button type="button" class="preset-btn" data-q="85" role="radio" aria-checked="false">Balanced</button>
+          <button type="button" class="preset-btn" data-q="70" role="radio" aria-checked="false">Small file</button>
+        </div>
+        <p class="preset-desc" id="presetDesc">100% quality — best fidelity, largest JPEGs.</p>
+      </div>
+
+      <div class="controls controls-grid">
+        <div class="control-row">
+          <label for="widthInp">Width (px)</label>
+          <input type="number" id="widthInp" min="1" max="16384" value="800" />
+        </div>
+        <div class="control-row">
+          <label for="heightInp">Height (px)</label>
+          <input type="number" id="heightInp" min="1" max="16384" value="600" />
+        </div>
+        <label class="check-row">
+          <input type="checkbox" id="keepAspect" checked />
+          <span>Maintain aspect ratio (fit inside width × height)</span>
+        </label>
+      </div>
+
+      <div id="resultsHeader" class="results-header" style="display:none">
+        Resized files (<span id="fileCount">0</span>):
+      </div>
+      <div id="fileResultsRoot">
+        <div id="resultsToolbar" class="results-toolbar" style="display:none">
+          <label class="gallery-toggle">
+            <input type="checkbox" id="galleryViewToggle" />
+            Show thumbnails in list
+          </label>
+          <p class="toolbar-note" id="galleryToolbarNote" hidden></p>
+        </div>
+        <div class="results" id="results"></div>
+        <div id="resultsMoreBlock" class="results-more-block" style="display:none">
+          <button type="button" class="more-files-btn" id="moreFilesBtn">
+            <span id="moreFilesLabel"></span>
+          </button>
+          <div id="resultsMore" class="results results-more-inner" hidden></div>
+        </div>
+      </div>
+
+      <div class="actions" id="actions" style="display:none">
+        <button class="btn btn-lg" id="downloadAll">⬇ Download All as ZIP</button>
+        <button class="btn btn-secondary btn-lg" id="clearAll">Clear All</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner">
+        <div class="affiliate-icon">📐</div>
+        <div class="affiliate-content">
+          <h3>Design social posts in exact sizes</h3>
+          <p>Canva includes thousands of templates sized for Instagram, Stories, and more.</p>
+        </div>
+        <a href="https://www.canva.com/" class="btn btn-orange" target="_blank" rel="sponsored noopener">
+          Try Canva →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>Is resizing free and unlimited?</h4><p>Yes. Process as many images as you like with no signup or watermarks.</p></div>
+        <div class="faq-item"><h4>Are my files uploaded?</h4><p>No. Canvas resizing runs entirely on your machine.</p></div>
+        <div class="faq-item"><h4>What does “fit inside width × height” mean?</h4><p>With aspect ratio on, each image scales uniformly so it fits within the box without cropping or stretching.</p></div>
+        <div class="faq-item"><h4>Why JPEG output?</h4><p>JPEG keeps file sizes reasonable after resizing. Your download names end in .jpg.</p></div>
+        <div class="faq-item"><h4>Very large images?</h4><p>Extreme dimensions may hit browser memory limits. If something fails, try a smaller target size.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      const dropzone = document.getElementById('dropzone');
+      const fileInput = document.getElementById('fileInput');
+      const results = document.getElementById('results');
+      const actions = document.getElementById('actions');
+      const banner = document.getElementById('successBanner');
+      const bannerText = document.getElementById('bannerText');
+      const resultsHeader = document.getElementById('resultsHeader');
+      const fileCount = document.getElementById('fileCount');
+      const resultsMore = document.getElementById('resultsMore');
+      const widthInp = document.getElementById('widthInp');
+      const heightInp = document.getElementById('heightInp');
+      const keepAspect = document.getElementById('keepAspect');
+      let converted = [];
+      let aspectLockSource = null;
+
+      function formatSizeForCompare(bytes) {
+        const mb = bytes / (1024 * 1024);
+        if (mb >= 0.01) return mb.toFixed(2) + ' MB';
+        return (bytes / 1024).toFixed(1) + ' KB';
+      }
+
+      function getJpegQuality() {
+        const btn = document.querySelector('.preset-btn.is-selected');
+        return btn ? parseInt(btn.dataset.q, 10) / 100 : 1;
+      }
+
+      function wireQualityPresets() {
+        const hintMain = document.getElementById('hintMain');
+        const presetDesc = document.getElementById('presetDesc');
+        const toggleAdvanced = document.getElementById('toggleAdvanced');
+        const advancedPanel = document.getElementById('advancedPanel');
+        const HINT = {
+          '100': 'Exporting at maximum JPEG quality',
+          '85': 'Exporting at balanced JPEG quality (85%)',
+          '70': 'Exporting for smallest file size (70%)',
+        };
+        const DESC = {
+          '100': '100% quality — best fidelity, largest JPEGs.',
+          '85': '85% — smaller files with minimal visible loss.',
+          '70': '70% — smallest files; more compression visible.',
+        };
+
+        function syncPresetLabels() {
+          const sel = document.querySelector('.preset-btn.is-selected');
+          const q = sel ? sel.dataset.q : '100';
+          if (hintMain) hintMain.textContent = HINT[q] || HINT['100'];
+          if (presetDesc) presetDesc.textContent = DESC[q] || DESC['100'];
+        }
+
+        document.querySelectorAll('.preset-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.preset-btn').forEach((b) => {
+              b.classList.remove('is-selected');
+              b.setAttribute('aria-checked', 'false');
+            });
+            btn.classList.add('is-selected');
+            btn.setAttribute('aria-checked', 'true');
+            syncPresetLabels();
+          });
+        });
+
+        toggleAdvanced?.addEventListener('click', () => {
+          const open = advancedPanel.hidden;
+          advancedPanel.hidden = !open;
+          toggleAdvanced.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+
+        syncPresetLabels();
+      }
+
+      wireQualityPresets();
+
+      function parseDim(el) {
+        const v = parseInt(el.value, 10);
+        return Number.isFinite(v) && v > 0 ? v : 1;
+      }
+
+      function computeTargetDims(nw, nh, maxW, maxH, lock) {
+        if (!lock) return { w: maxW, h: maxH };
+        const scale = Math.min(maxW / nw, maxH / nh, 1);
+        return {
+          w: Math.max(1, Math.round(nw * scale)),
+          h: Math.max(1, Math.round(nh * scale)),
+        };
+      }
+
+      widthInp.addEventListener('input', () => {
+        if (!keepAspect.checked || !aspectLockSource) return;
+        const ar = aspectLockSource.h / aspectLockSource.w;
+        heightInp.value = Math.max(1, Math.round(parseDim(widthInp) * ar));
+      });
+      heightInp.addEventListener('input', () => {
+        if (!keepAspect.checked || !aspectLockSource) return;
+        const ar = aspectLockSource.w / aspectLockSource.h;
+        widthInp.value = Math.max(1, Math.round(parseDim(heightInp) * ar));
+      });
+      keepAspect.addEventListener('change', () => {
+        if (keepAspect.checked) aspectLockSource = { w: parseDim(widthInp), h: parseDim(heightInp) };
+      });
+
+      dropzone.addEventListener('click', () => fileInput.click());
+      dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag'); });
+      dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag'));
+      dropzone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropzone.classList.remove('drag');
+        handleFiles(Array.from(e.dataTransfer.files));
+      });
+      fileInput.addEventListener('change', e => {
+        const fs = Array.from(e.target.files);
+        e.target.value = '';
+        handleFiles(fs);
+      });
+
+      function loadImage(file) {
+        return new Promise((resolve, reject) => {
+          const url = URL.createObjectURL(file);
+          const img = new Image();
+          img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+          img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Could not decode image')); };
+          img.crossOrigin = 'anonymous';
+          img.src = url;
+        });
+      }
+
+      function resizeToBlob(img, tw, th, quality) {
+        const canvas = document.createElement('canvas');
+        canvas.width = tw;
+        canvas.height = th;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, tw, th);
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, 0, 0, tw, th);
+        return new Promise((resolve, reject) => {
+          canvas.toBlob(
+            b => (b ? resolve(b) : reject(new Error('toBlob failed'))),
+            'image/jpeg',
+            quality
+          );
+        });
+      }
+
+      function outName(originalName) {
+        const base = originalName.replace(/\.(jpe?g|png|webp)$/i, '');
+        return base + '-resized.jpg';
+      }
+
+      async function handleFiles(files) {
+        if (!files || !files.length) return;
+        const list = files.filter(f => {
+          const t = (f.type || '').toLowerCase();
+          const n = f.name.toLowerCase();
+          return (
+            t === 'image/jpeg' ||
+            t === 'image/png' ||
+            t === 'image/webp' ||
+            /\.(jpe?g|png|webp)$/i.test(n)
+          );
+        });
+        if (!list.length) {
+          alert('Please choose JPG, PNG, or WebP images.');
+          return;
+        }
+
+        if (!aspectLockSource) {
+          aspectLockSource = { w: parseDim(widthInp), h: parseDim(heightInp) };
+        }
+
+        const total = list.length;
+        results.innerHTML = '';
+        if (resultsMore) resultsMore.innerHTML = '';
+        const moreBlock = document.getElementById('resultsMoreBlock');
+        if (moreBlock) moreBlock.style.display = 'none';
+        const toolbar = document.getElementById('resultsToolbar');
+        if (toolbar) toolbar.style.display = 'none';
+        const note = document.getElementById('galleryToolbarNote');
+        if (note) note.hidden = true;
+
+        banner.style.display = 'block';
+        banner.className = 'banner banner-info';
+        bannerText.textContent = '⏳ Resizing ' + total + ' file(s)...';
+
+        const maxW = parseDim(widthInp);
+        const maxH = parseDim(heightInp);
+        const lock = keepAspect.checked;
+        const quality = getJpegQuality();
+        let idx = 0;
+
+        for (const file of list) {
+          const parent = window.DoItSwiftFileResults
+            ? DoItSwiftFileResults.getAppendParent(results, resultsMore, idx)
+            : results;
+          idx += 1;
+
+          const item = document.createElement('div');
+          item.className = 'file-item';
+          item.innerHTML = `
+            <div class="file-item-main">
+              <div class="file-thumb" aria-hidden="true">🖼️</div>
+              <div class="file-info">
+                <div class="file-name"></div>
+                <div class="file-status">Resizing…</div>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+              </div>
+              <div class="file-actions-col">
+                <button type="button" class="btn-text btn-preview" disabled style="visibility:hidden">Preview</button>
+              </div>
+            </div>
+            <div class="file-preview-panel" hidden>
+              <img alt="Preview" />
+            </div>
+          `;
+          item.querySelector('.file-name').textContent = file.name;
+          parent.appendChild(item);
+          const fill = item.querySelector('.progress-fill');
+          const status = item.querySelector('.file-status');
+          fill.style.width = '40%';
+
+          try {
+            const img = await loadImage(file);
+            const nw = img.naturalWidth || img.width;
+            const nh = img.naturalHeight || img.height;
+            const { w: tw, h: th } = computeTargetDims(nw, nh, maxW, maxH, lock);
+            const finalBlob = await resizeToBlob(img, tw, th, quality);
+            const url = URL.createObjectURL(finalBlob);
+            const newName = outName(file.name);
+            converted.push({ name: newName, blob: finalBlob });
+            fill.style.width = '100%';
+            status.className = 'file-status done';
+            status.innerHTML =
+              '<span class="size-compare">Original: ' +
+              formatSizeForCompare(file.size) +
+              ' → Converted: ' +
+              formatSizeForCompare(finalBlob.size) +
+              '</span>' +
+              '<span class="dim-note">' +
+              tw +
+              '×' +
+              th +
+              ' px</span>';
+            const actionsCol = item.querySelector('.file-actions-col');
+            const dl = document.createElement('a');
+            dl.href = url;
+            dl.download = newName;
+            dl.className = 'btn';
+            dl.textContent = 'Download';
+            actionsCol.appendChild(dl);
+            if (window.DoItSwiftFileResults) {
+              DoItSwiftFileResults.initCompletedRow(item, url);
+            }
+          } catch (err) {
+            fill.style.width = '100%';
+            fill.style.background = '#ef4444';
+            status.className = 'file-status error';
+            status.textContent = 'Error: ' + (err.message || 'Failed');
+          }
+        }
+
+        if (converted.length) {
+          actions.style.display = 'flex';
+          resultsHeader.style.display = 'block';
+          fileCount.textContent = String(converted.length);
+          banner.className = 'banner banner-success';
+          bannerText.textContent = '✓ ' + converted.length + ' file(s) ready — see list below';
+          banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const batchOver10 = total > 10;
+          if (window.DoItSwiftFileResults) {
+            DoItSwiftFileResults.setupToolbar({
+              toolbar: document.getElementById('resultsToolbar'),
+              galleryToggle: document.getElementById('galleryViewToggle'),
+              note: document.getElementById('galleryToolbarNote'),
+              batchOver10,
+              galleryRoot: document.getElementById('fileResultsRoot'),
+            });
+            if (total > 10) {
+              DoItSwiftFileResults.setupMoreFilesSection({
+                moreBlock: document.getElementById('resultsMoreBlock'),
+                moreInner: document.getElementById('resultsMore'),
+                moreBtn: document.getElementById('moreFilesBtn'),
+                moreLabel: document.getElementById('moreFilesLabel'),
+                extraCount: total - 10,
+              });
+            }
+          }
+        }
+      }
+
+      document.getElementById('clearAll').addEventListener('click', () => {
+        results.innerHTML = '';
+        if (resultsMore) resultsMore.innerHTML = '';
+        const moreBlock = document.getElementById('resultsMoreBlock');
+        if (moreBlock) moreBlock.style.display = 'none';
+        const tb = document.getElementById('resultsToolbar');
+        if (tb) tb.style.display = 'none';
+        const gt = document.getElementById('galleryViewToggle');
+        if (gt) {
+          gt.checked = false;
+          gt.disabled = false;
+        }
+        const note = document.getElementById('galleryToolbarNote');
+        if (note) note.hidden = true;
+        converted = [];
+        actions.style.display = 'none';
+        banner.style.display = 'none';
+        resultsHeader.style.display = 'none';
+      });
+
+      document.getElementById('downloadAll').addEventListener('click', async () => {
+        if (typeof JSZip === 'undefined') return alert('ZIP library not loaded.');
+        const zip = new JSZip();
+        converted.forEach(f => zip.file(f.name, f.blob));
+        const content = await zip.generateAsync({ type: 'blob' });
+        const url = URL.createObjectURL(content);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'doitswift-resized.zip';
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      void (async () => {
+        try {
+          const pending = await window.DoItSwiftPending?.consume?.();
+          if (pending) await handleFiles([pending]);
+        } catch (e) {
+          console.warn(e);
+        }
+      })();
+    });
+  </script>
+
+  <style>
+    .hero { padding: 60px 0 20px; text-align: center; }
+    .subtitle { font-size: 19px; color: var(--text-muted); max-width: 620px; margin: 0 auto 28px; }
+
+    .converter-section { padding: 30px 0; }
+    .converter-section .container { max-width: 820px; }
+
+    .banner {
+      padding: 14px 20px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .banner-info { background: #dbeafe; color: #1e40af; }
+    .banner-success { background: #d1fae5; color: #065f46; }
+    [data-theme="dark"] .banner-info { background: rgba(30, 64, 175, .2); color: #93c5fd; }
+    [data-theme="dark"] .banner-success { background: rgba(6, 95, 70, .2); color: #6ee7b7; }
+
+    .dropzone {
+      background: var(--card);
+      border: 2px dashed var(--gray-300);
+      border-radius: var(--radius-lg);
+      padding: 70px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .2s;
+      box-shadow: var(--shadow);
+    }
+    .dropzone:hover, .dropzone.drag {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+    [data-theme="dark"] .dropzone.drag { background: rgba(0, 102, 255, .1); }
+    .dropzone-icon { font-size: 56px; margin-bottom: 14px; }
+    .dropzone-text { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+    .dropzone-sub { font-size: 14px; color: var(--text-muted); }
+    #fileInput { display: none; }
+
+    .converter-hint {
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 14px;
+      margin-bottom: 0;
+    }
+    .hint-toggle {
+      background: none;
+      border: none;
+      padding: 0;
+      font: inherit;
+      color: var(--blue);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .hint-toggle:hover {
+      color: var(--blue-dark);
+    }
+    .advanced-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      margin-top: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    .advanced-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .preset-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .preset-btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .preset-btn:hover {
+      border-color: var(--blue);
+    }
+    .preset-btn.is-selected {
+      border-color: var(--blue);
+      background: var(--blue-light);
+      color: var(--blue);
+    }
+    [data-theme='dark'] .preset-btn.is-selected {
+      background: rgba(0, 102, 255, 0.15);
+    }
+    .preset-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 12px;
+      margin-bottom: 0;
+      line-height: 1.45;
+    }
+    .size-compare {
+      display: block;
+      line-height: 1.45;
+    }
+    .dim-note {
+      display: block;
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .controls {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-top: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .controls-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .control-row.full { width: 100%; }
+    .control-row label { font-size: 14px; font-weight: 600; min-width: 90px; }
+    .control-row input[type="number"] {
+      width: 120px;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+    }
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .check-row input { width: 18px; height: 18px; }
+    .affiliate { padding: 40px 0; }
+    .affiliate .container { max-width: 820px; }
+    .affiliate-inner {
+      background: linear-gradient(135deg, #fff7ed, #ffedd5);
+      border: 1px solid #fed7aa;
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    [data-theme="dark"] .affiliate-inner {
+      background: linear-gradient(135deg, rgba(249, 115, 22, .1), rgba(245, 158, 11, .1));
+      border-color: rgba(249, 115, 22, .3);
+    }
+    .affiliate-icon { font-size: 42px; }
+    .affiliate-content { flex: 1; min-width: 200px; }
+    .affiliate-content h3 { font-size: 18px; margin-bottom: 4px; }
+    .affiliate-content p { font-size: 14px; color: var(--text-muted); }
+
+    .faq { padding: 60px 0; }
+    .faq .container { max-width: 820px; }
+    .section-title { text-align: center; margin-bottom: 32px; }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
+    }
+    .faq-item h4 { font-size: 16px; margin-bottom: 6px; }
+    .faq-item p { font-size: 14px; color: var(--text-muted); }
+  </style>
+</MainLayout>

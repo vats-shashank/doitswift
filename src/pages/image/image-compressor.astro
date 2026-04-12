@@ -1,0 +1,429 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+---
+
+<MainLayout
+  title="Free Image Compressor — JPG & PNG, Private & Unlimited | DoItSwift"
+  description="Compress JPG and PNG images in your browser with DoItSwift. Compare before and after file sizes with a quality slider. Nothing is uploaded."
+  keywords="image compressor, compress jpg, compress png, reduce image size, browser image compressor, free compress photos"
+  canonical={new URL(Astro.url.pathname, Astro.site).toString()}
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Is the image compressor free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Unlimited compression in your browser with no signup or watermarks." }},
+      { "@type": "Question", "name": "Do you upload my photos?", "acceptedAnswer": { "@type": "Answer", "text": "No. Compression uses the Canvas API locally on your device." }},
+      { "@type": "Question", "name": "Why do PNG files become JPG?", "acceptedAnswer": { "@type": "Answer", "text": "The quality slider targets JPEG compression. PNGs are rasterized and saved as JPG for predictable size savings." }},
+      { "@type": "Question", "name": "How accurate are the size numbers?", "acceptedAnswer": { "@type": "Answer", "text": "Before is your original file size; after is the generated JPEG blob size shown in kilobytes." }},
+      { "@type": "Question", "name": "Can I process many images at once?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Batch select or drag multiple JPG and PNG files and download individually or as a ZIP." }}
+    ]
+  })} />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" is:inline></script>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🔒 100% Private — Files Never Leave Your Device</div>
+      <h1>Image Compressor</h1>
+      <p class="subtitle">
+        Shrink JPG and PNG files with a quality slider. See before and after sizes for every image.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> Unlimited files</span>
+        <span><span class="check">✓</span> No size limit</span>
+        <span><span class="check">✓</span> Works offline</span>
+        <span><span class="check">✓</span> No watermarks</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="converter-section">
+    <div class="container">
+      <div id="successBanner" class="banner" style="display:none">
+        <span id="bannerText">Ready</span>
+      </div>
+
+      <div class="dropzone" id="dropzone">
+        <div class="dropzone-icon">📁</div>
+        <div class="dropzone-text">Drop JPG or PNG files here or click to browse</div>
+        <div class="dropzone-sub">PNG files are output as compressed JPG (transparency → white)</div>
+        <input type="file" id="fileInput" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
+      </div>
+
+      <div class="controls">
+        <label>JPEG quality:</label>
+        <input type="range" id="quality" min="30" max="100" value="80" />
+        <span class="quality-val" id="qualityVal">80%</span>
+      </div>
+
+      <div id="resultsHeader" class="results-header" style="display:none">
+        Compressed files (<span id="fileCount">0</span>):
+      </div>
+      <div id="fileResultsRoot">
+        <div id="resultsToolbar" class="results-toolbar" style="display:none">
+          <label class="gallery-toggle">
+            <input type="checkbox" id="galleryViewToggle" />
+            Show thumbnails in list
+          </label>
+          <p class="toolbar-note" id="galleryToolbarNote" hidden></p>
+        </div>
+        <div class="results" id="results"></div>
+        <div id="resultsMoreBlock" class="results-more-block" style="display:none">
+          <button type="button" class="more-files-btn" id="moreFilesBtn">
+            <span id="moreFilesLabel"></span>
+          </button>
+          <div id="resultsMore" class="results results-more-inner" hidden></div>
+        </div>
+      </div>
+
+      <div class="actions" id="actions" style="display:none">
+        <button class="btn btn-lg" id="downloadAll">⬇ Download All as ZIP</button>
+        <button class="btn btn-secondary btn-lg" id="clearAll">Clear All</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner">
+        <div class="affiliate-icon">🗜️</div>
+        <div class="affiliate-content">
+          <h3>Need server-side compression for WordPress?</h3>
+          <p>ShortPixel optimizes images in bulk on your site with minimal quality loss.</p>
+        </div>
+        <a href="https://shortpixel.com/" class="btn btn-orange" target="_blank" rel="sponsored noopener">
+          Explore ShortPixel →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>Is this compressor really free?</h4><p>Yes. No limits, accounts, or watermarks. Your CPU does the work in the browser.</p></div>
+        <div class="faq-item"><h4>Are my photos private?</h4><p>Yes. Files never leave your device, so we cannot access them.</p></div>
+        <div class="faq-item"><h4>What does before / after mean?</h4><p>Before is the original file size. After is the new JPEG size at your chosen quality — shown on each row.</p></div>
+        <div class="faq-item"><h4>Why JPG output for PNG uploads?</h4><p>JPEG gives strong size control via the quality slider. PNG lossless compression in-browser rarely shrinks photos much.</p></div>
+        <div class="faq-item"><h4>Will I ruin print quality?</h4><p>At high quality (90–100%) changes are usually invisible on screen. For print, keep quality high or keep originals.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      const dropzone = document.getElementById('dropzone');
+      const fileInput = document.getElementById('fileInput');
+      const results = document.getElementById('results');
+      const actions = document.getElementById('actions');
+      const banner = document.getElementById('successBanner');
+      const bannerText = document.getElementById('bannerText');
+      const resultsHeader = document.getElementById('resultsHeader');
+      const fileCount = document.getElementById('fileCount');
+      const resultsMore = document.getElementById('resultsMore');
+      const qualitySlider = document.getElementById('quality');
+      const qualityVal = document.getElementById('qualityVal');
+      let converted = [];
+
+      qualitySlider.addEventListener('input', e => { qualityVal.textContent = e.target.value + '%'; });
+
+      dropzone.addEventListener('click', () => fileInput.click());
+      dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag'); });
+      dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag'));
+      dropzone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropzone.classList.remove('drag');
+        handleFiles(Array.from(e.dataTransfer.files));
+      });
+      fileInput.addEventListener('change', e => {
+        const fs = Array.from(e.target.files);
+        e.target.value = '';
+        handleFiles(fs);
+      });
+
+      function loadImage(file) {
+        return new Promise((resolve, reject) => {
+          const url = URL.createObjectURL(file);
+          const img = new Image();
+          img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+          img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Could not decode image')); };
+          img.crossOrigin = 'anonymous';
+          img.src = url;
+        });
+      }
+
+      function toJpegBlob(img, quality) {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth || img.width;
+        canvas.height = img.naturalHeight || img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+        return new Promise((resolve, reject) => {
+          canvas.toBlob(
+            b => (b ? resolve(b) : reject(new Error('toBlob failed'))),
+            'image/jpeg',
+            quality
+          );
+        });
+      }
+
+      function outName(originalName) {
+        const base = originalName.replace(/\.(jpe?g|png)$/i, '');
+        return base + '.jpg';
+      }
+
+      async function handleFiles(files) {
+        if (!files || !files.length) return;
+        const list = files.filter(f => {
+          const t = (f.type || '').toLowerCase();
+          const n = f.name.toLowerCase();
+          return t === 'image/jpeg' || t === 'image/png' || /\.(jpe?g|png)$/i.test(n);
+        });
+        if (!list.length) {
+          alert('Please choose JPG or PNG images.');
+          return;
+        }
+
+        const total = list.length;
+        results.innerHTML = '';
+        if (resultsMore) resultsMore.innerHTML = '';
+        const moreBlock = document.getElementById('resultsMoreBlock');
+        if (moreBlock) moreBlock.style.display = 'none';
+        const toolbar = document.getElementById('resultsToolbar');
+        if (toolbar) toolbar.style.display = 'none';
+        const note = document.getElementById('galleryToolbarNote');
+        if (note) note.hidden = true;
+
+        banner.style.display = 'block';
+        banner.className = 'banner banner-info';
+        bannerText.textContent = '⏳ Compressing ' + total + ' file(s)...';
+
+        const quality = qualitySlider.value / 100;
+        let idx = 0;
+
+        for (const file of list) {
+          const beforeKb = (file.size / 1024).toFixed(1);
+          const parent = window.DoItSwiftFileResults
+            ? DoItSwiftFileResults.getAppendParent(results, resultsMore, idx)
+            : results;
+          idx += 1;
+
+          const item = document.createElement('div');
+          item.className = 'file-item';
+          item.innerHTML = `
+            <div class="file-item-main">
+              <div class="file-thumb" aria-hidden="true">🖼️</div>
+              <div class="file-info">
+                <div class="file-name"></div>
+                <div class="file-status">Compressing…</div>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+              </div>
+              <div class="file-actions-col">
+                <button type="button" class="btn-text btn-preview" disabled style="visibility:hidden">Preview</button>
+              </div>
+            </div>
+            <div class="file-preview-panel" hidden>
+              <img alt="Preview" />
+            </div>
+          `;
+          item.querySelector('.file-name').textContent = file.name;
+          parent.appendChild(item);
+          const fill = item.querySelector('.progress-fill');
+          const status = item.querySelector('.file-status');
+          fill.style.width = '40%';
+
+          try {
+            const img = await loadImage(file);
+            const finalBlob = await toJpegBlob(img, quality);
+            const afterKb = (finalBlob.size / 1024).toFixed(1);
+            const url = URL.createObjectURL(finalBlob);
+            const newName = outName(file.name);
+            converted.push({ name: newName, blob: finalBlob });
+            fill.style.width = '100%';
+            status.className = 'file-status done';
+            status.textContent = 'Before ' + beforeKb + ' KB → After ' + afterKb + ' KB';
+            const actionsCol = item.querySelector('.file-actions-col');
+            const dl = document.createElement('a');
+            dl.href = url;
+            dl.download = newName;
+            dl.className = 'btn';
+            dl.textContent = 'Download';
+            actionsCol.appendChild(dl);
+            if (window.DoItSwiftFileResults) {
+              DoItSwiftFileResults.initCompletedRow(item, url);
+            }
+          } catch (err) {
+            fill.style.width = '100%';
+            fill.style.background = '#ef4444';
+            status.className = 'file-status error';
+            status.textContent = 'Error: ' + (err.message || 'Failed');
+          }
+        }
+
+        if (converted.length) {
+          actions.style.display = 'flex';
+          resultsHeader.style.display = 'block';
+          fileCount.textContent = String(converted.length);
+          banner.className = 'banner banner-success';
+          bannerText.textContent = '✓ ' + converted.length + ' file(s) ready — see list below';
+          banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const batchOver10 = total > 10;
+          if (window.DoItSwiftFileResults) {
+            DoItSwiftFileResults.setupToolbar({
+              toolbar: document.getElementById('resultsToolbar'),
+              galleryToggle: document.getElementById('galleryViewToggle'),
+              note: document.getElementById('galleryToolbarNote'),
+              batchOver10,
+              galleryRoot: document.getElementById('fileResultsRoot'),
+            });
+            if (total > 10) {
+              DoItSwiftFileResults.setupMoreFilesSection({
+                moreBlock: document.getElementById('resultsMoreBlock'),
+                moreInner: document.getElementById('resultsMore'),
+                moreBtn: document.getElementById('moreFilesBtn'),
+                moreLabel: document.getElementById('moreFilesLabel'),
+                extraCount: total - 10,
+              });
+            }
+          }
+        }
+      }
+
+      document.getElementById('clearAll').addEventListener('click', () => {
+        results.innerHTML = '';
+        if (resultsMore) resultsMore.innerHTML = '';
+        const moreBlock = document.getElementById('resultsMoreBlock');
+        if (moreBlock) moreBlock.style.display = 'none';
+        const tb = document.getElementById('resultsToolbar');
+        if (tb) tb.style.display = 'none';
+        const gt = document.getElementById('galleryViewToggle');
+        if (gt) {
+          gt.checked = false;
+          gt.disabled = false;
+        }
+        const note = document.getElementById('galleryToolbarNote');
+        if (note) note.hidden = true;
+        converted = [];
+        actions.style.display = 'none';
+        banner.style.display = 'none';
+        resultsHeader.style.display = 'none';
+      });
+
+      document.getElementById('downloadAll').addEventListener('click', async () => {
+        if (typeof JSZip === 'undefined') return alert('ZIP library not loaded.');
+        const zip = new JSZip();
+        converted.forEach(f => zip.file(f.name, f.blob));
+        const content = await zip.generateAsync({ type: 'blob' });
+        const url = URL.createObjectURL(content);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'doitswift-compressed.zip';
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      void (async () => {
+        try {
+          const pending = await window.DoItSwiftPending?.consume?.();
+          if (pending) await handleFiles([pending]);
+        } catch (e) {
+          console.warn(e);
+        }
+      })();
+    });
+  </script>
+
+  <style>
+    .hero { padding: 60px 0 20px; text-align: center; }
+    .subtitle { font-size: 19px; color: var(--text-muted); max-width: 620px; margin: 0 auto 28px; }
+
+    .converter-section { padding: 30px 0; }
+    .converter-section .container { max-width: 820px; }
+
+    .banner {
+      padding: 14px 20px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .banner-info { background: #dbeafe; color: #1e40af; }
+    .banner-success { background: #d1fae5; color: #065f46; }
+    [data-theme="dark"] .banner-info { background: rgba(30, 64, 175, .2); color: #93c5fd; }
+    [data-theme="dark"] .banner-success { background: rgba(6, 95, 70, .2); color: #6ee7b7; }
+
+    .dropzone {
+      background: var(--card);
+      border: 2px dashed var(--gray-300);
+      border-radius: var(--radius-lg);
+      padding: 70px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .2s;
+      box-shadow: var(--shadow);
+    }
+    .dropzone:hover, .dropzone.drag {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+    [data-theme="dark"] .dropzone.drag { background: rgba(0, 102, 255, .1); }
+    .dropzone-icon { font-size: 56px; margin-bottom: 14px; }
+    .dropzone-text { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+    .dropzone-sub { font-size: 14px; color: var(--text-muted); }
+    #fileInput { display: none; }
+
+    .controls {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .controls label { font-size: 14px; font-weight: 600; }
+    .controls input[type=range] { flex: 1; min-width: 150px; }
+    .quality-val { font-size: 14px; font-weight: 600; color: var(--blue); min-width: 40px; }
+
+    .affiliate { padding: 40px 0; }
+    .affiliate .container { max-width: 820px; }
+    .affiliate-inner {
+      background: linear-gradient(135deg, #fff7ed, #ffedd5);
+      border: 1px solid #fed7aa;
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    [data-theme="dark"] .affiliate-inner {
+      background: linear-gradient(135deg, rgba(249, 115, 22, .1), rgba(245, 158, 11, .1));
+      border-color: rgba(249, 115, 22, .3);
+    }
+    .affiliate-icon { font-size: 42px; }
+    .affiliate-content { flex: 1; min-width: 200px; }
+    .affiliate-content h3 { font-size: 18px; margin-bottom: 4px; }
+    .affiliate-content p { font-size: 14px; color: var(--text-muted); }
+
+    .faq { padding: 60px 0; }
+    .faq .container { max-width: 820px; }
+    .section-title { text-align: center; margin-bottom: 32px; }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
+    }
+    .faq-item h4 { font-size: 16px; margin-bottom: 6px; }
+    .faq-item p { font-size: 14px; color: var(--text-muted); }
+  </style>
+</MainLayout>
