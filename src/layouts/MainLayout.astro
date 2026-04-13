@@ -98,7 +98,7 @@ const ogImageUrl =
           <a href="/blog">Blog</a>
           <a href="/#faq">FAQ</a>
           <button type="button" id="themeToggle" class="theme-toggle" aria-label="Switch to dark mode">🌙</button>
-          <a href="/pro" class="btn-pro">Get Pro</a>
+          <a href="/pro">Roadmap</a>
         </div>
       </div>
     </nav>
@@ -134,7 +134,7 @@ const ogImageUrl =
           <h5>Company</h5>
           <a href="/about">About</a>
           <a href="/blog">Blog</a>
-          <a href="/pro">Pro</a>
+          <a href="/pro">Roadmap</a>
           <a href="/contact">Contact</a>
         </div>
         <div class="footer-col">
@@ -282,13 +282,6 @@ const ogImageUrl =
       :global([data-theme='dark']) .theme-toggle:hover {
         background: var(--gray-200);
       }
-      .btn-pro {
-        background: linear-gradient(135deg, #f59e0b, #f97316);
-        color: #fff !important;
-        padding: 8px 16px;
-        border-radius: 8px;
-        font-weight: 600 !important;
-      }
 
       footer {
         background: var(--gray-900);
@@ -342,8 +335,7 @@ const ogImageUrl =
         .nav-links.is-open {
           display: flex;
         }
-        .nav-links > a,
-        .nav-links > .btn-pro {
+        .nav-links > a {
           padding: 12px 8px;
           border-radius: var(--radius-sm, 8px);
         }

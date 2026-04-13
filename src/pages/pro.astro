@@ -3,26 +3,29 @@ import MainLayout from '../layouts/MainLayout.astro';
 ---
 
 <MainLayout
-  title="DoItSwift Pro"
-  description="Future Pro tier for power users: advanced workflows and extras. Core DoItSwift tools stay free in your browser."
-  keywords="doitswift pro, online tools pro"
+  title="DoItSwift Roadmap | DoItSwift"
+  description="What we're thinking about building next at DoItSwift — exploratory plans, not a store. Core tools stay free; share feedback on the contact page."
+  keywords="doitswift roadmap, future plans, what's coming"
 >
   <section class="content-page">
     <div class="container">
-      <h1>DoItSwift Pro</h1>
+      <p class="roadmap-note">Shaping what we build next — share your ideas</p>
+      <h1>What's coming</h1>
       <p class="lead">
-        Today, every DoItSwift tool is free and runs in your browser — no account required. We are planning an optional
-        <strong>Pro</strong> tier for people who want more: faster batch flows, saved presets, priority support, and
-        other power-user features.
+        Today, every DoItSwift tool is free and runs in your browser — no account required. The notes below are
+        exploratory: we're sketching possible directions, including ideas for optional deeper workflows (batch flows,
+        presets, support) for people who want them. This is not a product page or a promise to ship or charge for
+        anything specific.
       </p>
 
       <h2>What stays free</h2>
       <p>
         Core conversion, compression, resizing, and encoding features you use today are intended to remain available
-        without a subscription. Pro is about going further for those who need it — not locking basics behind a paywall.
+        without a subscription. If we ever add optional extras, the aim is not to lock everyday basics behind a
+        paywall.
       </p>
 
-      <h2>What Pro might include</h2>
+      <h2>Ideas under consideration</h2>
       <ul>
         <li>Advanced batch and automation options</li>
         <li>Preset packs and reusable settings</li>
@@ -30,17 +33,27 @@ import MainLayout from '../layouts/MainLayout.astro';
         <li>Additional export and workflow integrations over time</li>
       </ul>
       <p>
-        Details and pricing will be announced when we are ready. Nothing changes for casual users who are happy with the
-        free tools.
+        Details and pricing would only be shared when and if we're ready — and nothing changes for casual users who are
+        happy with the free tools.
       </p>
 
       <h2>Have input?</h2>
       <p>
-        If you have a feature you would pay for — or something you never want paywalled — tell us on the{' '}
+        If there's something you'd like to see — or something you want to stay free forever — tell us on the{' '}
         <a href="/contact" class="link-back">contact page</a>. It genuinely shapes what we build next.
       </p>
 
       <p><a href="/" class="link-back">← Back to home</a></p>
     </div>
   </section>
+
+  <style>
+    .roadmap-note {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin: 0 0 10px;
+      letter-spacing: 0.02em;
+    }
+  </style>
 </MainLayout>
