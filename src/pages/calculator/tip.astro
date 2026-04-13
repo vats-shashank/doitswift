@@ -1,0 +1,414 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const site = Astro.site?.href ?? 'https://doitswift.com';
+const canonical = `${site}calculator/tip/`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Tip Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Restaurant tip and bill split with INR or USD, presets, and service quality shortcuts.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Is service charge the same as tip?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'In India, some bills include a service charge; tipping on top is optional and culturally lighter than in the US.',
+          },
+        },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: site },
+        { '@type': 'ListItem', position: 2, name: 'Calculators', item: `${site}calculator/` },
+        { '@type': 'ListItem', position: 3, name: 'Tip Calculator', item: canonical },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Tip Calculator — Calculate Tips & Split Bills | DoItSwift"
+  description="Compute tip amount, grand total, and per-person split in INR or USD. Preset percentages, service-quality shortcuts, and optional round-up."
+  keywords="tip calculator, bill split calculator, restaurant tip calculator, gratuity calculator"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Tip Calculator</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Tip &amp; Bill Split Calculator</h1>
+      <p class="subtitle">
+        Enter your subtotal, pick a tip percentage (or tap a service-quality preset), split across guests, and optionally round the total to a whole number for cash.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label>Currency</label>
+          <div class="seg">
+            <label><input type="radio" name="tipCur" value="INR" checked /> INR (₹)</label>
+            <label><input type="radio" name="tipCur" value="USD" /> USD ($)</label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="tipBill">Bill amount</label>
+          <input type="number" id="tipBill" min="0" step="0.01" value="1200" />
+        </div>
+        <div class="field">
+          <label for="tipPct">Tip percentage</label>
+          <input type="range" id="tipPctR" min="0" max="30" step="0.5" value="15" aria-hidden="true" />
+          <input type="number" id="tipPct" min="0" max="30" step="0.1" value="15" />
+        </div>
+        <div class="presets" role="group" aria-label="Tip presets">
+          <button type="button" class="preset" data-p="5">5%</button>
+          <button type="button" class="preset" data-p="10">10%</button>
+          <button type="button" class="preset" data-p="15">15%</button>
+          <button type="button" class="preset" data-p="18">18%</button>
+          <button type="button" class="preset" data-p="20">20%</button>
+        </div>
+        <div class="field">
+          <label>Service quality (sets tip %)</label>
+          <div class="qual">
+            <button type="button" data-p="10">Poor · 10%</button>
+            <button type="button" data-p="15">Average · 15%</button>
+            <button type="button" data-p="18">Good · 18%</button>
+            <button type="button" data-p="20">Excellent · 20%</button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="tipPeople">People splitting</label>
+          <input type="number" id="tipPeople" min="1" max="20" step="1" value="2" />
+        </div>
+        <div class="field">
+          <label><input type="checkbox" id="tipRound" /> Round total up to whole currency</label>
+        </div>
+      </div>
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <div class="grid2">
+          <div><span class="lab">Tip</span><strong id="tipAmt">0</strong></div>
+          <div><span class="lab">Total</span><strong id="tipTot">0</strong></div>
+          <div><span class="lab">Per person</span><strong id="tipPP">0</strong></div>
+          <div><span class="lab">Tip / person</span><strong id="tipTP">0</strong></div>
+        </div>
+        <p class="round-note" id="tipNote"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Tipping norms: India vs US vs Europe</h2>
+      <p>
+        <strong>United States</strong> restaurant culture still leans on customer tips to supplement server wages — 15–20% on pre-tax food is a common guideline when service was good. <strong>India</strong> increasingly adds a <strong>service charge</strong> (often ~10%) directly on the bill; where that appears, extra tipping may be optional — many diners round up or leave modest cash for individual servers when service stood out. <strong>United Kingdom</strong> sometimes adds discretionary service; <strong>continental Europe</strong> often includes service in menu prices — rounding change is enough.
+      </p>
+      <p>
+        <strong>Hotels, cabs, salons:</strong> Upscale hotels may expect porters and housekeeping tips in cash; ride-hailing apps sometimes include tips in-app. Salons and spas may add service charge — read the bill. When in doubt, ask politely whether charge is included.
+      </p>
+      <p>
+        <strong>Modern debate:</strong> Workers’ advocates push for living wages so tips are not survival-critical; some venues move to <strong>service-inclusive</strong> pricing. This calculator stays neutral — it only splits numbers you choose.
+      </p>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner">
+        <div class="affiliate-icon">🧾</div>
+        <div class="affiliate-content">
+          <h3>Budget better</h3>
+          <p>Pair tipping with our discount and percentage tools when comparing offers.</p>
+        </div>
+        <a href="/calculator/discount" class="btn btn-orange">Discount calculator</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>Pre-tax or post-tax?</h4><p>US guides often tip on pre-tax subtotal; this tool uses whatever amount you enter.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/discount">Discount</a> · <a href="/calculator/percentage">Percentage</a> · <a href="/calculator/age">Age</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      function debounce(fn, ms) {
+        let t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      function fmtMoney(n, cur) {
+        if (cur === 'USD') return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
+        return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 }).format(n);
+      }
+      function run() {
+        const cur = document.querySelector('input[name="tipCur"]:checked').value;
+        let bill = Math.max(0, parseFloat(document.getElementById('tipBill').value) || 0);
+        let pct = Math.max(0, Math.min(30, parseFloat(document.getElementById('tipPct').value) || 0));
+        document.getElementById('tipPctR').value = pct;
+        document.getElementById('tipPct').value = pct;
+        const people = Math.max(1, Math.min(20, parseInt(document.getElementById('tipPeople').value, 10) || 1));
+        document.getElementById('tipPeople').value = people;
+        const tip = bill * (pct / 100);
+        let total = bill + tip;
+        const roundUp = document.getElementById('tipRound').checked;
+        let rounded = total;
+        if (roundUp) rounded = Math.ceil(total);
+        const per = rounded / people;
+        const tipPer = (rounded - bill) / people;
+        document.getElementById('tipAmt').textContent = fmtMoney(tip, cur);
+        document.getElementById('tipTot').textContent = fmtMoney(rounded, cur);
+        document.getElementById('tipPP').textContent = fmtMoney(per, cur);
+        document.getElementById('tipTP').textContent = fmtMoney(tipPer, cur);
+        document.getElementById('tipNote').textContent = roundUp
+          ? 'Exact total before round-up: ' + fmtMoney(total, cur) + ' → rounded up for convenience.'
+          : '';
+      }
+      const d = debounce(run, 50);
+      ['tipBill', 'tipPct', 'tipPctR', 'tipPeople', 'tipRound'].forEach(function (id) {
+        const el = document.getElementById(id);
+        el.addEventListener('input', function () {
+          if (id === 'tipPctR') document.getElementById('tipPct').value = el.value;
+          d();
+        });
+        if (id === 'tipRound') el.addEventListener('change', d);
+      });
+      document.querySelectorAll('input[name="tipCur"]').forEach(function (el) {
+        el.addEventListener('change', d);
+      });
+      document.querySelectorAll('.preset, .qual button').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const p = this.getAttribute('data-p');
+          if (p) {
+            document.getElementById('tipPct').value = p;
+            document.getElementById('tipPctR').value = p;
+            d();
+          }
+        });
+      });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 16px 0 0;
+      max-width: 960px;
+    }
+    .breadcrumb a {
+      color: var(--blue);
+    }
+    .hero {
+      padding: 36px 0 16px;
+      text-align: center;
+    }
+    .subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto 22px;
+      line-height: 1.65;
+    }
+    .calc-section {
+      padding: 24px 0 40px;
+    }
+    .calc-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      max-width: 960px;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .calc-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .calc-inputs,
+    .calc-results {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+      box-shadow: var(--shadow);
+    }
+    .calc-heading {
+      font-size: 1rem;
+      margin: 0 0 16px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .field {
+      margin-bottom: 14px;
+    }
+    .field label {
+      display: block;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    .field input[type='number'] {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      font-size: 16px;
+    }
+    .presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .preset {
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--card);
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .qual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .qual button {
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--gray-100);
+      cursor: pointer;
+      font-size: 13px;
+    }
+    [data-theme='dark'] .qual button {
+      background: var(--gray-200);
+    }
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .lab {
+      display: block;
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .grid2 strong {
+      font-size: 1.25rem;
+    }
+    .round-note {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 12px;
+    }
+    .edu {
+      padding: 36px 0 40px;
+    }
+    .edu .container {
+      max-width: 760px;
+    }
+    .edu p {
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 18px;
+      font-size: 1.5rem;
+    }
+    .affiliate {
+      padding: 28px 0;
+    }
+    .affiliate .container {
+      max-width: 900px;
+    }
+    .affiliate-inner {
+      background: linear-gradient(135deg, #fff7ed, #ffedd5);
+      border: 1px solid #fdba74;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    [data-theme='dark'] .affiliate-inner {
+      background: linear-gradient(135deg, #431407, #7c2d12);
+      border-color: #c2410c;
+    }
+    .affiliate-icon {
+      font-size: 36px;
+    }
+    .affiliate-content {
+      flex: 1;
+      min-width: 200px;
+    }
+    .faq-list {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .related {
+      text-align: center;
+      padding-bottom: 48px;
+    }
+    .related-links a {
+      color: var(--blue);
+      font-weight: 600;
+    }
+  </style>
+</MainLayout>

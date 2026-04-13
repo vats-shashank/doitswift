@@ -1,0 +1,310 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/sip/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'SIP Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Free SIP calculator for monthly mutual fund investments. Estimate maturity, returns, and year-by-year growth.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is SIP?',
+          acceptedAnswer: { '@type': 'Answer', text: 'SIP means investing a fixed sum every month into mutual funds or similar instruments, benefiting from rupee-cost averaging and compounding.' },
+        },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="SIP Calculator — Free Online Calculator | DoItSwift"
+  description="Plan your mutual fund SIP: see maturity value, total invested, estimated returns, and a year-by-year breakdown. Free, instant, private."
+  keywords="SIP calculator, mutual fund SIP, systematic investment plan calculator, monthly SIP returns India"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>SIP Calculator</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>SIP Calculator</h1>
+      <p class="subtitle">
+        Estimate how much your monthly SIP could grow to — total invested, returns, and maturity value using compound growth (payment at the start of each month).
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label for="sipMonthly">Monthly investment (₹)</label>
+          <input type="range" id="sipMonthlyRange" min="500" max="100000" step="500" value="5000" aria-hidden="true" />
+          <input type="number" id="sipMonthly" min="500" max="100000" step="500" value="5000" inputmode="numeric" aria-describedby="sipMonthly-hint" />
+          <p id="sipMonthly-hint" class="field-hint">Between ₹500 and ₹1,00,000</p>
+        </div>
+        <div class="field">
+          <label for="sipRate">Expected annual return (%)</label>
+          <input type="range" id="sipRateRange" min="1" max="30" step="0.5" value="12" aria-hidden="true" />
+          <input type="number" id="sipRate" min="1" max="30" step="0.1" value="12" inputmode="decimal" />
+        </div>
+        <div class="field">
+          <label for="sipYears">Investment period (years)</label>
+          <input type="range" id="sipYearsRange" min="1" max="40" step="1" value="10" aria-hidden="true" />
+          <input type="number" id="sipYears" min="1" max="40" step="1" value="10" inputmode="numeric" />
+        </div>
+      </div>
+
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <div class="result-hero" id="sipMaturity">₹0</div>
+        <p class="result-label">Maturity value (estimated)</p>
+        <div class="result-grid">
+          <div>
+            <div class="result-sub" id="sipInvested">₹0</div>
+            <div class="result-caption">Total invested</div>
+          </div>
+          <div>
+            <div class="result-sub" id="sipReturns">₹0</div>
+            <div class="result-caption">Est. returns</div>
+          </div>
+        </div>
+        <div class="bar-chart" id="sipBar" role="img" aria-label="Invested versus returns bar comparison">
+          <div class="bar-row"><span class="bar-label">Invested</span><div class="bar-track"><div class="bar-fill bar-fill--inv" id="sipBarInv"></div></div></div>
+          <div class="bar-row"><span class="bar-label">Returns</span><div class="bar-track"><div class="bar-fill bar-fill--ret" id="sipBarRet"></div></div></div>
+        </div>
+        <details class="calc-details">
+          <summary>Year-by-year breakdown</summary>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Year</th><th>Cumulative invested</th><th>Est. value</th></tr></thead>
+              <tbody id="sipTable"></tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">How SIP wealth is estimated</h2>
+      <p>
+        A <strong>Systematic Investment Plan (SIP)</strong> means you invest the same amount every month. This calculator treats each payment as occurring at the <strong>beginning</strong> of the month, which matches how many mutual fund SIPs operate and uses the standard future-value-of-annuity-due formula. The monthly rate is the annual return divided by 12; the number of periods is years × 12.
+      </p>
+      <p>
+        The formula used is: <em>M = P × ([(1 + r)<sup>n</sup> − 1] / r) × (1 + r)</em>, where <em>P</em> is monthly investment, <em>r</em> is the monthly rate, and <em>n</em> is the number of months. <strong>Expected return</strong> is not guaranteed — markets move up and down. Use 10–12% only as a long-term equity illustration; debt funds might be closer to 6–8%. Fees (expense ratio), tax on redemption, and exit loads are not modeled here.
+      </p>
+      <p>
+        <strong>Example:</strong> ₹5,000/month for 10 years at 12% annualized implies roughly ₹6 lakh invested and a materially higher corpus than keeping cash — the exact numbers update live as you drag the sliders. Starting early matters: the same monthly amount over 20 years typically dominates a late start because compounding has more cycles.
+      </p>
+      <p>
+        <strong>Tips:</strong> Increase SIP when income rises, review asset allocation yearly, and avoid stopping during downturns if your goal is far away. Use this tool to compare scenarios (higher SIP vs longer horizon) before you commit on paper — then invest through a SEBI-registered platform.
+      </p>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner">
+        <div class="affiliate-icon">📈</div>
+        <div class="affiliate-content">
+          <h3>Start investing with a trusted platform</h3>
+          <p>Groww offers mutual funds, stocks, and SIPs with a simple app — do your own research before investing.</p>
+        </div>
+        <a href="https://groww.in/?ref=doitswift" class="btn btn-orange" target="_blank" rel="sponsored noopener noreferrer">Visit Groww →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>Is SIP return fixed?</h4><p>No. The percentage you enter is an assumption; actual returns vary.</p></div>
+        <div class="faq-item"><h4>Does this include tax on capital gains?</h4><p>No — it shows a gross maturity-style estimate before personal tax rules.</p></div>
+        <div class="faq-item"><h4>Why “beginning of month”?</h4><p>Many SIPs debit at the start of the period; the extra (1+r) factor reflects that timing.</p></div>
+        <div class="faq-item"><h4>Can I use this for daily/weekly SIP?</h4><p>This page is monthly only; adjust inputs conceptually or use a spreadsheet for other frequencies.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/lumpsum">Lumpsum Calculator</a>
+        ·
+        <a href="/calculator/emi">EMI Calculator</a>
+        ·
+        <a href="/calculator/ppf">PPF Calculator</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      const fmt = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+      function debounce(fn, ms) {
+        let t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      function sipFV(P, annualPct, years) {
+        const r = annualPct / 100 / 12;
+        const n = Math.round(years * 12);
+        if (n <= 0) return 0;
+        if (r === 0) return P * n;
+        return P * ((Math.pow(1 + r, n) - 1) / r) * (1 + r);
+      }
+      function syncRange(inp, rng) {
+        rng.value = inp.value;
+      }
+      function run() {
+        const P = Math.min(100000, Math.max(500, parseFloat(document.getElementById('sipMonthly').value) || 0));
+        const rate = Math.min(30, Math.max(1, parseFloat(document.getElementById('sipRate').value) || 0));
+        const yrs = Math.min(40, Math.max(1, parseFloat(document.getElementById('sipYears').value) || 0));
+        document.getElementById('sipMonthly').value = P;
+        document.getElementById('sipRate').value = rate;
+        document.getElementById('sipYears').value = yrs;
+        syncRange(document.getElementById('sipMonthly'), document.getElementById('sipMonthlyRange'));
+        syncRange(document.getElementById('sipRate'), document.getElementById('sipRateRange'));
+        syncRange(document.getElementById('sipYears'), document.getElementById('sipYearsRange'));
+        const months = Math.round(yrs * 12);
+        const invested = P * months;
+        const maturity = sipFV(P, rate, yrs);
+        const ret = Math.max(0, maturity - invested);
+        document.getElementById('sipMaturity').textContent = fmt.format(Math.round(maturity));
+        document.getElementById('sipInvested').textContent = fmt.format(Math.round(invested));
+        document.getElementById('sipReturns').textContent = fmt.format(Math.round(ret));
+        const maxBar = Math.max(invested, ret, 1);
+        document.getElementById('sipBarInv').style.width = (invested / maxBar) * 100 + '%';
+        document.getElementById('sipBarRet').style.width = (ret / maxBar) * 100 + '%';
+        const tbody = document.getElementById('sipTable');
+        tbody.innerHTML = '';
+        for (let y = 1; y <= yrs; y++) {
+          const invY = P * 12 * y;
+          const valY = sipFV(P, rate, y);
+          const tr = document.createElement('tr');
+          tr.innerHTML = '<td>' + y + '</td><td>' + fmt.format(Math.round(invY)) + '</td><td>' + fmt.format(Math.round(valY)) + '</td>';
+          tbody.appendChild(tr);
+        }
+      }
+      const debRun = debounce(run, 80);
+      ['sipMonthly', 'sipRate', 'sipYears'].forEach((id) => {
+        document.getElementById(id).addEventListener('input', debRun);
+      });
+      [['sipMonthlyRange', 'sipMonthly'], ['sipRateRange', 'sipRate'], ['sipYearsRange', 'sipYears']].forEach(function (pair) {
+        document.getElementById(pair[0]).addEventListener('input', function () {
+          document.getElementById(pair[1]).value = this.value;
+          debRun();
+        });
+      });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 18px; color: var(--text-muted); max-width: 640px; margin: 0 auto 24px; }
+    .calc-section { padding: 24px 0 40px; }
+    .calc-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: start;
+      max-width: 960px;
+    }
+    @media (max-width: 768px) {
+      .calc-layout { grid-template-columns: 1fr; }
+    }
+    .calc-inputs, .calc-results {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+      box-shadow: var(--shadow);
+    }
+    .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+    .field { margin-bottom: 18px; }
+    .field label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    .field input[type='number'] {
+      width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px;
+    }
+    .field input[type='range'] { width: 100%; margin-bottom: 6px; }
+    .field-hint { font-size: 12px; color: var(--text-muted); margin: 6px 0 0; }
+    .result-hero { font-size: 2.25rem; font-weight: 800; color: var(--blue); letter-spacing: -0.02em; }
+    .result-label { font-size: 14px; color: var(--text-muted); margin: 4px 0 20px; }
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .result-sub { font-size: 1.25rem; font-weight: 700; }
+    .result-caption { font-size: 12px; color: var(--text-muted); }
+    .bar-chart { margin: 16px 0; }
+    .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 13px; }
+    .bar-label { width: 64px; color: var(--text-muted); }
+    .bar-track { flex: 1; height: 22px; background: var(--gray-100); border-radius: 6px; overflow: hidden; }
+    [data-theme='dark'] .bar-track { background: var(--gray-200); }
+    .bar-fill { height: 100%; border-radius: 6px; transition: width 0.2s ease; }
+    .bar-fill--inv { background: var(--blue); opacity: 0.85; }
+    .bar-fill--ret { background: var(--green); }
+    .calc-details { margin-top: 12px; font-size: 14px; }
+    .calc-details summary { cursor: pointer; font-weight: 600; padding: 8px 0; }
+    .table-wrap { overflow-x: auto; max-height: 280px; overflow-y: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 8px 10px; border-bottom: 1px solid var(--border); text-align: right; }
+    th:first-child, td:first-child { text-align: left; }
+    .edu { padding: 40px 0; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
+    .section-title { text-align: center; margin-bottom: 20px; font-size: 1.5rem; }
+    .affiliate { padding: 32px 0; }
+    .affiliate .container { max-width: 900px; }
+    .affiliate-inner {
+      background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+      border: 1px solid #6ee7b7;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    }
+    [data-theme='dark'] .affiliate-inner {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), transparent);
+      border-color: rgba(52, 211, 153, 0.4);
+    }
+    .affiliate-icon { font-size: 36px; }
+    .affiliate-content { flex: 1; min-width: 200px; }
+    .affiliate-content h3 { font-size: 17px; margin-bottom: 4px; }
+    .affiliate-content p { font-size: 14px; color: var(--text-muted); }
+    .faq { padding: 32px 0 48px; }
+    .faq .container { max-width: 760px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 10px; }
+    .faq-item h4 { font-size: 15px; margin-bottom: 4px; }
+    .faq-item p { font-size: 14px; color: var(--text-muted); }
+    .related { padding: 24px 0 48px; text-align: center; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

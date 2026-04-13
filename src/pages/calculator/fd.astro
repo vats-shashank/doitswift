@@ -1,0 +1,159 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/fd/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebApplication', name: 'FD Calculator — DoItSwift', url: canonical, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' }, description: 'Fixed deposit maturity calculator with compound interest.' },
+    { '@type': 'FAQPage', mainEntity: [{ '@type': 'Question', name: 'What is FD?', acceptedAnswer: { '@type': 'Answer', text: 'A fixed deposit locks principal for a tenure at a stated interest rate with bank compounding rules.' } }] },
+  ],
+};
+---
+
+<MainLayout
+  title="FD Calculator — Free Online Calculator | DoItSwift"
+  description="Calculate fixed deposit maturity and interest earned. Choose compounding frequency — monthly, quarterly, half-yearly, or yearly."
+  keywords="FD calculator, fixed deposit calculator India, compound interest FD, maturity amount FD"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>FD Calculator</span></nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Fixed Deposit (FD) Calculator</h1>
+      <p class="subtitle">Compound interest: A = P × (1 + r/n)<sup>n×t</sup> — see maturity and interest for your principal, rate, and tenure.</p>
+      <div class="trust"><span><span class="check">✓</span> No signup</span><span><span class="check">✓</span> Instant results</span><span><span class="check">✓</span> Works offline</span></div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field"><label for="fdP">Principal (₹)</label><input type="number" id="fdP" min="1000" max="100000000" step="1000" value="100000" /></div>
+        <div class="field"><label for="fdR">Annual interest rate (%)</label><input type="range" id="fdRR" min="1" max="15" step="0.1" value="7" /><input type="number" id="fdR" min="1" max="15" step="0.01" value="7" /></div>
+        <div class="field"><label for="fdT">Tenure (years)</label><input type="number" id="fdT" min="0.08" max="10" step="0.25" value="3" /></div>
+        <div class="field">
+          <label for="fdN">Compounding</label>
+          <select id="fdN">
+            <option value="12">Monthly</option>
+            <option value="4" selected>Quarterly</option>
+            <option value="2">Half-yearly</option>
+            <option value="1">Yearly</option>
+          </select>
+        </div>
+      </div>
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <div class="result-hero" id="fdMat">₹0</div>
+        <p class="result-label">Maturity amount</p>
+        <div class="result-grid">
+          <div><div class="result-sub" id="fdInt">₹0</div><div class="result-caption">Interest earned</div></div>
+          <div><div class="result-sub" id="fdPrin">₹0</div><div class="result-caption">Principal</div></div>
+        </div>
+        <details class="calc-details"><summary>Year-by-year growth</summary><div class="table-wrap"><table><thead><tr><th>Year</th><th>Balance</th></tr></thead><tbody id="fdTb"></tbody></table></div></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Compound interest on FDs</h2>
+      <p>Banks quote an annual rate but credit interest per compounding period. More frequent compounding (monthly vs yearly) slightly increases the effective yield for the same nominal rate. This calculator uses the standard formula A = P(1 + r/n)<sup>nt</sup> with r as the nominal annual rate in decimal, n compounding periods per year, and t in years.</p>
+      <p>TDS and senior-citizen bonus rates are not applied here — enter the rate you expect after talking to your bank. Compare cumulative vs non-cumulative options at the branch.</p>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner">
+        <div class="affiliate-icon">📈</div>
+        <div class="affiliate-content"><h3>Invest systematically</h3><p>Explore mutual funds and direct plans on Groww — invest only after reading scheme documents.</p></div>
+        <a href="https://groww.in/?ref=doitswift" class="btn btn-orange" target="_blank" rel="sponsored noopener noreferrer">Groww →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq"><div class="container"><h2 class="section-title">FAQ</h2><div class="faq-list"><div class="faq-item"><h4>Is FD return guaranteed?</h4><p>Bank FDs are subject to bank rules and DICGC insurance limits — verify with your bank.</p></div></div></div></section>
+  <section class="related"><div class="container"><h2 class="section-title">Related</h2><p class="related-links"><a href="/calculator/sip">SIP</a> · <a href="/calculator/emi">EMI</a> · <a href="/calculator/gst">GST</a></p></div></section>
+
+  <script is:inline>
+    (function () {
+      const fmt = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+      function debounce(fn, ms) { let t; return function () { clearTimeout(t); t = setTimeout(fn, ms); }; }
+      function run() {
+        const P = Math.max(1000, parseFloat(document.getElementById('fdP').value) || 0);
+        const annual = Math.max(1, Math.min(15, parseFloat(document.getElementById('fdR').value) || 0));
+        const t = Math.max(0.08, Math.min(10, parseFloat(document.getElementById('fdT').value) || 0));
+        const n = parseInt(document.getElementById('fdN').value, 10);
+        document.getElementById('fdRR').value = annual;
+        document.getElementById('fdR').value = annual;
+        const r = annual / 100;
+        const A = P * Math.pow(1 + r / n, n * t);
+        const interest = A - P;
+        document.getElementById('fdMat').textContent = fmt.format(Math.round(A));
+        document.getElementById('fdInt').textContent = fmt.format(Math.round(interest));
+        document.getElementById('fdPrin').textContent = fmt.format(Math.round(P));
+        const tb = document.getElementById('fdTb');
+        tb.innerHTML = '';
+        const yMax = Math.ceil(t);
+        for (let y = 1; y <= yMax; y++) {
+          const ty = Math.min(y, t);
+          const bal = P * Math.pow(1 + r / n, n * ty);
+          const tr = document.createElement('tr');
+          tr.innerHTML = '<td>' + y + '</td><td>' + fmt.format(Math.round(bal)) + '</td>';
+          tb.appendChild(tr);
+        }
+      }
+      const d = debounce(run, 80);
+      ['fdP', 'fdR', 'fdT', 'fdN'].forEach(function (id) { document.getElementById(id).addEventListener('input', d); });
+      document.getElementById('fdRR').addEventListener('input', function () { document.getElementById('fdR').value = this.value; d(); });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 18px; color: var(--text-muted); max-width: 680px; margin: 0 auto 24px; }
+    .calc-section { padding: 24px 0 40px; }
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 960px; align-items: start; }
+    @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
+    .calc-inputs, .calc-results { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--shadow); }
+    .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+    .field { margin-bottom: 18px; }
+    .field label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    .field input, .field select { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
+    .field input[type='range'] { margin-bottom: 6px; }
+    .result-hero { font-size: 2.25rem; font-weight: 800; color: var(--blue); }
+    .result-label { font-size: 14px; color: var(--text-muted); margin: 4px 0 20px; }
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .result-sub { font-size: 1.25rem; font-weight: 700; }
+    .result-caption { font-size: 12px; color: var(--text-muted); }
+    .calc-details summary { cursor: pointer; font-weight: 600; margin-top: 12px; }
+    .table-wrap { overflow: auto; max-height: 220px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 8px; border-bottom: 1px solid var(--border); text-align: right; }
+    th:first-child, td:first-child { text-align: left; }
+    .edu { padding: 40px 0; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
+    .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .affiliate { padding: 28px 0; }
+    .affiliate .container { max-width: 900px; }
+    .affiliate-inner { background: linear-gradient(135deg, #ecfdf5, #d1fae5); border: 1px solid #6ee7b7; border-radius: var(--radius-lg); padding: 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .affiliate-icon { font-size: 36px; }
+    .affiliate-content { flex: 1; min-width: 200px; }
+    .affiliate-content h3 { font-size: 17px; margin-bottom: 4px; }
+    .affiliate-content p { font-size: 14px; color: var(--text-muted); }
+    .faq { padding: 28px 0; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+    .related { text-align: center; padding-bottom: 48px; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

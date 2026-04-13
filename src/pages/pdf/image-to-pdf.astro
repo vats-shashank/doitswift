@@ -1,0 +1,654 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/pdf/image-to-pdf/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Image to PDF Converter — DoItSwift',
+      url: canonical,
+      applicationCategory: 'UtilitiesApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      description: 'Convert JPG, PNG, WEBP, or HEIC images to PDF in your browser. Combine and reorder pages locally.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Does Image to PDF support PNG and HEIC?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. PNG and JPG embed directly; HEIC from iPhone is converted to JPEG in your browser before building the PDF.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Can I mix JPG and PNG in one PDF?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Yes. Add images in any order, reorder with drag and drop, then export one combined PDF.' },
+        },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Image to PDF Converter — Free, Private & Unlimited | DoItSwift"
+  description="Convert JPG, PNG, WEBP, or HEIC images to PDF in your browser. Reorder pages, pick A4/Letter/Legal — no upload, unlimited."
+  keywords="image to pdf, jpg to pdf, png to pdf, photo to pdf, multiple images to pdf, heic to pdf, webp to pdf"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.js" is:inline></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" is:inline></script>
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/pdf/">PDF Tools</a> › <span>Image to PDF</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🔒 100% Private — Files Never Leave Your Device</div>
+      <h1>Image to PDF Converter</h1>
+      <p class="subtitle">
+        Combine JPG, PNG, WebP, HEIC, GIF, or BMP images into a single PDF. Drag thumbnails to reorder. Page size A4, Letter, or Legal — orientation follows each image.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> Unlimited images</span>
+        <span><span class="check">✓</span> No size limit</span>
+        <span><span class="check">✓</span> Works offline</span>
+        <span><span class="check">✓</span> No watermarks</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="converter-section">
+    <div class="container">
+      <div id="successBanner" class="banner" style="display:none">
+        <span id="bannerText">Ready</span>
+      </div>
+
+      <div class="dropzone" id="dropzone">
+        <div class="dropzone-icon">🖼️</div>
+        <div class="dropzone-text">Drop images here or click to browse</div>
+        <div class="dropzone-sub">JPG, PNG, WebP, HEIC, GIF, BMP — batch supported</div>
+        <input
+          type="file"
+          id="fileInput"
+          multiple
+          accept=".jpg,.jpeg,.png,.webp,.heic,.heif,.gif,.bmp,image/jpeg,image/png,image/webp,image/heic,image/heif,image/gif,image/bmp"
+        />
+      </div>
+
+      <div class="tool-options" id="toolOptions" style="display:none">
+        <label class="opt-label" for="pageSize">Page size</label>
+        <select id="pageSize" class="opt-select">
+          <option value="a4" selected>A4</option>
+          <option value="letter">Letter</option>
+          <option value="legal">Legal</option>
+        </select>
+        <p class="opt-hint">Orientation is chosen per image (portrait vs landscape) based on width and height.</p>
+      </div>
+
+      <div id="thumbPanel" class="thumb-panel" style="display:none">
+        <p class="thumb-title">Order (drag to reorder)</p>
+        <ul id="thumbList" class="thumb-list"></ul>
+        <button type="button" class="btn btn-lg" id="buildBtn">Create PDF</button>
+      </div>
+
+      <div id="resultsHeader" class="results-header" style="display:none">Result:</div>
+      <div class="results" id="results"></div>
+
+      <div class="actions" id="actions" style="display:none">
+        <button class="btn btn-secondary btn-lg" id="clearAll">Clear All</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner">
+        <div class="affiliate-icon">📄</div>
+        <div class="affiliate-content">
+          <h3>Need professional PDF editing?</h3>
+          <p>Adobe Acrobat is the industry standard for editing, signing, and managing PDFs on Mac, Windows, and mobile.</p>
+        </div>
+        <a href="https://www.adobe.com/acrobat.html?ref=YOUR_AFFILIATE_ID" class="btn btn-orange" target="_blank" rel="sponsored noopener">Try Adobe Acrobat →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="long-form">
+    <div class="container">
+      <h2 class="section-title">When to combine images into a PDF</h2>
+      <p>
+        Sharing twenty separate vacation photos by email is noisy; one PDF keeps the story in order and opens anywhere.
+        Freelancers combine receipts into a single expense PDF. Teachers bundle worksheet scans. iPhone users often have
+        <strong>HEIC</strong> stills — we decode those to JPEG in the browser (via heic2any) before embedding, so you can
+        mix HEIC with PNG exports from Photoshop in one document. The key is <strong>order control</strong>: our thumbnail
+        list is drag-sortable so page 1 in the PDF matches the sequence you intend.
+      </p>
+      <p>
+        <strong>JPG and PNG</strong> embed directly. <strong>WebP, GIF, and BMP</strong> are rasterized to pixels then
+        saved as JPEG frames inside the PDF (animated GIFs use the first frame). PNG transparency is flattened onto white
+        (PDF pages are opaque rectangles). Very wide panoramas scale to fit A4, Letter, or Legal while preserving aspect
+        ratio.
+      </p>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>Is Image to PDF free?</h4><p>Yes — build as many PDFs as you need locally.</p></div>
+        <div class="faq-item"><h4>Are images uploaded?</h4><p>No — conversion runs in your tab only.</p></div>
+        <div class="faq-item"><h4>Does this support PNG?</h4><p>Yes. PNG files embed with transparency flattened to a white background on each page.</p></div>
+        <div class="faq-item"><h4>Can I mix JPG and PNG?</h4><p>Yes — add any supported types in one batch, reorder thumbnails, then create one PDF.</p></div>
+        <div class="faq-item"><h4>What about HEIC from iPhone?</h4><p>HEIC/HEIF is converted to JPEG in your browser first (heic2any), then embedded — same as our HEIC tools, with no server upload.</p></div>
+        <div class="faq-item"><h4>Does WebP work?</h4><p>Yes. We decode WebP to pixels, then embed in the PDF.</p></div>
+        <div class="faq-item"><h4>Can I mix portrait and landscape?</h4><p>Each page uses its own orientation from the image dimensions.</p></div>
+        <div class="faq-item"><h4>What filename is used?</h4><p>Default download name is images-combined.pdf.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      const PDFLibGlobal = typeof PDFLib !== 'undefined' ? PDFLib : window.PDFLib;
+      if (!PDFLibGlobal) return;
+      const { PDFDocument } = PDFLibGlobal;
+
+      const SIZES = {
+        a4: { w: 595.28, h: 841.89 },
+        letter: { w: 612, h: 792 },
+        legal: { w: 612, h: 1008 },
+      };
+
+      const dropzone = document.getElementById('dropzone');
+      const fileInput = document.getElementById('fileInput');
+      const thumbPanel = document.getElementById('thumbPanel');
+      const thumbList = document.getElementById('thumbList');
+      const buildBtn = document.getElementById('buildBtn');
+      const results = document.getElementById('results');
+      const actions = document.getElementById('actions');
+      const banner = document.getElementById('successBanner');
+      const bannerText = document.getElementById('bannerText');
+      const resultsHeader = document.getElementById('resultsHeader');
+      const toolOptions = document.getElementById('toolOptions');
+      const pageSizeEl = document.getElementById('pageSize');
+
+      let items = [];
+      function uid() {
+        return 'x' + Math.random().toString(36).slice(2, 9);
+      }
+
+      dropzone.addEventListener('click', () => fileInput.click());
+      dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('drag');
+      });
+      dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag'));
+      dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('drag');
+        void addFiles(Array.from(e.dataTransfer.files));
+      });
+      fileInput.addEventListener('change', (e) => {
+        const fs = Array.from(e.target.files || []);
+        e.target.value = '';
+        void addFiles(fs);
+      });
+
+      async function bitmapToJpegBytes(file) {
+        const bmp = await createImageBitmap(file);
+        const canvas = document.createElement('canvas');
+        canvas.width = bmp.width;
+        canvas.height = bmp.height;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(bmp, 0, 0);
+        const blob = await new Promise((res) => canvas.toBlob(res, 'image/jpeg', 0.92));
+        return new Uint8Array(await blob.arrayBuffer());
+      }
+
+      async function fileToEmbeddedBytes(file) {
+        const type = file.type || '';
+        const name = file.name.toLowerCase();
+        if (name.endsWith('.heic') || name.endsWith('.heif') || type.includes('heic') || type.includes('heif')) {
+          if (typeof heic2any === 'undefined') throw new Error('HEIC library not loaded — refresh the page.');
+          const outBlob = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.92 });
+          const finalBlob = Array.isArray(outBlob) ? outBlob[0] : outBlob;
+          const bytes = new Uint8Array(await finalBlob.arrayBuffer());
+          return { kind: 'jpg', bytes: bytes, previewBlob: finalBlob };
+        }
+        if (type.includes('jpeg') || /\.jpe?g$/i.test(name)) {
+          return { kind: 'jpg', bytes: new Uint8Array(await file.arrayBuffer()) };
+        }
+        if (type.includes('png') || name.endsWith('.png')) {
+          return { kind: 'png', bytes: new Uint8Array(await file.arrayBuffer()) };
+        }
+        if (type.includes('webp') || name.endsWith('.webp')) {
+          const bytes = await bitmapToJpegBytes(file);
+          return { kind: 'jpg', bytes: bytes };
+        }
+        if (type.includes('gif') || name.endsWith('.gif') || type.includes('bmp') || name.endsWith('.bmp')) {
+          const bytes = await bitmapToJpegBytes(file);
+          return { kind: 'jpg', bytes: bytes };
+        }
+        throw new Error('Unsupported image type');
+      }
+
+      async function addFiles(files) {
+        const ok = files.filter((f) => {
+          const n = f.name.toLowerCase();
+          return f.type.startsWith('image/') || /\.(jpe?g|png|webp|heic|heif|gif|bmp)$/i.test(n);
+        });
+        if (!ok.length) {
+          alert('Please add supported images: JPG, PNG, WebP, HEIC, GIF, or BMP.');
+          return;
+        }
+        banner.style.display = 'block';
+        banner.className = 'banner banner-info';
+        bannerText.textContent = '⏳ Loading images…';
+        for (const file of ok) {
+          try {
+            const emb = await fileToEmbeddedBytes(file);
+            let previewUrl;
+            if (emb.previewBlob) {
+              previewUrl = URL.createObjectURL(emb.previewBlob);
+              delete emb.previewBlob;
+            } else {
+              previewUrl = URL.createObjectURL(file);
+            }
+            items.push({ id: uid(), file, name: file.name, emb, preview: previewUrl });
+          } catch (err) {
+            alert(file.name + ': ' + (err.message || err));
+          }
+        }
+        toolOptions.style.display = 'block';
+        thumbPanel.style.display = 'block';
+        banner.className = 'banner banner-success';
+        bannerText.textContent = '✓ ' + items.length + ' image(s) — reorder if needed, then Create PDF';
+        renderThumbs();
+      }
+
+      function renderThumbs() {
+        thumbList.innerHTML = '';
+        items.forEach((it, index) => {
+          const li = document.createElement('li');
+          li.className = 'thumb-row';
+          li.draggable = true;
+          li.dataset.id = it.id;
+          li.innerHTML =
+            '<span class="thumb-grip">⋮⋮</span><img class="thumb-img" src="' +
+            it.preview +
+            '" alt=""/><span class="thumb-name">' +
+            escapeHtml(it.name) +
+            '</span><button type="button" class="btn-text thumb-remove" data-id="' +
+            it.id +
+            '">Remove</button>';
+          li.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', it.id);
+            li.classList.add('dragging');
+          });
+          li.addEventListener('dragend', () => li.classList.remove('dragging'));
+          li.addEventListener('dragover', (e) => e.preventDefault());
+          li.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const fromId = e.dataTransfer.getData('text/plain');
+            const toId = it.id;
+            if (!fromId || fromId === toId) return;
+            const fromIx = items.findIndex((x) => x.id === fromId);
+            const toIx = items.findIndex((x) => x.id === toId);
+            if (fromIx < 0 || toIx < 0) return;
+            const [mv] = items.splice(fromIx, 1);
+            items.splice(toIx, 0, mv);
+            renderThumbs();
+          });
+          thumbList.appendChild(li);
+        });
+        thumbList.querySelectorAll('.thumb-remove').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-id');
+            const rem = items.find((x) => x.id === id);
+            if (rem && rem.preview) URL.revokeObjectURL(rem.preview);
+            items = items.filter((x) => x.id !== id);
+            if (!items.length) {
+              thumbPanel.style.display = 'none';
+              toolOptions.style.display = 'none';
+              banner.style.display = 'none';
+            } else renderThumbs();
+          });
+        });
+      }
+
+      function escapeHtml(s) {
+        const d = document.createElement('div');
+        d.textContent = s;
+        return d.innerHTML;
+      }
+
+      buildBtn.addEventListener('click', async () => {
+        if (!items.length) return;
+        const sizeKey = pageSizeEl.value;
+        const base = SIZES[sizeKey] || SIZES.a4;
+        banner.style.display = 'block';
+        banner.className = 'banner banner-info';
+        bannerText.textContent = '⏳ Building PDF…';
+        results.innerHTML = '';
+        try {
+          const pdfDoc = await PDFDocument.create();
+          for (const it of items) {
+            let img;
+            if (it.emb.kind === 'jpg') img = await pdfDoc.embedJpg(it.emb.bytes);
+            else img = await pdfDoc.embedPng(it.emb.bytes);
+            const w = img.width;
+            const h = img.height;
+            const landscape = w > h;
+            let pageW = base.w;
+            let pageH = base.h;
+            if (landscape) {
+              pageW = base.h;
+              pageH = base.w;
+            }
+            const page = pdfDoc.addPage([pageW, pageH]);
+            const scale = Math.min(pageW / w, pageH / h);
+            const dw = w * scale;
+            const dh = h * scale;
+            page.drawImage(img, {
+              x: (pageW - dw) / 2,
+              y: (pageH - dh) / 2,
+              width: dw,
+              height: dh,
+            });
+          }
+          const bytes = await pdfDoc.save();
+          const blob = new Blob([bytes], { type: 'application/pdf' });
+          const url = URL.createObjectURL(blob);
+          resultsHeader.style.display = 'block';
+          const row = document.createElement('div');
+          row.className = 'file-item';
+          row.innerHTML =
+            '<div class="file-item-main"><div class="file-thumb">📑</div><div class="file-info">' +
+            '<div class="file-name">images-combined.pdf</div>' +
+            '<div class="file-status done">' +
+            (bytes.byteLength / 1024).toFixed(1) +
+            ' KB</div></div>' +
+            '<div class="file-actions-col"><a class="btn" href="' +
+            url +
+            '" download="images-combined.pdf">Download</a></div></div>';
+          results.appendChild(row);
+          actions.style.display = 'flex';
+          banner.className = 'banner banner-success';
+          bannerText.textContent = '✓ PDF ready';
+        } catch (err) {
+          alert('Failed: ' + (err.message || err));
+          bannerText.textContent = 'Error: ' + (err.message || 'failed');
+        }
+      });
+
+      document.getElementById('clearAll').addEventListener('click', () => {
+        items.forEach((it) => {
+          if (it.preview) URL.revokeObjectURL(it.preview);
+        });
+        items = [];
+        thumbList.innerHTML = '';
+        thumbPanel.style.display = 'none';
+        toolOptions.style.display = 'none';
+        results.innerHTML = '';
+        actions.style.display = 'none';
+        banner.style.display = 'none';
+        resultsHeader.style.display = 'none';
+      });
+    });
+  </script>
+
+  <style>
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 16px 0 0;
+      max-width: 820px;
+    }
+    .breadcrumb a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+    .hero {
+      padding: 40px 0 20px;
+      text-align: center;
+    }
+    .subtitle {
+      font-size: 19px;
+      color: var(--text-muted);
+      max-width: 620px;
+      margin: 0 auto 28px;
+    }
+    .converter-section {
+      padding: 30px 0;
+    }
+    .converter-section .container {
+      max-width: 820px;
+    }
+    .banner {
+      padding: 14px 20px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .banner-info {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    .banner-success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    [data-theme='dark'] .banner-info {
+      background: rgba(30, 64, 175, 0.2);
+      color: #93c5fd;
+    }
+    [data-theme='dark'] .banner-success {
+      background: rgba(6, 95, 70, 0.2);
+      color: #6ee7b7;
+    }
+    .dropzone {
+      background: var(--card);
+      border: 2px dashed var(--gray-300);
+      border-radius: var(--radius-lg);
+      padding: 70px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: var(--shadow);
+    }
+    .dropzone:hover,
+    .dropzone.drag {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+    .dropzone-icon {
+      font-size: 56px;
+      margin-bottom: 14px;
+    }
+    .dropzone-text {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .dropzone-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    #fileInput {
+      display: none;
+    }
+    .tool-options {
+      margin-top: 16px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card);
+    }
+    .opt-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .opt-select {
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .opt-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin: 8px 0 0;
+    }
+    .thumb-panel {
+      margin-top: 16px;
+    }
+    .thumb-title {
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .thumb-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 12px;
+    }
+    .thumb-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 6px;
+      background: var(--card);
+      cursor: grab;
+    }
+    .thumb-img {
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+    .thumb-name {
+      flex: 1;
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .thumb-grip {
+      color: var(--text-muted);
+    }
+    .results-header {
+      font-weight: 700;
+      margin: 16px 0 8px;
+    }
+    .file-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: var(--card);
+    }
+    .file-item-main {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .file-name {
+      font-weight: 600;
+    }
+    .file-status.done {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .actions {
+      margin-top: 12px;
+    }
+    .affiliate {
+      padding: 40px 0;
+    }
+    .affiliate .container {
+      max-width: 820px;
+    }
+    .affiliate-inner {
+      background: linear-gradient(135deg, #fff7ed, #ffedd5);
+      border: 1px solid #fed7aa;
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    [data-theme='dark'] .affiliate-inner {
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(245, 158, 11, 0.1));
+      border-color: rgba(249, 115, 22, 0.3);
+    }
+    .affiliate-icon {
+      font-size: 42px;
+    }
+    .affiliate-content {
+      flex: 1;
+      min-width: 200px;
+    }
+    .affiliate-content h3 {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+    .affiliate-content p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .long-form {
+      padding: 40px 0;
+    }
+    .long-form .container {
+      max-width: 760px;
+    }
+    .long-form p {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .faq {
+      padding: 40px 0 60px;
+    }
+    .faq .container {
+      max-width: 820px;
+    }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 12px;
+    }
+    .faq-item h4 {
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+    .faq-item p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+  </style>
+</MainLayout>

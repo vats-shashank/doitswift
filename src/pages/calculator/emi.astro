@@ -1,0 +1,262 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/emi/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'EMI Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Calculate loan EMI, total interest, and amortization for home, car, or personal loans in India.',
+    },
+    { '@type': 'FAQPage', mainEntity: [{ '@type': 'Question', name: 'What is EMI?', acceptedAnswer: { '@type': 'Answer', text: 'Equated Monthly Installment — fixed payment each month toward principal and interest on a loan.' } }] },
+  ],
+};
+---
+
+<MainLayout
+  title="EMI Calculator — Free Online Calculator | DoItSwift"
+  description="Calculate home loan or personal loan EMI, total interest, and repayment breakdown. Adjust amount, rate, and tenure in real time."
+  keywords="EMI calculator, loan EMI calculator India, home loan EMI, car loan EMI, interest calculator"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>EMI Calculator</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>EMI Calculator</h1>
+      <p class="subtitle">Work out monthly EMI, total interest, and how principal vs interest splits over your loan tenure.</p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label for="emiPrincipal">Loan amount (₹)</label>
+          <input type="number" id="emiPrincipal" min="10000" max="1000000000" step="1000" value="1000000" />
+        </div>
+        <div class="field">
+          <label for="emiRate">Interest rate (% per annum)</label>
+          <input type="range" id="emiRateRange" min="1" max="30" step="0.1" value="9" />
+          <input type="number" id="emiRate" min="1" max="30" step="0.01" value="9" />
+        </div>
+        <div class="field">
+          <label for="emiTenure">Tenure</label>
+          <div class="tenure-row">
+            <input type="number" id="emiTenure" min="1" value="5" />
+            <select id="emiTenureUnit" aria-label="Tenure unit">
+              <option value="y" selected>Years</option>
+              <option value="m">Months</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <div class="result-hero" id="emiMonthly">₹0</div>
+        <p class="result-label">Monthly EMI</p>
+        <div class="result-grid">
+          <div><div class="result-sub" id="emiInterest">₹0</div><div class="result-caption">Total interest</div></div>
+          <div><div class="result-sub" id="emiTotal">₹0</div><div class="result-caption">Total payment</div></div>
+        </div>
+        <div class="pie-wrap" role="img" aria-label="Principal versus interest pie chart">
+          <div class="pie" id="emiPie"></div>
+          <ul class="pie-legend">
+            <li><span class="dot dot-p"></span> Principal <span id="emiPctP">0%</span></li>
+            <li><span class="dot dot-i"></span> Interest <span id="emiPctI">0%</span></li>
+          </ul>
+        </div>
+        <details class="calc-details">
+          <summary>Year-wise amortization (summary)</summary>
+          <div class="table-wrap"><table><thead><tr><th>Year</th><th>Principal paid</th><th>Interest paid</th><th>Balance</th></tr></thead><tbody id="emiTable"></tbody></table></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">How EMI is calculated</h2>
+      <p>
+        EMI uses the standard reducing-balance formula: <em>EMI = [P × r × (1+r)<sup>n</sup>] / [(1+r)<sup>n</sup> − 1]</em>, where <em>P</em> is loan principal, <em>r</em> is the monthly interest rate (annual rate ÷ 12 ÷ 100), and <em>n</em> is the number of monthly installments. Each payment covers interest on the outstanding balance first; the rest reduces principal, so interest component falls over time.
+      </p>
+      <p>
+        <strong>Example:</strong> A ₹10 lakh loan at 9% for 5 years produces a fixed monthly outgo; over the tenure you pay more than ₹10 lakh because of interest — the pie chart shows that split. Banks may add processing fees, insurance, or floating rates; this calculator assumes a fixed rate for the full tenure unless you change inputs.
+      </p>
+      <p>
+        Use year-wise totals to see how much interest is front-loaded in early years — useful if you are considering partial prepayment. Always confirm numbers with your lender’s official schedule.
+      </p>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner">
+        <div class="affiliate-icon">🏦</div>
+        <div class="affiliate-content">
+          <h3>Compare loans on your terms</h3>
+          <p>Zerodha’s sister services and banks publish rates — verify EMI with official sanction letters.</p>
+        </div>
+        <a href="https://zerodha.com/?ref=doitswift" class="btn btn-orange" target="_blank" rel="sponsored noopener noreferrer">Zerodha →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>Is EMI the same as pre-EMI?</h4><p>No — pre-EMI is interest-only before full disbursement; this tool is for full EMI.</p></div>
+        <div class="faq-item"><h4>Does it handle floating rates?</h4><p>It assumes a constant rate; for floating loans, re-run when your rate resets.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/home-loan">Home Loan (prepayment)</a> · <a href="/calculator/lumpsum">Lumpsum</a> · <a href="/calculator/sip">SIP</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      const fmt = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+      function debounce(fn, ms) {
+        let t;
+        return function () { clearTimeout(t); t = setTimeout(fn, ms); };
+      }
+      function emiAmount(P, annual, months) {
+        const r = annual / 100 / 12;
+        if (months <= 0) return 0;
+        if (r === 0) return P / months;
+        return (P * r * Math.pow(1 + r, months)) / (Math.pow(1 + r, months) - 1);
+      }
+      function run() {
+        let P = Math.max(10000, Math.min(1e9, parseFloat(document.getElementById('emiPrincipal').value) || 0));
+        const rate = Math.max(1, Math.min(30, parseFloat(document.getElementById('emiRate').value) || 0));
+        const tv = parseFloat(document.getElementById('emiTenure').value) || 1;
+        const unit = document.getElementById('emiTenureUnit').value;
+        let months = unit === 'y' ? Math.round(tv * 12) : Math.round(tv);
+        months = Math.max(1, Math.min(360, months));
+        document.getElementById('emiPrincipal').value = P;
+        document.getElementById('emiRate').value = rate;
+        document.getElementById('emiRateRange').value = rate;
+        const emi = emiAmount(P, rate, months);
+        const totalPay = emi * months;
+        const interest = Math.max(0, totalPay - P);
+        document.getElementById('emiMonthly').textContent = fmt.format(Math.round(emi));
+        document.getElementById('emiInterest').textContent = fmt.format(Math.round(interest));
+        document.getElementById('emiTotal').textContent = fmt.format(Math.round(totalPay));
+        const pFrac = totalPay > 0 ? P / totalPay : 0;
+        const iFrac = 1 - pFrac;
+        document.getElementById('emiPctP').textContent = (pFrac * 100).toFixed(1) + '%';
+        document.getElementById('emiPctI').textContent = (iFrac * 100).toFixed(1) + '%';
+        const pie = document.getElementById('emiPie');
+        pie.style.background = 'conic-gradient(var(--blue) 0% ' + pFrac * 100 + '%, var(--orange) ' + pFrac * 100 + '% 100%)';
+        const r = rate / 100 / 12;
+        let bal = P;
+        const tbody = document.getElementById('emiTable');
+        tbody.innerHTML = '';
+        const years = Math.ceil(months / 12);
+        const emiVal = emi;
+        for (let y = 1; y <= years; y++) {
+          let yPrin = 0, yInt = 0;
+          for (let m = 0; m < 12 && (y - 1) * 12 + m < months; m++) {
+            const intr = bal * r;
+            const pr = emiVal - intr;
+            yInt += intr;
+            yPrin += pr;
+            bal -= pr;
+          }
+          const tr = document.createElement('tr');
+          tr.innerHTML = '<td>' + y + '</td><td>' + fmt.format(Math.round(yPrin)) + '</td><td>' + fmt.format(Math.round(yInt)) + '</td><td>' + fmt.format(Math.max(0, Math.round(bal))) + '</td>';
+          tbody.appendChild(tr);
+        }
+      }
+      const deb = debounce(run, 80);
+      ['emiPrincipal', 'emiRate', 'emiTenure', 'emiTenureUnit'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', deb);
+        document.getElementById(id).addEventListener('change', deb);
+      });
+      document.getElementById('emiRateRange').addEventListener('input', function () {
+        document.getElementById('emiRate').value = this.value;
+        deb();
+      });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 18px; color: var(--text-muted); max-width: 640px; margin: 0 auto 24px; }
+    .calc-section { padding: 24px 0 40px; }
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 960px; align-items: start; }
+    @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
+    .calc-inputs, .calc-results { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--shadow); }
+    .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+    .field { margin-bottom: 18px; }
+    .field label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    .field input[type='number'], .field select { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
+    .field input[type='range'] { width: 100%; margin-bottom: 6px; }
+    .tenure-row { display: flex; gap: 10px; }
+    .tenure-row input { flex: 1; }
+    .tenure-row select { width: 120px; }
+    .result-hero { font-size: 2.25rem; font-weight: 800; color: var(--blue); }
+    .result-label { font-size: 14px; color: var(--text-muted); margin: 4px 0 20px; }
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .result-sub { font-size: 1.25rem; font-weight: 700; }
+    .result-caption { font-size: 12px; color: var(--text-muted); }
+    .pie-wrap { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; }
+    .pie { width: 120px; height: 120px; border-radius: 50%; }
+    .pie-legend { list-style: none; padding: 0; margin: 0; font-size: 14px; }
+    .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+    .dot-p { background: var(--blue); }
+    .dot-i { background: var(--orange); }
+    .calc-details summary { cursor: pointer; font-weight: 600; }
+    .table-wrap { overflow: auto; max-height: 260px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 8px; border-bottom: 1px solid var(--border); text-align: right; }
+    th:first-child, td:first-child { text-align: left; }
+    .edu { padding: 40px 0; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
+    .section-title { text-align: center; margin-bottom: 20px; font-size: 1.5rem; }
+    .affiliate { padding: 32px 0; }
+    .affiliate .container { max-width: 900px; }
+    .affiliate-inner { background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #93c5fd; border-radius: var(--radius-lg); padding: 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    [data-theme='dark'] .affiliate-inner { background: rgba(59, 130, 246, 0.12); border-color: rgba(147, 197, 253, 0.4); }
+    .affiliate-icon { font-size: 36px; }
+    .affiliate-content { flex: 1; min-width: 200px; }
+    .affiliate-content h3 { font-size: 17px; margin-bottom: 4px; }
+    .affiliate-content p { font-size: 14px; color: var(--text-muted); }
+    .faq { padding: 32px 0 48px; }
+    .faq .container { max-width: 760px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 10px; }
+    .faq-item h4 { font-size: 15px; margin-bottom: 4px; }
+    .faq-item p { font-size: 14px; color: var(--text-muted); }
+    .related { padding: 24px 0 48px; text-align: center; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

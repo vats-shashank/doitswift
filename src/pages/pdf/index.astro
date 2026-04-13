@@ -1,0 +1,255 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const tools = [
+  { href: '/pdf/pdf-to-jpg', icon: '🖼️', title: 'PDF to JPG', desc: 'Export every page as a JPEG image' },
+  { href: '/pdf/image-to-pdf', icon: '📑', title: 'Image to PDF', desc: 'Combine JPG, PNG, WebP, HEIC & more' },
+  { href: '/pdf/merge-pdf', icon: '➕', title: 'Merge PDFs', desc: 'Join multiple PDFs in order' },
+  { href: '/pdf/split-pdf', icon: '✂️', title: 'Split PDF', desc: 'Extract pages or ranges' },
+  { href: '/pdf/compress-pdf', icon: '🗜️', title: 'Compress PDF', desc: 'Shrink file size in your browser' },
+  { href: '/pdf/unlock-pdf', icon: '🔓', title: 'Unlock PDF', desc: 'Remove password with the correct key' },
+];
+
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Free Online PDF Tools',
+  description:
+    'Free browser-based PDF tools. Merge PDFs, split, compress, convert images to PDF, extract pages, unlock with password. No upload, no signup, unlimited usage.',
+  url: new URL(Astro.url.pathname, Astro.site).href,
+  isPartOf: {
+    '@type': 'WebSite',
+    name: 'DoItSwift',
+    url: new URL('/', Astro.site).href,
+  },
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: tools.length,
+    itemListElement: tools.map((t, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: t.title,
+      url: new URL(t.href, Astro.site).href,
+      description: t.desc,
+    })),
+  },
+};
+---
+
+<MainLayout
+  title="Free Online PDF Tools — Merge, Split, Compress PDFs | DoItSwift"
+  description="Free browser-based PDF tools. Merge PDFs, split, compress, image to PDF, extract pages, unlock PDFs. No upload, no signup, unlimited usage."
+  keywords="pdf tools, merge pdf, split pdf, compress pdf, pdf to jpg, image to pdf, unlock pdf, free pdf online"
+  canonical={new URL(Astro.url.pathname, Astro.site).toString()}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(collectionJsonLd)} />
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">📄 PDF Tools</div>
+      <h1>Free Online PDF Tools</h1>
+      <p class="subtitle">
+        Merge, split, compress, and convert PDFs entirely in your browser. Your files never upload to our servers.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> 100% browser-based</span>
+        <span><span class="check">✓</span> Unlimited files</span>
+        <span><span class="check">✓</span> No watermarks</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="tools-section">
+    <div class="container">
+      <h2 class="section-title">All PDF tools</h2>
+      <p class="section-sub">Six utilities — processing stays on your device. <strong>6 tools</strong> ready to use.</p>
+      <div class="grid">
+        {tools.map((tool) => (
+          <a href={tool.href} class="tool-card">
+            <span class="icon">{tool.icon}</span>
+            <h3>{tool.title}</h3>
+            <p>{tool.desc}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="formats">
+    <div class="container">
+      <h2 class="section-title">About PDF tools &amp; the PDF format</h2>
+      <p class="section-sub">Why browser-based PDF utilities matter for privacy and everyday work.</p>
+      <div class="formats-prose">
+        <p>
+          Portable Document Format (PDF) is the standard way to share documents that should look the same on any device
+          — contracts, invoices, ebooks, scanned forms, and slide decks. Unlike Word or Pages files, a PDF locks in
+          fonts and layout so recipients see what you intended. That same strength makes PDFs harder to edit without
+          dedicated software, which is why people merge reports, split chapters, compress archives for email, or extract
+          pages as images for presentations.
+        </p>
+        <p>
+          Traditional online PDF converters often upload your file to a remote server. That creates privacy risk for
+          financial statements, medical records, or client work. DoItSwift PDF tools run with <strong>JavaScript inside
+          your browser</strong>: PDFs are read from your disk into memory, processed with libraries such as PDF-lib and
+          Mozilla’s PDF.js, and downloaded back to you — no account, no cloud queue, no retention on our side.
+        </p>
+        <p>
+          Use cases include combining invoices into one packet, pulling a single signed page from a scan, shrinking a
+          camera PDF before WhatsApp, turning slides into JPGs for social posts, and building a photo album PDF from
+          vacation JPGs. Because everything is local, you can disconnect from the internet after the page loads and keep
+          working. Very large files (hundreds of pages or 50MB+) may take longer or stress older phones; close other tabs
+          for best performance.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">PDF tools FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <h4>Is there a file size limit?</h4>
+          <p>
+            We do not impose a fixed cap — limits come from your device RAM and browser. PDFs above ~50MB may take a
+            noticeable time to process; very large files can fail on low-memory mobile browsers.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Are my PDFs uploaded to DoItSwift?</h4>
+          <p>
+            No. Tools load PDF-lib and related code from CDNs, but your document bytes stay in the browser unless you
+            choose to download the result. You can verify by going offline after the page loads.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Can I process multiple PDFs in one session?</h4>
+          <p>
+            Yes — merge, compress, and PDF-to-JPG support batches. Split focuses on one document at a time for clarity.
+            JPG-to-PDF accepts many images at once with reordering before export.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Will compression always make files smaller?</h4>
+          <p>
+            Usually, but not always. “Light” modes mostly re-save and strip metadata. Heavier modes may rasterize pages,
+            which trades smaller size against sharp text — pick the level that fits your document type.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Do these tools add watermarks?</h4>
+          <p>No. Output is whatever the conversion produces — no DoItSwift branding on your files.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Which browsers work best?</h4>
+          <p>
+            Latest Chrome, Edge, Firefox, or Safari on desktop. Mobile Safari and Chrome work for moderate file sizes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <p class="back-wrap container">
+    <a href="/" class="link-back">← Back to home</a>
+  </p>
+
+  <style>
+    .hero {
+      padding: 56px 0 24px;
+      text-align: center;
+    }
+    .subtitle {
+      font-size: 19px;
+      color: var(--text-muted);
+      max-width: 620px;
+      margin: 0 auto 28px;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .section-sub {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      font-size: 16px;
+    }
+    .tools-section {
+      padding: 40px 0 56px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .tool-card {
+      background: var(--card);
+      padding: 22px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+      box-shadow: var(--shadow);
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .tool-card:hover {
+      border-color: var(--blue);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+    .tool-card .icon {
+      font-size: 30px;
+      display: block;
+      margin-bottom: 10px;
+    }
+    .tool-card h3 {
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .tool-card p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .formats {
+      padding: 20px 0 60px;
+    }
+    .formats-prose {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .formats-prose p {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+    .faq {
+      padding: 40px 0 60px;
+    }
+    .faq .container {
+      max-width: 820px;
+    }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
+    }
+    .faq-item h4 {
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+    .faq-item p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .back-wrap {
+      padding-bottom: 48px;
+    }
+  </style>
+</MainLayout>

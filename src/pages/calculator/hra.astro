@@ -1,0 +1,385 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const site = Astro.site?.href ?? 'https://doitswift.com';
+const canonical = `${site}calculator/hra/`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'HRA Calculator 2026 — DoItSwift',
+      url: canonical,
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'House Rent Allowance exemption calculator for India with metro and non-metro rules.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Is HRA available in the new tax regime?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Generally HRA exemption is claimed under the old tax regime with valid rent proofs; the new regime has different deduction structures — confirm with a tax advisor.',
+          },
+        },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: site },
+        { '@type': 'ListItem', position: 2, name: 'Calculators', item: `${site}calculator/` },
+        { '@type': 'ListItem', position: 3, name: 'HRA Calculator', item: canonical },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="HRA Calculator 2026 — Calculate HRA Exemption Tax Saving | DoItSwift"
+  description="Compute monthly and annual HRA exemption as the minimum of actual HRA, 50%/40% of basic salary, and rent paid minus 10% of basic. Metro toggle for Delhi, Mumbai, Kolkata, Chennai."
+  keywords="hra calculator, hra exemption calculator, house rent allowance calculator, hra tax saving"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>HRA Calculator</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>HRA Exemption Calculator</h1>
+      <p class="subtitle">
+        Enter <strong>monthly</strong> basic salary, HRA received, rent paid, and whether you are in a metro (50% rule) or non-metro (40%). We show the three statutory components and the exempt amount — illustrative only.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs (monthly)</h2>
+        <div class="field">
+          <label for="hraBasic">Basic salary (₹)</label>
+          <input type="number" id="hraBasic" min="0" step="100" value="60000" />
+        </div>
+        <div class="field">
+          <label for="hraHra">HRA received (₹)</label>
+          <input type="number" id="hraHra" min="0" step="100" value="30000" />
+        </div>
+        <div class="field">
+          <label for="hraRent">Rent paid (₹)</label>
+          <input type="number" id="hraRent" min="0" step="100" value="25000" />
+        </div>
+        <div class="field">
+          <label>City type</label>
+          <div class="seg">
+            <label><input type="radio" name="hraMetro" value="1" checked /> Metro (Delhi, Mumbai, Kolkata, Chennai)</label>
+            <label><input type="radio" name="hraMetro" value="0" /> Non-metro</label>
+          </div>
+        </div>
+      </div>
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <div class="result-hero" id="hraEx">₹0</div>
+        <p class="result-label">HRA exempt per month (estimated)</p>
+        <div class="box">
+          <p class="line"><span>① Actual HRA received</span><strong id="hraC1">₹0</strong></p>
+          <p class="line"><span>② <span id="hraPctLab">50%</span> of basic salary</span><strong id="hraC2">₹0</strong></p>
+          <p class="line"><span>③ Rent paid − 10% of basic</span><strong id="hraC3">₹0</strong></p>
+          <p class="note">Exemption = minimum of ①, ②, and ③ (if positive).</p>
+        </div>
+        <div class="result-grid">
+          <div><div class="result-sub" id="hraTax">₹0</div><div class="result-caption">Taxable HRA / month</div></div>
+          <div><div class="result-sub" id="hraAnn">₹0</div><div class="result-caption">Annual exemption</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">HRA exemption rules (overview)</h2>
+      <p>
+        <strong>House Rent Allowance</strong> is a salary component many employers offer. Under the <strong>old tax regime</strong>, a portion can be <strong>exempt</strong> from tax if you pay rent for residential accommodation — subject to the least of three amounts each month: (1) actual HRA received; (2) 50% of basic salary if you live in specified metros (commonly <strong>Delhi, Mumbai, Kolkata, Chennai</strong>) or 40% elsewhere; and (3) rent paid minus 10% of basic salary. This calculator implements that textbook structure on <strong>monthly</strong> inputs.
+      </p>
+      <p>
+        <strong>New tax regime</strong> note: many deductions available in the old regime (including HRA-style exemptions) may not apply in the same way under the new concessional slabs. Always reconcile with Form 16, your payroll team, and a chartered accountant before filing — this page is not legal advice.
+      </p>
+      <p>
+        <strong>Documents</strong>: Employers often ask for rent receipts, rental agreements, and landlord PAN when annual rent exceeds <strong>₹1,00,000</strong>. Keep proofs aligned with actual bank transfers where possible. Fake receipts carry serious consequences.
+      </p>
+      <p>
+        <strong>Common mistakes</strong>: Claiming HRA while not paying rent, mismatch between declared rent and cash flows, or forgetting that the exemption uses <strong>basic salary</strong> only (not gross). Also remember: if you live in a <strong>self-owned</strong> house or with parents without genuine rent, HRA exemption generally does not apply — paying rent to parents is allowed only if it is a <strong>bona fide</strong> arrangement with documentation and the parent includes it in income if required.
+      </p>
+      <p>
+        Plug the monthly exempt figure into our <a href="/calculator/income-tax">income tax calculator</a> alongside other old-regime deductions to see directional tax impact — still verify with professional advice.
+      </p>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner">
+        <div class="affiliate-icon">📋</div>
+        <div class="affiliate-content">
+          <h3>Plan taxes holistically</h3>
+          <p>Use official AIS/Form 26AS and a CA for filing — tools here are educational.</p>
+        </div>
+        <a href="/calculator/income-tax" class="btn btn-orange">Income tax calculator</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>Why is component ③ negative?</h4><p>If rent is less than 10% of basic, that component clamps to zero — exemption may be limited by other components.</p></div>
+        <div class="faq-item"><h4>Do I use basic or gross?</h4><p>Rule uses basic salary; some payrolls split differently — follow your payslip definition.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/income-tax">Income Tax</a> · <a href="/calculator/gst">GST</a> · <a href="/calculator/emi">EMI</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      const fmt = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+      function debounce(fn, ms) {
+        let t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      function run() {
+        const basic = Math.max(0, parseFloat(document.getElementById('hraBasic').value) || 0);
+        const hra = Math.max(0, parseFloat(document.getElementById('hraHra').value) || 0);
+        const rent = Math.max(0, parseFloat(document.getElementById('hraRent').value) || 0);
+        const metro = document.querySelector('input[name="hraMetro"]:checked').value === '1';
+        const pct = metro ? 0.5 : 0.4;
+        document.getElementById('hraPctLab').textContent = (metro ? 50 : 40) + '%';
+        const c1 = hra;
+        const c2 = basic * pct;
+        const c3 = Math.max(0, rent - 0.1 * basic);
+        document.getElementById('hraC1').textContent = fmt.format(Math.round(c1));
+        document.getElementById('hraC2').textContent = fmt.format(Math.round(c2));
+        document.getElementById('hraC3').textContent = fmt.format(Math.round(c3));
+        const ex = Math.max(0, Math.min(c1, c2, c3));
+        document.getElementById('hraEx').textContent = fmt.format(Math.round(ex));
+        document.getElementById('hraTax').textContent = fmt.format(Math.round(Math.max(0, hra - ex)));
+        document.getElementById('hraAnn').textContent = fmt.format(Math.round(ex * 12));
+      }
+      const d = debounce(run, 60);
+      ['hraBasic', 'hraHra', 'hraRent'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', d);
+      });
+      document.querySelectorAll('input[name="hraMetro"]').forEach(function (el) {
+        el.addEventListener('change', d);
+      });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 16px 0 0;
+      max-width: 960px;
+    }
+    .breadcrumb a {
+      color: var(--blue);
+    }
+    .hero {
+      padding: 36px 0 16px;
+      text-align: center;
+    }
+    .subtitle {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto 22px;
+      line-height: 1.65;
+    }
+    .calc-section {
+      padding: 24px 0 40px;
+    }
+    .calc-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      max-width: 960px;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .calc-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .calc-inputs,
+    .calc-results {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+      box-shadow: var(--shadow);
+    }
+    .calc-heading {
+      font-size: 1rem;
+      margin: 0 0 16px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .field {
+      margin-bottom: 16px;
+    }
+    .field label {
+      display: block;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    .field input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      font-size: 16px;
+    }
+    .result-hero {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--blue);
+    }
+    .result-label {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 4px 0 14px;
+    }
+    .box {
+      background: var(--gray-100);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+    [data-theme='dark'] .box {
+      background: var(--gray-200);
+    }
+    .line {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 6px 0;
+    }
+    .note {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 10px;
+    }
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .result-sub {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+    .result-caption {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .edu {
+      padding: 36px 0 40px;
+    }
+    .edu .container {
+      max-width: 760px;
+    }
+    .edu p {
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .edu a {
+      color: var(--blue);
+      font-weight: 600;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 18px;
+      font-size: 1.5rem;
+    }
+    .affiliate {
+      padding: 28px 0;
+    }
+    .affiliate .container {
+      max-width: 900px;
+    }
+    .affiliate-inner {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border: 1px solid #fbbf24;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    [data-theme='dark'] .affiliate-inner {
+      background: linear-gradient(135deg, #422006, #713f12);
+      border-color: #b45309;
+    }
+    .affiliate-icon {
+      font-size: 36px;
+    }
+    .affiliate-content {
+      flex: 1;
+      min-width: 200px;
+    }
+    .faq-list {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .related {
+      text-align: center;
+      padding-bottom: 48px;
+    }
+    .related-links a {
+      color: var(--blue);
+      font-weight: 600;
+    }
+  </style>
+</MainLayout>

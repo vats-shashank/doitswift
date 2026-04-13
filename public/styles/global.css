@@ -64,6 +64,76 @@ img { max-width: 100%; display: block; }
   .container { padding: 0 16px; }
 }
 
+/* Radio option rows — vertical on narrow screens, horizontal when space allows */
+.seg {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+@media (min-width: 420px) {
+  .seg {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px 28px;
+  }
+}
+.seg label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.35;
+  cursor: pointer;
+}
+.seg input[type="radio"] {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin: 0;
+  flex-shrink: 0;
+  accent-color: var(--blue);
+}
+
+/* Beat scoped `.field label { display: block }` on calculator/tool pages */
+.field .seg label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.35;
+  cursor: pointer;
+}
+.field .seg input[type="radio"] {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin: 0;
+  flex-shrink: 0;
+  accent-color: var(--blue);
+}
+
+/* Fieldset radio lists (e.g. PDF tool modes) */
+.mode-fieldset label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 8px 0;
+  font-size: 14px;
+  line-height: 1.4;
+  cursor: pointer;
+}
+.mode-fieldset input[type="radio"] {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-top: 0.2em;
+  flex-shrink: 0;
+  accent-color: var(--blue);
+}
+
 /* Buttons */
 .btn {
   background: var(--blue);

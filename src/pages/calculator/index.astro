@@ -1,0 +1,333 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const finance = [
+  { href: '/calculator/sip', icon: '📈', title: 'SIP Calculator', desc: 'Systematic investment plan maturity & returns' },
+  { href: '/calculator/lumpsum', icon: '💵', title: 'Lumpsum Calculator', desc: 'One-time investment growth & chart' },
+  { href: '/calculator/ppf', icon: '🏛️', title: 'PPF Calculator', desc: 'Public Provident Fund maturity & yearly table' },
+  { href: '/calculator/emi', icon: '🏦', title: 'EMI Calculator', desc: 'Loan EMI, interest & amortization' },
+  { href: '/calculator/home-loan', icon: '🏠', title: 'Home Loan + Prepay', desc: 'EMI with prepayment simulation' },
+  { href: '/calculator/income-tax', icon: '📋', title: 'Income Tax', desc: 'India FY — new vs old regime' },
+  { href: '/calculator/fd', icon: '💰', title: 'FD Calculator', desc: 'Fixed deposit maturity & interest' },
+  { href: '/calculator/gst', icon: '🧾', title: 'GST Calculator', desc: 'Add or remove GST; CGST/SGST split' },
+  { href: '/calculator/hra', icon: '🏘️', title: 'HRA Calculator', desc: 'House rent allowance exemption' },
+];
+const health = [
+  { href: '/calculator/bmi', icon: '⚖️', title: 'BMI Calculator', desc: 'Body mass index & categories' },
+  { href: '/calculator/calorie', icon: '🔥', title: 'Calorie / TDEE', desc: 'Daily calories, BMR, macro example' },
+  { href: '/calculator/ideal-weight', icon: '📏', title: 'Ideal Weight', desc: 'Devine, Robinson, Miller, Hamwi + BMI band' },
+];
+const general = [
+  { href: '/calculator/age', icon: '🎂', title: 'Age Calculator', desc: 'Years, months, days from date of birth' },
+  { href: '/calculator/percentage', icon: '🔢', title: 'Percentage', desc: 'Percent of, change, increase/decrease' },
+  { href: '/calculator/tip', icon: '🧾', title: 'Tip Calculator', desc: 'Gratuity & bill split, INR or USD' },
+  { href: '/calculator/discount', icon: '🏷️', title: 'Discount', desc: 'Sale price, % off, stacked deals' },
+];
+
+const allTools = [...finance, ...health, ...general];
+
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Free Online Calculators',
+  description:
+    'Sixteen free online calculators for SIP, EMI, home loan prepayment, PPF, income tax, HRA, FD, GST, BMI, calories, ideal weight, age, percentage, tips, discounts, and more.',
+  url: new URL(Astro.url.pathname, Astro.site).href,
+  isPartOf: { '@type': 'WebSite', name: 'DoItSwift', url: new URL('/', Astro.site).href },
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: allTools.length,
+    itemListElement: allTools.map((t, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: t.title,
+      url: new URL(t.href, Astro.site).href,
+      description: t.desc,
+    })),
+  },
+};
+---
+
+<MainLayout
+  title="Free Online Calculators — Finance, Health, Math | DoItSwift"
+  description="Sixteen free calculators: SIP, EMI, home loan prepayment, PPF, income tax, HRA, FD, GST, BMI, TDEE, ideal weight, age, percentage, tip, and discount. Instant results, no signup."
+  keywords="online calculator, SIP calculator, EMI calculator, PPF calculator, HRA calculator, calorie calculator, tip calculator"
+  canonical={new URL(Astro.url.pathname, Astro.site).toString()}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(collectionJsonLd)} />
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Calculators</div>
+      <h1>Free Online Calculators</h1>
+      <p class="subtitle">
+        <strong>16 calculators</strong> for finance, health, and everyday math — all in your browser. No signup; math runs locally in JavaScript.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+        <span><span class="check">✓</span> Private</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="jump-nav-wrap">
+    <div class="container">
+      <nav class="jump-nav" aria-labelledby="jump-nav-heading">
+        <p id="jump-nav-heading" class="jump-nav-heading">Browse by category</p>
+        <ul class="jump-nav-list">
+          <li>
+            <a href="#finance">Finance <span class="jump-nav-count">({finance.length})</span></a>
+          </li>
+          <li>
+            <a href="#health">Health <span class="jump-nav-count">({health.length})</span></a>
+          </li>
+          <li>
+            <a href="#everyday">Everyday <span class="jump-nav-count">({general.length})</span></a>
+          </li>
+          <li>
+            <a href="#faq">FAQ</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <section id="finance" class="tools-section calc-anchor">
+    <div class="container">
+      <h2 class="section-title">Finance calculators</h2>
+      <p class="section-sub">Investments, loans, tax, rent, deposits, and GST — tuned for Indian rupees where it matters.</p>
+      <div class="grid">
+        {finance.map((tool) => (
+          <a href={tool.href} class="tool-card">
+            <span class="icon">{tool.icon}</span>
+            <h3>{tool.title}</h3>
+            <p>{tool.desc}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="health" class="tools-section tools-section--alt calc-anchor">
+    <div class="container">
+      <h2 class="section-title">Health calculators</h2>
+      <p class="section-sub">Screening tools — not medical advice. Consult professionals for diagnosis or meal plans.</p>
+      <div class="grid">
+        {health.map((tool) => (
+          <a href={tool.href} class="tool-card">
+            <span class="icon">{tool.icon}</span>
+            <h3>{tool.title}</h3>
+            <p>{tool.desc}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="everyday" class="tools-section calc-anchor">
+    <div class="container">
+      <h2 class="section-title">Everyday calculators</h2>
+      <p class="section-sub">Age, percentages, tipping, and shopping discounts — quick mental-load helpers.</p>
+      <div class="grid">
+        {general.map((tool) => (
+          <a href={tool.href} class="tool-card">
+            <span class="icon">{tool.icon}</span>
+            <h3>{tool.title}</h3>
+            <p>{tool.desc}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="faq calc-anchor">
+    <div class="container">
+      <h2 class="section-title">Calculator FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <h4>Do I need an account?</h4>
+          <p>No. Open a calculator, type your numbers, and see results immediately in your browser.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Are my inputs stored on DoItSwift servers?</h4>
+          <p>Calculations run locally in JavaScript. We do not receive your salary, loan, or health numbers unless a future feature explicitly says otherwise.</p>
+        </div>
+        <div class="faq-item">
+          <h4>What’s included in the 16 calculators?</h4>
+          <p>Finance (SIP, lumpsum, PPF, EMI, home loan prepayment, income tax, FD, GST, HRA), health (BMI, calorie/TDEE, ideal weight), and everyday tools (age, percentage, tip, discount).</p>
+        </div>
+        <div class="faq-item">
+          <h4>Are tax and EMI numbers legally binding?</h4>
+          <p>No — they are educational estimates. For tax filing or loan decisions, confirm with a chartered accountant or your bank.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Do calculators work on mobile?</h4>
+          <p>Yes. Use any modern phone browser; layouts stack for small screens.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <p class="back-wrap container">
+    <a href="/" class="link-back">← Back to home</a>
+  </p>
+
+  <style>
+    .jump-nav-wrap {
+      padding: 0 0 8px;
+    }
+    .jump-nav {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 16px 0 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .jump-nav-heading {
+      margin: 0 0 12px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-align: center;
+    }
+    .jump-nav-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .jump-nav-list a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .jump-nav-list a:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+    .jump-nav-list a:focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: 2px;
+    }
+    .jump-nav-count {
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    .jump-nav-list a:hover .jump-nav-count {
+      color: inherit;
+      opacity: 0.85;
+    }
+    /* Clear sticky nav when using in-page anchors */
+    .calc-anchor {
+      scroll-margin-top: max(5.25rem, calc(3.25rem + env(safe-area-inset-top, 0px)));
+    }
+    .hero {
+      padding: 56px 0 24px;
+      text-align: center;
+    }
+    .subtitle {
+      font-size: 19px;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto 28px;
+      line-height: 1.55;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .section-sub {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+      font-size: 16px;
+    }
+    .tools-section {
+      padding: 32px 0 48px;
+    }
+    .tools-section--alt {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .tool-card {
+      background: var(--card);
+      padding: 22px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: all 0.2s;
+    }
+    .tools-section--alt .tool-card {
+      background: var(--bg);
+    }
+    .tool-card:hover {
+      border-color: var(--blue);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+    .tool-card .icon {
+      font-size: 30px;
+      display: block;
+      margin-bottom: 10px;
+    }
+    .tool-card h3 {
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .tool-card p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .faq {
+      padding: 40px 0 60px;
+    }
+    .faq .container {
+      max-width: 820px;
+    }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 12px;
+    }
+    .faq-item h4 {
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+    .faq-item p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .back-wrap {
+      padding-bottom: 48px;
+    }
+  </style>
+</MainLayout>

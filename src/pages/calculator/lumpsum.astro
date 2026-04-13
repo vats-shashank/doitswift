@@ -1,0 +1,425 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const site = Astro.site?.href ?? 'https://doitswift.com';
+const canonical = `${site}calculator/lumpsum/`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Lumpsum Investment Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'One-time investment maturity with compound growth and yearly balance chart.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is a lumpsum investment?',
+          acceptedAnswer: { '@type': 'Answer', text: 'A single upfront investment compared with periodic SIP contributions; growth compounds on the full principal from day one.' },
+        },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: site },
+        { '@type': 'ListItem', position: 2, name: 'Calculators', item: `${site}calculator/` },
+        { '@type': 'ListItem', position: 3, name: 'Lumpsum Calculator', item: canonical },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Lumpsum Calculator — Calculate One-time Investment Returns | DoItSwift"
+  description="Project lumpsum mutual fund or portfolio growth: maturity value, estimated returns, and year-by-year compounded balance. Editable return and tenure."
+  keywords="lumpsum calculator, one time investment calculator, lumpsum return calculator, mutual fund lumpsum"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Lumpsum Calculator</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Lumpsum Calculator</h1>
+      <p class="subtitle">
+        Enter a one-time principal, expected annual return, and years invested. See maturity, profit, and how the balance could grow each year with compounding — not a promise of future performance.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label for="lsP">Lumpsum amount (₹)</label>
+          <input type="number" id="lsP" min="1000" max="100000000" step="1000" value="100000" />
+        </div>
+        <div class="field">
+          <label for="lsR">Expected annual return (%)</label>
+          <input type="range" id="lsRR" min="1" max="30" step="0.5" value="12" aria-hidden="true" />
+          <input type="number" id="lsR" min="1" max="30" step="0.1" value="12" />
+        </div>
+        <div class="field">
+          <label for="lsY">Investment period (years)</label>
+          <input type="range" id="lsYR" min="1" max="40" step="1" value="10" aria-hidden="true" />
+          <input type="number" id="lsY" min="1" max="40" step="1" value="10" />
+        </div>
+      </div>
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <div class="result-hero" id="lsMat">₹0</div>
+        <p class="result-label">Maturity value</p>
+        <div class="result-grid">
+          <div><div class="result-sub" id="lsInv">₹0</div><div class="result-caption">Principal (one-time)</div></div>
+          <div><div class="result-sub" id="lsRet">₹0</div><div class="result-caption">Estimated returns</div></div>
+        </div>
+        <div class="grow-chart" role="img" aria-label="Year by year balance bars" id="lsChart"></div>
+        <details class="calc-details">
+          <summary>Year-by-year balance</summary>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Year</th><th>Balance</th></tr></thead>
+              <tbody id="lsTb"></tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Lumpsum versus SIP — how to think about it</h2>
+      <p>
+        A <strong>lumpsum</strong> deploys your entire principal immediately, so every rupee begins compounding from day one at the assumed rate. A <strong>SIP</strong> spreads entries over time, which can reduce timing risk (you buy more units when markets are lower) but delays full deployment. Neither approach is universally “better” — it depends on horizon, market valuations, cash-flow discipline, and fees.
+      </p>
+      <p>
+        <strong>Quick thought experiment:</strong> If you had <strong>₹1,20,000</strong> today, one option is to invest it all as a lumpsum; another is to run a <strong>₹10,000/month SIP for 12 months</strong>. The lumpsum participates in a full year of growth on the whole amount (with volatility), while the SIP only puts ₹10,000 to work in month one, ₹20,000 by month two, and so on. In strong rising markets, lumpsums often win on paper; in falling markets, SIP can look smarter because later instalments buy cheaper. Real life includes crashes and recoveries — use scenarios, not one forecast.
+      </p>
+      <p>
+        <strong>Risk</strong>: A large lumpsum into volatile assets just before a downturn can sting emotionally and financially. Some investors split deployment (phased investing) or mix debt and equity. This calculator uses a <strong>constant annual return</strong> for illustration; real paths zigzag. Taxes (STT, capital gains), expense ratios, and exit loads are not modeled — net returns may be lower.
+      </p>
+      <p>
+        Compare with our <a href="/calculator/sip">SIP calculator</a> using the same annual return assumption to see how timing of cash flows changes ending wealth. For debt-like certainty, see <a href="/calculator/fd">FD</a> or <a href="/calculator/ppf">PPF</a> tools — different risk profiles entirely.
+      </p>
+      <p>
+        <strong>Formula:</strong> <em>A = P × (1 + r)<sup>n</sup></em> with annual compounding, where <em>P</em> is principal, <em>r</em> is the decimal annual rate, and <em>n</em> is years. Continuous or monthly compounding would differ slightly; we keep annual for clarity.
+      </p>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner">
+        <div class="affiliate-icon">📈</div>
+        <div class="affiliate-content">
+          <h3>Invest with research</h3>
+          <p>Direct mutual fund platforms can reduce commission drag — read scheme documents before lumpsum orders.</p>
+        </div>
+        <a href="https://groww.in/?ref=doitswift" class="btn btn-orange" target="_blank" rel="sponsored noopener noreferrer">Groww →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>Is return fixed?</h4><p>No — the percentage is your assumption; markets fluctuate.</p></div>
+        <div class="faq-item"><h4>Does this include tax?</h4><p>No — it shows gross growth before capital gains tax rules.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/sip">SIP Calculator</a> · <a href="/calculator/emi">EMI Calculator</a> · <a href="/calculator/ppf">PPF Calculator</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      const fmt = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+      function debounce(fn, ms) {
+        let t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      function run() {
+        let P = Math.max(1000, Math.min(1e8, parseFloat(document.getElementById('lsP').value) || 0));
+        let r = Math.max(1, Math.min(30, parseFloat(document.getElementById('lsR').value) || 0));
+        let y = Math.max(1, Math.min(40, parseInt(document.getElementById('lsY').value, 10) || 1));
+        document.getElementById('lsP').value = P;
+        document.getElementById('lsR').value = r;
+        document.getElementById('lsY').value = y;
+        document.getElementById('lsRR').value = r;
+        document.getElementById('lsYR').value = y;
+        const rd = r / 100;
+        const A = P * Math.pow(1 + rd, y);
+        document.getElementById('lsMat').textContent = fmt.format(Math.round(A));
+        document.getElementById('lsInv').textContent = fmt.format(Math.round(P));
+        document.getElementById('lsRet').textContent = fmt.format(Math.round(Math.max(0, A - P)));
+        const tb = document.getElementById('lsTb');
+        const chart = document.getElementById('lsChart');
+        tb.innerHTML = '';
+        chart.innerHTML = '';
+        let maxBal = 0;
+        const rows = [];
+        for (let yr = 1; yr <= y; yr++) {
+          const bal = P * Math.pow(1 + rd, yr);
+          maxBal = Math.max(maxBal, bal);
+          rows.push({ yr: yr, bal: bal });
+        }
+        rows.forEach(function (row) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = '<td>' + row.yr + '</td><td>' + fmt.format(Math.round(row.bal)) + '</td>';
+          tb.appendChild(tr);
+          const seg = document.createElement('div');
+          seg.className = 'grow-seg';
+          const inner = document.createElement('div');
+          inner.className = 'grow-seg-fill';
+          inner.style.height = maxBal > 0 ? Math.max(8, (row.bal / maxBal) * 120) + 'px' : '8px';
+          inner.title = 'Year ' + row.yr + ': ' + fmt.format(Math.round(row.bal));
+          seg.appendChild(inner);
+          chart.appendChild(seg);
+        });
+      }
+      const d = debounce(run, 80);
+      ['lsP', 'lsR', 'lsY', 'lsRR', 'lsYR'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', function () {
+          if (id === 'lsRR') document.getElementById('lsR').value = this.value;
+          if (id === 'lsYR') document.getElementById('lsY').value = this.value;
+          d();
+        });
+      });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 16px 0 0;
+      max-width: 960px;
+    }
+    .breadcrumb a {
+      color: var(--blue);
+    }
+    .hero {
+      padding: 36px 0 16px;
+      text-align: center;
+    }
+    .subtitle {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto 22px;
+      line-height: 1.65;
+    }
+    .calc-section {
+      padding: 24px 0 40px;
+    }
+    .calc-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      max-width: 960px;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .calc-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .calc-inputs,
+    .calc-results {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+      box-shadow: var(--shadow);
+    }
+    .calc-heading {
+      font-size: 1rem;
+      margin: 0 0 16px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .field {
+      margin-bottom: 16px;
+    }
+    .field label {
+      display: block;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    .field input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      font-size: 16px;
+    }
+    .result-hero {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--blue);
+    }
+    .result-label {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 4px 0 18px;
+    }
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .result-sub {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    .result-caption {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .grow-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      height: 140px;
+      padding: 8px 0;
+      border-top: 1px solid var(--border);
+      margin-top: 8px;
+    }
+    .grow-seg {
+      flex: 1;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .grow-seg-fill {
+      width: 100%;
+      max-width: 36px;
+      background: linear-gradient(180deg, var(--blue), #38bdf8);
+      border-radius: 4px 4px 0 0;
+      min-height: 8px;
+    }
+    .calc-details summary {
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    .table-wrap {
+      overflow: auto;
+      max-height: 220px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th,
+    td {
+      padding: 8px;
+      border-bottom: 1px solid var(--border);
+      text-align: right;
+    }
+    th:first-child,
+    td:first-child {
+      text-align: left;
+    }
+    .edu {
+      padding: 36px 0 40px;
+    }
+    .edu .container {
+      max-width: 760px;
+    }
+    .edu p {
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .edu a {
+      color: var(--blue);
+      font-weight: 600;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 18px;
+      font-size: 1.5rem;
+    }
+    .affiliate {
+      padding: 28px 0;
+    }
+    .affiliate .container {
+      max-width: 900px;
+    }
+    .affiliate-inner {
+      background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+      border: 1px solid #6ee7b7;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .affiliate-icon {
+      font-size: 36px;
+    }
+    .affiliate-content {
+      flex: 1;
+      min-width: 200px;
+    }
+    .faq-list {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .related {
+      text-align: center;
+      padding-bottom: 48px;
+    }
+    .related-links a {
+      color: var(--blue);
+      font-weight: 600;
+    }
+  </style>
+</MainLayout>

@@ -1,0 +1,540 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const site = Astro.site?.href ?? 'https://doitswift.com';
+const canonical = `${site}calculator/home-loan/`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Home Loan EMI Calculator with Prepayment — DoItSwift',
+      url: canonical,
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Home loan EMI with optional prepayment simulation: interest saved and tenure reduction.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Does prepayment always reduce tenure?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Many lenders keep EMI constant and shorten tenure when you prepay principal; others may reduce EMI — confirm your loan terms.',
+          },
+        },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: site },
+        { '@type': 'ListItem', position: 2, name: 'Calculators', item: `${site}calculator/` },
+        { '@type': 'ListItem', position: 3, name: 'Home Loan Calculator', item: canonical },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Home Loan EMI Calculator with Prepayment — Save Interest | DoItSwift"
+  description="Calculate home loan EMI and simulate prepayments (one-time, yearly, or monthly) to see interest saved and months shaved off — reducing balance with same EMI."
+  keywords="home loan calculator, home loan prepayment calculator, emi with prepayment, loan prepayment calculator"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Home Loan EMI (Prepayment)</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Home Loan EMI with Prepayment</h1>
+      <p class="subtitle">
+        Fixed EMI, floating or fixed rate modeled as constant here. After an optional “quiet period,” apply prepayments that shrink principal while EMI stays the same — tenure shortens until closure.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label for="hlP">Loan amount (₹)</label>
+          <input type="number" id="hlP" min="100000" max="1000000000" step="10000" value="5000000" />
+        </div>
+        <div class="field">
+          <label for="hlR">Interest rate (% p.a.)</label>
+          <input type="range" id="hlRR" min="1" max="20" step="0.05" value="8.5" aria-hidden="true" />
+          <input type="number" id="hlR" min="1" max="20" step="0.01" value="8.5" />
+        </div>
+        <div class="field">
+          <label for="hlY">Tenure (years)</label>
+          <input type="range" id="hlYR" min="1" max="30" step="1" value="20" aria-hidden="true" />
+          <input type="number" id="hlY" min="1" max="30" step="1" value="20" />
+        </div>
+        <div class="field">
+          <label for="hlPre">Prepayment amount (₹)</label>
+          <input type="number" id="hlPre" min="0" max="5000000" step="1000" value="0" />
+        </div>
+        <div class="field">
+          <label for="hlFreq">Prepayment frequency</label>
+          <select id="hlFreq">
+            <option value="none">None</option>
+            <option value="once">One-time</option>
+            <option value="yearly">Yearly</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="hlStart">Prepayment starts after (months)</label>
+          <input type="number" id="hlStart" min="0" max="360" step="1" value="12" />
+          <p class="field-hint">No prepayment before this many EMIs (e.g. 12 = from month 13).</p>
+        </div>
+      </div>
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <div class="result-hero" id="hlEmi">₹0</div>
+        <p class="result-label">Monthly EMI</p>
+        <div class="compare">
+          <div>
+            <h3>Without prepayment</h3>
+            <p class="line"><span>Total interest</span><strong id="hlInt0">₹0</strong></p>
+            <p class="line"><span>Tenure</span><strong id="hlMo0">0 mo</strong></p>
+          </div>
+          <div>
+            <h3>With prepayment</h3>
+            <p class="line"><span>Total interest</span><strong id="hlInt1">₹0</strong></p>
+            <p class="line"><span>Actual tenure</span><strong id="hlMo1">0 mo</strong></p>
+          </div>
+        </div>
+        <div class="highlight">
+          <p><strong>Interest saved:</strong> <span id="hlSave">₹0</span></p>
+          <p><strong>Tenure reduced by:</strong> <span id="hlCut">0 months</span></p>
+        </div>
+        <p class="hl-emi-note" id="hlEmiNote" hidden>
+          With <strong>prepayment frequency</strong> set to None, both columns match a standard reducing-balance loan (no extra principal payments). For the same EMI with a full amortization table, use the
+          <a href="/calculator/emi">EMI calculator</a>.
+        </p>
+        <details class="calc-details">
+          <summary>Year-wise summary (with prepayment)</summary>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Year</th><th>Principal paid</th><th>Interest paid</th><th>Prepay</th><th>End balance</th></tr>
+              </thead>
+              <tbody id="hlTb"></tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Prepaying a home loan — what to know</h2>
+      <p>
+        <strong>When prepayment helps:</strong> If your home loan costs more in interest than you reliably earn on alternate investments <em>after tax</em>, directing spare cash to principal can improve net worth. High EMIs also reduce monthly stress — but keep an emergency fund before aggressive prepayment. This calculator assumes the bank keeps your <strong>EMI constant</strong> and uses prepayments to <strong>shorten tenure</strong>, which is a common option; some lenders instead lower EMI — read your sanction letter.
+      </p>
+      <p>
+        <strong>Tax angle (India, illustrative):</strong> Section <strong>24(b)</strong> allows deduction on home loan interest within limits for self-occupied property; prepaying reduces future interest and therefore future deductions — that is not necessarily bad (you pay less real interest), but optimizers sometimes model the trade-off. Principal repayment may interact with Section <strong>80C</strong> eligibility on principal repayment within overall caps. Consult a CA for your exact structure.
+      </p>
+      <p>
+        <strong>Full vs partial prepayment:</strong> Full closure ends the loan; partial prepayments chip away principal. Some banks charge prepayment penalties on fixed-rate loans — factor that in. Floating-rate retail home loans often have fewer restrictions for individuals, but verify.
+      </p>
+      <p>
+        For a simpler EMI without prepayment paths, use the <a href="/calculator/emi">standard EMI calculator</a>. For investment return on idle cash before prepaying, try the <a href="/calculator/lumpsum">lumpsum calculator</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner">
+        <div class="affiliate-icon">🏦</div>
+        <div class="affiliate-content">
+          <h3>Compare lenders</h3>
+          <p>Official sanction letters beat online estimates — negotiate spread and processing fees.</p>
+        </div>
+        <a href="https://zerodha.com/?ref=doitswift" class="btn btn-orange" target="_blank" rel="sponsored noopener noreferrer">Zerodha →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>Why does tenure jump oddly?</h4><p>Large prepayments can remove years in one shot; rounding and minimum balance thresholds can affect the last month.</p></div>
+        <div class="faq-item"><h4>Is EMI recalculated?</h4><p>We keep EMI fixed after initial amortization — a simplification.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/emi">EMI Calculator</a> · <a href="/calculator/lumpsum">Lumpsum</a> · <a href="/calculator/percentage">Percentage</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      const fmt = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+      function debounce(fn, ms) {
+        let t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      function emiAmount(P, annual, months) {
+        const r = annual / 100 / 12;
+        if (months <= 0) return 0;
+        if (r === 0) return P / months;
+        return (P * r * Math.pow(1 + r, months)) / (Math.pow(1 + r, months) - 1);
+      }
+      function simulate(P, annual, months, prep, freq, startAfter) {
+        const r = annual / 100 / 12;
+        const emi = emiAmount(P, annual, months);
+        let bal = P;
+        let m = 0;
+        let totalInt = 0;
+        const yearly = {};
+        let onceDone = false;
+        while (bal > 0.02 && m < 600) {
+          m++;
+          const intP = bal * r;
+          let prin = emi - intP;
+          if (prin > bal) prin = bal;
+          bal -= prin;
+          totalInt += intP;
+          const y = Math.ceil(m / 12);
+          if (!yearly[y]) yearly[y] = { prin: 0, int: 0, prep: 0, end: 0 };
+          yearly[y].prin += prin;
+          yearly[y].int += intP;
+          let doPre = false;
+          if (prep > 0 && m > startAfter) {
+            if (freq === 'monthly') doPre = true;
+            else if (freq === 'yearly' && (m - startAfter - 1) % 12 === 0) doPre = true;
+            else if (freq === 'once' && !onceDone) {
+              doPre = true;
+              onceDone = true;
+            }
+          }
+          if (doPre) {
+            const pay = Math.min(prep, bal);
+            bal -= pay;
+            yearly[y].prep += pay;
+          }
+          yearly[y].end = bal;
+        }
+        return { emi: emi, months: m, totalInt: totalInt, yearly: yearly };
+      }
+      function run() {
+        let P = Math.max(100000, Math.min(1e9, parseFloat(document.getElementById('hlP').value) || 0));
+        let ar = Math.max(1, Math.min(20, parseFloat(document.getElementById('hlR').value) || 0));
+        let y = Math.max(1, Math.min(30, parseInt(document.getElementById('hlY').value, 10) || 1));
+        let prep = Math.max(0, Math.min(5000000, parseFloat(document.getElementById('hlPre').value) || 0));
+        const freq = document.getElementById('hlFreq').value;
+        let startAfter = Math.max(0, Math.min(360, parseInt(document.getElementById('hlStart').value, 10) || 0));
+        document.getElementById('hlP').value = P;
+        document.getElementById('hlR').value = ar;
+        document.getElementById('hlY').value = y;
+        document.getElementById('hlRR').value = ar;
+        document.getElementById('hlYR').value = y;
+        const n = y * 12;
+        const emi = emiAmount(P, ar, n);
+        const baseInt = Math.max(0, emi * n - P);
+        document.getElementById('hlEmi').textContent = fmt.format(Math.round(emi));
+        document.getElementById('hlInt0').textContent = fmt.format(Math.round(baseInt));
+        document.getElementById('hlMo0').textContent = n + ' mo';
+        const sim = simulate(P, ar, n, freq === 'none' ? 0 : prep, freq === 'none' ? 'none' : freq, startAfter);
+        document.getElementById('hlInt1').textContent = fmt.format(Math.round(sim.totalInt));
+        document.getElementById('hlMo1').textContent = sim.months + ' mo';
+        document.getElementById('hlSave').textContent = fmt.format(Math.max(0, Math.round(baseInt - sim.totalInt)));
+        document.getElementById('hlCut').textContent = Math.max(0, n - sim.months) + ' months';
+        const tb = document.getElementById('hlTb');
+        tb.innerHTML = '';
+        Object.keys(sim.yearly)
+          .sort(function (a, b) {
+            return +a - +b;
+          })
+          .forEach(function (k) {
+            const row = sim.yearly[k];
+            const tr = document.createElement('tr');
+            tr.innerHTML =
+              '<td>' +
+              k +
+              '</td><td>' +
+              fmt.format(Math.round(row.prin)) +
+              '</td><td>' +
+              fmt.format(Math.round(row.int)) +
+              '</td><td>' +
+              fmt.format(Math.round(row.prep)) +
+              '</td><td>' +
+              fmt.format(Math.round(row.end)) +
+              '</td>';
+            tb.appendChild(tr);
+          });
+        const note = document.getElementById('hlEmiNote');
+        if (note) {
+          note.hidden = freq !== 'none';
+        }
+      }
+      const d = debounce(run, 80);
+      ['hlP', 'hlR', 'hlY', 'hlPre', 'hlStart', 'hlRR', 'hlYR', 'hlFreq'].forEach(function (id) {
+        const el = document.getElementById(id);
+        const handler = function () {
+          if (id === 'hlRR') document.getElementById('hlR').value = this.value;
+          if (id === 'hlYR') document.getElementById('hlY').value = this.value;
+          d();
+        };
+        el.addEventListener('input', handler);
+        if (id === 'hlFreq') el.addEventListener('change', handler);
+      });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 16px 0 0;
+      max-width: 960px;
+    }
+    .breadcrumb a {
+      color: var(--blue);
+    }
+    .hero {
+      padding: 36px 0 16px;
+      text-align: center;
+    }
+    .subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 760px;
+      margin: 0 auto 22px;
+      line-height: 1.65;
+    }
+    .calc-section {
+      padding: 24px 0 40px;
+    }
+    .calc-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      max-width: 1000px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .calc-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .calc-inputs,
+    .calc-results {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+      box-shadow: var(--shadow);
+    }
+    .calc-heading {
+      font-size: 1rem;
+      margin: 0 0 16px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .field {
+      margin-bottom: 14px;
+    }
+    .field label {
+      display: block;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      font-size: 16px;
+    }
+    .field-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+    .result-hero {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--blue);
+    }
+    .result-label {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 4px 0 16px;
+    }
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 520px) {
+      .compare {
+        grid-template-columns: 1fr;
+      }
+    }
+    .compare h3 {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin: 4px 0;
+      gap: 8px;
+    }
+    .highlight {
+      background: var(--gray-100);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      margin: 10px 0;
+      font-size: 15px;
+    }
+    [data-theme='dark'] .highlight {
+      background: var(--gray-200);
+    }
+    .hl-emi-note {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin: 0 0 12px;
+      padding: 12px 14px;
+      background: var(--gray-100);
+      border-radius: var(--radius);
+      border-left: 3px solid var(--blue);
+    }
+    [data-theme='dark'] .hl-emi-note {
+      background: var(--gray-200);
+    }
+    .hl-emi-note a {
+      color: var(--blue);
+      font-weight: 600;
+    }
+    .calc-details summary {
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    .table-wrap {
+      overflow: auto;
+      max-height: 260px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    th,
+    td {
+      padding: 8px;
+      border-bottom: 1px solid var(--border);
+      text-align: right;
+    }
+    th:first-child,
+    td:first-child {
+      text-align: left;
+    }
+    .edu {
+      padding: 36px 0 40px;
+    }
+    .edu .container {
+      max-width: 760px;
+    }
+    .edu p {
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .edu a {
+      color: var(--blue);
+      font-weight: 600;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 18px;
+      font-size: 1.5rem;
+    }
+    .affiliate {
+      padding: 28px 0;
+    }
+    .affiliate .container {
+      max-width: 900px;
+    }
+    .affiliate-inner {
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      border: 1px solid #93c5fd;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .affiliate-icon {
+      font-size: 36px;
+    }
+    .affiliate-content {
+      flex: 1;
+      min-width: 200px;
+    }
+    .faq-list {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .related {
+      text-align: center;
+      padding-bottom: 48px;
+    }
+    .related-links a {
+      color: var(--blue);
+      font-weight: 600;
+    }
+  </style>
+</MainLayout>

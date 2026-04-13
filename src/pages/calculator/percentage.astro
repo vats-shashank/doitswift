@@ -1,0 +1,436 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/percentage/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Percentage Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'UtilitiesApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Multi-mode percentage calculator: percent of, ratio, increase/decrease, and percent change.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'How do you calculate percentage change?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Percent change from X to Y is ((Y − X) / |X|) × 100 when X is not zero.',
+          },
+        },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Percentage Calculator — Free Online Calculator | DoItSwift"
+  description="What is X% of Y? X is what percent of Y? Increase or decrease by a percent, or find percent change between two values — four modes, instant results."
+  keywords="percentage calculator, percent change, percent increase, percent of a number"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Percentage Calculator</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Percentage Calculator</h1>
+      <p class="subtitle">
+        Switch modes to answer everyday percentage questions — discounts, exam scores, price hikes, and growth rates — without memorizing formulas.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label for="pctMode">Mode</label>
+          <select id="pctMode" aria-label="Calculator mode">
+            <option value="of">What is X% of Y?</option>
+            <option value="is">X is what percent of Y?</option>
+            <option value="chg">X% increase/decrease from Y</option>
+            <option value="delta">Percent change from X to Y</option>
+          </select>
+        </div>
+        <div id="pctFieldsXY">
+          <div class="field">
+            <label for="pctX" id="lblX">X (%)</label>
+            <input type="number" id="pctX" step="any" value="20" />
+          </div>
+          <div class="field">
+            <label for="pctY" id="lblY">Y</label>
+            <input type="number" id="pctY" step="any" value="500" />
+          </div>
+        </div>
+        <div class="field" id="pctFieldsDir">
+          <label>Direction</label>
+          <div class="seg">
+            <label><input type="radio" name="pctDir" value="inc" checked /> Increase</label>
+            <label><input type="radio" name="pctDir" value="dec" /> Decrease</label>
+          </div>
+        </div>
+        <div id="pctFieldsDelta" class="hidden">
+          <div class="field">
+            <label for="pctA">From (old value)</label>
+            <input type="number" id="pctA" step="any" value="100" />
+          </div>
+          <div class="field">
+            <label for="pctB">To (new value)</label>
+            <input type="number" id="pctB" step="any" value="120" />
+          </div>
+        </div>
+      </div>
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Result</h2>
+        <p class="big" id="pctOut">—</p>
+        <p class="sub" id="pctSub"></p>
+        <div class="barviz" id="pctBar" aria-hidden="true">
+          <div class="barviz-inner" id="pctBarInner"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Percentage formulas (quick reference)</h2>
+      <p>
+        <strong>Part from percent:</strong> To find what <em>P</em>% of <em>Y</em> equals, compute <em>Y × (P/100)</em>. That is the discount amount if <em>Y</em> is list price, or the tip if <em>Y</em> is the bill before tip — always confirm whether tax is included.
+      </p>
+      <p>
+        <strong>Ratio to percent:</strong> “<em>X</em> is what percent of <em>Y</em>?” answers <em>(X / Y) × 100</em> when <em>Y ≠ 0</em>. Use it for conversion rates, test scores, or market share.
+      </p>
+      <p>
+        <strong>Increase/decrease by a percent:</strong> Increasing <em>Y</em> by <em>P</em>% yields <em>Y × (1 + P/100)</em>; decreasing uses <em>Y × (1 − P/100)</em>. Watch for compound successive changes — two 10% increases are not the same as one 20% increase.
+      </p>
+      <p>
+        <strong>Percent change between two values:</strong> From <em>X</em> to <em>Y</em>, use <em>((Y − X) / |X|) × 100</em>. The result is positive if <em>Y &gt; X</em> and negative if <em>Y &lt; X</em>. If the starting value is zero, percent change is undefined — we surface an error instead of dividing by zero.
+      </p>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner">
+        <div class="affiliate-icon">📊</div>
+        <div class="affiliate-content">
+          <h3>Spreadsheets</h3>
+          <p>For bigger tables, export to Google Sheets or Excel — the same formulas apply in cells.</p>
+        </div>
+        <a href="https://sheets.google.com" class="btn btn-orange" target="_blank" rel="noopener noreferrer">Google Sheets</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <h4>Why is percent change undefined?</h4>
+          <p>Starting from zero, relative change has no meaningful ratio — talk in absolute terms instead.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Do you round?</h4>
+          <p>We show enough decimals for clarity; bank rounding rules may differ.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Can I use negatives?</h4>
+          <p>Yes — for example, loss vs profit comparisons, as long as denominators stay valid.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/tip">Tip</a> · <a href="/calculator/discount">Discount</a> · <a href="/calculator/gst">GST</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      function debounce(fn, ms) {
+        var t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      function showMode() {
+        var m = document.getElementById('pctMode').value;
+        document.getElementById('pctFieldsXY').classList.toggle('hidden', m === 'delta');
+        document.getElementById('pctFieldsDir').style.display = m === 'chg' ? 'block' : 'none';
+        document.getElementById('pctFieldsDelta').classList.toggle('hidden', m !== 'delta');
+        if (m === 'is') {
+          document.getElementById('lblX').textContent = 'X (part)';
+          document.getElementById('lblY').textContent = 'Y (whole)';
+        } else if (m === 'chg' || m === 'of') {
+          document.getElementById('lblX').textContent = 'X (%)';
+          document.getElementById('lblY').textContent = 'Y (base)';
+        }
+      }
+      function run() {
+        showMode();
+        var m = document.getElementById('pctMode').value;
+        var x = parseFloat(document.getElementById('pctX').value);
+        var y = parseFloat(document.getElementById('pctY').value);
+        var out = document.getElementById('pctOut');
+        var sub = document.getElementById('pctSub');
+        var bar = document.getElementById('pctBarInner');
+        bar.style.width = '0%';
+        if (m === 'of') {
+          var v = y * (x / 100);
+          out.textContent = v.toLocaleString('en-IN', { maximumFractionDigits: 4 });
+          sub.textContent = x + '% of ' + y + ' = ' + v;
+          bar.style.width = Math.min(100, Math.abs(x)) + '%';
+        } else if (m === 'is') {
+          if (!y) {
+            out.textContent = 'Y cannot be 0';
+            sub.textContent = '';
+            return;
+          }
+          var p = (x / y) * 100;
+          out.textContent = p.toLocaleString('en-IN', { maximumFractionDigits: 4 }) + '%';
+          sub.textContent = x + ' / ' + y + ' × 100';
+          bar.style.width = Math.min(100, Math.abs(p)) + '%';
+        } else if (m === 'chg') {
+          var inc = document.querySelector('input[name="pctDir"]:checked').value === 'inc';
+          var f = inc ? 1 + x / 100 : 1 - x / 100;
+          var r = y * f;
+          out.textContent = r.toLocaleString('en-IN', { maximumFractionDigits: 4 });
+          sub.textContent = (inc ? 'Increase' : 'Decrease') + ' ' + y + ' by ' + x + '% → ' + r;
+          bar.style.width = '50%';
+        } else {
+          var a = parseFloat(document.getElementById('pctA').value);
+          var b = parseFloat(document.getElementById('pctB').value);
+          if (!a) {
+            out.textContent = 'Old value cannot be 0 for % change';
+            sub.textContent = '';
+            return;
+          }
+          var ch = ((b - a) / Math.abs(a)) * 100;
+          out.textContent =
+            ch.toLocaleString('en-IN', { maximumFractionDigits: 4 }) + '% ' + (ch >= 0 ? 'increase' : 'decrease');
+          sub.textContent = 'From ' + a + ' to ' + b;
+          bar.style.width = Math.min(100, Math.abs(ch)) + '%';
+        }
+      }
+      var d = debounce(run, 60);
+      ['pctMode', 'pctX', 'pctY', 'pctA', 'pctB'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', d);
+      });
+      document.querySelectorAll('input[name="pctDir"]').forEach(function (el) {
+        el.addEventListener('change', d);
+      });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 16px 0 0;
+      max-width: 960px;
+    }
+    .breadcrumb a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+    .hero {
+      padding: 36px 0 16px;
+      text-align: center;
+    }
+    .subtitle {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 700px;
+      margin: 0 auto 22px;
+      line-height: 1.6;
+    }
+    .calc-section {
+      padding: 24px 0 40px;
+    }
+    .calc-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      max-width: 960px;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .calc-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .calc-inputs,
+    .calc-results {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+      box-shadow: var(--shadow);
+    }
+    .calc-heading {
+      font-size: 1rem;
+      margin: 0 0 16px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-weight: 700;
+    }
+    .field {
+      margin-bottom: 16px;
+    }
+    .field label {
+      display: block;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      font-size: 16px;
+    }
+    .hidden {
+      display: none !important;
+    }
+    .big {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--blue);
+      margin: 0;
+      word-break: break-word;
+    }
+    .sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+    .barviz {
+      margin-top: 18px;
+      height: 12px;
+      background: var(--gray-200);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .barviz-inner {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--blue), #38bdf8);
+      transition: width 0.12s ease-out;
+    }
+    .edu {
+      padding: 36px 0 40px;
+    }
+    .edu .container {
+      max-width: 760px;
+    }
+    .edu p {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 18px;
+      font-size: 1.5rem;
+    }
+    .affiliate {
+      padding: 28px 0;
+    }
+    .affiliate .container {
+      max-width: 900px;
+    }
+    .affiliate-inner {
+      background: linear-gradient(135deg, #ecfeff, #cffafe);
+      border: 1px solid #67e8f9;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    [data-theme='dark'] .affiliate-inner {
+      background: linear-gradient(135deg, #0c4a6e, #164e63);
+      border-color: #0e7490;
+    }
+    .affiliate-icon {
+      font-size: 36px;
+    }
+    .affiliate-content {
+      flex: 1;
+      min-width: 220px;
+    }
+    .affiliate-content h3 {
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+    .affiliate-content p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+    .faq-list {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .faq-item h4 {
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+    .faq-item p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin: 0;
+    }
+    .related {
+      text-align: center;
+      padding-bottom: 48px;
+    }
+    .related-links a {
+      color: var(--blue);
+      font-weight: 600;
+    }
+  </style>
+</MainLayout>

@@ -1,0 +1,18 @@
+---
+const redirectUrl = '/pdf/image-to-pdf/';
+const absolute = 'https://doitswift.com' + redirectUrl;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="refresh" content={`0;url=${redirectUrl}`} />
+    <link rel="canonical" href={absolute} />
+    <title>Redirecting…</title>
+  </head>
+  <body>
+    <p>Redirecting to <a href={redirectUrl}>{redirectUrl}</a></p>
+  </body>
+</html>

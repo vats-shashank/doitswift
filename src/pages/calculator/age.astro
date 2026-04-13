@@ -1,0 +1,442 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/age/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Age Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'UtilitiesApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Calculate exact age in years, months, days, and fun approximations from date of birth.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'How is age calculated?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'We compare calendar years, months, and days between your birth date and the chosen “as of” date using local calendar arithmetic.',
+          },
+        },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Age Calculator — Free Online Calculator | DoItSwift"
+  description="Find your exact age in years, months, and days from your date of birth. Set any “as of” date, see total days and hours, next birthday, and playful estimates."
+  keywords="age calculator, date of birth calculator, how old am I, next birthday countdown"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Age Calculator</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Age Calculator</h1>
+      <p class="subtitle">
+        Pick your date of birth and an “as of” date — we’ll break down the exact span in years, months, and days, plus totals and a lighthearted set of estimates.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label for="ageDob">Date of birth</label>
+          <input type="date" id="ageDob" value="1995-06-15" />
+        </div>
+        <div class="field">
+          <label for="ageAsOf">Calculate age as of</label>
+          <input type="date" id="ageAsOf" />
+        </div>
+      </div>
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <p class="age-line" id="ageYmd">—</p>
+        <div class="stat-grid">
+          <div>
+            <div class="stat-num" id="ageDays">—</div>
+            <div class="stat-cap">Total days lived</div>
+          </div>
+          <div>
+            <div class="stat-num" id="ageHours">—</div>
+            <div class="stat-cap">Approx. hours lived</div>
+          </div>
+        </div>
+        <p class="next-bd" id="ageNext"></p>
+        <details class="fun">
+          <summary>Fun estimates (approximate)</summary>
+          <ul id="ageFun"></ul>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Calendar math behind age</h2>
+      <p>
+        Computers store dates as midnight UTC instants, but <strong>human age</strong> is usually expressed in whole calendar years plus months and days without borrowing from clock time.
+        This calculator walks month-by-month from your birthday: if the “as of” day is before your birth day in the current month, we borrow a month from the age tally, mirroring how people answer “how old are you?” in everyday conversation.
+      </p>
+      <p>
+        <strong>Total days</strong> counts 24-hour boundaries between the two midnights — leap years included automatically via the Date object. <strong>Hours</strong> multiplies by 24 for a feel of scale; daylight saving in your locale does not change the count here because we anchor on date-only fields.
+      </p>
+      <p>
+        Use the flexible “as of” field to answer historical questions — for example, how old someone was on an election day — or to plan a milestone party. For legal age cutoffs (driving, voting), always confirm with the jurisdiction’s precise rules and time zones.
+      </p>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner">
+        <div class="affiliate-icon">📅</div>
+        <div class="affiliate-content">
+          <h3>Plan ahead</h3>
+          <p>Use calendar apps like Google Calendar or Outlook to set annual birthday reminders and travel buffers — especially across time zones.</p>
+        </div>
+        <a href="https://calendar.google.com" class="btn btn-orange" target="_blank" rel="noopener noreferrer">Google Calendar</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <h4>Why doesn’t my age match another website?</h4>
+          <p>Different sites round differently or use UTC-only math. We prioritize calendar years/months/days in local date fields.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Are heartbeats accurate?</h4>
+          <p>No — we assume an average resting rate near 70 bpm for illustration only.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Can “as of” be before birth?</h4>
+          <p>We show an error — negative ages are not meaningful here.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/percentage">Percentage</a> · <a href="/calculator/tip">Tip</a> · <a href="/calculator/discount">Discount</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      function debounce(fn, ms) {
+        var t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      function parseYMD(s) {
+        var p = s.split('-');
+        return { y: +p[0], m: +p[1], d: +p[2] };
+      }
+      function isValidOrder(dob, end) {
+        var a = new Date(dob.y, dob.m - 1, dob.d).getTime();
+        var b = new Date(end.y, end.m - 1, end.d).getTime();
+        return b >= a;
+      }
+      /** Age in years, months, days from dob to end (calendar components). */
+      function ageParts(dob, end) {
+        var y = end.y - dob.y;
+        var m = end.m - dob.m;
+        var d = end.d - dob.d;
+        if (d < 0) {
+          m -= 1;
+          var prevMonth = new Date(end.y, end.m - 1, 0);
+          d += prevMonth.getDate();
+        }
+        if (m < 0) {
+          y -= 1;
+          m += 12;
+        }
+        return { y: y, m: m, d: d };
+      }
+      function dayDiff(dob, end) {
+        var a = new Date(dob.y, dob.m - 1, dob.d);
+        var b = new Date(end.y, end.m - 1, end.d);
+        return Math.round((b - a) / 86400000);
+      }
+      function nextBirthday(dob, from) {
+        var y = from.y;
+        var tryD = new Date(y, dob.m - 1, dob.d);
+        var cur = new Date(from.y, from.m - 1, from.d);
+        if (tryD <= cur) tryD = new Date(y + 1, dob.m - 1, dob.d);
+        return tryD;
+      }
+      function fmtInt(n) {
+        return new Intl.NumberFormat('en-IN').format(n);
+      }
+      function run() {
+        var dobS = document.getElementById('ageDob').value;
+        var endS = document.getElementById('ageAsOf').value;
+        if (!endS) {
+          var t = new Date();
+          var pad = function (n) {
+            return (n < 10 ? '0' : '') + n;
+          };
+          endS = t.getFullYear() + '-' + pad(t.getMonth() + 1) + '-' + pad(t.getDate());
+          document.getElementById('ageAsOf').value = endS;
+        }
+        var dob = parseYMD(dobS);
+        var end = parseYMD(endS);
+        if (!isValidOrder(dob, end)) {
+          document.getElementById('ageYmd').textContent = '“As of” date must be on or after date of birth.';
+          return;
+        }
+        var p = ageParts(dob, end);
+        document.getElementById('ageYmd').textContent =
+          p.y + ' years, ' + p.m + ' months, ' + p.d + ' days';
+        var days = dayDiff(dob, end);
+        document.getElementById('ageDays').textContent = fmtInt(days);
+        document.getElementById('ageHours').textContent = fmtInt(days * 24);
+        var nb = nextBirthday(dob, end);
+        var nd = Math.round((nb - new Date(end.y, end.m - 1, end.d)) / 86400000);
+        document.getElementById('ageNext').textContent =
+          'Next birthday: ' + nb.toDateString() + ' (in ' + nd + ' days from “as of”).';
+        var moons = Math.floor(days / 29.53);
+        var hb = days * 24 * 60 * 70;
+        var ul = document.getElementById('ageFun');
+        ul.innerHTML = '';
+        [
+          'Full moons (≈29.5 days each): ~' + fmtInt(moons),
+          'Heartbeats (assuming ~70 bpm at rest): ~' + fmtInt(hb),
+          'Weeks lived: ~' + fmtInt(Math.floor(days / 7)),
+        ].forEach(function (t) {
+          var li = document.createElement('li');
+          li.textContent = t;
+          ul.appendChild(li);
+        });
+      }
+      var d = debounce(run, 60);
+      document.getElementById('ageDob').addEventListener('input', d);
+      document.getElementById('ageAsOf').addEventListener('input', d);
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 16px 0 0;
+      max-width: 960px;
+    }
+    .breadcrumb a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+    .hero {
+      padding: 36px 0 16px;
+      text-align: center;
+    }
+    .subtitle {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 700px;
+      margin: 0 auto 22px;
+      line-height: 1.6;
+    }
+    .calc-section {
+      padding: 24px 0 40px;
+    }
+    .calc-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      max-width: 960px;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .calc-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .calc-inputs,
+    .calc-results {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+      box-shadow: var(--shadow);
+    }
+    .calc-heading {
+      font-size: 1rem;
+      margin: 0 0 16px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-weight: 700;
+    }
+    .field label {
+      display: block;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    .field input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      font-size: 16px;
+    }
+    .field {
+      margin-bottom: 16px;
+    }
+    .age-line {
+      font-size: 1.35rem;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .stat-num {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--blue);
+    }
+    .stat-cap {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .next-bd {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .fun summary {
+      cursor: pointer;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .fun ul {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .edu {
+      padding: 36px 0 40px;
+    }
+    .edu .container {
+      max-width: 760px;
+    }
+    .edu p {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 18px;
+      font-size: 1.5rem;
+    }
+    .affiliate {
+      padding: 28px 0;
+    }
+    .affiliate .container {
+      max-width: 900px;
+    }
+    .affiliate-inner {
+      background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+      border: 1px solid #c4b5fd;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    [data-theme='dark'] .affiliate-inner {
+      background: linear-gradient(135deg, #1e1b4b, #312e81);
+      border-color: #4c1d95;
+    }
+    .affiliate-icon {
+      font-size: 36px;
+    }
+    .affiliate-content {
+      flex: 1;
+      min-width: 220px;
+    }
+    .affiliate-content h3 {
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+    .affiliate-content p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+    .faq-list {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .faq-item h4 {
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+    .faq-item p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin: 0;
+    }
+    .related {
+      text-align: center;
+      padding-bottom: 48px;
+    }
+    .related-links a {
+      color: var(--blue);
+      font-weight: 600;
+    }
+  </style>
+</MainLayout>

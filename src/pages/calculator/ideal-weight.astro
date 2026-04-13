@@ -1,0 +1,402 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const site = Astro.site?.href ?? 'https://doitswift.com';
+const canonical = `${site}calculator/ideal-weight/`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Ideal Weight Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'HealthApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Ideal body weight from Devine, Robinson, Miller, Hamwi formulas plus BMI healthy range.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Why do formulas disagree?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Each formula was built from different populations and eras; averaging them shows spread, not truth.',
+          },
+        },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: site },
+        { '@type': 'ListItem', position: 2, name: 'Calculators', item: `${site}calculator/` },
+        { '@type': 'ListItem', position: 3, name: 'Ideal Weight Calculator', item: canonical },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Ideal Weight Calculator — Your Healthy Weight Range | DoItSwift"
+  description="Compare Devine, Robinson, Miller, and Hamwi ideal-weight formulas, BMI-based healthy range, and a blended recommendation with optional body frame adjustment."
+  keywords="ideal weight calculator, healthy weight range, ideal body weight, weight for height calculator"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Ideal Weight Calculator</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Ideal Weight Calculator</h1>
+      <p class="subtitle">
+        Height drives most “ideal weight” estimates. We show four classic clinical formulas in kg, a BMI band (18.5–24.9), and an average — then optionally nudge for self-reported frame size.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label>Height</label>
+          <div class="seg">
+            <label><input type="radio" name="iwHu" value="cm" checked /> cm</label>
+            <label><input type="radio" name="iwHu" value="ft" /> ft&nbsp;/&nbsp;in</label>
+          </div>
+          <div id="iwHcm"><input type="number" id="iwCm" min="120" max="230" value="170" /></div>
+          <div id="iwHft" class="hidden row2">
+            <input type="number" id="iwFt" min="4" max="7" value="5" />
+            <input type="number" id="iwIn" min="0" max="11" step="0.1" value="7" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="iwAge">Age (optional)</label>
+          <input type="number" id="iwAge" min="18" max="100" value="" placeholder="e.g. 34" />
+        </div>
+        <div class="field">
+          <label>Gender</label>
+          <div class="seg">
+            <label><input type="radio" name="iwSex" value="m" checked /> Male</label>
+            <label><input type="radio" name="iwSex" value="f" /> Female</label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="iwFrame">Frame (optional)</label>
+          <select id="iwFrame">
+            <option value="1">Medium (no adjustment)</option>
+            <option value="0.93">Small (−7%)</option>
+            <option value="1.07">Large (+7%)</option>
+          </select>
+        </div>
+      </div>
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <p class="big" id="iwRec">— kg</p>
+        <p class="lbl">Blended recommendation (midpoint of formulas × frame)</p>
+        <div class="table-mini">
+          <p><span>Devine</span><strong id="iwD">—</strong></p>
+          <p><span>Robinson</span><strong id="iwR">—</strong></p>
+          <p><span>Miller</span><strong id="iwM">—</strong></p>
+          <p><span>Hamwi</span><strong id="iwH">—</strong></p>
+        </div>
+        <p class="bmi-range"><strong>BMI healthy range (18.5–24.9):</strong> <span id="iwBmi">—</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Why more than one formula?</h2>
+      <p>
+        Clinicians once used “ideal body weight” to size drug doses and ventilator settings. <strong>Devine (1974)</strong>, <strong>Robinson</strong>, <strong>Miller</strong>, and <strong>Hamwi</strong> each publish a linear rule based on height above five feet — they agree in the middle but diverge at tall and short extremes. Showing all four highlights <strong>uncertainty</strong>: there is no single divine number, only a band.
+      </p>
+      <p>
+        <strong>BMI 18.5–24.9</strong> marks a population-level healthy range for many adults; it is not perfect for muscular athletes or older adults with sarcopenia. Better markers include <strong>waist circumference</strong>, <strong>waist-to-hip ratio</strong>, and body-fat percentage from DEXA or skilled skinfold testing — when available.
+      </p>
+      <p>
+        <strong>Frame size</strong> here is a simple ±7% nudge around the average of formulas — a coarse stand-in for bone breadth, not diagnostic. If your weight and activity feel good and labs are fine, a chart should not override lived experience — but sudden unintended weight change still warrants medical review.
+      </p>
+      <p>
+        Continue learning with our <a href="/calculator/bmi">BMI calculator</a> for category screening and the <a href="/calculator/calorie">calorie / TDEE calculator</a> if you are planning structured nutrition changes with professional oversight.
+      </p>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner health">
+        <div class="affiliate-icon">🏃</div>
+        <div class="affiliate-content">
+          <h3>Train smart</h3>
+          <p>Resistance training preserves lean mass while dieting — pair with adequate protein.</p>
+        </div>
+        <a href="https://www.strava.com" class="btn btn-orange" target="_blank" rel="noopener noreferrer">Strava</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>Are results in kg or lb?</h4><p>We display kilograms; multiply by 2.20462 for pounds.</p></div>
+        <div class="faq-item"><h4>What about kids?</h4><p>Pediatric growth charts differ — this page targets adults.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/bmi">BMI</a> · <a href="/calculator/calorie">Calorie / TDEE</a> · <a href="/calculator/age">Age</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      const fmt = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 1 });
+      function debounce(fn, ms) {
+        let t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      function inches() {
+        let cm;
+        if (document.querySelector('input[name="iwHu"]:checked').value === 'cm') {
+          cm = parseFloat(document.getElementById('iwCm').value) || 0;
+        } else {
+          const ft = parseFloat(document.getElementById('iwFt').value) || 0;
+          const inch = parseFloat(document.getElementById('iwIn').value) || 0;
+          cm = (ft * 12 + inch) * 2.54;
+        }
+        return cm / 2.54;
+      }
+      function run() {
+        document.getElementById('iwHcm').classList.toggle('hidden', document.querySelector('input[name="iwHu"]:checked').value !== 'cm');
+        document.getElementById('iwHft').classList.toggle('hidden', document.querySelector('input[name="iwHu"]:checked').value !== 'ft');
+        const inh = inches();
+        const male = document.querySelector('input[name="iwSex"]:checked').value === 'm';
+        const over = Math.max(0, inh - 60);
+        const d = male ? 50 + 2.3 * over : 45.5 + 2.3 * over;
+        const ro = male ? 52 + 1.9 * over : 49 + 1.7 * over;
+        const mi = male ? 56.2 + 1.41 * over : 53.1 + 1.36 * over;
+        const ha = male ? 48 + 2.7 * over : 45.5 + 2.2 * over;
+        const lbs = [d, ro, mi, ha];
+        const kgArr = lbs.map(function (lb) {
+          return lb * 0.45359237;
+        });
+        const frame = parseFloat(document.getElementById('iwFrame').value);
+        const avg = (kgArr.reduce(function (a, b) {
+          return a + b;
+        }, 0) /
+          4) *
+          frame;
+        document.getElementById('iwD').textContent = fmt.format(kgArr[0]) + ' kg';
+        document.getElementById('iwR').textContent = fmt.format(kgArr[1]) + ' kg';
+        document.getElementById('iwM').textContent = fmt.format(kgArr[2]) + ' kg';
+        document.getElementById('iwH').textContent = fmt.format(kgArr[3]) + ' kg';
+        document.getElementById('iwRec').textContent = fmt.format(avg) + ' kg';
+        const hcm =
+          document.querySelector('input[name="iwHu"]:checked').value === 'cm'
+            ? parseFloat(document.getElementById('iwCm').value) || 0
+            : inches() * 2.54;
+        const hM = hcm / 100;
+        const low = 18.5 * hM * hM;
+        const high = 24.9 * hM * hM;
+        document.getElementById('iwBmi').textContent =
+          fmt.format(low) + ' – ' + fmt.format(high) + ' kg (from height)';
+      }
+      const d = debounce(run, 60);
+      ['iwCm', 'iwFt', 'iwIn', 'iwFrame'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', d);
+      });
+      document.querySelectorAll('input[name="iwHu"], input[name="iwSex"]').forEach(function (el) {
+        el.addEventListener('change', d);
+      });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 16px 0 0;
+      max-width: 960px;
+    }
+    .breadcrumb a {
+      color: var(--blue);
+    }
+    .hero {
+      padding: 36px 0 16px;
+      text-align: center;
+    }
+    .subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto 22px;
+      line-height: 1.65;
+    }
+    .calc-section {
+      padding: 24px 0 40px;
+    }
+    .calc-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      max-width: 960px;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .calc-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .calc-inputs,
+    .calc-results {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+      box-shadow: var(--shadow);
+    }
+    .calc-heading {
+      font-size: 1rem;
+      margin: 0 0 16px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .field {
+      margin-bottom: 14px;
+    }
+    .field label {
+      display: block;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      font-size: 16px;
+    }
+    .row2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .hidden {
+      display: none !important;
+    }
+    .big {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--blue);
+      margin: 0;
+    }
+    .lbl {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 6px 0 14px;
+    }
+    .table-mini p {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin: 6px 0;
+    }
+    .bmi-range {
+      font-size: 14px;
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+    .edu {
+      padding: 36px 0 40px;
+    }
+    .edu .container {
+      max-width: 760px;
+    }
+    .edu p {
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .edu a {
+      color: var(--blue);
+      font-weight: 600;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 18px;
+      font-size: 1.5rem;
+    }
+    .affiliate {
+      padding: 28px 0;
+    }
+    .affiliate .container {
+      max-width: 900px;
+    }
+    .affiliate-inner.health {
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      border: 1px solid #93c5fd;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .affiliate-icon {
+      font-size: 36px;
+    }
+    .affiliate-content {
+      flex: 1;
+      min-width: 200px;
+    }
+    .faq-list {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .related {
+      text-align: center;
+      padding-bottom: 48px;
+    }
+    .related-links a {
+      color: var(--blue);
+      font-weight: 600;
+    }
+  </style>
+</MainLayout>

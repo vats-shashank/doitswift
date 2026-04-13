@@ -1,0 +1,446 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const site = Astro.site?.href ?? 'https://doitswift.com';
+const canonical = `${site}calculator/calorie/`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Calorie Calculator — TDEE — DoItSwift',
+      url: canonical,
+      applicationCategory: 'HealthApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Daily calorie needs using Mifflin-St Jeor BMR, activity multipliers, and goal-based targets with macros.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is TDEE?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Total Daily Energy Expenditure estimates calories you burn per day including activity, built from BMR times an activity factor.',
+          },
+        },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: site },
+        { '@type': 'ListItem', position: 2, name: 'Calculators', item: `${site}calculator/` },
+        { '@type': 'ListItem', position: 3, name: 'Calorie Calculator', item: canonical },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Calorie Calculator — Daily Calorie Needs (TDEE) | DoItSwift"
+  description="Estimate BMR with Mifflin-St Jeor, multiply by activity level, then set a goal-based calorie target with example protein, carb, and fat grams."
+  keywords="calorie calculator, tdee calculator, daily calorie needs, bmr calculator, calorie intake calculator"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Calorie Calculator</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Daily Calorie Calculator (TDEE)</h1>
+      <p class="subtitle">
+        Mifflin-St Jeor for BMR, activity multiplier for TDEE, then adjust for weight-loss or gain goals using ~7,700 kcal per kg of body-weight change.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label for="calAge">Age (years)</label>
+          <input type="number" id="calAge" min="15" max="100" value="32" />
+        </div>
+        <div class="field">
+          <label>Gender</label>
+          <div class="seg">
+            <label><input type="radio" name="calSex" value="m" checked /> Male</label>
+            <label><input type="radio" name="calSex" value="f" /> Female</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Height</label>
+          <div class="seg">
+            <label><input type="radio" name="calHu" value="cm" checked /> cm</label>
+            <label><input type="radio" name="calHu" value="ft" /> ft&nbsp;/&nbsp;in</label>
+          </div>
+          <div id="calHcm"><input type="number" id="calCm" min="100" max="250" value="175" /></div>
+          <div id="calHft" class="hidden row2">
+            <input type="number" id="calFt" min="3" max="8" value="5" aria-label="Feet" />
+            <input type="number" id="calIn" min="0" max="11" step="0.1" value="9" aria-label="Inches" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Weight</label>
+          <div class="seg">
+            <label><input type="radio" name="calWu" value="kg" checked /> kg</label>
+            <label><input type="radio" name="calWu" value="lb" /> lb</label>
+          </div>
+          <input type="number" id="calW" min="30" max="300" step="0.1" value="72" />
+        </div>
+        <div class="field">
+          <label for="calAct">Activity level</label>
+          <select id="calAct">
+            <option value="1.2">Sedentary — little/no exercise (×1.2)</option>
+            <option value="1.375">Lightly active — 1–3 days/week (×1.375)</option>
+            <option value="1.55" selected>Moderately active — 3–5 days/week (×1.55)</option>
+            <option value="1.725">Very active — 6–7 days/week (×1.725)</option>
+            <option value="1.9">Super active — hard daily + physical job (×1.9)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="calGoal">Goal</label>
+          <select id="calGoal">
+            <option value="0">Maintain weight</option>
+            <option value="-0.25">Lose weight — slow (~0.25 kg/week)</option>
+            <option value="-0.5">Lose weight — moderate (~0.5 kg/week)</option>
+            <option value="-1">Lose weight — aggressive (~1 kg/week)</option>
+            <option value="0.25">Gain weight — slow (~0.25 kg/week)</option>
+            <option value="0.5">Gain weight — moderate (~0.5 kg/week)</option>
+          </select>
+        </div>
+      </div>
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <p class="big" id="calTarget">0</p>
+        <p class="lbl">Target kcal / day</p>
+        <div class="grid3">
+          <div><span class="lab">BMR</span><strong id="calBmr">0</strong></div>
+          <div><span class="lab">TDEE</span><strong id="calTdee">0</strong></div>
+          <div><span class="lab">Δ vs TDEE</span><strong id="calDelta">0</strong></div>
+        </div>
+        <div class="macros">
+          <h3>Example macro split (30 / 40 / 30)</h3>
+          <p>Protein <span id="calP">0</span> g · Carbs <span id="calC">0</span> g · Fat <span id="calF">0</span> g</p>
+        </div>
+        <div class="meter" role="img" aria-label="Calorie balance meter">
+          <div class="meter-bar"><div class="meter-fill" id="calMeter"></div></div>
+          <div class="meter-cap">Deficit ← → Surplus (vs maintenance)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">BMR, TDEE, and safe targets</h2>
+      <p>
+        <strong>Basal Metabolic Rate (BMR)</strong> estimates calories your body would burn at rest — breathing, circulation, temperature control. The <strong>Mifflin–St Jeor</strong> equation is widely used in apps and research for adults: it depends on weight, height, age, and sex. <strong>Total Daily Energy Expenditure (TDEE)</strong> multiplies BMR by an <strong>activity factor</strong> from sedentary to very active lifestyles.
+      </p>
+      <p>
+        To <strong>change body weight</strong>, we apply a daily calorie difference derived from the rule of thumb that <strong>~7,700 kcal</strong> matches roughly <strong>1 kg</strong> of tissue energy over time. So losing 0.5 kg/week suggests about 550 kcal/day deficit. These are population averages — metabolism adapts, water weight swings, and menstrual cycles matter. Very aggressive deficits (especially combined with high training load) can raise injury and fatigue risk.
+      </p>
+      <p>
+        <strong>Macros</strong> here split target calories into 30% protein, 40% carbohydrate, and 30% fat using 4 kcal/g for protein and carbs and 9 kcal/g for fat — a teaching template, not a prescription for athletes or clinical diets. People who strength-train often prioritize protein higher; ketogenic diets flip carb and fat shares.
+      </p>
+      <p>
+        <strong>Limitations:</strong> Online calculators cannot see lean mass, thyroid status, medications, sleep, or stress. Use results as a starting band, then adjust based on weekly weight trend and performance. <strong>Consult a registered dietitian</strong> if you have diabetes, eating disorders, pregnancy, or sport-specific needs. Pair with our <a href="/calculator/bmi">BMI</a> and <a href="/calculator/ideal-weight">ideal weight</a> tools only for context — not diagnosis.
+      </p>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner health">
+        <div class="affiliate-icon">🥗</div>
+        <div class="affiliate-content">
+          <h3>Build sustainable habits</h3>
+          <p>Food logging apps can improve awareness — pick one you will actually use daily.</p>
+        </div>
+        <a href="https://www.myfitnesspal.com" class="btn btn-orange" target="_blank" rel="noopener noreferrer">MyFitnessPal</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>Why doesn’t my weight move exactly?</h4><p>Water, salt, and stress shift scale weight day to day — track 2–4 week trends.</p></div>
+        <div class="faq-item"><h4>Is aggressive loss safe?</h4><p>Not for everyone — medical guidance recommended if you have comorbidities.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/bmi">BMI</a> · <a href="/calculator/ideal-weight">Ideal weight</a> · <a href="/calculator/age">Age</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      function debounce(fn, ms) {
+        let t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      function kg() {
+        const w = parseFloat(document.getElementById('calW').value) || 0;
+        return document.querySelector('input[name="calWu"]:checked').value === 'lb' ? w * 0.45359237 : w;
+      }
+      function heightCm() {
+        if (document.querySelector('input[name="calHu"]:checked').value === 'cm') {
+          return parseFloat(document.getElementById('calCm').value) || 0;
+        }
+        const ft = parseFloat(document.getElementById('calFt').value) || 0;
+        const inch = parseFloat(document.getElementById('calIn').value) || 0;
+        return (ft * 12 + inch) * 2.54;
+      }
+      function run() {
+        const male = document.querySelector('input[name="calSex"]:checked').value === 'm';
+        document.getElementById('calHcm').classList.toggle('hidden', document.querySelector('input[name="calHu"]:checked').value !== 'cm');
+        document.getElementById('calHft').classList.toggle('hidden', document.querySelector('input[name="calHu"]:checked').value !== 'ft');
+        const age = Math.max(15, Math.min(100, parseInt(document.getElementById('calAge').value, 10) || 25));
+        const wkg = kg();
+        const h = heightCm();
+        const act = parseFloat(document.getElementById('calAct').value);
+        const goal = parseFloat(document.getElementById('calGoal').value);
+        let bmr = 10 * wkg + 6.25 * h - 5 * age + (male ? 5 : -161);
+        const tdee = bmr * act;
+        const adj = (goal * 7700) / 7;
+        const target = Math.max(800, tdee + adj);
+        document.getElementById('calBmr').textContent = Math.round(bmr) + ' kcal';
+        document.getElementById('calTdee').textContent = Math.round(tdee) + ' kcal';
+        document.getElementById('calDelta').textContent = (adj >= 0 ? '+' : '') + Math.round(adj) + ' kcal';
+        document.getElementById('calTarget').textContent = Math.round(target) + ' kcal';
+        document.getElementById('calP').textContent = Math.round((target * 0.3) / 4);
+        document.getElementById('calC').textContent = Math.round((target * 0.4) / 4);
+        document.getElementById('calF').textContent = Math.round((target * 0.3) / 9);
+        const pct = Math.max(0, Math.min(100, 50 + (adj / 25) * -1));
+        document.getElementById('calMeter').style.width = pct + '%';
+      }
+      const d = debounce(run, 60);
+      ['calAge', 'calCm', 'calFt', 'calIn', 'calW', 'calAct', 'calGoal'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', d);
+      });
+      document.querySelectorAll('input[name="calSex"], input[name="calHu"], input[name="calWu"]').forEach(function (el) {
+        el.addEventListener('change', d);
+      });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 16px 0 0;
+      max-width: 960px;
+    }
+    .breadcrumb a {
+      color: var(--blue);
+    }
+    .hero {
+      padding: 36px 0 16px;
+      text-align: center;
+    }
+    .subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto 22px;
+      line-height: 1.65;
+    }
+    .calc-section {
+      padding: 24px 0 40px;
+    }
+    .calc-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      max-width: 960px;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .calc-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .calc-inputs,
+    .calc-results {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+      box-shadow: var(--shadow);
+    }
+    .calc-heading {
+      font-size: 1rem;
+      margin: 0 0 16px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .field {
+      margin-bottom: 14px;
+    }
+    .field > label:first-child,
+    .field label.block {
+      display: block;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      font-size: 16px;
+    }
+    .row2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .hidden {
+      display: none !important;
+    }
+    .big {
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: var(--blue);
+      margin: 0;
+    }
+    .lbl {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 4px 0 14px;
+    }
+    .grid3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      font-size: 14px;
+      margin-bottom: 14px;
+    }
+    .lab {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .macros {
+      font-size: 14px;
+      margin-bottom: 14px;
+    }
+    .macros h3 {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    .meter-bar {
+      height: 12px;
+      background: var(--gray-200);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .meter-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #22c55e, #eab308, #ef4444);
+      width: 50%;
+      transition: width 0.12s ease;
+    }
+    .meter-cap {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      text-align: center;
+    }
+    .edu {
+      padding: 36px 0 40px;
+    }
+    .edu .container {
+      max-width: 760px;
+    }
+    .edu p {
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .edu a {
+      color: var(--blue);
+      font-weight: 600;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 18px;
+      font-size: 1.5rem;
+    }
+    .affiliate {
+      padding: 28px 0;
+    }
+    .affiliate .container {
+      max-width: 900px;
+    }
+    .affiliate-inner.health {
+      background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+      border: 1px solid #6ee7b7;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .affiliate-icon {
+      font-size: 36px;
+    }
+    .affiliate-content {
+      flex: 1;
+      min-width: 200px;
+    }
+    .faq-list {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .related {
+      text-align: center;
+      padding-bottom: 48px;
+    }
+    .related-links a {
+      color: var(--blue);
+      font-weight: 600;
+    }
+  </style>
+</MainLayout>

@@ -1,0 +1,179 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/gst/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebApplication', name: 'GST Calculator — DoItSwift', url: canonical, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' }, description: 'Add or remove GST; CGST, SGST, and IGST breakdown for India.' },
+    { '@type': 'FAQPage', mainEntity: [{ '@type': 'Question', name: 'What is GST?', acceptedAnswer: { '@type': 'Answer', text: 'Goods and Services Tax — indirect tax with CGST/SGST for intra-state and IGST for inter-state supplies.' } }] },
+  ],
+};
+---
+
+<MainLayout
+  title="GST Calculator — Free Online Calculator | DoItSwift"
+  description="Add GST to a price or extract GST from an inclusive amount. CGST/SGST split, IGST mode, and custom GST rates."
+  keywords="GST calculator India, CGST SGST calculator, GST inclusive exclusive, remove GST from amount"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>GST Calculator</span></nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>GST Calculator</h1>
+      <p class="subtitle">Add GST to a base price or back out tax from a GST-inclusive total. View CGST/SGST (half each) or full IGST for inter-state.</p>
+      <div class="trust"><span><span class="check">✓</span> No signup</span><span><span class="check">✓</span> Instant results</span><span><span class="check">✓</span> Works offline</span></div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label>Mode</label>
+          <div class="seg">
+            <label><input type="radio" name="gstMode" value="add" checked /> Add GST to amount</label>
+            <label><input type="radio" name="gstMode" value="remove" /> Remove GST from amount</label>
+          </div>
+        </div>
+        <div class="field"><label for="gstAmt">Amount (₹)</label><input type="number" id="gstAmt" min="0" step="0.01" value="10000" /></div>
+        <div class="field">
+          <label for="gstRateSel">GST rate</label>
+          <select id="gstRateSel">
+            <option value="5">5%</option>
+            <option value="12">12%</option>
+            <option value="18" selected>18%</option>
+            <option value="28">28%</option>
+            <option value="custom">Custom</option>
+          </select>
+          <input type="number" id="gstRateCustom" min="0" max="50" step="0.01" value="18" style="margin-top:8px;display:none" aria-label="Custom GST percent" />
+        </div>
+        <div class="field">
+          <label>Tax type</label>
+          <div class="seg">
+            <label><input type="radio" name="gstType" value="intra" checked /> Intra-state (CGST + SGST)</label>
+            <label><input type="radio" name="gstType" value="inter" /> Inter-state (IGST)</label>
+          </div>
+        </div>
+      </div>
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <div class="result-grid">
+          <div><div class="result-sub" id="gstTax">₹0</div><div class="result-caption">GST amount</div></div>
+          <div><div class="result-sub" id="gstBase">₹0</div><div class="result-caption" id="gstBaseLbl">Taxable value</div></div>
+          <div><div class="result-sub" id="gstTotal">₹0</div><div class="result-caption" id="gstTotalLbl">Total with GST</div></div>
+        </div>
+        <div id="gstSplit" class="split-box">
+          <p><strong id="gstLine1"></strong></p>
+          <p><strong id="gstLine2"></strong></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">How GST math works</h2>
+      <p><strong>Add GST:</strong> GST = Amount × (rate/100), Total = Amount + GST. <strong>Remove GST:</strong> If amount includes GST, Taxable = Amount ÷ (1 + rate/100), GST = Amount − Taxable.</p>
+      <p>For <strong>intra-state</strong> supplies, CGST and SGST are typically half of the total GST each. For <strong>inter-state</strong>, IGST equals the full GST rate amount in one component. Actual invoicing must follow your GST registration and HSN/SAC rules — this page is a quick arithmetic aid only.</p>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner">
+        <div class="affiliate-icon">📈</div>
+        <div class="affiliate-content"><h3>Plan investments</h3><p>Use Groww for mutual funds after you understand costs and risk.</p></div>
+        <a href="https://groww.in/?ref=doitswift" class="btn btn-orange" target="_blank" rel="sponsored noopener noreferrer">Groww →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq"><div class="container"><h2 class="section-title">FAQ</h2><div class="faq-item"><h4>Is this official GST filing?</h4><p>No — it is a calculator only, not connected to the GST portal.</p></div></div></section>
+  <section class="related"><div class="container"><p class="related-links"><a href="/calculator/fd">FD</a> · <a href="/calculator/percentage">Percentage</a> · <a href="/calculator/income-tax">Income tax</a></p></div></section>
+
+  <script is:inline>
+    (function () {
+      const fmt = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 });
+      function debounce(fn, ms) { let t; return function () { clearTimeout(t); t = setTimeout(fn, ms); }; }
+      function rate() {
+        const sel = document.getElementById('gstRateSel').value;
+        if (sel === 'custom') return Math.max(0, parseFloat(document.getElementById('gstRateCustom').value) || 0);
+        return parseFloat(sel);
+      }
+      function run() {
+        const mode = document.querySelector('input[name="gstMode"]:checked').value;
+        const amt = Math.max(0, parseFloat(document.getElementById('gstAmt').value) || 0);
+        const r = rate() / 100;
+        const inter = document.querySelector('input[name="gstType"]:checked').value === 'inter';
+        let base, tax, total;
+        if (mode === 'add') {
+          base = amt;
+          tax = base * r;
+          total = base + tax;
+        } else {
+          total = amt;
+          base = r >= 0 ? total / (1 + r) : total;
+          tax = total - base;
+        }
+        document.getElementById('gstTax').textContent = fmt.format(tax);
+        document.getElementById('gstBase').textContent = fmt.format(base);
+        document.getElementById('gstTotal').textContent = fmt.format(mode === 'add' ? total : amt);
+        document.getElementById('gstBaseLbl').textContent = mode === 'add' ? 'Taxable value (base)' : 'Taxable value (ex-GST)';
+        document.getElementById('gstTotalLbl').textContent = mode === 'add' ? 'Total with GST' : 'GST-inclusive amount';
+        const half = tax / 2;
+        if (inter) {
+          document.getElementById('gstLine1').textContent = 'IGST: ' + fmt.format(tax);
+          document.getElementById('gstLine2').textContent = '';
+        } else {
+          document.getElementById('gstLine1').textContent = 'CGST: ' + fmt.format(half);
+          document.getElementById('gstLine2').textContent = 'SGST: ' + fmt.format(half);
+        }
+      }
+      const d = debounce(run, 80);
+      document.getElementById('gstRateSel').addEventListener('change', function () {
+        document.getElementById('gstRateCustom').style.display = this.value === 'custom' ? 'block' : 'none';
+        d();
+      });
+      document.querySelectorAll('input[name="gstMode"], input[name="gstType"], #gstAmt, #gstRateCustom').forEach(function (el) { el.addEventListener('input', d); });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 18px; color: var(--text-muted); max-width: 680px; margin: 0 auto 24px; }
+    .calc-section { padding: 24px 0 40px; }
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 960px; align-items: start; }
+    @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
+    .calc-inputs, .calc-results { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--shadow); }
+    .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    .field input, .field select { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
+    .result-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    .result-sub { font-size: 1.35rem; font-weight: 700; color: var(--blue); }
+    .result-caption { font-size: 12px; color: var(--text-muted); }
+    .split-box { margin-top: 16px; padding: 14px; background: var(--gray-100); border-radius: var(--radius); font-size: 14px; }
+    [data-theme='dark'] .split-box { background: var(--gray-200); }
+    .edu { padding: 40px 0; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 12px; }
+    .section-title { text-align: center; font-size: 1.5rem; margin-bottom: 16px; }
+    .affiliate { padding: 28px 0; }
+    .affiliate .container { max-width: 900px; }
+    .affiliate-inner { background: linear-gradient(135deg, #ecfdf5, #d1fae5); border: 1px solid #6ee7b7; border-radius: var(--radius-lg); padding: 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .affiliate-icon { font-size: 36px; }
+    .affiliate-content { flex: 1; min-width: 200px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; max-width: 760px; margin: 0 auto; }
+    .related { text-align: center; padding: 24px 0 48px; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

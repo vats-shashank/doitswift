@@ -423,9 +423,16 @@ import MainLayout from '../../layouts/MainLayout.astro';
       align-items: flex-start;
       gap: 10px;
       font-size: 14px;
+      line-height: 1.45;
       cursor: pointer;
     }
-    .radio-row input { margin-top: 3px; }
+    .radio-row input[type="radio"] {
+      width: 1.125rem;
+      height: 1.125rem;
+      margin-top: 0.2em;
+      flex-shrink: 0;
+      accent-color: var(--blue);
+    }
     .radio-row code {
       font-size: 12px;
       background: var(--gray-100);

@@ -13,16 +13,16 @@ const categories = [
   {
     emoji: '📄',
     title: 'PDF Tools',
-    href: '#',
-    live: false,
-    desc: 'Merge, split, compress, convert PDFs in your browser.',
+    href: '/pdf/',
+    live: true,
+    desc: 'Merge, split, compress, convert PDFs in your browser. 6 tools and counting.',
   },
   {
     emoji: '🧮',
     title: 'Calculators',
-    href: '#',
-    live: false,
-    desc: 'EMI, BMI, age, SIP, mortgage, and more.',
+    href: '/calculator/',
+    live: true,
+    desc: '16 free calculators — finance, health, math, and everyday. Instant results.',
   },
   {
     emoji: '📝',
@@ -62,6 +62,9 @@ const categories = [
 ];
 
 const tools = [
+  { href: '/calculator/sip', icon: '📈', title: 'SIP Calculator', desc: 'Mutual fund SIP maturity & returns', live: true },
+  { href: '/calculator/emi', icon: '🏦', title: 'EMI Calculator', desc: 'Loan EMI, interest & amortization', live: true },
+  { href: '/calculator/bmi', icon: '⚖️', title: 'BMI Calculator', desc: 'Body mass index & categories', live: true },
   { href: '/image/heic-to-jpg', icon: '📱', title: 'HEIC to JPG', desc: 'Convert iPhone photos to JPG', live: true },
   { href: '/image/webp-to-jpg', icon: '🖼️', title: 'WEBP to JPG', desc: 'Convert WebP images instantly', live: true },
   { href: '/image/image-compressor', icon: '🗜️', title: 'Image Compressor', desc: 'Shrink files up to 80%', live: true },
@@ -100,16 +103,17 @@ const tools = [
   <!-- SMART UPLOAD -->
   <section class="smart-upload">
     <div class="container">
-      <div class="dropzone" id="smartDrop">
+        <div class="dropzone" id="smartDrop">
         <div class="dropzone-icon">✨</div>
-        <div class="dropzone-text">Drop any image file here</div>
+        <div class="dropzone-text">Drop an image or PDF here</div>
         <div class="dropzone-sub">
           We'll auto-detect the format and route you to the right tool
         </div>
-        <input type="file" id="smartInput" accept="image/*,.heic,.heif" />
+        <input type="file" id="smartInput" accept="image/*,.heic,.heif,.pdf,application/pdf" />
       </div>
       <p class="smart-hint">
-        Supported: HEIC, HEIF, WEBP, AVIF, PNG, JPG, SVG, BMP, GIF
+        Supported: HEIC, HEIF, WEBP, AVIF, PNG, JPG, SVG, BMP, GIF, PDF · Calculators (SIP, EMI, BMI, and more) live under
+        <a href="/calculator/">Browse by Category → Calculators</a> — no file upload needed.
       </p>
     </div>
   </section>
@@ -118,7 +122,7 @@ const tools = [
   <section class="category-section" id="categories">
     <div class="container">
       <h2 class="section-title">Browse by Category</h2>
-      <p class="section-sub">Start with image tools today — more categories are on the way.</p>
+      <p class="section-sub">Image, PDF, and calculator tools are live — more categories are on the way.</p>
       <div class="category-grid">
         {categories.map((cat) =>
           cat.live ? (
@@ -235,7 +239,9 @@ const tools = [
       const type = file.type.toLowerCase();
       let dest = null;
 
-      if (name.endsWith('.heic') || name.endsWith('.heif') || type.includes('heic') || type.includes('heif')) {
+      if (name.endsWith('.pdf') || type === 'application/pdf') {
+        dest = '/pdf/compress-pdf';
+      } else if (name.endsWith('.heic') || name.endsWith('.heif') || type.includes('heic') || type.includes('heif')) {
         dest = '/image/heic-to-jpg';
       } else if (name.endsWith('.webp') || type.includes('webp')) {
         dest = '/image/webp-to-jpg';
