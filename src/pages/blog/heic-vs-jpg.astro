@@ -1,17 +1,19 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
 
 const title = "HEIC vs JPG: Complete Format Comparison for 2026";
 const description = "HEIC vs JPG: which format is better for photos in 2026? Compare file size, quality, compatibility, and use cases. Get the definitive answer based on real data.";
 const publishDate = "2026-04-13";
 const lastUpdated = "2026-04-13";
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <MainLayout
   title={`${title} | DoItSwift`}
   description={description}
   keywords="heic vs jpg, heic or jpg, heic vs jpeg, which is better heic or jpg, heic jpg comparison"
-  canonical="https://doitswift.com/blog/heic-vs-jpg/"
+  canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
@@ -489,6 +491,8 @@ const lastUpdated = "2026-04-13";
           </p>
         </div>
       </section>
+
+      <ShareButtons title={title} url={canonical} />
 
       <section class="cta-section">
         <h2>Need to convert HEIC to JPG right now?</h2>

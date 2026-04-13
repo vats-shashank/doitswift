@@ -1,7 +1,9 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
 
 const title = 'How to Open HEIC Files on Windows 11 in 2026 (3 Free Methods)';
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 const description =
   'Three free ways to view and convert HEIC photos from your iPhone on a Windows 11 PC — including a browser option with no install.';
 ---
@@ -10,7 +12,7 @@ const description =
   title={`${title} | DoItSwift Blog`}
   {description}
   keywords="heic windows 11, open heic, convert heic to jpg, iphone photos pc"
-  canonical={new URL(Astro.url.pathname, Astro.site).toString()}
+  canonical={canonical}
 >
   <article class="content-page blog-post">
     <div class="container">
@@ -68,6 +70,8 @@ const description =
           <a href="/image/" class="link-back">image tools</a>.
         </p>
       </div>
+
+      <ShareButtons title={title} url={canonical} />
 
       <p class="section-tail">
         <a href="/blog" class="link-back">← All posts</a>

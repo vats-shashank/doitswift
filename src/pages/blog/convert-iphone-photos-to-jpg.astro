@@ -1,17 +1,19 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
 
 const title = "How to Convert iPhone Photos to JPG Without Losing Quality (2026 Guide)";
 const description = "Convert iPhone HEIC photos to JPG with zero quality loss. 5 free methods tested — browser, Mac Preview, iPhone settings, iCloud, and email tricks. Step-by-step guide.";
 const publishDate = "2026-04-13";
 const lastUpdated = "2026-04-13";
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <MainLayout
   title={`${title} | DoItSwift`}
   description={description}
   keywords="convert iphone photos to jpg, iphone to jpg, iphone photo to jpeg, convert iphone pictures, heic to jpg iphone"
-  canonical="https://doitswift.com/blog/convert-iphone-photos-to-jpg/"
+  canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
@@ -461,6 +463,8 @@ const lastUpdated = "2026-04-13";
           </p>
         </div>
       </section>
+
+      <ShareButtons title={title} url={canonical} />
 
       <section class="cta-section">
         <h2>Skip the setup — convert HEIC to JPG in seconds</h2>
