@@ -1,0 +1,347 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/body-fat/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Body Fat Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'HealthApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'US Navy body fat percentage from neck, waist, hip, and height with metric or imperial inputs.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'How accurate is the US Navy method?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'It correlates with body composition for many adults but can misclassify very muscular or lean individuals — use as a screening estimate, not a medical diagnosis.',
+          },
+        },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Body Fat Percentage Calculator — US Navy Method | DoItSwift"
+  description="Estimate body fat percentage using the US Navy tape method. Toggle cm/ft-in, kg/lb, neck, waist, hip (women), and see category-style interpretation."
+  keywords="body fat calculator, body fat percentage calculator, us navy body fat calculator"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Body Fat Calculator</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Body Fat Calculator (US Navy)</h1>
+      <p class="subtitle">
+        Tape-test estimates from <strong>neck, waist</strong>, and (for women) <strong>hip</strong> circumferences plus height. Measure consistently — same tape tension, parallel to the floor, at the specified landmarks.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label>Gender</label>
+          <div class="seg">
+            <label><input type="radio" name="bfGen" value="m" checked /> Male</label>
+            <label><input type="radio" name="bfGen" value="f" /> Female</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Height</label>
+          <div class="seg">
+            <label><input type="radio" name="bfHunit" value="cm" checked /> Centimeters</label>
+            <label><input type="radio" name="bfHunit" value="ft" /> Feet &amp; inches</label>
+          </div>
+          <div id="bfHCmWrap">
+            <input type="number" id="bfCm" min="100" max="250" step="0.1" value="175" aria-label="Height in centimeters" />
+          </div>
+          <div id="bfHFtWrap" class="hidden">
+            <div class="row2">
+              <div>
+                <label for="bfFt" class="sr-only">Feet</label>
+                <input type="number" id="bfFt" min="4" max="8" step="1" value="5" /> <span class="unit">ft</span>
+              </div>
+              <div>
+                <label for="bfIn" class="sr-only">Inches</label>
+                <input type="number" id="bfIn" min="0" max="11" step="0.1" value="9" /> <span class="unit">in</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Neck circumference</label>
+          <div class="seg">
+            <label><input type="radio" name="bfNunit" value="cm" checked /> cm</label>
+            <label><input type="radio" name="bfNunit" value="in" /> in</label>
+          </div>
+          <input type="number" id="bfNeck" min="20" max="60" step="0.1" value="38" aria-label="Neck circumference" />
+        </div>
+        <div class="field">
+          <label>Waist circumference</label>
+          <div class="seg">
+            <label><input type="radio" name="bfWunit" value="cm" checked /> cm</label>
+            <label><input type="radio" name="bfWunit" value="in" /> in</label>
+          </div>
+          <input type="number" id="bfWaist" min="40" max="200" step="0.1" value="85" aria-label="Waist circumference" />
+        </div>
+        <div class="field" id="bfHipField">
+          <label>Hip circumference (women)</label>
+          <div class="seg">
+            <label><input type="radio" name="bfHiunit" value="cm" checked /> cm</label>
+            <label><input type="radio" name="bfHiunit" value="in" /> in</label>
+          </div>
+          <input type="number" id="bfHip" min="40" max="200" step="0.1" value="100" aria-label="Hip circumference" />
+        </div>
+      </div>
+
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <p class="bf-val" id="bfPct">—</p>
+        <p class="bf-cat" id="bfCat">Enter measurements</p>
+        <p class="bf-note" id="bfNote"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Measuring like the US Navy method</h2>
+      <p>
+        <strong>Neck:</strong> just below the larynx, tape horizontal. <strong>Waist:</strong> at the narrowest point, usually near the navel level for the formula. <strong>Hip (women):</strong> at the widest part of the buttocks.
+      </p>
+      <p>
+        The estimate uses logarithmic circumference ratios relative to height — practical for field screening but not equivalent to DEXA or hydrostatic weighing. Very lean or very muscular people can sit outside typical ranges.
+      </p>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner health">
+        <div class="affiliate-icon">🏃</div>
+        <div class="affiliate-content">
+          <h3>Training &amp; recovery</h3>
+          <p>Pair nutrition with strength training; consult a clinician before aggressive cuts.</p>
+        </div>
+        <a href="https://www.strava.com" class="btn btn-orange" target="_blank" rel="noopener noreferrer">Strava</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>Why is my result unrealistic?</h4><p>Wrong units, loose tape, or measuring over clothes skew results. Double-check inches vs cm toggles.</p></div>
+        <div class="faq-item"><h4>Is this for teens?</h4><p>The Navy method targets adults; teens need different standards.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/bmi">BMI</a> · <a href="/calculator/ideal-weight">Ideal weight</a> · <a href="/calculator/calorie">Calorie / TDEE</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      function debounce(fn, ms) {
+        var t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      function toInches(val, unit) {
+        return unit === 'cm' ? val / 2.54 : val;
+      }
+      function heightInches() {
+        var u = document.querySelector('input[name="bfHunit"]:checked').value;
+        if (u === 'cm') return parseFloat(document.getElementById('bfCm').value) / 2.54;
+        var ft = parseFloat(document.getElementById('bfFt').value) || 0;
+        var inch = parseFloat(document.getElementById('bfIn').value) || 0;
+        return ft * 12 + inch;
+      }
+      function catMale(p) {
+        if (p < 6) return 'Essential fat range (very low)';
+        if (p < 14) return 'Athletic range (typical labels)';
+        if (p < 18) return 'Fitness range';
+        if (p < 25) return 'Average range';
+        return 'Above typical fitness range';
+      }
+      function catFemale(p) {
+        if (p < 16) return 'Essential fat range (very low)';
+        if (p < 21) return 'Athletic range (typical labels)';
+        if (p < 25) return 'Fitness range';
+        if (p < 32) return 'Average range';
+        return 'Above typical fitness range';
+      }
+      function syncBfHeight(newUnit) {
+        if (newUnit === 'ft') {
+          var cm = parseFloat(document.getElementById('bfCm').value);
+          if (isNaN(cm) || cm <= 0) return;
+          var totalIn = cm / 2.54;
+          var ft = Math.floor(totalIn / 12);
+          var inch = totalIn - ft * 12;
+          document.getElementById('bfFt').value = ft;
+          document.getElementById('bfIn').value = Math.round(inch * 100) / 100;
+        } else {
+          var ft = parseFloat(document.getElementById('bfFt').value) || 0;
+          var inch = parseFloat(document.getElementById('bfIn').value) || 0;
+          document.getElementById('bfCm').value = Math.round((ft * 12 + inch) * 2.54 * 100) / 100;
+        }
+      }
+      function syncBfCircum(id, newUnit) {
+        var v = parseFloat(document.getElementById(id).value) || 0;
+        if (newUnit === 'in') {
+          document.getElementById(id).value = Math.round((v / 2.54) * 10) / 10;
+        } else {
+          document.getElementById(id).value = Math.round(v * 2.54 * 10) / 10;
+        }
+      }
+      function run() {
+        var gen = document.querySelector('input[name="bfGen"]:checked').value;
+        document.getElementById('bfHipField').style.display = gen === 'f' ? 'block' : 'none';
+
+        document.getElementById('bfHCmWrap').classList.toggle('hidden', document.querySelector('input[name="bfHunit"]:checked').value !== 'cm');
+        document.getElementById('bfHFtWrap').classList.toggle('hidden', document.querySelector('input[name="bfHunit"]:checked').value !== 'ft');
+
+        var h = heightInches();
+        var neck = toInches(parseFloat(document.getElementById('bfNeck').value) || 0, document.querySelector('input[name="bfNunit"]:checked').value);
+        var waist = toInches(parseFloat(document.getElementById('bfWaist').value) || 0, document.querySelector('input[name="bfWunit"]:checked').value);
+        var hip = toInches(parseFloat(document.getElementById('bfHip').value) || 0, document.querySelector('input[name="bfHiunit"]:checked').value);
+
+        if (h <= 0 || neck <= 0 || waist <= 0 || (gen === 'f' && hip <= 0)) {
+          document.getElementById('bfPct').textContent = '—';
+          document.getElementById('bfCat').textContent = 'Enter measurements';
+          document.getElementById('bfNote').textContent = '';
+          return;
+        }
+        var log10 = Math.log10;
+        var bf;
+        if (gen === 'm') {
+          if (waist - neck <= 0) {
+            document.getElementById('bfPct').textContent = '—';
+            document.getElementById('bfCat').textContent = 'Waist must be greater than neck';
+            document.getElementById('bfNote').textContent = '';
+            return;
+          }
+          bf = 495 / (1.0324 - 0.19077 * log10(waist - neck) + 0.15456 * log10(h)) - 450;
+        } else {
+          if (waist + hip - neck <= 0) {
+            document.getElementById('bfPct').textContent = '—';
+            document.getElementById('bfCat').textContent = 'Check waist, hip, and neck';
+            document.getElementById('bfNote').textContent = '';
+            return;
+          }
+          bf = 495 / (1.29579 - 0.35004 * log10(waist + hip - neck) + 0.221 * log10(h)) - 450;
+        }
+        bf = Math.max(0, Math.min(60, bf));
+        document.getElementById('bfPct').textContent = bf.toFixed(1) + '%';
+        document.getElementById('bfCat').textContent = gen === 'm' ? catMale(bf) : catFemale(bf);
+        document.getElementById('bfNote').textContent =
+          'Labels are informal bands — not medical standards. Measurements in inches internally; your unit toggles convert automatically.';
+      }
+      var d = debounce(run, 60);
+      ['bfCm', 'bfFt', 'bfIn', 'bfNeck', 'bfWaist', 'bfHip'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', d);
+      });
+      document.querySelectorAll('input[name="bfHunit"]').forEach(function (el) {
+        el.addEventListener('change', function () {
+          syncBfHeight(this.value);
+          d();
+        });
+      });
+      document.querySelectorAll('input[name="bfNunit"]').forEach(function (el) {
+        el.addEventListener('change', function () {
+          syncBfCircum('bfNeck', this.value);
+          d();
+        });
+      });
+      document.querySelectorAll('input[name="bfWunit"]').forEach(function (el) {
+        el.addEventListener('change', function () {
+          syncBfCircum('bfWaist', this.value);
+          d();
+        });
+      });
+      document.querySelectorAll('input[name="bfHiunit"]').forEach(function (el) {
+        el.addEventListener('change', function () {
+          syncBfCircum('bfHip', this.value);
+          d();
+        });
+      });
+      document.querySelectorAll('input[name="bfGen"]').forEach(function (el) {
+        el.addEventListener('change', d);
+      });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 17px; color: var(--text-muted); max-width: 700px; margin: 0 auto 22px; line-height: 1.6; }
+    .calc-section { padding: 24px 0 40px; }
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 960px; align-items: start; }
+    @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
+    .calc-inputs, .calc-results { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--shadow); }
+    .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+    .field { margin-bottom: 16px; }
+    .field > label:first-child { display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; }
+    .field input, .field select { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: center; }
+    .row2 > div { display: flex; align-items: center; gap: 6px; }
+    .unit { font-size: 13px; color: var(--text-muted); }
+    .hidden { display: none !important; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
+    .bf-val { font-size: 2.75rem; font-weight: 800; color: var(--blue); margin: 0; }
+    .bf-cat { font-size: 1.1rem; font-weight: 700; margin: 8px 0 6px; }
+    .bf-note { font-size: 14px; color: var(--text-muted); line-height: 1.55; }
+    .edu { padding: 36px 0 40px; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.8; color: var(--text-muted); margin-bottom: 14px; }
+    .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .affiliate { padding: 28px 0; }
+    .affiliate .container { max-width: 900px; }
+    .affiliate-inner.health { background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #93c5fd; border-radius: var(--radius-lg); padding: 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    [data-theme='dark'] .affiliate-inner.health { background: linear-gradient(135deg, #1e293b, #0f172a); border-color: #334155; }
+    .affiliate-icon { font-size: 36px; }
+    .affiliate-content { flex: 1; min-width: 220px; }
+    .affiliate-content h3 { font-size: 17px; margin-bottom: 6px; }
+    .affiliate-content p { font-size: 14px; color: var(--text-muted); }
+    .faq-list { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+    .faq-item h4 { margin-bottom: 8px; font-size: 15px; }
+    .faq-item p { font-size: 14px; color: var(--text-muted); margin: 0; }
+    .related { text-align: center; padding-bottom: 48px; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

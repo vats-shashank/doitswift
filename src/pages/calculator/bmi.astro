@@ -175,6 +175,10 @@ const jsonLd = {
           <h4>Why is my needle clipped?</h4>
           <p>Extreme BMIs map to the bar edges so the gauge stays readable.</p>
         </div>
+        <div class="faq-item">
+          <h4>Does switching cm/ft or kg/lb keep my numbers?</h4>
+          <p>Yes — we convert the value you entered so height and weight stay consistent when you change units.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -183,7 +187,7 @@ const jsonLd = {
     <div class="container">
       <h2 class="section-title">Related calculators</h2>
       <p class="related-links">
-        <a href="/calculator/calorie">Calorie / TDEE</a> · <a href="/calculator/ideal-weight">Ideal weight</a> · <a href="/calculator/age">Age</a>
+        <a href="/calculator/calorie">Calorie / TDEE</a> · <a href="/calculator/heart-rate">Heart rate zones</a> · <a href="/calculator/ideal-weight">Ideal weight</a> · <a href="/calculator/age">Age</a>
       </p>
     </div>
   </section>
@@ -217,6 +221,29 @@ const jsonLd = {
         if (bmi < 30) return { label: 'Overweight', key: 'o' };
         return { label: 'Obese', key: 'x' };
       }
+      function syncBmiHeight(newUnit) {
+        if (newUnit === 'ft') {
+          var cm = parseFloat(document.getElementById('bmiCm').value);
+          if (isNaN(cm) || cm <= 0) return;
+          var totalIn = cm / 2.54;
+          var ft = Math.floor(totalIn / 12);
+          var inch = totalIn - ft * 12;
+          document.getElementById('bmiFt').value = ft;
+          document.getElementById('bmiIn').value = Math.round(inch * 100) / 100;
+        } else {
+          var ft = parseFloat(document.getElementById('bmiFt').value) || 0;
+          var inch = parseFloat(document.getElementById('bmiIn').value) || 0;
+          document.getElementById('bmiCm').value = Math.round((ft * 12 + inch) * 2.54 * 100) / 100;
+        }
+      }
+      function syncBmiWeight(newUnit) {
+        var w = parseFloat(document.getElementById('bmiWeight').value) || 0;
+        if (newUnit === 'lb') {
+          document.getElementById('bmiWeight').value = Math.round(w * 2.2046226218 * 10) / 10;
+        } else {
+          document.getElementById('bmiWeight').value = Math.round(w * 0.45359237 * 10) / 10;
+        }
+      }
       function run() {
         var hm = heightM();
         var kg = weightKg();
@@ -224,6 +251,10 @@ const jsonLd = {
         document.getElementById('hFtWrap').classList.toggle('hidden', document.querySelector('input[name="bmiHunit"]:checked').value !== 'ft');
         if (hm <= 0 || kg <= 0) {
           document.getElementById('bmiNum').textContent = '—';
+          document.getElementById('bmiCat').textContent = 'Enter height and weight';
+          document.getElementById('bmiRisk').textContent = '';
+          document.getElementById('bmiIdeal').textContent = '';
+          document.getElementById('bmiNeedle').style.left = '50%';
           return;
         }
         var bmi = kg / (hm * hm);
@@ -260,8 +291,17 @@ const jsonLd = {
       ['bmiCm', 'bmiFt', 'bmiIn', 'bmiWeight', 'bmiAge'].forEach(function (id) {
         document.getElementById(id).addEventListener('input', d);
       });
-      document.querySelectorAll('input[name="bmiHunit"], input[name="bmiWunit"]').forEach(function (el) {
-        el.addEventListener('change', d);
+      document.querySelectorAll('input[name="bmiHunit"]').forEach(function (el) {
+        el.addEventListener('change', function () {
+          syncBmiHeight(this.value);
+          d();
+        });
+      });
+      document.querySelectorAll('input[name="bmiWunit"]').forEach(function (el) {
+        el.addEventListener('change', function () {
+          syncBmiWeight(this.value);
+          d();
+        });
       });
       run();
     })();

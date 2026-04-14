@@ -1,0 +1,304 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
+
+const canonical = 'https://doitswift.com/calculator/stock-average/';
+const site = 'https://doitswift.com';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Stock Average Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Average buy price across multiple purchases, optional profit/loss with brokerage and charges.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [{ '@type': 'Question', name: 'What is averaging down?', acceptedAnswer: { '@type': 'Answer', text: 'Buying more shares at a lower price to reduce your average cost per share — it can help or compound losses if the stock keeps falling.' } }],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: site + '/' },
+        { '@type': 'ListItem', position: 2, name: 'Calculators', item: site + '/calculator/' },
+        { '@type': 'ListItem', position: 3, name: 'Stock Average Calculator', item: canonical },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Stock Average Calculator — Average Buy Price & Profit | DoItSwift"
+  description="Calculate weighted average stock price from multiple buys, or profit/loss after brokerage and STT. Choose display currency; educational only."
+  keywords="stock average calculator, share average calculator, stock profit calculator, averaging down calculator"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Stock Average Calculator</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Stock Average &amp; Profit Calculator</h1>
+      <p class="subtitle">
+        <strong>Mode A:</strong> weighted average from multiple purchases. <strong>Mode B:</strong> profit or loss after optional brokerage and charges. Switch currency for display.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <p class="disc container">
+    <strong>Disclaimer:</strong> Investment outcomes depend on market conditions. This tool performs arithmetic only — not investment advice. Past performance does not guarantee future results. Consult a SEBI-registered advisor for personalized guidance.
+  </p>
+
+  <section class="calc-section">
+    <div class="container">
+      <div class="mode-bar">
+        <label class="seg"><input type="radio" name="stkMode" value="avg" checked /> Stock averaging</label>
+        <label class="seg"><input type="radio" name="stkMode" value="pl" /> Profit / loss</label>
+      </div>
+      <div class="field row-inline">
+        <label>Currency</label>
+        <select id="stkCur" aria-label="Currency">
+          {CALCULATOR_CURRENCY_OPTIONS.map((o) => (
+            <option value={o.code} selected={o.code === 'INR'}>
+              {o.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div id="panelAvg" class="stk-panel">
+        <h2 class="calc-heading">Purchases</h2>
+        <div id="stkRows"></div>
+        <button type="button" class="btn-add" id="stkAddRow">+ Add purchase</button>
+        <div class="field">
+          <label for="stkCurPx">Current price per share (optional, for MTM)</label>
+          <input type="number" id="stkCurPx" min="0" step="0.01" placeholder="Leave blank to skip" />
+        </div>
+        <div class="calc-results stk-out" aria-live="polite">
+          <h2 class="calc-heading">Results</h2>
+          <p><strong>Total shares:</strong> <span id="stkTotSh">0</span></p>
+          <p><strong>Total invested:</strong> <span id="stkTotInv">0</span></p>
+          <p><strong>Average price / share:</strong> <span id="stkAvg">0</span></p>
+          <p id="stkMtmP"></p>
+        </div>
+      </div>
+
+      <div id="panelPl" class="stk-panel hidden">
+        <div class="calc-layout calc-layout--single">
+          <div class="calc-inputs">
+            <h2 class="calc-heading">Inputs</h2>
+            <div class="field"><label for="plBuy">Buy price / share</label><input type="number" id="plBuy" min="0" step="0.01" value="100" /></div>
+            <div class="field"><label for="plSell">Sell price / share</label><input type="number" id="plSell" min="0" step="0.01" value="120" /></div>
+            <div class="field"><label for="plShares">Number of shares</label><input type="number" id="plShares" min="0" step="1" value="10" /></div>
+            <div class="field"><label for="plBrok">Brokerage (% of trade)</label><input type="number" id="plBrok" min="0" step="0.01" value="0.1" /></div>
+            <div class="field"><label for="plStt">Other charges / STT (% of trade)</label><input type="number" id="plStt" min="0" step="0.01" value="0.1" /></div>
+          </div>
+          <div class="calc-results">
+            <h2 class="calc-heading">Results</h2>
+            <p><strong>Gross P/L:</strong> <span id="plGross">0</span></p>
+            <p><strong>Estimated charges:</strong> <span id="plChg">0</span></p>
+            <p><strong>Net P/L:</strong> <span id="plNet">0</span></p>
+            <p><strong>Return on invested:</strong> <span id="plPct">0%</span></p>
+            <p><strong>Approx. break-even sell price (after charges):</strong> <span id="plBe">0</span></p>
+            <p class="tax-note">
+              Tax: India short-term vs long-term equity gains rules apply by holding period; US treatment differs by holding and income — consult a tax professional.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Averaging, charges, and taxes</h2>
+      <p>
+        <strong>Averaging down</strong> means buying more of a stock at a lower price so your <strong>weighted average cost</strong> falls. It can reduce the price needed to break even — but it also increases total capital at risk if the thesis was wrong. “Catching a falling knife” is a real behavioral risk; use position sizing and a clear invalidation level.
+      </p>
+      <p>
+        <strong>Brokerage, STT, GST on charges</strong>, and exchange fees reduce net returns. Our profit mode applies percentage charges on buy and sell notionals as a simplified model — your broker’s actual slip may differ slightly.
+      </p>
+      <p>
+        In <strong>India</strong>, short-term capital gains on listed equity and equity funds may be taxed differently from long-term holdings depending on current law; rules change with the Union Budget. In the <strong>US</strong>, short-term gains are typically taxed as ordinary income and long-term at reduced rates for many taxpayers — always verify with a qualified professional.
+      </p>
+      <p>
+        For wealth accumulation scenarios, pair this with <a href="/calculator/sip">SIP</a>, <a href="/calculator/lumpsum">Lumpsum</a>, and <a href="/calculator/compound-interest">Compound Interest</a> calculators.
+      </p>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/sip">SIP</a>
+        ·
+        <a href="/calculator/lumpsum">Lumpsum</a>
+        ·
+        <a href="/calculator/compound-interest">Compound Interest</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline define:vars={{ LOCALE_BY_CURRENCY }}>
+    (function () {
+      var cur = 'INR';
+      function localeForCurrency(code) {
+        return LOCALE_BY_CURRENCY[code] || 'en-US';
+      }
+      function fmt(n) {
+        return new Intl.NumberFormat(localeForCurrency(cur), {
+          style: 'currency',
+          currency: cur,
+          maximumFractionDigits: 2,
+        }).format(n);
+      }
+      function rowHtml(i) {
+        return (
+          '<div class="stk-row" data-i="' +
+          i +
+          '">' +
+          '<input type="number" min="0" step="1" class="stk-q" placeholder="Shares" aria-label="Shares row ' +
+          (i + 1) +
+          '" />' +
+          '<input type="number" min="0" step="0.01" class="stk-p" placeholder="Price" aria-label="Price row ' +
+          (i + 1) +
+          '" />' +
+          '<button type="button" class="stk-rm" aria-label="Remove row">×</button>' +
+          '</div>'
+        );
+      }
+      function initRows() {
+        var c = document.getElementById('stkRows');
+        c.innerHTML = rowHtml(0) + rowHtml(1);
+        wireRows();
+      }
+      function wireRows() {
+        document.querySelectorAll('.stk-row').forEach(function (row) {
+          row.querySelector('.stk-rm').addEventListener('click', function () {
+            if (document.querySelectorAll('.stk-row').length > 1) row.remove();
+            runAvg();
+          });
+          row.querySelector('.stk-q').addEventListener('input', runAvg);
+          row.querySelector('.stk-p').addEventListener('input', runAvg);
+        });
+      }
+      function runAvg() {
+        var tq = 0,
+          ti = 0;
+        document.querySelectorAll('.stk-row').forEach(function (row) {
+          var q = parseFloat(row.querySelector('.stk-q').value) || 0;
+          var p = parseFloat(row.querySelector('.stk-p').value) || 0;
+          tq += q;
+          ti += q * p;
+        });
+        var avg = tq > 0 ? ti / tq : 0;
+        document.getElementById('stkTotSh').textContent = tq.toFixed(4).replace(/\.?0+$/, '');
+        document.getElementById('stkTotInv').textContent = fmt(ti);
+        document.getElementById('stkAvg').textContent = fmt(avg);
+        var cp = parseFloat(document.getElementById('stkCurPx').value);
+        var mtm = document.getElementById('stkMtmP');
+        if (!isNaN(cp) && tq > 0) {
+          var mv = cp * tq;
+          var pl = mv - ti;
+          mtm.textContent =
+            'At current price: market value ' + fmt(mv) + ', P/L ' + fmt(pl) + ' (' + ((pl / ti) * 100).toFixed(2) + '% on cost).';
+        } else mtm.textContent = '';
+      }
+      function runPl() {
+        var buy = parseFloat(document.getElementById('plBuy').value) || 0;
+        var sell = parseFloat(document.getElementById('plSell').value) || 0;
+        var sh = parseFloat(document.getElementById('plShares').value) || 0;
+        var br = (parseFloat(document.getElementById('plBrok').value) || 0) / 100;
+        var st = (parseFloat(document.getElementById('plStt').value) || 0) / 100;
+        var gross = (sell - buy) * sh;
+        var buyN = buy * sh,
+          sellN = sell * sh;
+        var chg = buyN * br + sellN * br + buyN * st + sellN * st;
+        var net = gross - chg;
+        var inv = buy * sh;
+        var rr = br + st;
+        var be = rr < 1 && buy > 0 ? (buy * (1 + rr)) / (1 - rr) : NaN;
+        document.getElementById('plGross').textContent = fmt(gross);
+        document.getElementById('plChg').textContent = fmt(chg);
+        document.getElementById('plNet').textContent = fmt(net);
+        document.getElementById('plPct').textContent = inv > 0 ? ((net / inv) * 100).toFixed(2) + '%' : '—';
+        document.getElementById('plBe').textContent = !isNaN(be) && sh > 0 ? fmt(be) : '—';
+      }
+      document.getElementById('stkAddRow').addEventListener('click', function () {
+        var c = document.getElementById('stkRows');
+        var n = document.querySelectorAll('.stk-row').length;
+        c.insertAdjacentHTML('beforeend', rowHtml(n));
+        wireRows();
+      });
+      document.getElementById('stkCurPx').addEventListener('input', runAvg);
+      document.getElementById('stkCur').addEventListener('change', function () {
+        cur = this.value;
+        runAvg();
+        runPl();
+      });
+      document.querySelectorAll('input[name="stkMode"]').forEach(function (el) {
+        el.addEventListener('change', function () {
+          var av = el.value === 'avg';
+          document.getElementById('panelAvg').classList.toggle('hidden', !av);
+          document.getElementById('panelPl').classList.toggle('hidden', av);
+        });
+      });
+      ['plBuy', 'plSell', 'plShares', 'plBrok', 'plStt'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', runPl);
+      });
+      initRows();
+      runAvg();
+      runPl();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 17px; color: var(--text-muted); max-width: 720px; margin: 0 auto 20px; line-height: 1.6; }
+    .disc { font-size: 14px; color: var(--text-muted); background: #fff7ed; border: 1px solid #fed7aa; border-radius: var(--radius); padding: 14px 18px; max-width: 900px; margin: 0 auto 16px; }
+    :global([data-theme='dark']) .disc { background: rgba(251, 146, 60, 0.12); border-color: rgba(251, 146, 60, 0.35); }
+    .calc-section { padding: 16px 0 40px; }
+    .mode-bar { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+    .seg { font-weight: 600; font-size: 15px; }
+    .row-inline { max-width: 200px; margin-bottom: 20px; }
+    .row-inline select { width: 100%; padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+    .hidden { display: none !important; }
+    .stk-panel { max-width: 720px; margin: 0 auto; }
+    .stk-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; margin-bottom: 8px; align-items: center; }
+    .stk-row input { padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
+    .stk-rm { width: 40px; height: 44px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--gray-100); cursor: pointer; font-size: 20px; line-height: 1; }
+    .btn-add { margin: 12px 0 20px; padding: 10px 16px; border-radius: var(--radius-sm); border: 1px dashed var(--blue); background: transparent; color: var(--blue); font-weight: 600; cursor: pointer; }
+    .calc-heading { font-size: 1rem; margin: 0 0 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+    .stk-out, .calc-results { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 22px; box-shadow: var(--shadow); margin-top: 16px; }
+    .stk-out p { margin: 8px 0; font-size: 15px; }
+    .calc-layout--single { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 768px) { .calc-layout--single { grid-template-columns: 1fr; } }
+    .calc-inputs .field label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; }
+    .calc-inputs .field input { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+    .tax-note { font-size: 13px; color: var(--text-muted); margin-top: 12px; line-height: 1.5; }
+    .edu { padding: 36px 0 48px; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
+    .edu a { color: var(--blue); font-weight: 600; }
+    .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .related { text-align: center; padding-bottom: 48px; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

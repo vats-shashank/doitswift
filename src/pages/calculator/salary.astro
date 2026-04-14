@@ -1,0 +1,352 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/salary/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Salary Calculator (India) — DoItSwift',
+      url: canonical,
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'CTC to in-hand salary estimate for India with PF, HRA, professional tax, and new vs old tax regime.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Why is CTC different from take-home?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'CTC includes employer costs and variable pay; take-home is what lands in your account after PF, tax, and other deductions.',
+          },
+        },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Salary Calculator India — CTC to In-Hand Take-Home | DoItSwift"
+  description="Estimate monthly in-hand salary from CTC in India: basic, HRA, PF, professional tax, and FY 2026-27 new vs old regime tax — illustrative only."
+  keywords="salary calculator india, ctc calculator, in hand salary calculator, take home salary calculator"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Salary Calculator (India)</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Salary Calculator (CTC → In-hand)</h1>
+      <p class="subtitle">
+        Split a typical Indian salary structure from <strong>annual CTC</strong>, then subtract PF, professional tax, and an <strong>FY 2026-27–style</strong> income-tax estimate under new vs old regime. Bonus is shown separately from monthly in-hand.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <p class="disclaimer container">
+    <strong>Disclaimer:</strong> Employers use actual pay codes, perquisites, flexi plans, and proofs. This is a simplified model (40% basic, metro/non-metro HRA %, capped EPF employee ₹1,800/month, ₹200/month PT). Verify with your offer letter and Form 16.
+  </p>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label for="salCtc">Annual CTC (₹)</label>
+          <input type="number" id="salCtc" min="0" step="10000" value="1000000" inputmode="numeric" />
+        </div>
+        <div class="field">
+          <label for="salBonus">Bonus / variable (% of CTC)</label>
+          <input type="range" id="salBonusR" min="0" max="40" step="1" value="10" aria-hidden="true" />
+          <input type="number" id="salBonus" min="0" max="40" step="0.5" value="10" inputmode="decimal" />
+        </div>
+        <div class="field">
+          <label for="salCity">City type (HRA % of basic)</label>
+          <select id="salCity" aria-label="Metro or non-metro">
+            <option value="metro" selected>Metro (50% of basic as HRA component)</option>
+            <option value="non">Non-metro (40% of basic)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Tax regime (for comparison)</label>
+          <div class="seg" role="radiogroup" aria-label="Tax regime">
+            <label><input type="radio" name="salReg" value="new" checked /> New regime</label>
+            <label><input type="radio" name="salReg" value="old" /> Old regime</label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="salRent">Monthly rent paid (₹, for old-regime HRA exempt)</label>
+          <input type="number" id="salRent" min="0" step="500" value="15000" inputmode="numeric" />
+        </div>
+        <div class="field">
+          <label for="sal80c">80C (₹, old regime, max ₹1.5L)</label>
+          <input type="number" id="sal80c" min="0" step="5000" value="150000" inputmode="numeric" />
+        </div>
+        <div class="field">
+          <label for="salOther">Other Chapter VI-A + deductions (₹, old regime)</label>
+          <input type="number" id="salOther" min="0" step="1000" value="0" inputmode="numeric" />
+        </div>
+        <div class="field">
+          <label for="salHealth">Other monthly deductions (₹) — insurance, etc.</label>
+          <input type="number" id="salHealth" min="0" step="100" value="500" inputmode="numeric" />
+        </div>
+      </div>
+
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <div class="compare-grid">
+          <div class="compare-card" id="salCardNew">
+            <h3>New regime</h3>
+            <p class="big" id="salHandNew">₹0</p>
+            <p class="small">Monthly in-hand (excl. bonus)</p>
+          </div>
+          <div class="compare-card" id="salCardOld">
+            <h3>Old regime</h3>
+            <p class="big" id="salHandOld">₹0</p>
+            <p class="small">Monthly in-hand (excl. bonus)</p>
+          </div>
+        </div>
+        <p class="bonus-line" id="salBonusOut"></p>
+        <details class="calc-details" open>
+          <summary>Detailed breakdown (annual)</summary>
+          <ul class="break-list" id="salBreak"></ul>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Why CTC ≠ in-hand</h2>
+      <p>
+        <strong>CTC</strong> bundles fixed pay, allowances, employer PF, gratuity accrual, and sometimes variable pay. What you spend monthly is closer to <strong>gross minus statutory deductions and income tax</strong> — and variable bonus may hit once a year.
+      </p>
+      <p>
+        <strong>Components:</strong> Basic is often a large fraction of fixed pay; <strong>HRA</strong> helps with rent (exemption in old regime follows rent and salary rules — we use the classic minimum-of-three formula). <strong>Employee PF</strong> is modeled at 12% of monthly basic with a ₹1,800/month cap common when PF wage is capped at ₹15,000. <strong>Professional tax</strong> varies by state — we use ₹200/month as a common illustration.
+      </p>
+      <p>
+        <strong>Tax regimes:</strong> The new regime uses FY 2026-27-style slabs from our <a href="/calculator/income-tax">income tax calculator</a> with standard deduction; the old regime allows 80C and other entries you specify plus eligible HRA exemption.
+      </p>
+      <p>
+        <strong>Negotiation tip:</strong> Compare <em>gross fixed</em> and <em>net after tax</em> when comparing offers — a higher CTC with a bigger variable component or lower basic can change take-home and PF base differently than it looks on paper.
+      </p>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner">
+        <div class="affiliate-icon">📋</div>
+        <div class="affiliate-content">
+          <h3>Tax planning</h3>
+          <p>For full slab comparison, use the dedicated income tax and HRA tools.</p>
+        </div>
+        <a href="/calculator/income-tax" class="btn btn-orange">Income Tax →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>Why is PF capped?</h4><p>Many employers cap employee PF at 12% of ₹15,000 wages (₹1,800/month). Your company may differ.</p></div>
+        <div class="faq-item"><h4>Does this match my payslip?</h4><p>Only approximately — LTA, NPS, perquisites, and surcharges can change tax.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/income-tax">Income Tax</a> · <a href="/calculator/hra">HRA</a> · <a href="/calculator/emi">EMI</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      const fmt = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+      function debounce(fn, ms) {
+        let t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      function cessOn(tax) {
+        return Math.round(tax * 1.04);
+      }
+      function taxNewRaw(TI) {
+        if (TI <= 0) return 0;
+        let t = 0;
+        if (TI > 300000) t += (Math.min(TI, 700000) - 300000) * 0.05;
+        if (TI > 700000) t += (Math.min(TI, 1000000) - 700000) * 0.1;
+        if (TI > 1000000) t += (Math.min(TI, 1200000) - 1000000) * 0.15;
+        if (TI > 1200000) t += (Math.min(TI, 1500000) - 1200000) * 0.2;
+        if (TI > 1500000) t += (TI - 1500000) * 0.3;
+        return Math.round(t);
+      }
+      function taxNewFinal(TI) {
+        if (TI <= 700000) return 0;
+        return taxNewRaw(TI);
+      }
+      function taxOldRaw(TI) {
+        if (TI <= 250000) return 0;
+        if (TI <= 500000) return Math.round((TI - 250000) * 0.05);
+        if (TI <= 1000000) return Math.round(12500 + (TI - 500000) * 0.2);
+        return Math.round(12500 + 100000 + (TI - 1000000) * 0.3);
+      }
+      /** HRA exemption: min of HRA received, rent-10% basic, 40/50% basic metro */
+      function hraExemptAnnual(basicAnnual, hraAnnual, rentAnnual, metro) {
+        const a = hraAnnual;
+        const b = Math.max(0, rentAnnual - 0.1 * basicAnnual);
+        const c = (metro ? 0.5 : 0.4) * basicAnnual;
+        return Math.max(0, Math.min(a, b, c));
+      }
+      function run() {
+        const ctc = Math.max(0, parseFloat(document.getElementById('salCtc').value) || 0);
+        const bonusPct = Math.min(40, Math.max(0, parseFloat(document.getElementById('salBonus').value) || 0));
+        const metro = document.getElementById('salCity').value === 'metro';
+        const rentMo = Math.max(0, parseFloat(document.getElementById('salRent').value) || 0);
+        const c80 = Math.max(0, parseFloat(document.getElementById('sal80c').value) || 0);
+        const otherDed = Math.max(0, parseFloat(document.getElementById('salOther').value) || 0);
+        const otherMo = Math.max(0, parseFloat(document.getElementById('salHealth').value) || 0);
+        document.getElementById('salBonus').value = bonusPct;
+        document.getElementById('salBonusR').value = bonusPct;
+
+        const bonusAnnual = (ctc * bonusPct) / 100;
+        const fixed = Math.max(0, ctc - bonusAnnual);
+        const basicAnnual = fixed * 0.4;
+        const hraAnnual = basicAnnual * (metro ? 0.5 : 0.4);
+        const specialAnnual = Math.max(0, fixed - basicAnnual - hraAnnual);
+        const grossSalaryAnnual = fixed;
+
+        const basicMo = basicAnnual / 12;
+        const pfMo = Math.min(0.12 * basicMo, 1800);
+        const pfAnnual = pfMo * 12;
+        const ptAnnual = 200 * 12;
+
+        const rentAnnual = rentMo * 12;
+        const hraEx = hraExemptAnnual(basicAnnual, hraAnnual, rentAnnual, metro);
+        const c80cap = Math.min(150000, c80);
+
+        const tiNew = Math.max(0, grossSalaryAnnual - 50000);
+        const taxN = cessOn(taxNewFinal(tiNew));
+
+        const tiOld = Math.max(0, grossSalaryAnnual - 50000 - hraEx - c80cap - otherDed);
+        const taxO = cessOn(taxOldRaw(tiOld));
+
+        const afterTaxNew = grossSalaryAnnual - taxN - pfAnnual - ptAnnual;
+        const afterTaxOld = grossSalaryAnnual - taxO - pfAnnual - ptAnnual;
+        const monthlyNew = afterTaxNew / 12 - otherMo;
+        const monthlyOld = afterTaxOld / 12 - otherMo;
+
+        document.getElementById('salHandNew').textContent = fmt.format(Math.round(Math.max(0, monthlyNew)));
+        document.getElementById('salHandOld').textContent = fmt.format(Math.round(Math.max(0, monthlyOld)));
+        document.getElementById('salBonusOut').textContent =
+          'Year-end bonus (variable): ~' +
+          fmt.format(Math.round(bonusAnnual)) +
+          ' — often paid separately from monthly salary.';
+
+        const reg = document.querySelector('input[name="salReg"]:checked').value;
+        document.getElementById('salCardNew').classList.toggle('is-focus', reg === 'new');
+        document.getElementById('salCardOld').classList.toggle('is-focus', reg === 'old');
+
+        const ul = document.getElementById('salBreak');
+        ul.innerHTML = '';
+        function li(text) {
+          const x = document.createElement('li');
+          x.textContent = text;
+          ul.appendChild(x);
+        }
+        li('Annual gross (excl. bonus): ' + fmt.format(Math.round(grossSalaryAnnual)));
+        li('Basic (~40% of ex-bonus CTC): ' + fmt.format(Math.round(basicAnnual)));
+        li('HRA component: ' + fmt.format(Math.round(hraAnnual)));
+        li('Special / residual allowance: ' + fmt.format(Math.round(specialAnnual)));
+        li('Employee PF (annual, capped model): ' + fmt.format(Math.round(pfAnnual)));
+        li('Professional tax (₹200×12 illustration): ' + fmt.format(Math.round(ptAnnual)));
+        li('Income tax + cess — new regime: ' + fmt.format(taxN) + ' · old regime: ' + fmt.format(taxO));
+        li('Eligible HRA exemption (old regime, modeled): ' + fmt.format(Math.round(hraEx)));
+        li('Other monthly deductions you entered: ' + fmt.format(Math.round(otherMo * 12)) + '/yr');
+      }
+      const d = debounce(run, 80);
+      ['salCtc', 'salBonus', 'salCity', 'salRent', 'sal80c', 'salOther', 'salHealth'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', d);
+      });
+      document.querySelectorAll('input[name="salReg"]').forEach(function (el) {
+        el.addEventListener('change', d);
+      });
+      document.getElementById('salBonusR').addEventListener('input', function () {
+        document.getElementById('salBonus').value = this.value;
+        d();
+      });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 12px; text-align: center; }
+    .subtitle { font-size: 17px; color: var(--text-muted); max-width: 720px; margin: 0 auto 20px; line-height: 1.6; }
+    .disclaimer { font-size: 13px; color: var(--text-muted); max-width: 900px; margin: 0 auto 8px; padding: 12px 16px; background: var(--gray-100); border-radius: var(--radius); border: 1px solid var(--border); }
+    [data-theme='dark'] .disclaimer { background: var(--gray-200); }
+    .calc-section { padding: 20px 0 40px; }
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 1000px; align-items: start; }
+    @media (max-width: 900px) { .calc-layout { grid-template-columns: 1fr; } }
+    .calc-inputs, .calc-results { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--shadow); }
+    .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    .field input, .field select { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
+    .field input[type='range'] { width: 100%; margin-bottom: 6px; }
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    @media (max-width: 520px) { .compare-grid { grid-template-columns: 1fr; } }
+    .compare-card { border: 2px solid var(--border); border-radius: var(--radius); padding: 14px; background: var(--gray-100); }
+    [data-theme='dark'] .compare-card { background: var(--gray-200); }
+    .compare-card.is-focus { border-color: var(--blue); box-shadow: 0 0 0 1px var(--blue); }
+    .compare-card h3 { font-size: 13px; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text-muted); }
+    .big { font-size: 1.65rem; font-weight: 800; color: var(--blue); margin: 0; }
+    .small { font-size: 12px; color: var(--text-muted); margin: 4px 0 0; }
+    .bonus-line { font-size: 14px; color: var(--text-muted); margin: 12px 0 8px; line-height: 1.5; }
+    .break-list { margin: 12px 0 0; padding-left: 18px; font-size: 14px; color: var(--text-muted); line-height: 1.65; }
+    .calc-details summary { cursor: pointer; font-weight: 600; }
+    .edu { padding: 36px 0 40px; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.8; color: var(--text-muted); margin-bottom: 14px; }
+    .edu a { color: var(--blue); font-weight: 600; }
+    .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .affiliate { padding: 28px 0; }
+    .affiliate .container { max-width: 900px; }
+    .affiliate-inner { background: linear-gradient(135deg, #fef3c7, #fde68a); border: 1px solid #fbbf24; border-radius: var(--radius-lg); padding: 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    [data-theme='dark'] .affiliate-inner { background: rgba(251, 191, 36, 0.12); border-color: rgba(251, 191, 36, 0.45); }
+    .affiliate-icon { font-size: 36px; }
+    .affiliate-content { flex: 1; min-width: 200px; }
+    .affiliate-content h3 { font-size: 17px; margin-bottom: 4px; }
+    .affiliate-content p { font-size: 14px; color: var(--text-muted); }
+    .faq { padding: 28px 0; }
+    .faq-list { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+    .faq-item h4 { margin-bottom: 8px; font-size: 15px; }
+    .faq-item p { font-size: 14px; color: var(--text-muted); margin: 0; }
+    .related { text-align: center; padding-bottom: 48px; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

@@ -1,0 +1,168 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/date-difference/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Date Difference Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Days, weeks, and approximate months between two calendar dates.',
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Date Difference Calculator — Days, Weeks & Months Between Dates | DoItSwift"
+  description="Find the span between two dates: total days, whole weeks, and approximate months — inclusive and exclusive options."
+  keywords="date difference calculator, days between dates, weeks between two dates"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Date Difference</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Date Difference Calculator</h1>
+      <p class="subtitle">
+        Pick a <strong>start</strong> and <strong>end</strong> date. We show calendar <strong>days</strong>, whole <strong>weeks</strong>, and an approximate <strong>month</strong> count (30.44-day average month — not the same as “calendar months”).
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label for="ddStart">Start date</label>
+          <input type="date" id="ddStart" />
+        </div>
+        <div class="field">
+          <label for="ddEnd">End date</label>
+          <input type="date" id="ddEnd" />
+        </div>
+        <div class="field">
+          <label class="chk"><input type="checkbox" id="ddInclusive" /> Include both dates in day count (+1 day)</label>
+        </div>
+      </div>
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <div class="result-hero" id="ddDays">0</div>
+        <p class="result-label">Days between</p>
+        <div class="result-grid">
+          <div>
+            <div class="result-sub" id="ddWeeks">0</div>
+            <div class="result-caption">Whole weeks</div>
+          </div>
+          <div>
+            <div class="result-sub" id="ddMonths">0</div>
+            <div class="result-caption">Approx. months (avg length)</div>
+          </div>
+        </div>
+        <p class="hint" id="ddHint"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Reading the numbers</h2>
+      <p>
+        <strong>Days</strong> use midnight-to-midnight UTC-neutral local dates in your browser. <strong>Weeks</strong> are whole 7-day blocks inside that span. <strong>Approximate months</strong> divide the day count by 30.44 — handy for rough duration, not for legal “one calendar month” rules.
+      </p>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/age">Age</a> · <a href="/calculator/pregnancy-due-date">Pregnancy due date</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      function parseLocal(iso) {
+        if (!iso) return null;
+        var p = iso.split('-');
+        return new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
+      }
+      function run() {
+        var a = parseLocal(document.getElementById('ddStart').value);
+        var b = parseLocal(document.getElementById('ddEnd').value);
+        var inc = document.getElementById('ddInclusive').checked;
+        if (!a || !b) {
+          document.getElementById('ddDays').textContent = '—';
+          return;
+        }
+        var t0 = a.getTime();
+        var t1 = b.getTime();
+        var diff = Math.round(Math.abs(t1 - t0) / 86400000);
+        if (inc) diff += 1;
+        var weeks = Math.floor(diff / 7);
+        var approxMo = diff / 30.4375;
+        document.getElementById('ddDays').textContent = diff.toLocaleString('en-IN');
+        document.getElementById('ddWeeks').textContent = weeks.toLocaleString('en-IN');
+        document.getElementById('ddMonths').textContent = approxMo.toFixed(2);
+        document.getElementById('ddHint').textContent =
+          t1 >= t0 ? 'End is on or after start.' : 'End is before start — we used absolute difference.';
+      }
+      ['ddStart', 'ddEnd', 'ddInclusive'].forEach(function (id) {
+        document.getElementById(id).addEventListener('change', run);
+        document.getElementById(id).addEventListener('input', run);
+      });
+      var t = new Date();
+      var y = new Date(t);
+      y.setFullYear(y.getFullYear() - 1);
+      document.getElementById('ddEnd').value = t.toISOString().slice(0, 10);
+      document.getElementById('ddStart').value = y.toISOString().slice(0, 10);
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 17px; color: var(--text-muted); max-width: 680px; margin: 0 auto 22px; line-height: 1.6; }
+    .calc-section { padding: 24px 0 40px; }
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 960px; align-items: start; }
+    @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
+    .calc-inputs, .calc-results { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--shadow); }
+    .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    .field input[type='date'] { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
+    .chk { font-weight: 500; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+    .result-hero { font-size: 2.5rem; font-weight: 800; color: var(--blue); }
+    .result-label { font-size: 14px; color: var(--text-muted); margin: 4px 0 20px; }
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .result-sub { font-size: 1.25rem; font-weight: 700; }
+    .result-caption { font-size: 12px; color: var(--text-muted); }
+    .hint { font-size: 13px; color: var(--text-muted); margin-top: 12px; }
+    .edu { padding: 36px 0 48px; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.8; color: var(--text-muted); }
+    .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .related { text-align: center; padding-bottom: 48px; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

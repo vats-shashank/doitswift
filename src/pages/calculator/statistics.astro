@@ -1,0 +1,831 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/statistics/';
+const site = 'https://doitswift.com';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Statistics Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'EducationalApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Mean, median, mode, standard deviation, quartiles, histogram and box plot from pasted or typed numbers.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        { '@type': 'Question', name: 'Sample vs population variance?', acceptedAnswer: { '@type': 'Answer', text: 'Sample variance divides by n−1 (Bessel correction); population variance divides by n when your list is the entire population.' } },
+        { '@type': 'Question', name: 'How many numbers can I enter?', acceptedAnswer: { '@type': 'Answer', text: 'Up to 10,000 numeric values; large pastes show a brief calculating state.' } },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: site + '/' },
+        { '@type': 'ListItem', position: 2, name: 'Calculators', item: site + '/calculator/' },
+        { '@type': 'ListItem', position: 3, name: 'Statistics Calculator', item: canonical },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Statistics Calculator — Mean, Median, Mode, Standard Deviation | DoItSwift"
+  description="Compute mean, median, mode, range, variance, standard deviation, quartiles, IQR, geometric & harmonic means. Paste CSV or one-per-line; histogram and box plot."
+  keywords="statistics calculator, mean median mode calculator, standard deviation calculator, average calculator"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Statistics Calculator</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Statistics Calculator</h1>
+      <p class="subtitle">
+        Paste <strong>comma-separated</strong> values or enter <strong>one number per line</strong>. Choose <strong>sample</strong> or <strong>population</strong> for variance and standard deviation. Up to <strong>10,000</strong> numbers — large sets show a short
+        “Calculating…” state.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> Histogram &amp; box plot</span>
+        <span><span class="check">✓</span> Multimodal detection</span>
+        <span><span class="check">✓</span> Private (local JS)</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label for="stCsv">Comma-separated numbers</label>
+          <textarea id="stCsv" rows="4" placeholder="e.g. 12, 15, 18, 12, 20">12, 15, 18, 12, 20, 22, 15</textarea>
+        </div>
+        <div class="field">
+          <label for="stLines">One number per line (merged with above)</label>
+          <textarea id="stLines" rows="4" placeholder="Optional second list"></textarea>
+        </div>
+        <div class="field">
+          <label>Add one value</label>
+          <div class="row-add">
+            <input type="number" id="stOne" step="any" placeholder="Number" />
+            <button type="button" class="btn-small" id="stAddBtn">Add to list</button>
+          </div>
+          <p class="field-hint">Appends to the comma field for quick building.</p>
+        </div>
+        <div class="field">
+          <span class="lbl">Variance type</span>
+          <div class="seg">
+            <label><input type="radio" name="stPop" value="sample" checked /> Sample (divide by n−1)</label>
+            <label><input type="radio" name="stPop" value="pop" /> Population (divide by n)</label>
+          </div>
+        </div>
+      </div>
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <p class="calc-status" id="stStatus"></p>
+        <div id="stWarn" class="warn-box hidden"></div>
+        <div class="result-grid" id="stGrid">
+          <div><span class="result-sub" id="stN">—</span><span class="result-caption">Count (n)</span></div>
+          <div><span class="result-sub" id="stSum">—</span><span class="result-caption">Sum Σx</span></div>
+          <div><span class="result-sub" id="stMean">—</span><span class="result-caption">Mean</span></div>
+          <div><span class="result-sub" id="stMed">—</span><span class="result-caption">Median</span></div>
+          <div><span class="result-sub" id="stMode">—</span><span class="result-caption">Mode</span></div>
+          <div><span class="result-sub" id="stMin">—</span><span class="result-caption">Min</span></div>
+          <div><span class="result-sub" id="stMax">—</span><span class="result-caption">Max</span></div>
+          <div><span class="result-sub" id="stRange">—</span><span class="result-caption">Range</span></div>
+          <div><span class="result-sub" id="stVar">—</span><span class="result-caption">Variance</span></div>
+          <div><span class="result-sub" id="stSd">—</span><span class="result-caption">Std. deviation</span></div>
+          <div><span class="result-sub" id="stSS">—</span><span class="result-caption">Sum of squares Σ(x−μ)²</span></div>
+          <div><span class="result-sub" id="stQ1">—</span><span class="result-caption">Q1</span></div>
+          <div><span class="result-sub" id="stQ2">—</span><span class="result-caption">Q2 (median)</span></div>
+          <div><span class="result-sub" id="stQ3">—</span><span class="result-caption">Q3</span></div>
+          <div><span class="result-sub" id="stIqr">—</span><span class="result-caption">IQR</span></div>
+          <div><span class="result-sub" id="stGm">—</span><span class="result-caption">Geometric mean</span></div>
+          <div><span class="result-sub" id="stHm">—</span><span class="result-caption">Harmonic mean</span></div>
+        </div>
+        <div class="viz-block">
+          <h3 class="viz-title">Frequency (histogram)</h3>
+          <p class="viz-hint viz-hint--static">
+            <strong>Frequency</strong> on the vertical axis (0 → max count in any bin). Each bar is one bin on the value axis; hover a bar for the exact interval. Ranges are summarized under the chart.
+          </p>
+          <p class="viz-hint" id="stHistHint"></p>
+          <div class="hist-wrap">
+            <div class="hist" id="stHist" role="img" aria-label="Histogram of binned frequencies"></div>
+          </div>
+        </div>
+        <div class="viz-block">
+          <h3 class="viz-title">Box plot (quartiles)</h3>
+          <p class="viz-hint" id="stBoxHint"></p>
+          <div class="boxplot" id="stBox" role="img" aria-label="Box plot min Q1 median Q3 max"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Descriptive statistics — intuition and pitfalls</h2>
+      <p>
+        The <strong>mean</strong> is the arithmetic average: every value carries equal weight, so a single extreme outlier can pull the mean far from where most data sit. The <strong>median</strong> sorts all values and takes the middle (or averages the two middle values when n is even); it is robust to outliers and often better for skewed incomes or house prices. The <strong>mode</strong> is the most frequent value — useful for categorical codes or discrete ratings; datasets can be multimodal or have no mode if every value appears once.
+      </p>
+      <p>
+        <strong>Variance</strong> measures average squared distance from the mean. For a <strong>sample</strong> drawn from a larger population, dividing by <em>n − 1</em> (instead of <em>n</em>) gives an unbiased estimate of population variance — the classic Bessel correction. If your list is the <strong>entire population</strong>, dividing by <em>n</em> is appropriate. <strong>Standard deviation</strong> is the square root of variance, returning units to the same scale as your measurements, which makes it easier to interpret next to the raw numbers.
+      </p>
+      <p>
+        <strong>Quartiles</strong> split sorted data into quarters. <strong>IQR</strong> (Q3 − Q1) captures the spread of the middle half and underpins outlier rules like 1.5×IQR fences. <strong>Geometric mean</strong> multiplies values and takes the n-th root — common for growth rates; it requires all inputs positive. <strong>Harmonic mean</strong> is the reciprocal of the average of reciprocals — natural for rates such as “average speed” when distances match.
+      </p>
+      <p>
+        <strong>Histograms</strong> group values into bins; changing bin width can change the story slightly — we use equal-width bins across the observed range for a compact view. <strong>Box plots</strong> encode median, quartiles, and extremes; they excel at comparing batches side by side. When every number is identical, spread measures are zero — we surface a note so you know the tool is working, not stuck.
+      </p>
+      <p>
+        In many real populations, <strong>mean salary exceeds median salary</strong> because a long right tail of very high earners lifts the average while the midpoint stays closer to typical pay. That is why news articles often cite medians for “typical” experience. For percent work and scientific notation, pair this page with our <a href="/calculator/percentage">Percentage</a> and <a href="/calculator/scientific">Scientific calculator</a>.
+      </p>
+      <p>
+        <strong>Outliers</strong> deserve explicit thought: a single corrupted sensor reading, a typo, or a jackpot bonus can dominate the mean. Before trusting a mean, glance at min, max, and the box plot — if the whiskers are tight but one point is miles away, investigate or winsorize in your formal analysis. <strong>Sample size</strong> matters for stability: variance estimates wobble more when n is tiny; our sample variance uses n−1 precisely so small samples do not underestimate spread on average.
+      </p>
+      <p>
+        <strong>Reporting</strong> in papers and dashboards often shows mean ± SD; readers may wrongly assume normality. Median and IQR complement means when distributions skew. For repeated measurements on the same units (before/after), consider whether paired tests apply — this calculator stays descriptive and does not infer p-values, but good summaries are the prerequisite for any inference.
+      </p>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <h4>Why “Calculating…” on paste?</h4>
+          <p>Sorting and scanning thousands of numbers blocks the UI thread briefly; we defer work so the browser can show the indicator.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Non-numeric tokens?</h4>
+          <p>Commas, spaces, and newlines split tokens; empty tokens are skipped. Invalid tokens are ignored with a warning when nothing usable remains.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/percentage">Percentage</a>
+        ·
+        <a href="/calculator/scientific">Scientific Calculator</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      var nf = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 8 });
+      function parseAll() {
+        var a = document.getElementById('stCsv').value;
+        var b = document.getElementById('stLines').value;
+        var raw = a + '\n' + b.replace(/,/g, ' ');
+        var parts = raw.split(/[\s,;\n\r\t]+/);
+        var out = [];
+        for (var i = 0; i < parts.length; i++) {
+          var t = parts[i].trim();
+          if (t === '') continue;
+          var x = parseFloat(t);
+          if (!isNaN(x)) out.push(x);
+        }
+        return out;
+      }
+      function quantileSorted(sorted, q) {
+        var n = sorted.length;
+        if (n === 0) return NaN;
+        var pos = (n - 1) * q;
+        var lo = Math.floor(pos);
+        var hi = Math.ceil(pos);
+        if (lo === hi) return sorted[lo];
+        return sorted[lo] + (sorted[hi] - sorted[lo]) * (pos - lo);
+      }
+      function modes(arr) {
+        var freq = {};
+        for (var i = 0; i < arr.length; i++) {
+          var k = String(arr[i]);
+          freq[k] = (freq[k] || 0) + 1;
+        }
+        var max = 0;
+        for (var k in freq) if (freq[k] > max) max = freq[k];
+        if (max <= 1 && arr.length > 1) return '— (all unique)';
+        var list = [];
+        for (var k in freq) if (freq[k] === max) list.push(parseFloat(k));
+        list.sort(function (a, b) {
+          return a - b;
+        });
+        return list.map(nf.format).join(', ');
+      }
+      function run() {
+        var full = parseAll();
+        var trimmed = full.length > 10000;
+        var nums = trimmed ? full.slice(0, 10000) : full;
+        var pop = document.querySelector('input[name="stPop"]:checked').value === 'pop';
+        var big = nums.length > 4000;
+        if (big) {
+          document.getElementById('stStatus').textContent = 'Calculating…';
+        }
+        function compute() {
+          if (nums.length === 0) {
+            document.getElementById('stStatus').textContent = 'Enter at least one number.';
+            document.getElementById('stWarn').classList.add('hidden');
+            ['stN', 'stSum', 'stMean', 'stMed', 'stMode', 'stMin', 'stMax', 'stRange', 'stVar', 'stSd', 'stSS', 'stQ1', 'stQ2', 'stQ3', 'stIqr', 'stGm', 'stHm'].forEach(function (id) {
+              document.getElementById(id).textContent = '—';
+            });
+            var hEmpty = document.getElementById('stHist');
+            hEmpty.innerHTML = '';
+            hEmpty.removeAttribute('style');
+            document.getElementById('stBox').innerHTML = '';
+            var hh0 = document.getElementById('stHistHint');
+            var bh0 = document.getElementById('stBoxHint');
+            if (hh0) hh0.textContent = '';
+            if (bh0) bh0.textContent = '';
+            return;
+          }
+          var n = nums.length;
+          var sum = 0;
+          for (var i = 0; i < n; i++) sum += nums[i];
+          var mean = sum / n;
+          var ss = 0;
+          for (i = 0; i < n; i++) ss += (nums[i] - mean) * (nums[i] - mean);
+          var div = n <= 1 ? 1 : pop ? n : n - 1;
+          var variance = ss / div;
+          var sd = Math.sqrt(Math.max(0, variance));
+          var sorted = nums.slice().sort(function (a, b) {
+            return a - b;
+          });
+          var med = quantileSorted(sorted, 0.5);
+          var q1 = quantileSorted(sorted, 0.25);
+          var q3 = quantileSorted(sorted, 0.75);
+          var gm = NaN;
+          var allPos = true;
+          for (i = 0; i < n; i++) {
+            if (nums[i] <= 0) {
+              allPos = false;
+              break;
+            }
+          }
+          if (allPos && n > 0) {
+            var logSum = 0;
+            for (i = 0; i < n; i++) logSum += Math.log(nums[i]);
+            gm = Math.exp(logSum / n);
+          }
+          var hsum = 0;
+          var badH = false;
+          for (i = 0; i < n; i++) {
+            if (nums[i] === 0) badH = true;
+            else hsum += 1 / nums[i];
+          }
+          var hm = badH || hsum === 0 ? NaN : n / hsum;
+          document.getElementById('stN').textContent = String(n);
+          document.getElementById('stSum').textContent = nf.format(sum);
+          document.getElementById('stMean').textContent = nf.format(mean);
+          document.getElementById('stMed').textContent = nf.format(med);
+          document.getElementById('stMode').textContent = modes(nums);
+          document.getElementById('stMin').textContent = nf.format(sorted[0]);
+          document.getElementById('stMax').textContent = nf.format(sorted[n - 1]);
+          document.getElementById('stRange').textContent = nf.format(sorted[n - 1] - sorted[0]);
+          document.getElementById('stVar').textContent = nf.format(variance);
+          document.getElementById('stSd').textContent = nf.format(sd);
+          document.getElementById('stSS').textContent = nf.format(ss);
+          document.getElementById('stQ1').textContent = nf.format(q1);
+          document.getElementById('stQ2').textContent = nf.format(med);
+          document.getElementById('stQ3').textContent = nf.format(q3);
+          document.getElementById('stIqr').textContent = nf.format(q3 - q1);
+          document.getElementById('stGm').textContent = isNaN(gm) ? '— (all values must be > 0)' : nf.format(gm);
+          document.getElementById('stHm').textContent = isNaN(hm) ? '— (no zeros)' : nf.format(hm);
+          document.getElementById('stStatus').textContent = '';
+          var warn = document.getElementById('stWarn');
+          if (trimmed) {
+            warn.textContent = 'Only the first 10,000 numbers were used.';
+            warn.classList.remove('hidden');
+          } else if (n === 1) {
+            warn.textContent = 'With a single value, spread and quartiles are trivial — add more data for richer stats.';
+            warn.classList.remove('hidden');
+          } else if (sorted[0] === sorted[n - 1]) {
+            warn.textContent = 'All values are identical — variance is 0 and the chart is flat.';
+            warn.classList.remove('hidden');
+          } else {
+            warn.classList.add('hidden');
+            warn.textContent = '';
+          }
+          var mn = sorted[0],
+            mx = sorted[n - 1];
+          var bins = Math.min(20, Math.max(4, Math.ceil(Math.sqrt(n))));
+          var w = (mx - mn) / bins || 1;
+          var counts = new Array(bins);
+          for (i = 0; i < bins; i++) counts[i] = 0;
+          for (i = 0; i < n; i++) {
+            var bi = Math.min(bins - 1, Math.floor((nums[i] - mn) / w));
+            counts[bi]++;
+          }
+          var cmax = Math.max.apply(null, counts);
+          var histEl = document.getElementById('stHist');
+          /* Fixed 520×200 viewBox: bars centered in slots with gaps; Y = count, X = bins; scales uniformly via CSS max-height */
+          function escXml(s) {
+            return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          }
+          var vbW = 520;
+          var vbH = 200;
+          var mg = { l: 46, r: 16, t: 20, b: 50 };
+          var plotW = vbW - mg.l - mg.r;
+          var plotH = vbH - mg.t - mg.b;
+          var baseline = mg.t + plotH;
+          var slot = plotW / bins;
+          var gapRatio = 0.28;
+          var barW = Math.max(slot * (1 - gapRatio), 6);
+          var maxH = plotH * 0.88;
+          var ariaParts = [];
+          var parts = [];
+          parts.push(
+            '<svg class="hist-svg" viewBox="0 0 ' +
+              vbW +
+              ' ' +
+              vbH +
+              '" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+          );
+          var gi;
+          for (gi = 1; gi <= 3; gi++) {
+            var gy = baseline - (plotH * gi) / 4;
+            parts.push(
+              '<line class="hist-grid" x1="' +
+                mg.l +
+                '" y1="' +
+                gy +
+                '" x2="' +
+                (vbW - mg.r) +
+                '" y2="' +
+                gy +
+                '"/>'
+            );
+          }
+          parts.push(
+            '<line class="hist-axis" x1="' +
+              mg.l +
+              '" y1="' +
+              mg.t +
+              '" x2="' +
+              mg.l +
+              '" y2="' +
+              baseline +
+              '"/>'
+          );
+          parts.push(
+            '<line class="hist-axis" x1="' +
+              mg.l +
+              '" y1="' +
+              baseline +
+              '" x2="' +
+              (vbW - mg.r) +
+              '" y2="' +
+              baseline +
+              '"/>'
+          );
+          parts.push(
+            '<text class="hist-y" x="' +
+              (mg.l - 8) +
+              '" y="' +
+              (baseline + 5) +
+              '" text-anchor="end">0</text>'
+          );
+          parts.push(
+            '<text class="hist-y" x="' +
+              (mg.l - 8) +
+              '" y="' +
+              (mg.t + 12) +
+              '" text-anchor="end">' +
+              escXml(cmax) +
+              '</text>'
+          );
+          parts.push(
+            '<text class="hist-caption" x="' +
+              mg.l +
+              '" y="' +
+              (mg.t - 2) +
+              '">Frequency (count per bin)</text>'
+          );
+          for (i = 0; i < bins; i++) {
+            var lo = mn + i * w;
+            var hi = i === bins - 1 ? mx : mn + (i + 1) * w;
+            var cnt = counts[i];
+            var bh = cmax ? (cnt / cmax) * maxH : 0;
+            if (cnt > 0 && bh < 4) bh = 4;
+            var bx = mg.l + i * slot + (slot - barW) / 2;
+            parts.push(
+              '<rect class="hist-bar" x="' +
+                bx +
+                '" y="' +
+                (baseline - bh) +
+                '" width="' +
+                barW +
+                '" height="' +
+                bh +
+                '" rx="2" ry="2"><title>Bin ' +
+                (i + 1) +
+                ': ' +
+                cnt +
+                ' values — interval ' +
+                nf.format(lo) +
+                ' to ' +
+                nf.format(hi) +
+                '</title></rect>'
+            );
+            var lab;
+            if (bins <= 6) {
+              lab = escXml(nf.format(lo)) + '…' + escXml(nf.format(hi));
+            } else if (bins <= 12) {
+              lab = 'B' + (i + 1);
+            } else {
+              lab = String(i + 1);
+            }
+            if (lab.length > 18) lab = 'B' + (i + 1);
+            parts.push(
+              '<text class="hist-x" x="' +
+                (bx + barW / 2) +
+                '" y="' +
+                (baseline + 20) +
+                '" text-anchor="middle">' +
+                lab +
+                '</text>'
+            );
+            ariaParts.push('Bin ' + (i + 1) + ': ' + cnt);
+          }
+          parts.push(
+            '<text class="hist-xsum" x="' +
+              (mg.l + plotW / 2) +
+              '" y="' +
+              (vbH - 6) +
+              '" text-anchor="middle">Data range: ' +
+              escXml(nf.format(mn)) +
+              ' — ' +
+              escXml(nf.format(mx)) +
+              '</text>'
+          );
+          parts.push('</svg>');
+          histEl.removeAttribute('style');
+          histEl.innerHTML = parts.join('');
+          histEl.setAttribute('aria-label', 'Histogram: ' + ariaParts.join('; ') + '.');
+          document.getElementById('stHistHint').textContent =
+            bins +
+            ' equal-width bins from ' +
+            nf.format(mn) +
+            ' to ' +
+            nf.format(mx) +
+            '. Y-axis: count (0–' +
+            cmax +
+            '). Tallest bar = max frequency.';
+          var rng = mx - mn;
+          function pct(x) {
+            if (rng <= 0) return 50;
+            return ((x - mn) / rng) * 100;
+          }
+          var pMin = pct(sorted[0]);
+          var pQ1 = pct(q1);
+          var pMed = pct(med);
+          var pQ3 = pct(q3);
+          var pMax = pct(sorted[n - 1]);
+          var boxW = Math.max(pQ3 - pQ1, 0.85);
+          var whiskW = Math.max(pMax - pMin, 0.85);
+          if (rng <= 0) {
+            document.getElementById('stBox').innerHTML =
+              '<div class="bp-track bp-track--single">' +
+              '<div class="bp-single" title="min = max = median">' +
+              '<span class="bp-single-line"></span><span class="bp-single-dot"></span></div>' +
+              '</div>' +
+              '<ul class="bp-vals bp-vals--one">' +
+              '<li><span class="bp-lbl">All values equal:</span> <span class="bp-num">' +
+              nf.format(mn) +
+              '</span></li></ul>';
+            document.getElementById('stBoxHint').textContent =
+              'No spread — all values are identical; whiskers and box coincide.';
+          } else {
+            document.getElementById('stBox').innerHTML =
+              '<div class="bp-track">' +
+              '<div class="bp-whisk" style="left:' +
+              pMin +
+              '%;width:' +
+              whiskW +
+              '%"></div>' +
+              '<div class="bp-rect" style="left:' +
+              pQ1 +
+              '%;width:' +
+              boxW +
+              '%"></div>' +
+              '<div class="bp-med" style="left:' +
+              pMed +
+              '%"></div>' +
+              '<span class="bp-cap bp-cap-min" style="left:' +
+              pMin +
+              '%"></span>' +
+              '<span class="bp-cap bp-cap-max" style="left:' +
+              pMax +
+              '%"></span>' +
+              '</div>' +
+              '<ul class="bp-vals">' +
+              '<li><span class="bp-lbl">Min:</span> <span class="bp-num">' +
+              nf.format(sorted[0]) +
+              '</span></li>' +
+              '<li><span class="bp-lbl">Q1:</span> <span class="bp-num">' +
+              nf.format(q1) +
+              '</span></li>' +
+              '<li><span class="bp-lbl">Q2 (median):</span> <span class="bp-num">' +
+              nf.format(med) +
+              '</span></li>' +
+              '<li><span class="bp-lbl">Q3:</span> <span class="bp-num">' +
+              nf.format(q3) +
+              '</span></li>' +
+              '<li><span class="bp-lbl">Max:</span> <span class="bp-num">' +
+              nf.format(sorted[n - 1]) +
+              '</span></li></ul>';
+            document.getElementById('stBoxHint').textContent =
+              'Horizontal scale: min (left) to max (right). Shaded box = IQR (Q1–Q3). Orange = median. Caps = min/max.';
+          }
+        }
+        if (big) setTimeout(compute, 0);
+        else compute();
+      }
+      function debounce(fn, ms) {
+        var t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      var d = debounce(run, 120);
+      document.getElementById('stCsv').addEventListener('input', d);
+      document.getElementById('stLines').addEventListener('input', d);
+      document.querySelectorAll('input[name="stPop"]').forEach(function (el) {
+        el.addEventListener('change', d);
+      });
+      document.getElementById('stAddBtn').addEventListener('click', function () {
+        var v = document.getElementById('stOne').value;
+        if (v === '') return;
+        var cur = document.getElementById('stCsv').value.trim();
+        document.getElementById('stCsv').value = cur ? cur + ', ' + v : v;
+        document.getElementById('stOne').value = '';
+        d();
+      });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 16px; color: var(--text-muted); max-width: 720px; margin: 0 auto 20px; line-height: 1.65; }
+    .calc-section { padding: 24px 0 40px; }
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 1000px; align-items: start; }
+    @media (max-width: 900px) { .calc-layout { grid-template-columns: 1fr; } }
+    .calc-inputs, .calc-results { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--shadow); }
+    .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
+    .field { margin-bottom: 14px; }
+    .field label, .lbl { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    .field textarea, .field input { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 15px; font-family: inherit; }
+    .field-hint { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+    .seg { display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
+    .row-add { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn-small { padding: 10px 14px; border-radius: var(--radius-sm); background: var(--gray-200); border: 1px solid var(--border); font-weight: 600; cursor: pointer; }
+    [data-theme='dark'] .btn-small { background: var(--gray-100); }
+    .calc-status { font-size: 14px; color: var(--blue); min-height: 1.2em; margin-bottom: 8px; }
+    .warn-box { background: #fffbeb; border: 1px solid #fcd34d; border-radius: var(--radius); padding: 10px 12px; font-size: 13px; margin-bottom: 12px; color: var(--text); }
+    [data-theme='dark'] .warn-box { background: rgba(251, 191, 36, 0.12); border-color: rgba(252, 211, 77, 0.5); }
+    .warn-box.hidden { display: none; }
+    .result-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    @media (min-width: 600px) { .result-grid { grid-template-columns: repeat(3, 1fr); } }
+    .result-sub { display: block; font-size: 1.05rem; font-weight: 700; color: var(--blue); }
+    .result-caption { display: block; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.03em; }
+    .viz-block { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border); }
+    .viz-title { font-size: 15px; margin-bottom: 6px; color: var(--text); font-weight: 600; }
+    .viz-hint { font-size: 12px; color: var(--text-muted); margin: 0 0 10px; line-height: 1.45; }
+    .viz-hint--static { margin-bottom: 6px; }
+    .viz-hint--static strong { color: var(--text); font-weight: 600; }
+    .hist-wrap {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: visible;
+      border-radius: var(--radius-sm);
+      -webkit-overflow-scrolling: touch;
+    }
+    .hist {
+      box-sizing: border-box;
+      padding: 12px 14px 14px;
+      border-radius: var(--radius);
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    [data-theme='dark'] .hist {
+      background: var(--gray-100);
+    }
+    .hist-svg {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      max-height: 200px;
+      shape-rendering: geometricPrecision;
+    }
+    .hist-grid {
+      stroke: var(--border);
+      stroke-width: 1;
+      opacity: 0.65;
+    }
+    .hist-axis {
+      stroke: var(--text-muted);
+      stroke-width: 1.25;
+      opacity: 0.55;
+    }
+    .hist-bar {
+      fill: #2563eb;
+      stroke: #fff;
+      stroke-width: 1;
+    }
+    [data-theme='dark'] .hist-bar {
+      fill: #3b82f6;
+      stroke: #171717;
+    }
+    .hist-y,
+    .hist-x {
+      fill: var(--text-muted);
+      font-size: 11px;
+      font-family: var(--font, system-ui, sans-serif);
+    }
+    .hist-x {
+      font-size: 9px;
+      opacity: 0.9;
+    }
+    .hist-caption {
+      fill: var(--text-muted);
+      font-size: 11px;
+      font-weight: 600;
+      font-family: var(--font, system-ui, sans-serif);
+    }
+    .hist-xsum {
+      fill: var(--text-muted);
+      font-size: 10px;
+      opacity: 0.85;
+      font-family: var(--font, system-ui, sans-serif);
+    }
+    .boxplot { padding: 4px 0 8px; }
+    .bp-track {
+      position: relative;
+      height: 48px;
+      margin: 6px 0 10px;
+      border-radius: 8px;
+      background: var(--gray-100);
+      border: 1px solid var(--border);
+    }
+    [data-theme='dark'] .bp-track {
+      background: rgba(15, 23, 42, 0.55);
+    }
+    .bp-whisk {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      height: 4px;
+      margin-top: -2px;
+      background: #94a3b8;
+      border-radius: 2px;
+      pointer-events: none;
+    }
+    [data-theme='dark'] .bp-whisk {
+      background: #64748b;
+    }
+    .bp-rect {
+      position: absolute;
+      top: 8px;
+      height: 32px;
+      box-sizing: border-box;
+      background: rgba(59, 130, 246, 0.22);
+      border: 2px solid var(--blue);
+      border-radius: 6px;
+      pointer-events: none;
+    }
+    .bp-med {
+      position: absolute;
+      top: 4px;
+      width: 4px;
+      height: 40px;
+      background: var(--orange);
+      border-radius: 2px;
+      z-index: 2;
+      pointer-events: none;
+      transform: translateX(-50%);
+    }
+    .bp-cap {
+      position: absolute;
+      top: 50%;
+      width: 3px;
+      height: 14px;
+      margin-top: -7px;
+      background: var(--text);
+      border-radius: 2px;
+      z-index: 1;
+      pointer-events: none;
+      transform: translateX(-50%);
+    }
+    .bp-track--single {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .bp-single {
+      position: relative;
+      width: 72%;
+      height: 4px;
+    }
+    .bp-single-line {
+      display: block;
+      width: 100%;
+      height: 4px;
+      background: #94a3b8;
+      border-radius: 2px;
+    }
+    .bp-single-dot {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 12px;
+      height: 12px;
+      margin: -6px 0 0 -6px;
+      background: var(--blue);
+      border: 2px solid var(--orange);
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    }
+    .bp-vals {
+      list-style: none;
+      margin: 12px 0 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+    @media (max-width: 640px) {
+      .bp-vals {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    .bp-vals li {
+      margin: 0;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--gray-100);
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0 0.35em;
+      min-width: 0;
+    }
+    [data-theme='dark'] .bp-vals li {
+      background: rgba(15, 23, 42, 0.45);
+    }
+    .bp-vals--one {
+      grid-template-columns: 1fr;
+      max-width: 420px;
+    }
+    .bp-lbl {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: none;
+      letter-spacing: normal;
+      color: var(--text-muted);
+      line-height: 1.35;
+      flex-shrink: 0;
+    }
+    .bp-num {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--blue);
+      font-variant-numeric: tabular-nums;
+      line-height: 1.25;
+      word-break: break-word;
+    }
+    .edu { padding: 36px 0 32px; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.8; color: var(--text-muted); margin-bottom: 14px; }
+    .edu a { color: var(--blue); font-weight: 600; }
+    .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .faq { padding: 0 0 24px; }
+    .faq .container { max-width: 760px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 10px; }
+    .related { text-align: center; padding-bottom: 48px; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

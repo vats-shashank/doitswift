@@ -1,5 +1,6 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
 
 const site = Astro.site?.href ?? 'https://doitswift.com';
 const canonical = `${site}calculator/discount/`;
@@ -72,6 +73,16 @@ const jsonLd = {
       <div class="calc-inputs">
         <h2 class="calc-heading">Inputs</h2>
         <div class="field">
+          <label for="discCur">Currency (display)</label>
+          <select id="discCur" aria-label="Currency">
+            {CALCULATOR_CURRENCY_OPTIONS.map((o) => (
+              <option value={o.code} selected={o.code === 'INR'}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div class="field">
           <label for="discMode">Mode</label>
           <select id="discMode">
             <option value="sale">Sale price from discount %</option>
@@ -82,7 +93,7 @@ const jsonLd = {
         </div>
         <div>
           <div class="field" id="fieldOrig">
-            <label for="discOrig">Original price (₹)</label><input type="number" id="discOrig" min="0" step="1" value="4999" />
+            <label for="discOrig">Original price</label><input type="number" id="discOrig" min="0" step="1" value="4999" />
           </div>
           <div class="field" id="fieldOff1">
             <label for="discOff1">First discount (%)</label><input type="number" id="discOff1" min="0" max="100" step="0.1" value="20" />
@@ -91,10 +102,10 @@ const jsonLd = {
             <label for="discOff2">Second discount (%)</label><input type="number" id="discOff2" min="0" max="100" step="0.1" value="10" />
           </div>
           <div class="field" id="fieldSale">
-            <label for="discSale">Sale price (₹)</label><input type="number" id="discSale" min="0" step="1" value="3999" />
+            <label for="discSale">Sale price</label><input type="number" id="discSale" min="0" step="1" value="3999" />
           </div>
           <div class="field" id="fieldSale2">
-            <label for="discSale2">Sale price (₹)</label><input type="number" id="discSale2" min="0" step="1" value="3200" />
+            <label for="discSale2">Sale price</label><input type="number" id="discSale2" min="0" step="1" value="3200" />
           </div>
           <div class="field" id="fieldOffR">
             <label for="discOffR">Discount (%)</label><input type="number" id="discOffR" min="0" max="100" step="0.1" value="20" />
@@ -152,14 +163,20 @@ const jsonLd = {
     <div class="container">
       <h2 class="section-title">Related calculators</h2>
       <p class="related-links">
-        <a href="/calculator/percentage">Percentage</a> · <a href="/calculator/tip">Tip</a> · <a href="/calculator/gst">GST</a>
+        <a href="/calculator/percentage">Percentage</a> · <a href="/calculator/tip">Tip</a> · <a href="/calculator/gst">GST</a> · <a href="/calculator/markup-margin">Markup &amp; margin</a>
       </p>
     </div>
   </section>
 
-  <script is:inline>
+  <script is:inline define:vars={{ LOCALE_BY_CURRENCY }}>
     (function () {
-      const fmt = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 });
+      function localeForCurrency(code) {
+        return LOCALE_BY_CURRENCY[code] || 'en-US';
+      }
+      function makeFmt() {
+        var code = document.getElementById('discCur').value || 'INR';
+        return new Intl.NumberFormat(localeForCurrency(code), { style: 'currency', currency: code, maximumFractionDigits: 2 });
+      }
       function debounce(fn, ms) {
         let t;
         return function () {
@@ -180,6 +197,7 @@ const jsonLd = {
         show('fieldOffR', m === 'rev');
       }
       function run() {
+        const fmt = makeFmt();
         modeVis();
         const m = document.getElementById('discMode').value;
         const orig = Math.max(0, parseFloat(document.getElementById('discOrig').value) || 0);
@@ -245,9 +263,10 @@ const jsonLd = {
             : '';
       }
       const d = debounce(run, 60);
-      ['discMode', 'discOrig', 'discOff1', 'discOff2', 'discSale', 'discSale2', 'discOffR'].forEach(function (id) {
+      ['discMode', 'discCur', 'discOrig', 'discOff1', 'discOff2', 'discSale', 'discSale2', 'discOffR'].forEach(function (id) {
         document.getElementById(id).addEventListener('input', d);
       });
+      document.getElementById('discCur').addEventListener('change', d);
       run();
     })();
   </script>

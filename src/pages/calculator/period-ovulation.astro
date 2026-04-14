@@ -1,0 +1,856 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/period-ovulation/';
+const site = 'https://doitswift.com';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Period & Ovulation Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'HealthApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Estimated period dates, ovulation, and fertile window from last period and cycle length — educational only.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [{ '@type': 'Question', name: 'Is this a contraception tool?', acceptedAnswer: { '@type': 'Answer', text: 'No. Calendar methods have high failure rates; use medically approved contraception and professional advice.' } }],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: site + '/' },
+        { '@type': 'ListItem', position: 2, name: 'Calculators', item: site + '/calculator/' },
+        { '@type': 'ListItem', position: 3, name: 'Period & Ovulation', item: canonical },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Period & Ovulation Calculator — Track Your Cycle | DoItSwift"
+  description="Estimate next period dates, ovulation, and fertile windows from your last period and cycle length. Not medical advice; not for contraception."
+  keywords="period calculator, ovulation calculator, menstrual cycle calculator, fertile window calculator"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Period &amp; Ovulation</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Period &amp; Ovulation Calculator</h1>
+      <p class="subtitle">
+        Enter your <strong>last period start</strong> and typical <strong>cycle</strong> and <strong>period length</strong> — we estimate upcoming periods, ovulation, and a fertile window. For comprehensive tracking, apps like Flo or Clue offer more features.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> Private</span>
+        <span><span class="check">✓</span> Runs in browser</span>
+        <span><span class="check">✓</span> No signup</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="medical-callout container" role="note">
+    <strong>⚠️ Important:</strong> This calculator provides <strong>estimates</strong> based on average cycle data. It is <strong>not for contraception</strong> — natural family planning has high failure rates unless taught and monitored professionally. It does <strong>not</strong> confirm pregnancy. Consult a <strong>healthcare provider</strong> for fertility, contraception, irregular cycles, or pregnancy planning. Many women have <strong>irregular cycles</strong>; treat outputs as illustrations only.
+  </div>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label for="poLmp">First day of last period</label>
+          <input type="date" id="poLmp" />
+        </div>
+        <div class="field">
+          <label for="poCycle">Average cycle length (days)</label>
+          <input type="range" id="poCycleR" min="21" max="45" value="28" aria-hidden="true" />
+          <input type="number" id="poCycle" min="21" max="45" value="28" />
+        </div>
+        <div class="field">
+          <label for="poLen">Average period length (days)</label>
+          <input type="range" id="poLenR" min="2" max="10" value="5" aria-hidden="true" />
+          <input type="number" id="poLen" min="2" max="10" value="5" />
+        </div>
+        <div class="field">
+          <label for="poHorizon">Show next</label>
+          <select id="poHorizon" aria-label="Months to calculate">
+            <option value="1">1 cycle</option>
+            <option value="3" selected>3 cycles</option>
+            <option value="6">6 cycles</option>
+            <option value="12">12 cycles</option>
+          </select>
+        </div>
+      </div>
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Cycle calendar</h2>
+        <p class="po-sr-only" id="poCalCap">Color-coded calendar for the selected cycle</p>
+        <div class="po-cal-wrap">
+          <div class="calendar-legend" aria-hidden="true">
+            <span class="legend-item"><span class="legend-dot legend-period"></span> Period</span>
+            <span class="legend-item"><span class="legend-dot legend-fertile"></span> Fertile window</span>
+            <span class="legend-item"><span class="legend-dot legend-ovulation"></span> Ovulation</span>
+          </div>
+          <div class="po-nav">
+            <button type="button" class="po-nav-btn" id="poPrev" aria-label="Previous cycle" disabled>←</button>
+            <div class="po-nav-label" id="poCycleLabel" aria-live="polite">Cycle 1 of 1</div>
+            <button type="button" class="po-nav-btn" id="poNext" aria-label="Next cycle">→</button>
+          </div>
+          <div
+            id="poStatusCallout"
+            class="cycle-status-callout"
+            role="status"
+            aria-live="polite"
+            hidden
+          ></div>
+          <div id="poCycleSummary" class="cycle-summary-host"></div>
+          <div id="poCalRoot" class="po-cal-root" role="group" aria-labelledby="poCycleLabel poCalCap"></div>
+        </div>
+        <div class="po-ddp-wrap" id="poDdpWrap">
+          <p class="po-ddp-label">Rough due date (this cycle’s ovulation)</p>
+          <p class="po-ddp" id="poDdp"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Menstrual cycle basics</h2>
+      <p>
+        A typical cycle includes <strong>menstrual</strong>, <strong>follicular</strong>, <strong>ovulatory</strong>, and <strong>luteal</strong> phases. <strong>Ovulation</strong> often occurs about <strong>14 days before</strong> the next expected period — not always “day 14 of the cycle” unless your cycle is very regular and 28 days. Signs such as <strong>basal body temperature</strong> shift, <strong>cervical mucus</strong> changes, or <strong>LH</strong> test surges can help time ovulation better than a calendar alone.
+      </p>
+      <p>
+        <strong>Irregular cycles</strong> (large variation in length), very heavy bleeding, severe pain, or missed periods warrant medical evaluation — do not rely on this page for diagnosis.
+      </p>
+      <p>
+        If you conceive around ovulation, a rough <strong>due date</strong> from LMP is on the order of 280 days — use our <a href="/calculator/pregnancy-due-date">Pregnancy Due Date</a> calculator for Naegele-style estimates and discuss dating scans with your clinician.
+      </p>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/pregnancy-due-date">Pregnancy Due Date</a>
+        ·
+        <a href="/calculator/age">Age Calculator</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      var HEADERS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      var currentCycleIdx = 0;
+      function pad(n) {
+        return n < 10 ? '0' + n : '' + n;
+      }
+      function fmt(d) {
+        return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+      }
+      function fmtLong(d) {
+        return d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+      }
+      function fmtShortDate(d) {
+        return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+      }
+      function addDays(d, n) {
+        var x = new Date(d);
+        x.setDate(x.getDate() + n);
+        return x;
+      }
+      function sameDay(a, b) {
+        return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+      }
+      function dayOrder(d) {
+        return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+      }
+      function isBetween(d, a, b) {
+        var t = dayOrder(d);
+        return t >= dayOrder(a) && t <= dayOrder(b);
+      }
+      /** Monday = 0 … Sunday = 6 */
+      function mondayFirstIndex(jsDay) {
+        return (jsDay + 6) % 7;
+      }
+      /** First day of the cycle that contains `today` (day 1 = period start). */
+      function getCurrentPeriodStart(lmp, cycleLen, today) {
+        var t = dayOrder(today);
+        var ps = new Date(lmp);
+        ps.setHours(12, 0, 0, 0);
+        if (t < dayOrder(ps)) return null;
+        while (dayOrder(addDays(ps, cycleLen)) <= t) {
+          ps = addDays(ps, cycleLen);
+        }
+        return ps;
+      }
+      function cycleDayNumber(ps, today) {
+        return Math.round((dayOrder(today) - dayOrder(ps)) / 86400000) + 1;
+      }
+      /** Ovulation on cycle day (C − 14). Menstrual overlaps fertile days → menstrual first. */
+      function phaseNameForCycleDay(d, C, P, O) {
+        if (d >= 1 && d <= P) return 'Menstrual phase';
+        if (d === O) return 'Ovulation day';
+        if (d >= O - 5 && d <= O - 1) return 'Fertile window';
+        if (d >= O + 1 && d <= C) return 'Luteal phase';
+        if (d > P && d < O - 5) return 'Follicular phase';
+        return 'Follicular phase';
+      }
+      function pregnancyChanceForCycleDay(d, C, P, O) {
+        if (d >= 1 && d <= P) return 'Low';
+        if (d === O) return 'High';
+        if (d >= O - 5 && d <= O - 1) return 'Moderate';
+        return 'Low';
+      }
+      /** e.g. Mar 14–18 or Mar 30 – Apr 4 */
+      function fmtRangeStat(a, b) {
+        if (a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth()) {
+          var mo = a.toLocaleDateString(undefined, { month: 'short' });
+          return mo + ' ' + a.getDate() + '–' + b.getDate();
+        }
+        return fmtShortDate(a) + ' – ' + fmtShortDate(b);
+      }
+      function fmtCycleSummary(ci, lmp, cycleLen, plen) {
+        var periodStart = addDays(lmp, ci * cycleLen);
+        var nextCycleStart = addDays(lmp, (ci + 1) * cycleLen);
+        var pEnd = addDays(periodStart, plen - 1);
+        var ov = addDays(nextCycleStart, -14);
+        var fwS = addDays(ov, -5);
+        var fwE = addDays(ov, 1);
+        var fertileDayCount = Math.round((dayOrder(fwE) - dayOrder(fwS)) / 86400000) + 1;
+        var started = periodStart.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+        var h =
+          '<div class="cycle-summary">' +
+          '<h3 class="cycle-summary-title">Cycle ' +
+          (ci + 1) +
+          ' · Started ' +
+          started +
+          '</h3>' +
+          '<div class="cycle-stats">' +
+          '<div class="stat">' +
+          '<span class="stat-label">Period</span>' +
+          '<span class="stat-value">' +
+          fmtRangeStat(periodStart, pEnd) +
+          '</span>' +
+          '<span class="stat-detail">' +
+          plen +
+          ' days</span></div>' +
+          '<div class="stat">' +
+          '<span class="stat-label">Fertile window</span>' +
+          '<span class="stat-value">' +
+          fmtRangeStat(fwS, fwE) +
+          '</span>' +
+          '<span class="stat-detail">' +
+          fertileDayCount +
+          ' days</span></div>' +
+          '<div class="stat stat-highlight">' +
+          '<span class="stat-label">Ovulation</span>' +
+          '<span class="stat-value">' +
+          fmtShortDate(ov) +
+          '</span>' +
+          '<span class="stat-detail">Peak fertility</span></div>' +
+          '<div class="stat">' +
+          '<span class="stat-label">Next period</span>' +
+          '<span class="stat-value">' +
+          fmtShortDate(nextCycleStart) +
+          '</span>' +
+          '<span class="stat-detail">Cycle day 1</span></div>' +
+          '</div></div>';
+        return h;
+      }
+      function fmtStatusCallout(lmp, cycleLen, plen) {
+        var today = new Date();
+        today.setHours(12, 0, 0, 0);
+        var ps = getCurrentPeriodStart(lmp, cycleLen, today);
+        if (!ps) {
+          return (
+            '<p class="cycle-status-line">📍 Enter the <strong>first day of your last period</strong> (on or before today) to see where you are in your cycle.</p>'
+          );
+        }
+        var C = cycleLen;
+        var O = C - 14;
+        var d = cycleDayNumber(ps, today);
+        if (d < 1) d = 1;
+        if (d > C) d = C;
+        var phase = phaseNameForCycleDay(d, C, plen, O);
+        var chance = pregnancyChanceForCycleDay(d, C, plen, O);
+        var nextP = addDays(ps, C);
+        var daysUntil = Math.round((dayOrder(nextP) - dayOrder(today)) / 86400000);
+        var nextLine;
+        if (daysUntil <= 0) {
+          nextLine = 'Next period expected: <strong>' + fmtShortDate(nextP) + '</strong>';
+        } else {
+          nextLine =
+            'Next period expected in <strong>' +
+            daysUntil +
+            '</strong> day' +
+            (daysUntil === 1 ? '' : 's') +
+            ' (<strong>' +
+            fmtShortDate(nextP) +
+            '</strong>)';
+        }
+        return (
+          '<p class="cycle-status-line cycle-status-line--main">📍 You are on <strong>Day ' +
+          d +
+          '</strong> of your cycle (<strong>' +
+          phase +
+          '</strong>)</p>' +
+          '<p class="cycle-status-line">' +
+          nextLine +
+          '</p>' +
+          '<p class="cycle-status-line cycle-status-line--chance">Pregnancy chance today: <strong>' +
+          chance +
+          '</strong> <span class="cycle-status-hint">(illustrative only)</span></p>'
+        );
+      }
+      /**
+       * Ovulation before fertile; period vs ovulation same day → ovulation.
+       */
+      function cellPhase(cellDate, lmp, cycleLen, plen, ci) {
+        var pStart = addDays(lmp, ci * cycleLen);
+        var pEnd = addDays(pStart, plen - 1);
+        var nextP = addDays(lmp, (ci + 1) * cycleLen);
+        var ov = addDays(nextP, -14);
+        var fwS = addDays(ov, -5);
+        var fwE = addDays(ov, 1);
+        if (sameDay(cellDate, ov)) return 'o';
+        if (isBetween(cellDate, pStart, pEnd)) return 'p';
+        if (isBetween(cellDate, fwS, fwE)) return 'f';
+        return 'n';
+      }
+      function monthsOverlappingCycle(periodStart, lastDayOfCycle) {
+        var list = [];
+        var y = periodStart.getFullYear();
+        var m = periodStart.getMonth();
+        var yE = lastDayOfCycle.getFullYear();
+        var mE = lastDayOfCycle.getMonth();
+        var cy = y;
+        var cm = m;
+        while (cy < yE || (cy === yE && cm <= mE)) {
+          list.push({ year: cy, month: cm });
+          cm++;
+          if (cm > 11) {
+            cm = 0;
+            cy++;
+          }
+        }
+        return list;
+      }
+      /** One month: single .calendar-grid with 7 columns; all cells are direct grid children */
+      function buildMonthSection(y, m, lmp, cycleLen, plen, ci) {
+        var wrap = document.createElement('div');
+        wrap.className = 'calendar-month';
+        var title = document.createElement('h3');
+        title.className = 'calendar-month-title';
+        title.textContent = new Date(y, m, 1).toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+        wrap.appendChild(title);
+        var grid = document.createElement('div');
+        grid.className = 'calendar-grid';
+        var h;
+        for (h = 0; h < 7; h++) {
+          var hd = document.createElement('div');
+          hd.className = 'calendar-day-header';
+          hd.textContent = HEADERS[h];
+          grid.appendChild(hd);
+        }
+        var first = new Date(y, m, 1);
+        first.setHours(12, 0, 0, 0);
+        var padCount = mondayFirstIndex(first.getDay());
+        var p;
+        for (p = 0; p < padCount; p++) {
+          var empty = document.createElement('div');
+          empty.className = 'calendar-day calendar-day-empty';
+          empty.setAttribute('aria-hidden', 'true');
+          grid.appendChild(empty);
+        }
+        var daysInMonth = new Date(y, m + 1, 0).getDate();
+        var today = new Date();
+        today.setHours(0, 0, 0, 0);
+        var d;
+        for (d = 1; d <= daysInMonth; d++) {
+          var cellDate = new Date(y, m, d);
+          cellDate.setHours(12, 0, 0, 0);
+          var phase = cellPhase(cellDate, lmp, cycleLen, plen, ci);
+          var cell = document.createElement('div');
+          cell.className = 'calendar-day';
+          if (phase === 'o') cell.classList.add('calendar-day-ovulation');
+          else if (phase === 'p') cell.classList.add('calendar-day-period');
+          else if (phase === 'f') cell.classList.add('calendar-day-fertile');
+          var todayN = new Date();
+          todayN.setHours(0, 0, 0, 0);
+          var cmp = new Date(y, m, d);
+          cmp.setHours(0, 0, 0, 0);
+          if (cmp.getTime() === todayN.getTime()) cell.classList.add('calendar-day-today');
+          cell.textContent = String(d);
+          cell.title = fmtLong(cellDate);
+          grid.appendChild(cell);
+        }
+        var totalUsed = padCount + daysInMonth;
+        var tail = (7 - (totalUsed % 7)) % 7;
+        for (p = 0; p < tail; p++) {
+          var empty2 = document.createElement('div');
+          empty2.className = 'calendar-day calendar-day-empty';
+          empty2.setAttribute('aria-hidden', 'true');
+          grid.appendChild(empty2);
+        }
+        wrap.appendChild(grid);
+        return wrap;
+      }
+      function run(resetCycleNav) {
+        var lmpS = document.getElementById('poLmp').value;
+        if (!lmpS) return;
+        if (resetCycleNav) currentCycleIdx = 0;
+        var lmp = new Date(lmpS + 'T12:00:00');
+        var cycleLen = Math.min(45, Math.max(21, parseInt(document.getElementById('poCycle').value, 10) || 28));
+        var plen = Math.min(10, Math.max(2, parseInt(document.getElementById('poLen').value, 10) || 5));
+        var nc = parseInt(document.getElementById('poHorizon').value, 10) || 3;
+        document.getElementById('poCycle').value = cycleLen;
+        document.getElementById('poLen').value = plen;
+        document.getElementById('poCycleR').value = cycleLen;
+        document.getElementById('poLenR').value = plen;
+        if (currentCycleIdx >= nc) currentCycleIdx = nc - 1;
+        if (currentCycleIdx < 0) currentCycleIdx = 0;
+        var ci = currentCycleIdx;
+        var periodStart = addDays(lmp, ci * cycleLen);
+        var nextCycleStart = addDays(lmp, (ci + 1) * cycleLen);
+        var lastDayOfCycle = addDays(nextCycleStart, -1);
+        document.getElementById('poCycleLabel').textContent = 'Cycle ' + (ci + 1) + ' of ' + nc;
+        var summaryEl = document.getElementById('poCycleSummary');
+        summaryEl.innerHTML = fmtCycleSummary(ci, lmp, cycleLen, plen);
+        var statusEl = document.getElementById('poStatusCallout');
+        statusEl.innerHTML = fmtStatusCallout(lmp, cycleLen, plen);
+        statusEl.removeAttribute('hidden');
+        document.getElementById('poPrev').disabled = ci <= 0;
+        document.getElementById('poNext').disabled = ci >= nc - 1;
+        var root = document.getElementById('poCalRoot');
+        root.innerHTML = '';
+        var monthList = monthsOverlappingCycle(periodStart, lastDayOfCycle);
+        var i;
+        for (i = 0; i < monthList.length; i++) {
+          var ym = monthList[i];
+          root.appendChild(buildMonthSection(ym.year, ym.month, lmp, cycleLen, plen, ci));
+        }
+        var ovX = addDays(nextCycleStart, -14);
+        var edd = addDays(ovX, 266);
+        document.getElementById('poDdp').innerHTML =
+          'Rough due date ≈ <strong>' +
+          fmtLong(edd) +
+          '</strong> (from ovulation <strong>' +
+          fmtLong(ovX) +
+          '</strong>). Clinical dating may differ.';
+      }
+      function onInput() {
+        run(true);
+      }
+      function goDelta(delta) {
+        var lmpS = document.getElementById('poLmp').value;
+        if (!lmpS) return;
+        var nc = parseInt(document.getElementById('poHorizon').value, 10) || 3;
+        currentCycleIdx = Math.max(0, Math.min(nc - 1, currentCycleIdx + delta));
+        run(false);
+      }
+      var lmpEl = document.getElementById('poLmp');
+      var d = new Date();
+      d.setMonth(d.getMonth() - 1);
+      lmpEl.value = fmt(d);
+      ['poLmp', 'poCycle', 'poLen', 'poHorizon'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', onInput);
+        document.getElementById(id).addEventListener('change', onInput);
+      });
+      document.getElementById('poCycleR').addEventListener('input', function () {
+        document.getElementById('poCycle').value = this.value;
+        onInput();
+      });
+      document.getElementById('poLenR').addEventListener('input', function () {
+        document.getElementById('poLen').value = this.value;
+        onInput();
+      });
+      document.getElementById('poPrev').addEventListener('click', function () {
+        goDelta(-1);
+      });
+      document.getElementById('poNext').addEventListener('click', function () {
+        goDelta(1);
+      });
+      run(true);
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 17px; color: var(--text-muted); max-width: 720px; margin: 0 auto 20px; line-height: 1.6; }
+    .medical-callout {
+      background: #fef2f2;
+      border: 2px solid #f87171;
+      color: var(--text);
+      padding: 18px 20px;
+      border-radius: 12px;
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 900px;
+      margin-bottom: 20px;
+    }
+    :global([data-theme='dark']) .medical-callout {
+      background: rgba(248, 113, 113, 0.12);
+      border-color: rgba(248, 113, 113, 0.5);
+    }
+    .calc-section { padding: 16px 0 40px; }
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 960px; align-items: start; margin: 0 auto; }
+    @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
+    .calc-inputs, .calc-results { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--shadow); }
+    .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+    .field label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; }
+    .field input, .field select { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
+    .po-sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .po-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .po-nav-btn {
+      flex-shrink: 0;
+      min-width: 44px;
+      min-height: 44px;
+      padding: 0 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--card);
+      font-size: 1.2rem;
+      line-height: 1;
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .po-nav-btn:hover:not(:disabled) {
+      background: var(--gray-100);
+      border-color: var(--gray-300);
+    }
+    :global([data-theme='dark']) .po-nav-btn:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .po-nav-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .po-nav-btn:focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: 2px;
+    }
+    .po-nav-label {
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-align: center;
+      flex: 1;
+      color: var(--text);
+    }
+    .po-cal-wrap {
+      margin-top: 0;
+    }
+    .cycle-summary-host {
+      width: 100%;
+      margin-bottom: 8px;
+    }
+    .po-cal-root {
+      width: 100%;
+      max-width: 100%;
+    }
+    .po-ddp-wrap {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: var(--radius-md, 10px);
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+    }
+    :global([data-theme='dark']) .po-ddp-wrap {
+      background: rgba(59, 130, 246, 0.12);
+      border-color: rgba(96, 165, 250, 0.35);
+    }
+    .po-ddp-label {
+      margin: 0 0 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+    }
+    .po-ddp {
+      font-size: 14px;
+      color: var(--text);
+      margin: 0;
+      line-height: 1.55;
+    }
+    .po-ddp strong {
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .edu { padding: 36px 0 48px; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
+    .edu a { color: var(--blue); font-weight: 600; }
+    .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .related { text-align: center; padding-bottom: 48px; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+
+  <!-- Global: JS injects .calendar-* nodes; scoped Astro CSS would not apply to them -->
+  <style is:global>
+    .calendar-legend {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .legend-period {
+      background: #fee2e2;
+      border: 1px solid #b91c1c;
+    }
+    .legend-fertile {
+      background: #d1fae5;
+      border: 1px solid #047857;
+    }
+    .legend-ovulation {
+      background: #10b981;
+      border: 1px solid #047857;
+    }
+    .cycle-status-callout {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.28);
+      padding: 16px 20px;
+      border-radius: 12px;
+      margin-bottom: 18px;
+      box-sizing: border-box;
+    }
+    [data-theme='dark'] .cycle-status-callout {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: rgba(96, 165, 250, 0.35);
+    }
+    .cycle-status-line {
+      margin: 0 0 10px;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--text);
+    }
+    .cycle-status-line:last-child {
+      margin-bottom: 0;
+    }
+    .cycle-status-line--main {
+      font-size: 15px;
+    }
+    .cycle-status-line--chance {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .cycle-status-hint {
+      font-size: 12px;
+      font-weight: 400;
+      opacity: 0.9;
+    }
+    .cycle-summary {
+      margin: 0 0 20px;
+    }
+    .cycle-summary-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin: 0 0 14px;
+      text-align: center;
+      color: var(--text);
+      line-height: 1.35;
+    }
+    .cycle-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (min-width: 520px) {
+      .cycle-stats {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    .stat {
+      background: var(--gray-50);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      text-align: center;
+      box-sizing: border-box;
+      min-width: 0;
+    }
+    [data-theme='dark'] .stat {
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .stat-highlight {
+      border-color: rgba(16, 185, 129, 0.45);
+      background: rgba(16, 185, 129, 0.1);
+    }
+    [data-theme='dark'] .stat-highlight {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(52, 211, 153, 0.4);
+    }
+    .stat-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+    }
+    .stat-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.35;
+      word-break: break-word;
+    }
+    .stat-detail {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .calendar-month {
+      margin-bottom: 32px;
+    }
+    .calendar-month:last-child {
+      margin-bottom: 0;
+    }
+    .calendar-month-title {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0 0 16px;
+      color: var(--text);
+    }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      background: var(--card);
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+    .calendar-day-header {
+      text-align: center;
+      padding: 8px 4px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .calendar-day {
+      aspect-ratio: 1 / 1;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text);
+      position: relative;
+      cursor: default;
+      transition: background 0.15s ease;
+      box-sizing: border-box;
+    }
+    .calendar-day:hover:not(.calendar-day-empty) {
+      background: var(--gray-100);
+    }
+    .calendar-day-empty {
+      background: transparent !important;
+      pointer-events: none;
+    }
+    .calendar-day-period {
+      background: #fee2e2;
+      color: #b91c1c;
+      font-weight: 600;
+    }
+    .calendar-day-fertile {
+      background: #d1fae5;
+      color: #047857;
+    }
+    .calendar-day-ovulation {
+      background: #10b981;
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 0 0 2px var(--card), 0 0 0 4px #10b981;
+    }
+    .calendar-day-today {
+      border: 2px solid var(--blue);
+    }
+    [data-theme='dark'] .calendar-day:hover:not(.calendar-day-empty) {
+      background: rgba(255, 255, 255, 0.06);
+    }
+    [data-theme='dark'] .calendar-day-period {
+      background: rgba(220, 38, 38, 0.2);
+      color: #fca5a5;
+    }
+    [data-theme='dark'] .calendar-day-fertile {
+      background: rgba(16, 185, 129, 0.2);
+      color: #6ee7b7;
+    }
+    [data-theme='dark'] .calendar-day-ovulation {
+      box-shadow: 0 0 0 2px var(--card), 0 0 0 4px #10b981;
+    }
+    @media (max-width: 480px) {
+      .calendar-grid {
+        gap: 2px;
+        padding: 8px;
+        max-width: 100%;
+      }
+      .calendar-day {
+        font-size: 12px;
+      }
+      .calendar-day-header {
+        font-size: 10px;
+        padding: 6px 2px;
+      }
+      .calendar-month-title {
+        font-size: 16px;
+      }
+    }
+  </style>
+</MainLayout>

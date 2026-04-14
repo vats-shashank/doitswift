@@ -1,0 +1,302 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/rd/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'RD Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Recurring deposit maturity, interest, and quarter-wise breakdown with quarterly compounding.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'How is RD interest compounded?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Many Indian banks compound RD interest quarterly. This tool adds your monthly installment, then applies quarterly interest on the balance in line with common practice.',
+          },
+        },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="RD Calculator — Recurring Deposit Maturity & Interest | DoItSwift"
+  description="Calculate recurring deposit maturity, total interest, and deposits for Indian RDs. Quarterly compounding, adjustable tenure and rate."
+  keywords="rd calculator, recurring deposit calculator, rd interest calculator, post office rd calculator"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>RD Calculator</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>RD Calculator</h1>
+      <p class="subtitle">
+        Model a monthly recurring deposit with <strong>quarterly compounding</strong> (typical for many bank RDs). See maturity, interest earned, and a quarter-by-quarter balance trail.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label for="rdMonthly">Monthly deposit (₹)</label>
+          <input type="range" id="rdMonthlyR" min="100" max="100000" step="100" value="5000" aria-hidden="true" />
+          <input type="number" id="rdMonthly" min="100" max="100000" step="100" value="5000" inputmode="numeric" />
+        </div>
+        <div class="field">
+          <label for="rdRate">Annual interest rate (%)</label>
+          <input type="range" id="rdRateR" min="1" max="15" step="0.1" value="7" aria-hidden="true" />
+          <input type="number" id="rdRate" min="1" max="15" step="0.05" value="7" inputmode="decimal" />
+        </div>
+        <div class="field">
+          <label for="rdYears">Tenure</label>
+          <div class="tenure-row">
+            <input type="number" id="rdTenure" min="1" value="3" />
+            <select id="rdTenureUnit" aria-label="Tenure unit">
+              <option value="y" selected>Years</option>
+              <option value="m">Months</option>
+            </select>
+          </div>
+          <p class="field-hint">6 months to 10 years — use months for short tenures.</p>
+        </div>
+        <div class="field">
+          <label for="rdFreq">Compounding</label>
+          <select id="rdFreq" aria-label="Compounding frequency">
+            <option value="4" selected>Quarterly (typical)</option>
+            <option value="12">Monthly</option>
+            <option value="1">Annual</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <div class="result-hero" id="rdMat">₹0</div>
+        <p class="result-label">Maturity amount</p>
+        <div class="result-grid">
+          <div>
+            <div class="result-sub" id="rdDep">₹0</div>
+            <div class="result-caption">Total deposited</div>
+          </div>
+          <div>
+            <div class="result-sub" id="rdInt">₹0</div>
+            <div class="result-caption">Interest earned</div>
+          </div>
+        </div>
+        <details class="calc-details">
+          <summary>Year / quarter breakdown</summary>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Period</th><th>Deposits (cumulative)</th><th>Balance</th></tr></thead>
+              <tbody id="rdTable"></tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">RD vs FD vs SIP</h2>
+      <p>
+        <strong>Recurring deposit (RD):</strong> You commit a fixed amount every month for a fixed tenure; the bank quotes a rate and compounds interest (often quarterly). Good for forced savings with predictable maturity.
+      </p>
+      <p>
+        <strong>Fixed deposit (FD):</strong> One lump sum for a term — different cash-flow pattern from RD.
+      </p>
+      <p>
+        <strong>SIP (mutual funds):</strong> Market-linked; no guaranteed rate. RD is closer to a savings contract; SIPs may suit long-term growth with volatility.
+      </p>
+      <p>
+        <strong>Bank vs Post Office RD:</strong> Rates change with policy — compare published schedules for tenure buckets you care about. Post Office instruments have their own rules and tax treatment.
+      </p>
+      <p>
+        <strong>TDS:</strong> Interest may be subject to TDS above thresholds; this calculator shows gross interest before your specific TDS or Form 15G/15H situation.
+      </p>
+      <p>
+        <strong>When RD helps:</strong> Short horizons, very low risk tolerance, or a place to park EMI-style discipline without market noise — for long inflation-beating goals, many investors blend equity/debt per goal date.
+      </p>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner">
+        <div class="affiliate-icon">🏦</div>
+        <div class="affiliate-content">
+          <h3>Compare before you lock in</h3>
+          <p>Check official bank/PO circulars for the exact rate on your deposit date — calculators are illustrative.</p>
+        </div>
+        <a href="https://zerodha.com/?ref=doitswift" class="btn btn-orange" target="_blank" rel="sponsored noopener noreferrer">Zerodha →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>Will this match my bank passbook exactly?</h4><p>Maybe not to the rupee — banks use day-count and cut-off rules. Use this for estimates.</p></div>
+        <div class="faq-item"><h4>Why quarterly default?</h4><p>Many Indian RDs compound quarterly; you can switch frequency to explore sensitivity.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/fd">FD Calculator</a> · <a href="/calculator/sip">SIP Calculator</a> · <a href="/calculator/emi">EMI Calculator</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      const fmt = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+      function debounce(fn, ms) {
+        let t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      function run() {
+        let P = Math.min(100000, Math.max(100, parseFloat(document.getElementById('rdMonthly').value) || 0));
+        const rate = Math.min(15, Math.max(1, parseFloat(document.getElementById('rdRate').value) || 7));
+        let tv = parseFloat(document.getElementById('rdTenure').value) || 1;
+        const unit = document.getElementById('rdTenureUnit').value;
+        let months = unit === 'y' ? Math.round(tv * 12) : Math.round(tv);
+        months = Math.max(6, Math.min(120, months));
+        const freq = parseInt(document.getElementById('rdFreq').value, 10) || 4;
+        document.getElementById('rdMonthly').value = P;
+        document.getElementById('rdRate').value = rate;
+        document.getElementById('rdMonthlyR').value = P;
+        document.getElementById('rdRateR').value = rate;
+
+        const rAnnual = rate / 100;
+        const c = freq;
+        const monthsPerPeriod = 12 / c;
+        let balance = 0;
+        let totalDep = 0;
+        const rows = [];
+        for (let m = 1; m <= months; m++) {
+          balance += P;
+          totalDep += P;
+          const isPeriodEnd = m % monthsPerPeriod === 0 || m === months;
+          if (isPeriodEnd) {
+            balance *= 1 + rAnnual / c;
+            const yr = Math.ceil(m / 12);
+            const slot = Math.floor(((m - 1) % 12) / monthsPerPeriod) + 1;
+            rows.push({
+              short: 'Year ' + yr + ' · slot ' + slot,
+              dep: totalDep,
+              bal: balance,
+            });
+          }
+        }
+        const interest = Math.max(0, balance - totalDep);
+        document.getElementById('rdMat').textContent = fmt.format(Math.round(balance));
+        document.getElementById('rdDep').textContent = fmt.format(Math.round(totalDep));
+        document.getElementById('rdInt').textContent = fmt.format(Math.round(interest));
+        const tbody = document.getElementById('rdTable');
+        tbody.innerHTML = '';
+        rows.forEach(function (row) {
+          const tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td>' + row.short + '</td><td>' + fmt.format(Math.round(row.dep)) + '</td><td>' + fmt.format(Math.round(row.bal)) + '</td>';
+          tbody.appendChild(tr);
+        });
+      }
+      const deb = debounce(run, 80);
+      ['rdMonthly', 'rdRate', 'rdTenure', 'rdTenureUnit', 'rdFreq'].forEach(function (id) {
+        const el = document.getElementById(id);
+        el.addEventListener('input', deb);
+        el.addEventListener('change', deb);
+      });
+      document.getElementById('rdMonthlyR').addEventListener('input', function () {
+        document.getElementById('rdMonthly').value = this.value;
+        deb();
+      });
+      document.getElementById('rdRateR').addEventListener('input', function () {
+        document.getElementById('rdRate').value = this.value;
+        deb();
+      });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 18px; color: var(--text-muted); max-width: 680px; margin: 0 auto 24px; line-height: 1.55; }
+    .calc-section { padding: 24px 0 40px; }
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 960px; align-items: start; }
+    @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
+    .calc-inputs, .calc-results { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--shadow); }
+    .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+    .field { margin-bottom: 18px; }
+    .field label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    .field input[type='number'], .field select { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
+    .field input[type='range'] { width: 100%; margin-bottom: 6px; }
+    .field-hint { font-size: 12px; color: var(--text-muted); margin: 6px 0 0; }
+    .tenure-row { display: flex; gap: 10px; }
+    .tenure-row input { flex: 1; }
+    .tenure-row select { width: 120px; }
+    .result-hero { font-size: 2.25rem; font-weight: 800; color: var(--blue); }
+    .result-label { font-size: 14px; color: var(--text-muted); margin: 4px 0 20px; }
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px; }
+    .result-sub { font-size: 1.25rem; font-weight: 700; }
+    .result-caption { font-size: 12px; color: var(--text-muted); }
+    .calc-details summary { cursor: pointer; font-weight: 600; }
+    .table-wrap { overflow: auto; max-height: 280px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 8px; border-bottom: 1px solid var(--border); text-align: right; }
+    th:first-child, td:first-child { text-align: left; }
+    .edu { padding: 40px 0; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
+    .section-title { text-align: center; margin-bottom: 20px; font-size: 1.5rem; }
+    .affiliate { padding: 32px 0; }
+    .affiliate .container { max-width: 900px; }
+    .affiliate-inner { background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #93c5fd; border-radius: var(--radius-lg); padding: 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    [data-theme='dark'] .affiliate-inner { background: rgba(59, 130, 246, 0.12); border-color: rgba(147, 197, 253, 0.4); }
+    .affiliate-icon { font-size: 36px; }
+    .affiliate-content { flex: 1; min-width: 200px; }
+    .affiliate-content h3 { font-size: 17px; margin-bottom: 4px; }
+    .affiliate-content p { font-size: 14px; color: var(--text-muted); }
+    .faq { padding: 32px 0 48px; }
+    .faq .container { max-width: 760px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 10px; }
+    .faq-item h4 { font-size: 15px; margin-bottom: 4px; }
+    .faq-item p { font-size: 14px; color: var(--text-muted); }
+    .related { padding: 24px 0 48px; text-align: center; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

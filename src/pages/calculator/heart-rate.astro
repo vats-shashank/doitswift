@@ -1,0 +1,218 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/heart-rate/';
+const site = 'https://doitswift.com';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Heart Rate Zone Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'HealthApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Maximum heart rate and five training zones using standard, Tanaka, or Karvonen methods.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [{ '@type': 'Question', name: 'What is the fat-burning zone?', acceptedAnswer: { '@type': 'Answer', text: 'A moderate intensity range; total calories still matter more than zone labels for fat loss.' } }],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: site + '/' },
+        { '@type': 'ListItem', position: 2, name: 'Calculators', item: site + '/calculator/' },
+        { '@type': 'ListItem', position: 3, name: 'Heart Rate Zones', item: canonical },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Heart Rate Zone Calculator — Maximum HR & Training Zones | DoItSwift"
+  description="Calculate max heart rate (220−age, Tanaka, or Karvonen) and five training zones with BPM ranges and color bar."
+  keywords="heart rate zone calculator, target heart rate calculator, max heart rate calculator, training zones calculator"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Heart Rate Zones</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Heart Rate Zone Calculator</h1>
+      <p class="subtitle">
+        Estimate <strong>maximum heart rate</strong> and <strong>five zones</strong> for training — choose <strong>standard</strong>, <strong>Tanaka</strong>, or <strong>Karvonen</strong> (optional resting HR). Formula-based estimates vary by individual.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label for="hrAge">Age (years)</label>
+          <input type="number" id="hrAge" min="10" max="100" value="35" />
+        </div>
+        <div class="field">
+          <label for="hrRest">Resting heart rate (optional, BPM)</label>
+          <input type="number" id="hrRest" min="30" max="120" placeholder="e.g. 60" />
+        </div>
+        <div class="field">
+          <label>Method</label>
+          <select id="hrMethod" aria-label="HR formula">
+            <option value="std">Standard (220 − age)</option>
+            <option value="tan">Tanaka (208 − 0.7 × age)</option>
+            <option value="kar">Karvonen (uses resting HR)</option>
+          </select>
+        </div>
+      </div>
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Zones (BPM)</h2>
+        <p class="hr-mhr">Estimated MHR: <strong id="hrMhr">—</strong> bpm</p>
+        <div id="hrZones"></div>
+        <div class="hr-bar" id="hrBar" role="img" aria-label="Zone color bar"></div>
+        <ul class="hr-tips" id="hrTips"></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Why zones matter</h2>
+      <p>
+        Heart rate is a practical proxy for intensity. <strong>Zone 2</strong> is often used for easy aerobic base building; <strong>zone 4–5</strong> for short intervals and VO₂ stimulus. The old “fat-burning zone” is a partial truth — you burn a higher <em>proportion</em> of fat at lower intensities, but total calorie burn and overall deficit matter more for body composition.
+      </p>
+      <p>
+        Measure <strong>resting HR</strong> on waking for consistency. <strong>HRV</strong> (heart rate variability) is increasingly used for recovery — consumer devices vary in accuracy. <strong>Karvonen</strong> personalizes zones when resting HR is known; <strong>Tanaka</strong> is often closer for older adults than 220−age.
+      </p>
+      <p>
+        Pair with <a href="/calculator/calorie">Calorie / TDEE</a>, <a href="/calculator/bmi">BMI</a>, and <a href="/calculator/body-fat">Body Fat</a> for a broader fitness picture — not medical diagnosis.
+      </p>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/calorie">Calorie / TDEE</a>
+        ·
+        <a href="/calculator/bmi">BMI</a>
+        ·
+        <a href="/calculator/body-fat">Body Fat</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      var zones = [
+        { n: 1, lo: 0.5, hi: 0.6, name: 'Recovery / very light', tip: 'Warm-up, recovery day, easy movement.' },
+        { n: 2, lo: 0.6, hi: 0.7, name: 'Aerobic / fat burn', tip: 'Long easy sessions, conversational pace.' },
+        { n: 3, lo: 0.7, hi: 0.8, name: 'Aerobic / endurance', tip: 'Tempo-style sustainable work.' },
+        { n: 4, lo: 0.8, hi: 0.9, name: 'Threshold', tip: 'Hard intervals, race pace pieces.' },
+        { n: 5, lo: 0.9, hi: 1.0, name: 'VO₂ max / max effort', tip: 'Short intervals, sprints, competition.' },
+      ];
+      function mhrStd(age) {
+        return 220 - age;
+      }
+      function mhrTan(age) {
+        return 208 - 0.7 * age;
+      }
+      function run() {
+        var age = Math.min(100, Math.max(10, parseInt(document.getElementById('hrAge').value, 10) || 35));
+        document.getElementById('hrAge').value = age;
+        var rest = parseFloat(document.getElementById('hrRest').value);
+        var method = document.getElementById('hrMethod').value;
+        if (method === 'kar' && (isNaN(rest) || rest <= 0)) {
+          document.getElementById('hrMhr').textContent = 'Enter resting HR';
+          document.getElementById('hrZones').innerHTML = '';
+          document.getElementById('hrBar').innerHTML = '';
+          document.getElementById('hrTips').innerHTML = '';
+          return;
+        }
+        var mhr = method === 'tan' ? mhrTan(age) : mhrStd(age);
+        var reserve = method === 'kar' ? mhr - rest : 0;
+        document.getElementById('hrMhr').textContent = Math.round(mhr).toString();
+        var html = '';
+        var bar = '';
+        var tips = '';
+        zones.forEach(function (z) {
+          var a, b;
+          if (method === 'kar') {
+            a = Math.round(rest + z.lo * reserve);
+            b = Math.round(rest + z.hi * reserve);
+          } else {
+            a = Math.round(z.lo * mhr);
+            b = Math.round(z.hi * mhr);
+          }
+          html +=
+            '<div class="hrz"><span class="hrz-n">Z' +
+            z.n +
+            '</span> <strong>' +
+            a +
+            '–' +
+            b +
+            ' bpm</strong> — ' +
+            z.name +
+            '</div>';
+          bar += '<span class="hrz-b hrz-b' + z.n + '" style="flex:' + (z.hi - z.lo) + '"></span>';
+          tips += '<li><strong>Zone ' + z.n + ':</strong> ' + z.tip + '</li>';
+        });
+        document.getElementById('hrZones').innerHTML = html;
+        document.getElementById('hrBar').innerHTML = bar;
+        document.getElementById('hrTips').innerHTML = tips;
+      }
+      ['hrAge', 'hrRest', 'hrMethod'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', run);
+        document.getElementById(id).addEventListener('change', run);
+      });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 17px; color: var(--text-muted); max-width: 720px; margin: 0 auto 20px; line-height: 1.6; }
+    .calc-section { padding: 24px 0 40px; }
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 960px; margin: 0 auto; align-items: start; }
+    @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
+    .calc-inputs, .calc-results { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--shadow); }
+    .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
+    .field label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; }
+    .field input, .field select { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
+    .hr-mhr { font-size: 16px; margin-bottom: 12px; }
+    .hrz { font-size: 14px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .hrz-n { display: inline-block; width: 28px; color: var(--text-muted); }
+    .hr-bar { display: flex; height: 24px; border-radius: 8px; overflow: hidden; margin: 16px 0; }
+    .hrz-b { min-width: 4px; }
+    .hrz-b1 { background: #93c5fd; }
+    .hrz-b2 { background: #60a5fa; }
+    .hrz-b3 { background: #3b82f6; }
+    .hrz-b4 { background: #1d4ed8; }
+    .hrz-b5 { background: #1e3a8a; }
+    .hr-tips { margin: 12px 0 0; padding-left: 1.2em; font-size: 13px; color: var(--text-muted); line-height: 1.55; }
+    .edu { padding: 36px 0 48px; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
+    .edu a { color: var(--blue); font-weight: 600; }
+    .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .related { text-align: center; padding-bottom: 48px; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

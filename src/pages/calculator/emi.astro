@@ -1,5 +1,6 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
 
 const canonical = 'https://doitswift.com/calculator/emi/';
 const jsonLd = {
@@ -49,7 +50,17 @@ const jsonLd = {
       <div class="calc-inputs">
         <h2 class="calc-heading">Inputs</h2>
         <div class="field">
-          <label for="emiPrincipal">Loan amount (₹)</label>
+          <label for="emiCur">Currency (display)</label>
+          <select id="emiCur" aria-label="Currency">
+            {CALCULATOR_CURRENCY_OPTIONS.map((o) => (
+              <option value={o.code} selected={o.code === 'INR'}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div class="field">
+          <label for="emiPrincipal">Loan amount</label>
           <input type="number" id="emiPrincipal" min="10000" max="1000000000" step="1000" value="1000000" />
         </div>
         <div class="field">
@@ -70,11 +81,11 @@ const jsonLd = {
       </div>
       <div class="calc-results" aria-live="polite">
         <h2 class="calc-heading">Results</h2>
-        <div class="result-hero" id="emiMonthly">₹0</div>
+        <div class="result-hero" id="emiMonthly">—</div>
         <p class="result-label">Monthly EMI</p>
         <div class="result-grid">
-          <div><div class="result-sub" id="emiInterest">₹0</div><div class="result-caption">Total interest</div></div>
-          <div><div class="result-sub" id="emiTotal">₹0</div><div class="result-caption">Total payment</div></div>
+          <div><div class="result-sub" id="emiInterest">—</div><div class="result-caption">Total interest</div></div>
+          <div><div class="result-sub" id="emiTotal">—</div><div class="result-caption">Total payment</div></div>
         </div>
         <div class="pie-wrap" role="img" aria-label="Principal versus interest pie chart">
           <div class="pie" id="emiPie"></div>
@@ -102,6 +113,9 @@ const jsonLd = {
       </p>
       <p>
         Use year-wise totals to see how much interest is front-loaded in early years — useful if you are considering partial prepayment. Always confirm numbers with your lender’s official schedule.
+      </p>
+      <p>
+        For <strong>unsecured personal loans</strong> (often shorter tenure and higher rates), use the <a href="/calculator/personal-loan">Personal Loan EMI calculator</a>. For <strong>US-style mortgages</strong> with property tax, insurance, and PMI, see the <a href="/calculator/mortgage">Mortgage calculator</a> — Indian home buyers may prefer the <a href="/calculator/home-loan">Home Loan calculator</a> with prepayment options.
       </p>
     </div>
   </section>
@@ -133,14 +147,20 @@ const jsonLd = {
     <div class="container">
       <h2 class="section-title">Related calculators</h2>
       <p class="related-links">
-        <a href="/calculator/home-loan">Home Loan (prepayment)</a> · <a href="/calculator/lumpsum">Lumpsum</a> · <a href="/calculator/sip">SIP</a>
+        <a href="/calculator/home-loan">Home Loan (prepayment)</a> · <a href="/calculator/personal-loan">Personal Loan EMI</a> · <a href="/calculator/mortgage">Mortgage (US)</a> · <a href="/calculator/lumpsum">Lumpsum</a> · <a href="/calculator/sip">SIP</a>
       </p>
     </div>
   </section>
 
-  <script is:inline>
+  <script is:inline define:vars={{ LOCALE_BY_CURRENCY }}>
     (function () {
-      const fmt = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+      function localeForCurrency(code) {
+        return LOCALE_BY_CURRENCY[code] || 'en-US';
+      }
+      function makeFmt() {
+        var code = document.getElementById('emiCur').value || 'INR';
+        return new Intl.NumberFormat(localeForCurrency(code), { style: 'currency', currency: code, maximumFractionDigits: 0 });
+      }
       function debounce(fn, ms) {
         let t;
         return function () { clearTimeout(t); t = setTimeout(fn, ms); };
@@ -152,6 +172,7 @@ const jsonLd = {
         return (P * r * Math.pow(1 + r, months)) / (Math.pow(1 + r, months) - 1);
       }
       function run() {
+        var fmt = makeFmt();
         let P = Math.max(10000, Math.min(1e9, parseFloat(document.getElementById('emiPrincipal').value) || 0));
         const rate = Math.max(1, Math.min(30, parseFloat(document.getElementById('emiRate').value) || 0));
         const tv = parseFloat(document.getElementById('emiTenure').value) || 1;
@@ -194,6 +215,7 @@ const jsonLd = {
         }
       }
       const deb = debounce(run, 80);
+      document.getElementById('emiCur').addEventListener('change', deb);
       ['emiPrincipal', 'emiRate', 'emiTenure', 'emiTenureUnit'].forEach(function (id) {
         document.getElementById(id).addEventListener('input', deb);
         document.getElementById(id).addEventListener('change', deb);

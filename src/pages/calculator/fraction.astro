@@ -1,0 +1,348 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/fraction/';
+const site = 'https://doitswift.com';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Fraction Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'EducationalApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Add, subtract, multiply, divide fractions; simplify; decimal to fraction with steps.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        { '@type': 'Question', name: 'Why common denominators for addition?', acceptedAnswer: { '@type': 'Answer', text: 'You are combining same-sized parts; unlike denominators mean different part sizes until converted.' } },
+        { '@type': 'Question', name: 'How do you simplify a fraction?', acceptedAnswer: { '@type': 'Answer', text: 'Divide numerator and denominator by their greatest common divisor (GCD) until no common factors remain.' } },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: site + '/' },
+        { '@type': 'ListItem', position: 2, name: 'Calculators', item: site + '/calculator/' },
+        { '@type': 'ListItem', position: 3, name: 'Fraction Calculator', item: canonical },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Fraction Calculator — Add, Subtract, Multiply, Divide Fractions | DoItSwift"
+  description="Add, subtract, multiply, divide fractions and mixed numbers; simplify; convert decimals to fractions. Steps shown for learning."
+  keywords="fraction calculator, adding fractions calculator, dividing fractions calculator, mixed number calculator"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Fraction Calculator</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Fraction Calculator</h1>
+      <p class="subtitle">Operate on fractions and mixed numbers, <strong>simplify</strong>, or turn a <strong>decimal</strong> into a reduced fraction. Denominator zero shows a clear error.</p>
+      <div class="trust">
+        <span><span class="check">✓</span> Step hints</span>
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container">
+      <div class="tabs" role="tablist">
+        <button type="button" class="tab is-active" role="tab" data-tab="op">Calculate</button>
+        <button type="button" class="tab" role="tab" data-tab="sim">Simplify</button>
+        <button type="button" class="tab" role="tab" data-tab="dec">Decimal → fraction</button>
+      </div>
+
+      <div id="tabOp" class="tab-panel">
+        <div class="frac-row">
+          <input type="number" id="f1w" class="small" placeholder="Whole" aria-label="First whole" />
+          <span class="frac">
+            <input type="number" id="f1n" class="num" aria-label="First numerator" value="1" />
+            <span class="bar"></span>
+            <input type="number" id="f1d" class="den" aria-label="First denominator" value="2" />
+          </span>
+        </div>
+        <select id="fOp" aria-label="Operation">
+          <option value="+">+</option>
+          <option value="-">−</option>
+          <option value="*">×</option>
+          <option value="/">÷</option>
+        </select>
+        <div class="frac-row">
+          <input type="number" id="f2w" class="small" placeholder="Whole" aria-label="Second whole" />
+          <span class="frac">
+            <input type="number" id="f2n" class="num" aria-label="Second numerator" value="1" />
+            <span class="bar"></span>
+            <input type="number" id="f2d" class="den" aria-label="Second denominator" value="3" />
+          </span>
+        </div>
+        <button type="button" class="btn-calc" id="fGo">Calculate</button>
+        <div class="out" id="fOut" aria-live="polite"></div>
+      </div>
+
+      <div id="tabSim" class="tab-panel hidden">
+        <p class="hint">Enter numerator and denominator (integers; negatives allowed in numerator).</p>
+        <div class="frac-row">
+          <span class="frac">
+            <input type="number" id="sN" class="num" value="12" />
+            <span class="bar"></span>
+            <input type="number" id="sD" class="den" value="18" />
+          </span>
+        </div>
+        <button type="button" class="btn-calc" id="sGo">Simplify</button>
+        <div class="out" id="sOut"></div>
+      </div>
+
+      <div id="tabDec" class="tab-panel hidden">
+        <label for="dIn">Decimal</label>
+        <input type="number" id="dIn" step="any" value="0.375" />
+        <button type="button" class="btn-calc" id="dGo">Convert</button>
+        <div class="out" id="dOut"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Fractions — concepts, operations, and everyday use</h2>
+      <p>
+        A <strong>fraction</strong> expresses a part of a whole: the <strong>numerator</strong> counts pieces and the <strong>denominator</strong> names the size of each piece. When denominators match, addition and subtraction are intuitive — you are adding or removing the same kind of slice. When denominators differ, you first rewrite every term with a <strong>common denominator</strong> (often the product of the two denominators, or the <em>least</em> common multiple for smaller numbers). That step is not “making the problem harder”; it is aligning units so you are not accidentally adding apples to oranges.
+      </p>
+      <p>
+        <strong>Multiplication</strong> of fractions is simpler in notation: multiply numerators for the new top, denominators for the new bottom, then simplify. Intuitively, “a half <em>of</em> a third” is a sixth — multiplication scales one fraction by another. <strong>Division</strong> flips the second fraction (the divisor) and multiplies: dividing by a fraction is the same as multiplying by its reciprocal, which matches how many “chunks” fit into another quantity. Our calculator follows these rules and reduces results with the <strong>GCD</strong>, the largest integer that divides both numerator and denominator. That is how we obtain <strong>lowest terms</strong>.
+      </p>
+      <p>
+        <strong>Proper</strong> fractions stay below one whole; <strong>improper</strong> fractions have a larger top than bottom and represent a value greater than one; <strong>mixed numbers</strong> combine a whole part with a proper fraction. Internally, mixed numbers become improper fractions for calculation, then you can read the result back as a mixed number when it helps. <strong>Negative</strong> fractions follow the same sign rules as integers — a negative in either the numerator or the denominator flips the sign; having both negative makes a positive value.
+      </p>
+      <p>
+        <strong>Why GCD matters:</strong> The Euclidean algorithm repeatedly replaces the larger number by the remainder until one number hits zero; the last non-zero value is the GCD. Dividing both parts of a fraction by the GCD guarantees the fraction cannot be reduced further. Showing these steps is standard in classrooms because it reinforces number sense — you see <em>why</em> 12/18 becomes 2/3, not just the final answer.
+      </p>
+      <p>
+        <strong>Decimal to fraction</strong> on a computer multiplies by a power of ten to clear places past the decimal, then simplifies. Very long decimals may not have a tidy fractional form in floating-point arithmetic; we use a rational approximation suitable for homework-style problems. For exact engineering tolerances, symbolic math libraries are preferable — this page targets study, cooking, and quick checks.
+      </p>
+      <p>
+        <strong>Real-world uses</strong> include recipes (half of ¾ cup), music (time signatures and note lengths), construction (measuring boards in inches and fractions), and probability (chances expressed as favorable over total outcomes). <strong>Common mistakes</strong> include adding numerators without fixing denominators, forgetting to invert when dividing, and canceling terms across a plus sign (only factors common to an entire numerator and denominator may be divided out). Checking your answer by converting to a decimal is a good habit.
+      </p>
+      <p>
+        Pair this tool with our <a href="/calculator/percentage">Percentage calculator</a> when you move between fractional and percent language, and with the <a href="/calculator/scientific">Scientific calculator</a> for logs, powers, and trig where fractions appear inside larger expressions.
+      </p>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <h4>Why does the calculator say division by zero?</h4>
+          <p>A denominator of zero is undefined — there is no fraction with zero as the bottom number. Check both fractions before dividing; dividing by a fraction whose numerator is zero also triggers that message.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Can I enter only a whole number?</h4>
+          <p>Yes — leave the fractional part as zero or use the whole-number box with numerator zero and denominator one.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/percentage">Percentage</a>
+        ·
+        <a href="/calculator/scientific">Scientific Calculator</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      function gcd(a, b) {
+        a = Math.abs(Math.floor(a));
+        b = Math.abs(Math.floor(b));
+        while (b) {
+          var t = b;
+          b = a % b;
+          a = t;
+        }
+        return a || 1;
+      }
+      function toImp(w, n, d) {
+        w = parseInt(w, 10) || 0;
+        n = parseInt(n, 10) || 0;
+        d = parseInt(d, 10) || 1;
+        if (d === 0) return null;
+        var sign = d < 0 ? -1 : 1;
+        d = Math.abs(d);
+        n = w * d * sign + n;
+        return { n: n, d: d };
+      }
+      function simp(n, d) {
+        if (d === 0) return null;
+        var g = gcd(n, d);
+        n /= g;
+        d /= g;
+        if (d < 0) {
+          n = -n;
+          d = -d;
+        }
+        return { n: n, d: d };
+      }
+      function fmtF(x) {
+        if (!x) return 'Error: division by zero or invalid.';
+        var n = x.n,
+          d = x.d;
+        var w = Math.floor(Math.abs(n) / d);
+        var rn = Math.abs(n) % d;
+        if (n < 0 && w > 0) rn = -Math.abs(rn);
+        var s = '';
+        if (w !== 0) s += (n < 0 && rn !== 0 ? '-' : '') + w + ' ';
+        s += Math.abs(rn) + '/' + d;
+        return s.trim() + ' = ' + (n / d).toFixed(8).replace(/\.?0+$/, '');
+      }
+      document.querySelectorAll('.tab').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll('.tab').forEach(function (x) {
+            x.classList.toggle('is-active', x === b);
+          });
+          var t = b.getAttribute('data-tab');
+          document.getElementById('tabOp').classList.toggle('hidden', t !== 'op');
+          document.getElementById('tabSim').classList.toggle('hidden', t !== 'sim');
+          document.getElementById('tabDec').classList.toggle('hidden', t !== 'dec');
+        });
+      });
+      function doOp() {
+        var a = toImp(document.getElementById('f1w').value, document.getElementById('f1n').value, document.getElementById('f1d').value);
+        var b = toImp(document.getElementById('f2w').value, document.getElementById('f2n').value, document.getElementById('f2d').value);
+        var op = document.getElementById('fOp').value;
+        if (!a || !b) {
+          document.getElementById('fOut').textContent = 'Invalid fraction (check denominators ≠ 0).';
+          return;
+        }
+        var an = a.n,
+          ad = a.d,
+          bn = b.n,
+          bd = b.d;
+        var rn, rd;
+        if (op === '+') {
+          rn = an * bd + bn * ad;
+          rd = ad * bd;
+        } else if (op === '-') {
+          rn = an * bd - bn * ad;
+          rd = ad * bd;
+        } else if (op === '*') {
+          rn = an * bn;
+          rd = ad * bd;
+        } else {
+          if (bn === 0) {
+            document.getElementById('fOut').textContent = 'Cannot divide by zero.';
+            return;
+          }
+          rn = an * bd;
+          rd = ad * bn;
+        }
+        var out = simp(rn, rd);
+        document.getElementById('fOut').innerHTML =
+          '<p><strong>Result:</strong> ' +
+          fmtF(out) +
+          '</p><p class="hint">Steps: combine using common denominator or product rule, then divide by GCD(' +
+          Math.abs(rn) +
+          ',' +
+          Math.abs(rd) +
+          ') to simplify.</p>';
+      }
+      document.getElementById('fGo').addEventListener('click', doOp);
+      ['f1w', 'f1n', 'f1d', 'f2w', 'f2n', 'f2d', 'fOp'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', doOp);
+        document.getElementById(id).addEventListener('change', doOp);
+      });
+      document.getElementById('sN').addEventListener('input', function () {
+        document.getElementById('sGo').click();
+      });
+      document.getElementById('sD').addEventListener('input', function () {
+        document.getElementById('sGo').click();
+      });
+      document.getElementById('sGo').addEventListener('click', function () {
+        var n = parseInt(document.getElementById('sN').value, 10);
+        var d = parseInt(document.getElementById('sD').value, 10);
+        var g = gcd(n, d);
+        var out = simp(n, d);
+        document.getElementById('sOut').innerHTML =
+          '<p><strong>Reduced:</strong> ' +
+          fmtF(out) +
+          '</p><p class="hint">GCD(' +
+          Math.abs(n) +
+          ',' +
+          Math.abs(d) +
+          ') = ' +
+          g +
+          '.</p>';
+      });
+      document.getElementById('dIn').addEventListener('input', function () {
+        document.getElementById('dGo').click();
+      });
+      document.getElementById('dGo').addEventListener('click', function () {
+        var x = parseFloat(document.getElementById('dIn').value);
+        if (isNaN(x)) return;
+        var prec = 1e8;
+        var n = Math.round(x * prec);
+        var d = prec;
+        var out = simp(n, d);
+        document.getElementById('dOut').innerHTML = '<p><strong>≈</strong> ' + fmtF(out) + ' (rational approximation)</p>';
+      });
+      doOp();
+      document.getElementById('sGo').click();
+      document.getElementById('dGo').click();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 17px; color: var(--text-muted); max-width: 700px; margin: 0 auto 20px; line-height: 1.6; }
+    .calc-section { padding: 24px 0 40px; }
+    .calc-section .container { max-width: 560px; }
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .tab { padding: 10px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--card); font-weight: 600; cursor: pointer; }
+    .tab.is-active { border-color: var(--blue); color: var(--blue); }
+    .tab-panel { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; box-shadow: var(--shadow); }
+    .hidden { display: none !important; }
+    .frac-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+    .frac { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; }
+    .frac .bar { width: 100%; border-top: 2px solid var(--text); margin: 2px 0; }
+    .frac input.num, .frac input.den { width: 72px; text-align: center; padding: 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 16px; }
+    input.small { width: 72px; padding: 8px; }
+    #fOp { font-size: 20px; padding: 8px 12px; margin: 8px 0; }
+    .btn-calc { margin-top: 12px; padding: 10px 20px; border-radius: var(--radius-sm); background: var(--blue); color: #fff; border: none; font-weight: 600; cursor: pointer; }
+    .out { margin-top: 16px; font-size: 15px; line-height: 1.6; }
+    .hint { font-size: 13px; color: var(--text-muted); }
+    .edu { padding: 36px 0 48px; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
+    .edu a { color: var(--blue); font-weight: 600; }
+    .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .related { text-align: center; padding-bottom: 48px; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+    .faq { padding: 0 0 32px; }
+    .faq .container { max-width: 760px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 10px; }
+    .faq-item h4 { font-size: 15px; margin-bottom: 6px; }
+    .faq-item p { font-size: 14px; color: var(--text-muted); margin: 0; line-height: 1.55; }
+  </style>
+</MainLayout>

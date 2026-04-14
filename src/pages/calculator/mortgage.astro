@@ -1,0 +1,341 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
+
+const canonical = 'https://doitswift.com/calculator/mortgage/';
+const site = 'https://doitswift.com';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Mortgage Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      description: 'US-style mortgage payment calculator with PITI, PMI, HOA, amortization, and total cost.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        { '@type': 'Question', name: 'What is PITI?', acceptedAnswer: { '@type': 'Answer', text: 'Principal, Interest, Taxes, and Insurance — the main components of a typical monthly housing payment.' } },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: site + '/' },
+        { '@type': 'ListItem', position: 2, name: 'Calculators', item: site + '/calculator/' },
+        { '@type': 'ListItem', position: 3, name: 'Mortgage Calculator', item: canonical },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Mortgage Calculator — Calculate Monthly Payment & Total Cost | DoItSwift"
+  description="Mortgage calculator with principal & interest, property tax, insurance, PMI, and HOA. US-focused defaults; amortization and cost breakdown."
+  keywords="mortgage calculator, home mortgage calculator, mortgage payment calculator, monthly mortgage calculator"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Mortgage Calculator</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Mortgage Calculator</h1>
+      <p class="subtitle">
+        Estimate <strong>monthly P&amp;I</strong> plus <strong>taxes, insurance, PMI, and HOA</strong> — common US mortgage structure. For Indian home loans with prepayment options, use our <a href="/calculator/home-loan">Home Loan Calculator</a>.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <p class="locale-note container">
+    This calculator uses <strong>US conventions</strong> (PMI, property tax % of home value, etc.). For Indian home loan calculations with prepayment options, see our <a href="/calculator/home-loan">Home Loan Calculator</a>.
+  </p>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label for="mgCur">Currency (display)</label>
+          <select id="mgCur" aria-label="Currency">
+            {CALCULATOR_CURRENCY_OPTIONS.map((o) => (
+              <option value={o.code} selected={o.code === 'USD'}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div class="field">
+          <label for="mgPrice">Home price</label>
+          <input type="number" id="mgPrice" min="50000" step="1000" value="300000" />
+        </div>
+        <div class="field">
+          <label>Down payment</label>
+          <div class="seg">
+            <label><input type="radio" name="mgDpT" value="pct" checked /> Percent</label>
+            <label><input type="radio" name="mgDpT" value="usd" /> Fixed amount</label>
+          </div>
+          <input type="number" id="mgDp" min="0" step="1000" value="20" />
+          <span id="mgDpHint" class="field-hint">Percent of home price</span>
+        </div>
+        <div class="field">
+          <label for="mgYears">Loan term (years)</label>
+          <select id="mgYears">
+            <option value="15">15</option>
+            <option value="30" selected>30</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="mgRate">Interest rate (% p.a.)</label>
+          <input type="number" id="mgRate" min="0.1" max="20" step="0.01" value="6.5" />
+        </div>
+        <div class="field">
+          <label for="mgTax">Property tax (% of home price / year)</label>
+          <input type="number" id="mgTax" min="0" max="5" step="0.01" value="1.2" />
+        </div>
+        <div class="field">
+          <label for="mgIns">Home insurance (/ year)</label>
+          <input type="number" id="mgIns" min="0" step="50" value="1200" />
+        </div>
+        <div class="field">
+          <label for="mgHoa">HOA (/ month)</label>
+          <input type="number" id="mgHoa" min="0" step="10" value="0" />
+        </div>
+        <div class="field">
+          <label for="mgPmi">PMI (% of loan / year, if down &lt; 20%)</label>
+          <input type="number" id="mgPmi" min="0" max="2" step="0.05" value="0.5" />
+        </div>
+      </div>
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <div class="result-hero" id="mgPi">—</div>
+        <p class="result-label">Principal &amp; interest / month</p>
+        <div class="result-hero result-hero--sub" id="mgTot">—</div>
+        <p class="result-label">Total monthly payment (PITI + PMI + HOA)</p>
+        <div class="result-grid">
+          <div><div class="result-sub" id="mgInt">—</div><div class="result-caption">Total interest (30y)</div></div>
+          <div><div class="result-sub" id="mgCost">—</div><div class="result-caption">Total paid (P&amp;I only)</div></div>
+        </div>
+        <p class="result-note" id="mgPmiNote"></p>
+        <div class="bar-stack" role="img" aria-label="Payment breakdown">
+          <div class="bar-slice bar-pi" id="mgBarPi"></div>
+          <div class="bar-slice bar-tax" id="mgBarTax"></div>
+          <div class="bar-slice bar-ins" id="mgBarIns"></div>
+          <div class="bar-slice bar-pmi" id="mgBarPmi"></div>
+          <div class="bar-slice bar-hoa" id="mgBarHoa"></div>
+        </div>
+        <ul class="bar-legend" id="mgLeg"></ul>
+        <details class="calc-details">
+          <summary>Yearly amortization (principal &amp; interest)</summary>
+          <div class="table-wrap"><table><thead><tr><th>Year</th><th>Principal</th><th>Interest</th><th>Balance</th></tr></thead><tbody id="mgTable"></tbody></table></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Mortgages — US terminology and trade-offs</h2>
+      <p>
+        A <strong>mortgage</strong> is a loan secured by real estate; in the United States the word is standard, while in India many people say <strong>home loan</strong> for a similar product. Monthly payments often bundle <strong>PITI</strong>: Principal and Interest on the loan, property Taxes, and homeowners Insurance. <strong>PMI</strong> (Private Mortgage Insurance) may apply when the down payment is below 20% on conventional loans — it protects the lender and adds to your monthly cost until you have enough equity.
+      </p>
+      <p>
+        <strong>15-year vs 30-year:</strong> shorter terms mean higher monthly P&amp;I but far less total interest. <strong>Fixed vs adjustable (ARM):</strong> fixed rates give predictability; ARMs can start lower but reset with market rates. <strong>Refinancing</strong> replaces your loan — often to lower the rate or change term — but closing costs matter; break-even analysis is essential.
+      </p>
+      <p>
+        In the US, <strong>mortgage interest</strong> may be tax-deductible for itemizers subject to limits and law changes — this is not tax advice; consult a CPA. <strong>First-time buyer mistakes</strong> include ignoring PMI, underestimating maintenance, and looking only at P&amp;I instead of full housing cost.
+      </p>
+      <p>
+        Compare with our <a href="/calculator/emi">EMI</a> and <a href="/calculator/home-loan">Home Loan</a> calculators for India-style schedules, and <a href="/calculator/compound-interest">Compound Interest</a> for wealth growth alongside debt decisions.
+      </p>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/emi">EMI Calculator</a>
+        ·
+        <a href="/calculator/home-loan">Home Loan</a>
+        ·
+        <a href="/calculator/compound-interest">Compound Interest</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline define:vars={{ LOCALE_BY_CURRENCY }}>
+    (function () {
+      function localeForCurrency(code) {
+        return LOCALE_BY_CURRENCY[code] || 'en-US';
+      }
+      function makeFmt() {
+        var code = document.getElementById('mgCur').value || 'USD';
+        return new Intl.NumberFormat(localeForCurrency(code), { style: 'currency', currency: code, maximumFractionDigits: 0 });
+      }
+      function emi(P, annual, months) {
+        var r = annual / 100 / 12;
+        if (months <= 0) return 0;
+        if (r === 0) return P / months;
+        var p = Math.pow(1 + r, months);
+        return (P * r * p) / (p - 1);
+      }
+      function run() {
+        var fmt = makeFmt();
+        var price = parseFloat(document.getElementById('mgPrice').value) || 0;
+        var dpType = document.querySelector('input[name="mgDpT"]:checked').value;
+        var dpRaw = parseFloat(document.getElementById('mgDp').value) || 0;
+        var down = dpType === 'pct' ? (price * dpRaw) / 100 : dpRaw;
+        down = Math.min(down, price * 0.99);
+        var loan = Math.max(0, price - down);
+        var yrs = parseInt(document.getElementById('mgYears').value, 10) || 30;
+        var n = yrs * 12;
+        var rate = parseFloat(document.getElementById('mgRate').value) || 0;
+        var taxPct = parseFloat(document.getElementById('mgTax').value) || 0;
+        var insY = parseFloat(document.getElementById('mgIns').value) || 0;
+        var hoa = parseFloat(document.getElementById('mgHoa').value) || 0;
+        var pmiPct = parseFloat(document.getElementById('mgPmi').value) || 0;
+        var E = emi(loan, rate, n);
+        var taxM = (price * (taxPct / 100)) / 12;
+        var insM = insY / 12;
+        var ltv = price > 0 ? down / price : 1;
+        var needPmi = ltv < 0.2 && loan > 0;
+        var pmiM = needPmi ? (loan * (pmiPct / 100)) / 12 : 0;
+        var tot = E + taxM + insM + pmiM + hoa;
+        var totalInt = E * n - loan;
+        document.getElementById('mgPi').textContent = fmt.format(Math.round(E));
+        document.getElementById('mgTot').textContent = fmt.format(Math.round(tot));
+        document.getElementById('mgInt').textContent = fmt.format(Math.round(totalInt));
+        document.getElementById('mgCost').textContent = fmt.format(Math.round(E * n));
+        document.getElementById('mgPmiNote').textContent = needPmi
+          ? 'PMI applied (down payment under 20%).'
+          : 'No PMI in this estimate (20%+ down or zero PMI rate).';
+        var max = tot || 1;
+        document.getElementById('mgBarPi').style.flex = E / max;
+        document.getElementById('mgBarTax').style.flex = taxM / max;
+        document.getElementById('mgBarIns').style.flex = insM / max;
+        document.getElementById('mgBarPmi').style.flex = pmiM / max;
+        document.getElementById('mgBarHoa').style.flex = hoa / max;
+        document.getElementById('mgLeg').innerHTML =
+          '<li>P&amp;I: ' +
+          fmt.format(Math.round(E)) +
+          '</li><li>Tax: ' +
+          fmt.format(Math.round(taxM)) +
+          '</li><li>Insurance: ' +
+          fmt.format(Math.round(insM)) +
+          '</li><li>PMI: ' +
+          fmt.format(Math.round(pmiM)) +
+          '</li><li>HOA: ' +
+          fmt.format(Math.round(hoa)) +
+          '</li>';
+        var bal = loan;
+        var r = rate / 100 / 12;
+        var tbody = document.getElementById('mgTable');
+        tbody.innerHTML = '';
+        var yPrin = 0,
+          yInt = 0,
+          y = 1;
+        for (var m = 1; m <= n; m++) {
+          var iP = bal * r;
+          var pP = E - iP;
+          bal -= pP;
+          yPrin += pP;
+          yInt += iP;
+          if (m % 12 === 0 || m === n) {
+            var tr = document.createElement('tr');
+            tr.innerHTML =
+              '<td>' +
+              y +
+              '</td><td>' +
+              fmt.format(Math.round(yPrin)) +
+              '</td><td>' +
+              fmt.format(Math.round(yInt)) +
+              '</td><td>' +
+              fmt.format(Math.max(0, Math.round(bal))) +
+              '</td>';
+            tbody.appendChild(tr);
+            y++;
+            yPrin = 0;
+            yInt = 0;
+          }
+        }
+      }
+      document.querySelectorAll('input[name="mgDpT"]').forEach(function (el) {
+        el.addEventListener('change', function () {
+          var pct = document.querySelector('input[name="mgDpT"]:checked').value === 'pct';
+          document.getElementById('mgDpHint').textContent = pct ? 'Percent of home price' : 'Fixed amount in selected currency';
+          document.getElementById('mgDp').value = pct ? '20' : '60000';
+          run();
+        });
+      });
+      document.getElementById('mgCur').addEventListener('change', run);
+      ['mgPrice', 'mgDp', 'mgYears', 'mgRate', 'mgTax', 'mgIns', 'mgHoa', 'mgPmi'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', run);
+      });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 17px; color: var(--text-muted); max-width: 720px; margin: 0 auto 16px; line-height: 1.6; }
+    .subtitle a { color: var(--blue); }
+    .locale-note { font-size: 14px; color: var(--text-muted); background: var(--blue-light); padding: 14px 18px; border-radius: var(--radius); max-width: 900px; margin: 0 auto 8px; border: 1px solid var(--border); }
+    :global([data-theme='dark']) .locale-note { background: rgba(0, 102, 255, 0.12); }
+    .locale-note a { color: var(--blue); font-weight: 600; }
+    .calc-section { padding: 24px 0 40px; }
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 960px; align-items: start; }
+    @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
+    .calc-inputs, .calc-results { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--shadow); }
+    .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    .field input, .field select { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
+    .seg { display: flex; gap: 12px; margin-bottom: 8px; font-size: 14px; }
+    .field-hint { font-size: 12px; color: var(--text-muted); display: block; margin-top: 4px; }
+    .result-hero { font-size: 2rem; font-weight: 800; color: var(--blue); }
+    .result-hero--sub { font-size: 1.5rem; margin-top: 8px; }
+    .result-label { font-size: 13px; color: var(--text-muted); margin: 4px 0 12px; }
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px; }
+    .result-sub { font-size: 1.15rem; font-weight: 700; }
+    .result-caption { font-size: 12px; color: var(--text-muted); }
+    .result-note { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+    .bar-stack { display: flex; height: 28px; border-radius: 6px; overflow: hidden; margin: 12px 0; }
+    .bar-slice { min-width: 2px; }
+    .bar-pi { background: var(--blue); }
+    .bar-tax { background: #8b5cf6; }
+    .bar-ins { background: #10b981; }
+    .bar-pmi { background: #f59e0b; }
+    .bar-hoa { background: #64748b; }
+    .bar-legend { list-style: none; margin: 0; padding: 0; font-size: 12px; color: var(--text-muted); }
+    .bar-legend li { margin-bottom: 4px; }
+    .calc-details summary { cursor: pointer; font-weight: 600; }
+    .table-wrap { overflow: auto; max-height: 240px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 8px; border-bottom: 1px solid var(--border); text-align: right; }
+    th:first-child, td:first-child { text-align: left; }
+    .edu { padding: 36px 0 48px; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
+    .edu a { color: var(--blue); font-weight: 600; }
+    .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .related { text-align: center; padding-bottom: 48px; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

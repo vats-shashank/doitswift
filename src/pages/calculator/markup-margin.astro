@@ -1,0 +1,346 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
+
+const canonical = 'https://doitswift.com/calculator/markup-margin/';
+const site = 'https://doitswift.com';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Markup & Margin Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Convert between markup and margin; selling price from cost; margin from sale; bulk pricing with currency switch.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Is markup the same as margin?',
+          acceptedAnswer: { '@type': 'Answer', text: 'No. Markup is profit divided by cost; margin is profit divided by selling price. A 50% markup equals about 33.3% margin.' },
+        },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: site + '/' },
+        { '@type': 'ListItem', position: 2, name: 'Calculators', item: site + '/calculator/' },
+        { '@type': 'ListItem', position: 3, name: 'Markup & Margin Calculator', item: canonical },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Markup & Margin Calculator — Calculate Profit & Selling Price | DoItSwift"
+  description="Find selling price from cost and markup, or margin from cost and sale, or max cost from target margin. Bulk mode with your choice of currency."
+  keywords="markup calculator, profit margin calculator, gross margin calculator, retail markup calculator"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Markup &amp; Margin</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Markup &amp; Margin Calculator</h1>
+      <p class="subtitle">
+        <strong>Markup</strong> is profit on <em>cost</em>; <strong>margin</strong> is profit on <em>selling price</em> — the most confused pair in retail. Choose a <strong>currency</strong> and pick a mode below.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> Four modes</span>
+        <span><span class="check">✓</span> Bulk pricing</span>
+        <span><span class="check">✓</span> Instant</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container">
+      <div class="curr-row">
+        <label for="mmCur">Currency</label>
+        <select id="mmCur" aria-label="Currency">
+          {CALCULATOR_CURRENCY_OPTIONS.map((o) => (
+            <option value={o.code} selected={o.code === 'INR'}>
+              {o.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div class="tabs" role="tablist">
+        <button type="button" class="tab is-active" data-tab="m1" role="tab">Selling price</button>
+        <button type="button" class="tab" data-tab="m2" role="tab">Margin from sale</button>
+        <button type="button" class="tab" data-tab="m3" role="tab">Cost from margin</button>
+        <button type="button" class="tab" data-tab="m4" role="tab">Bulk pricing</button>
+      </div>
+
+      <div id="panel1" class="panel">
+        <div class="calc-layout">
+          <div class="calc-inputs">
+            <div class="field"><label for="mmC1">Cost price</label><input type="number" id="mmC1" min="0" step="0.01" value="1000" /></div>
+            <div class="field"><label for="mmMk1">Markup %</label><input type="number" id="mmMk1" min="0" step="0.1" value="40" /></div>
+          </div>
+          <div class="calc-results" aria-live="polite">
+            <div class="big" id="mmOut1">—</div>
+            <p class="sub" id="mmSub1"></p>
+            <div class="bar-wrap"><div class="bar-in" id="mmBar1"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="panel2" class="panel hidden">
+        <div class="calc-layout">
+          <div class="calc-inputs">
+            <div class="field"><label for="mmC2">Cost price</label><input type="number" id="mmC2" min="0" step="0.01" value="800" /></div>
+            <div class="field"><label for="mmS2">Selling price</label><input type="number" id="mmS2" min="0" step="0.01" value="1200" /></div>
+          </div>
+          <div class="calc-results">
+            <div class="big" id="mmOut2">—</div>
+            <p class="sub" id="mmSub2"></p>
+            <div class="bar-wrap"><div class="bar-in" id="mmBar2"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="panel3" class="panel hidden">
+        <div class="calc-layout">
+          <div class="calc-inputs">
+            <div class="field"><label for="mmS3">Selling price</label><input type="number" id="mmS3" min="0" step="0.01" value="1500" /></div>
+            <div class="field"><label for="mmMar3">Target margin %</label><input type="number" id="mmMar3" min="0" max="99.99" step="0.1" value="35" /></div>
+          </div>
+          <div class="calc-results">
+            <div class="big" id="mmOut3">—</div>
+            <p class="sub" id="mmSub3"></p>
+            <div class="bar-wrap"><div class="bar-in" id="mmBar3"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="panel4" class="panel hidden">
+        <div class="calc-layout">
+          <div class="calc-inputs">
+            <div class="field"><label for="mmCu">Cost per unit</label><input type="number" id="mmCu" min="0" step="0.01" value="50" /></div>
+            <div class="field"><label for="mmMk4">Markup %</label><input type="number" id="mmMk4" min="0" step="0.1" value="60" /></div>
+            <div class="field"><label for="mmQ">Quantity</label><input type="number" id="mmQ" min="1" step="1" value="200" /></div>
+          </div>
+          <div class="calc-results">
+            <div class="big" id="mmOut4">—</div>
+            <p class="sub" id="mmSub4"></p>
+            <div class="bar-wrap"><div class="bar-in" id="mmBar4"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Markup vs margin — why the confusion costs money</h2>
+      <p>
+        <strong>Markup %</strong> = (Selling − Cost) ÷ Cost × 100. <strong>Margin %</strong> (gross margin here) = (Selling − Cost) ÷ Selling × 100. Because the denominator differs, <strong>50% markup is not 50% margin</strong> — it is roughly <strong>33.3% margin</strong>. Conversely, <strong>50% margin</strong> requires <strong>100% markup</strong> on cost. Procurement and merchandising teams often think in markup (“we need 2× cost on this SKU”); finance and investors usually quote margin (“we run a 45% gross margin business”). When someone says “take 20 points,” clarify whether they mean percentage points of price or of cost — the financial impact is not interchangeable.
+      </p>
+      <p>
+        <strong>Mode 1</strong> answers the classic retail question: given landed cost and a target markup, what shelf price clears the math? <strong>Mode 2</strong> reverses from observed shelf and purchase cost to margin and markup — useful when auditing a competitor’s promotion or a distributor’s quote. <strong>Mode 3</strong> backs into maximum allowable cost if the market will only bear a certain price and you must hold a minimum margin for overhead. <strong>Mode 4</strong> scales units so you can sanity-check a purchase order: total revenue, total profit, and per-unit economics in one view.
+      </p>
+      <p>
+        <strong>Discounts</strong> shrink margin faster than many expect: 10% off a 40% margin product can erase nearly a quarter of gross profit if costs are fixed — model price cuts with margin, not only top-line revenue. Stacking coupons, cashback, and channel fees compounds the effect; many businesses miss net margin because they only tracked list price. <strong>GST / sales tax</strong> may sit on top depending on jurisdiction; this tool is pre-tax margin on your entered prices — add VAT or GST as your invoicing practice requires. B2B quotes sometimes show “margin” on ex-works cost while retail shows tax-inclusive tags — keep your baseline consistent when comparing scenarios.
+      </p>
+      <p>
+        <strong>Pricing strategy</strong> (brief): cost-plus is transparent but ignores willingness-to-pay; value-based pricing starts from customer outcomes; competitive parity anchors to the market. Whatever strategy you choose, translating between markup and margin correctly keeps sales, operations, and finance aligned. Rounding to psychological price points (₹999, $19.99) slightly changes margin — recompute after rounding for material SKUs.
+      </p>
+      <p>
+        <strong>Industry context (very rough):</strong> mass retail might live in ~20–50% gross margin bands; restaurants often show high “cost of goods” percentages; software and digital goods can show 70–90%+ gross margins before R&amp;D and sales spend. These figures are not targets — they illustrate why a “10% discount” hits restaurants harder than SaaS on a percentage-point basis. Use our <a href="/calculator/gst">GST</a>, <a href="/calculator/discount">Discount</a>, and <a href="/calculator/percentage">Percentage</a> calculators alongside this one for full pricing stacks.
+      </p>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-item">
+        <h4>How do I convert margin to markup?</h4>
+        <p>Markup = Margin ÷ (100% − Margin). Example: 25% margin → 25 ÷ 75 ≈ 33.3% markup.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/gst">GST</a>
+        ·
+        <a href="/calculator/discount">Discount</a>
+        ·
+        <a href="/calculator/percentage">Percentage</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline define:vars={{ LOCALE_BY_CURRENCY }}>
+    (function () {
+      var fmt;
+      function localeForCurrency(code) {
+        return LOCALE_BY_CURRENCY[code] || 'en-US';
+      }
+      function syncFmt() {
+        var cur = document.getElementById('mmCur').value;
+        fmt = new Intl.NumberFormat(localeForCurrency(cur), {
+          style: 'currency',
+          currency: cur,
+          maximumFractionDigits: 2,
+        });
+      }
+      function tab(id) {
+        document.querySelectorAll('.tab').forEach(function (b) {
+          b.classList.toggle('is-active', b.getAttribute('data-tab') === id);
+        });
+        document.getElementById('panel1').classList.toggle('hidden', id !== 'm1');
+        document.getElementById('panel2').classList.toggle('hidden', id !== 'm2');
+        document.getElementById('panel3').classList.toggle('hidden', id !== 'm3');
+        document.getElementById('panel4').classList.toggle('hidden', id !== 'm4');
+      }
+      document.querySelectorAll('.tab').forEach(function (b) {
+        b.addEventListener('click', function () {
+          tab(b.getAttribute('data-tab'));
+          run();
+        });
+      });
+      function run() {
+        syncFmt();
+        var c1 = parseFloat(document.getElementById('mmC1').value) || 0;
+        var mk1 = parseFloat(document.getElementById('mmMk1').value) || 0;
+        var sell1 = c1 * (1 + mk1 / 100);
+        var prof1 = sell1 - c1;
+        var mar1 = sell1 > 0 ? (prof1 / sell1) * 100 : 0;
+        document.getElementById('mmOut1').textContent = fmt.format(sell1);
+        document.getElementById('mmSub1').textContent =
+          'Profit ' +
+          fmt.format(prof1) +
+          ' · Margin ' +
+          mar1.toFixed(2) +
+          '% · Markup ' +
+          mk1.toFixed(2) +
+          '%';
+        document.getElementById('mmBar1').style.width = Math.min(100, mar1) + '%';
+
+        var c2 = parseFloat(document.getElementById('mmC2').value) || 0;
+        var s2 = parseFloat(document.getElementById('mmS2').value) || 0;
+        var p2 = s2 - c2;
+        var mar2 = s2 > 0 ? (p2 / s2) * 100 : 0;
+        var mk2 = c2 > 0 ? (p2 / c2) * 100 : 0;
+        document.getElementById('mmOut2').textContent =
+          'Margin ' + mar2.toFixed(2) + '% · Markup ' + (isFinite(mk2) ? mk2.toFixed(2) : '—') + '%';
+        document.getElementById('mmSub2').textContent =
+          'Profit ' + fmt.format(p2) + ' · Cost ' + fmt.format(c2) + ' → Sell ' + fmt.format(s2);
+        document.getElementById('mmBar2').style.width = Math.min(100, Math.max(0, mar2)) + '%';
+
+        var s3 = parseFloat(document.getElementById('mmS3').value) || 0;
+        var mar3 = parseFloat(document.getElementById('mmMar3').value) || 0;
+        var c3 = s3 * (1 - mar3 / 100);
+        var prof3 = s3 - c3;
+        var mk3 = c3 > 0 ? (prof3 / c3) * 100 : 0;
+        document.getElementById('mmOut3').textContent = 'Max cost ' + fmt.format(c3);
+        document.getElementById('mmSub3').textContent =
+          'Profit at that cost: ' +
+          fmt.format(prof3) +
+          ' · Equivalent markup ' +
+          (isFinite(mk3) ? mk3.toFixed(2) : '—') +
+          '%';
+        document.getElementById('mmBar3').style.width = Math.min(100, Math.max(0, mar3)) + '%';
+
+        var cu = parseFloat(document.getElementById('mmCu').value) || 0;
+        var mk4 = parseFloat(document.getElementById('mmMk4').value) || 0;
+        var q = Math.max(1, parseInt(document.getElementById('mmQ').value, 10) || 1);
+        var su = cu * (1 + mk4 / 100);
+        var tc = cu * q;
+        var tr = su * q;
+        var tp = tr - tc;
+        var mar4 = su > 0 ? ((su - cu) / su) * 100 : 0;
+        document.getElementById('mmOut4').textContent = fmt.format(su) + ' / unit';
+        document.getElementById('mmSub4').textContent =
+          'Total cost ' +
+          fmt.format(tc) +
+          ' · Revenue ' +
+          fmt.format(tr) +
+          ' · Profit ' +
+          fmt.format(tp) +
+          ' · Margin ' +
+          mar4.toFixed(2) +
+          '%';
+        document.getElementById('mmBar4').style.width = Math.min(100, mar4) + '%';
+      }
+      function debounce(fn, ms) {
+        var t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      var d = debounce(run, 60);
+      document.getElementById('mmCur').addEventListener('change', d);
+      [
+        'mmC1',
+        'mmMk1',
+        'mmC2',
+        'mmS2',
+        'mmS3',
+        'mmMar3',
+        'mmCu',
+        'mmMk4',
+        'mmQ',
+      ].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', d);
+      });
+      tab('m1');
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 16px; color: var(--text-muted); max-width: 720px; margin: 0 auto 20px; line-height: 1.65; }
+    .calc-section { padding: 24px 0 40px; }
+    .calc-section .container { max-width: 920px; }
+    .curr-row { margin-bottom: 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .curr-row label { font-weight: 600; font-size: 14px; }
+    .curr-row select { padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 15px; }
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+    .tab { padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--card); font-weight: 600; cursor: pointer; font-size: 14px; }
+    .tab.is-active { border-color: var(--blue); color: var(--blue); }
+    .panel.hidden { display: none !important; }
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+    @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
+    .calc-inputs, .calc-results { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--shadow); }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    .field input { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
+    .big { font-size: 1.5rem; font-weight: 800; color: var(--blue); margin: 0; word-break: break-word; }
+    .sub { font-size: 14px; color: var(--text-muted); line-height: 1.55; margin: 10px 0 14px; }
+    .bar-wrap { height: 12px; background: var(--gray-200); border-radius: 999px; overflow: hidden; }
+    .bar-in { height: 100%; width: 0; background: linear-gradient(90deg, #22c55e, var(--blue)); transition: width 0.12s ease; }
+    .edu { padding: 36px 0 24px; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.8; color: var(--text-muted); margin-bottom: 14px; }
+    .edu a { color: var(--blue); font-weight: 600; }
+    .section-title { text-align: center; margin-bottom: 16px; font-size: 1.5rem; }
+    .faq { padding: 0 0 24px; }
+    .faq .container { max-width: 760px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+    .related { text-align: center; padding-bottom: 48px; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

@@ -1,0 +1,753 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/scientific/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Scientific Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description:
+        'Free online scientific calculator with trigonometry, logarithms, powers, parentheses, and math.js evaluation.',
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Scientific Calculator — Online Free with Trig & Functions | DoItSwift"
+  description="Free scientific calculator powered by math.js: order of operations, trig, logs, powers, parentheses, memory, and mobile-friendly layout."
+  keywords="scientific calculator, scientific calculator online, free scientific calculator, online calculator with functions"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.2/math.min.js"></script>
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Scientific Calculator</span>
+  </nav>
+
+  <section class="hero hero--sci">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Scientific Calculator</h1>
+      <p class="subtitle">
+        Free online scientific calculator with trigonometry, logarithms, and advanced functions. Works on mobile and desktop.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Works offline</span>
+        <span><span class="check">✓</span> Mobile-friendly</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section sci-page">
+    <div class="container sci-page-inner">
+      <div class="sci-shell" id="sciShell">
+        <div class="sci-display" aria-live="polite">
+          <div class="sci-expr" id="sciExpr" title="Expression"></div>
+          <div class="sci-result" id="sciResult">0</div>
+        </div>
+        <div class="sci-memrow" id="sciMemRow" aria-live="polite"></div>
+
+        <div class="sci-grid" id="sciGrid" role="group" aria-label="Calculator keypad">
+          <!-- Row 1 -->
+          <button type="button" class="sci-btn sci-btn--mode" id="sciModeBtn" aria-pressed="true" data-action="mode">Deg</button>
+          <button type="button" class="sci-btn sci-btn--mem" data-action="mc" title="Memory clear">MC</button>
+          <button type="button" class="sci-btn sci-btn--mem" data-action="mr" title="Memory recall">MR</button>
+          <button type="button" class="sci-btn sci-btn--mem" data-action="mplus" title="Memory add">M+</button>
+          <button type="button" class="sci-btn sci-btn--mem" data-action="mminus" title="Memory subtract">M−</button>
+
+          <!-- Row 2 -->
+          <button type="button" class="sci-btn sci-btn--fn" data-append="sin(">sin</button>
+          <button type="button" class="sci-btn sci-btn--fn" data-append="cos(">cos</button>
+          <button type="button" class="sci-btn sci-btn--fn" data-append="tan(">tan</button>
+          <button type="button" class="sci-btn sci-btn--fn" data-append="^">^</button>
+          <button type="button" class="sci-btn sci-btn--fn" data-append="sqrt(">√</button>
+
+          <!-- Row 3 -->
+          <button type="button" class="sci-btn sci-btn--fn" data-append="asin(">sin⁻¹</button>
+          <button type="button" class="sci-btn sci-btn--fn" data-append="acos(">cos⁻¹</button>
+          <button type="button" class="sci-btn sci-btn--fn" data-append="atan(">tan⁻¹</button>
+          <button type="button" class="sci-btn sci-btn--fn" data-append="^2">x²</button>
+          <button type="button" class="sci-btn sci-btn--fn" data-append="^3">x³</button>
+
+          <!-- Row 4 -->
+          <button type="button" class="sci-btn sci-btn--fn" data-append="log10(">log</button>
+          <button type="button" class="sci-btn sci-btn--fn" data-append="ln(">ln</button>
+          <button type="button" class="sci-btn sci-btn--fn" data-append="pi">π</button>
+          <button type="button" class="sci-btn sci-btn--fn" data-append="e">e</button>
+          <button type="button" class="sci-btn sci-btn--fn" data-action="fact" title="Factorial">n!</button>
+
+          <!-- Row 5 -->
+          <button type="button" class="sci-btn sci-btn--fn" data-append="(">(</button>
+          <button type="button" class="sci-btn sci-btn--fn" data-append=")">)</button>
+          <button type="button" class="sci-btn sci-btn--fn" data-append="*0.01">%</button>
+          <button type="button" class="sci-btn sci-btn--gray" data-action="bs" title="Backspace">⌫</button>
+          <button type="button" class="sci-btn sci-btn--gray" data-action="ac" title="All clear">AC</button>
+
+          <!-- Row 6 -->
+          <button type="button" class="sci-btn sci-btn--num" data-append="7">7</button>
+          <button type="button" class="sci-btn sci-btn--num" data-append="8">8</button>
+          <button type="button" class="sci-btn sci-btn--num" data-append="9">9</button>
+          <button type="button" class="sci-btn sci-btn--op" data-append="/">÷</button>
+          <button type="button" class="sci-btn sci-btn--gray" data-action="c" title="Clear">C</button>
+
+          <!-- Row 7 -->
+          <button type="button" class="sci-btn sci-btn--num" data-append="4">4</button>
+          <button type="button" class="sci-btn sci-btn--num" data-append="5">5</button>
+          <button type="button" class="sci-btn sci-btn--num" data-append="6">6</button>
+          <button type="button" class="sci-btn sci-btn--op" data-append="*">×</button>
+          <button type="button" class="sci-btn sci-btn--op" data-append="+">+</button>
+
+          <!-- Row 8–9 -->
+          <button type="button" class="sci-btn sci-btn--num" data-append="1">1</button>
+          <button type="button" class="sci-btn sci-btn--num" data-append="2">2</button>
+          <button type="button" class="sci-btn sci-btn--num" data-append="3">3</button>
+          <button type="button" class="sci-btn sci-btn--op" data-append="-">−</button>
+          <button type="button" class="sci-btn sci-btn--eq sci-btn--eq-tall" data-action="eq">=</button>
+
+          <button type="button" class="sci-btn sci-btn--num sci-btn--zero" data-append="0">0</button>
+          <button type="button" class="sci-btn sci-btn--num" data-append=".">.</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">How this calculator works</h2>
+      <p>
+        Expressions are evaluated with <strong>math.js</strong>, which applies correct <strong>order of operations</strong> (PEMDAS/BODMAS), supports <strong>parentheses</strong>, powers (<code>^</code>), and standard functions. Choose <strong>Deg</strong> or <strong>Rad</strong> for sine, cosine, tangent, and their inverses.
+      </p>
+      <p>
+        <strong>log</strong> is base 10; <strong>ln</strong> is the natural logarithm. <strong>n!</strong> inserts a factorial (e.g. <code>5!</code>). Use <strong>MC / MR / M+ / M−</strong> for memory after you have a valid result (evaluate with <strong>=</strong> or use memory keys which evaluate the current line when needed).
+      </p>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/percentage">Percentage</a>
+        ·
+        <a href="/calculator/unit-converter">Unit converter</a>
+        ·
+        <a href="/calculator/compound-interest">Compound interest</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      var raw = '';
+      var mem = 0;
+      var isDeg = true;
+      var debounceTimer;
+
+      function waitMath(cb, tries) {
+        tries = tries || 0;
+        if (typeof math !== 'undefined' && math.evaluate) {
+          cb();
+          return;
+        }
+        if (tries > 80) return;
+        setTimeout(function () {
+          waitMath(cb, tries + 1);
+        }, 50);
+      }
+
+      function trigScope() {
+        var D = Math.PI / 180;
+        var R = 180 / Math.PI;
+        return {
+          sin: function (x) {
+            return Math.sin(isDeg ? x * D : x);
+          },
+          cos: function (x) {
+            return Math.cos(isDeg ? x * D : x);
+          },
+          tan: function (x) {
+            return Math.tan(isDeg ? x * D : x);
+          },
+          asin: function (x) {
+            var r = Math.asin(x);
+            return isDeg ? r * R : r;
+          },
+          acos: function (x) {
+            var r = Math.acos(x);
+            return isDeg ? r * R : r;
+          },
+          atan: function (x) {
+            var r = Math.atan(x);
+            return isDeg ? r * R : r;
+          },
+        };
+      }
+
+      function pretty(s) {
+        if (!s) return '\u00a0';
+        return s.replace(/\*/g, '\u00d7').replace(/\//g, '\u00f7');
+      }
+
+      function fmtResult(v) {
+        if (v === undefined || v === null) return '0';
+        try {
+          if (typeof math !== 'undefined' && math.isComplex && math.isComplex(v)) {
+            return math.format(v, { precision: 12 });
+          }
+        } catch (e) {}
+        var n;
+        try {
+          n = typeof math !== 'undefined' ? math.number(v) : Number(v);
+        } catch (e2) {
+          return String(v);
+        }
+        if (typeof n !== 'number' || !isFinite(n)) {
+          if (typeof n === 'number' && !isFinite(n)) return 'Error';
+          return String(v);
+        }
+        var abs = Math.abs(n);
+        if (abs !== 0 && (abs >= 1e15 || (abs < 1e-10 && abs > 0))) {
+          return n.toExponential(10);
+        }
+        var t = Math.round(n * 1e12) / 1e12;
+        var out = String(t);
+        if (out.length > 16) return parseFloat(n.toPrecision(14)).toString();
+        return out;
+      }
+
+      function evaluateExpr(expr) {
+        var scope = trigScope();
+        return math.evaluate(expr, scope);
+      }
+
+      function updateExprDisplay() {
+        var el = document.getElementById('sciExpr');
+        if (el) el.textContent = pretty(raw) || '\u00a0';
+      }
+
+      function updatePreview() {
+        var resultEl = document.getElementById('sciResult');
+        if (!resultEl) return;
+        var e = raw.trim();
+        if (!e) {
+          resultEl.textContent = '0';
+          return;
+        }
+        try {
+          var v = evaluateExpr(e);
+          resultEl.textContent = fmtResult(v);
+        } catch (err) {
+          resultEl.textContent = '\u2026';
+        }
+      }
+
+      function schedulePreview() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(updatePreview, 60);
+      }
+
+      function append(s) {
+        raw += s;
+        updateExprDisplay();
+        schedulePreview();
+      }
+
+      function backspace() {
+        raw = raw.slice(0, -1);
+        updateExprDisplay();
+        schedulePreview();
+      }
+
+      function allClear() {
+        raw = '';
+        updateExprDisplay();
+        updatePreview();
+      }
+
+      function doEquals() {
+        var e = raw.trim();
+        if (!e) return;
+        try {
+          var v = evaluateExpr(e);
+          raw = fmtResult(v);
+          if (raw === 'Error') raw = '';
+          updateExprDisplay();
+          document.getElementById('sciResult').textContent = fmtResult(v);
+        } catch (err) {
+          document.getElementById('sciResult').textContent = 'Error';
+        }
+      }
+
+      function doFactorial() {
+        var e = raw.trim();
+        if (!e) return;
+        if (/[0-9.)]$/.test(e)) raw += '!';
+        else raw += 'factorial(';
+        updateExprDisplay();
+        schedulePreview();
+      }
+
+      function syncModeButton() {
+        var btn = document.getElementById('sciModeBtn');
+        if (!btn) return;
+        btn.textContent = isDeg ? 'Deg' : 'Rad';
+        btn.setAttribute('aria-pressed', isDeg ? 'true' : 'false');
+      }
+
+      function syncMemHint() {
+        var row = document.getElementById('sciMemRow');
+        if (!row) return;
+        if (mem !== 0) {
+          row.textContent = 'M = ' + fmtResult(mem);
+          row.hidden = false;
+        } else {
+          row.textContent = '';
+          row.hidden = true;
+        }
+      }
+
+      function getEvalNumber() {
+        var e = raw.trim();
+        if (!e) return NaN;
+        try {
+          return math.number(evaluateExpr(e));
+        } catch (err) {
+          return NaN;
+        }
+      }
+
+      function init() {
+        if (document.getElementById('sciGrid').dataset.wired === '1') return;
+        document.getElementById('sciGrid').dataset.wired = '1';
+
+        document.getElementById('sciGrid').addEventListener('click', function (ev) {
+          var btn = ev.target.closest('button');
+          if (!btn) return;
+          var ap = btn.getAttribute('data-append');
+          var act = btn.getAttribute('data-action');
+          if (ap !== null) {
+            append(ap);
+            return;
+          }
+          if (act === 'eq') {
+            doEquals();
+            return;
+          }
+          if (act === 'bs') {
+            backspace();
+            return;
+          }
+          if (act === 'ac') {
+            allClear();
+            return;
+          }
+          if (act === 'c') {
+            backspace();
+            return;
+          }
+          if (act === 'mode') {
+            isDeg = !isDeg;
+            syncModeButton();
+            schedulePreview();
+            return;
+          }
+          if (act === 'fact') {
+            doFactorial();
+            return;
+          }
+          if (act === 'mc') {
+            mem = 0;
+            syncMemHint();
+            return;
+          }
+          if (act === 'mr') {
+            append(String(mem));
+            return;
+          }
+          if (act === 'mplus') {
+            var v = getEvalNumber();
+            if (!isNaN(v)) {
+              mem += v;
+              syncMemHint();
+            }
+            return;
+          }
+          if (act === 'mminus') {
+            var v2 = getEvalNumber();
+            if (!isNaN(v2)) {
+              mem -= v2;
+              syncMemHint();
+            }
+            return;
+          }
+        });
+
+        function shouldIgnoreKeydown(e) {
+          var t = e.target;
+          if (!t) return false;
+          if (t.isContentEditable) return true;
+          var tag = (t.tagName || '').toLowerCase();
+          if (tag === 'textarea') return true;
+          if (tag === 'select') return true;
+          if (tag === 'input') {
+            var ty = (t.type || '').toLowerCase();
+            if (ty === 'button' || ty === 'checkbox' || ty === 'radio' || ty === 'range' || ty === 'file') return false;
+            if (t.readOnly || t.disabled) return false;
+            return true;
+          }
+          return false;
+        }
+
+        function onKey(e) {
+          if (shouldIgnoreKeydown(e)) return;
+          var k = e.key;
+          var code = e.code || '';
+          if (code === 'NumpadDecimal' || (k === '.' && e.location === 3)) {
+            e.preventDefault();
+            append('.');
+            return;
+          }
+          if (/^Numpad[0-9]$/.test(code)) {
+            e.preventDefault();
+            append(code.slice(6));
+            return;
+          }
+          if (code === 'NumpadEnter' || (k === 'Enter' && e.location === 3)) {
+            e.preventDefault();
+            doEquals();
+            return;
+          }
+          if (code === 'NumpadAdd') {
+            e.preventDefault();
+            append('+');
+            return;
+          }
+          if (code === 'NumpadSubtract') {
+            e.preventDefault();
+            append('-');
+            return;
+          }
+          if (code === 'NumpadMultiply') {
+            e.preventDefault();
+            append('*');
+            return;
+          }
+          if (code === 'NumpadDivide') {
+            e.preventDefault();
+            append('/');
+            return;
+          }
+          if (k >= '0' && k <= '9') {
+            e.preventDefault();
+            append(k);
+            return;
+          }
+          if (k === '.') {
+            e.preventDefault();
+            append('.');
+            return;
+          }
+          if (k === '+') {
+            e.preventDefault();
+            append('+');
+            return;
+          }
+          if (k === '-' || k === '\u2212') {
+            e.preventDefault();
+            append('-');
+            return;
+          }
+          if (k === '*') {
+            e.preventDefault();
+            append('*');
+            return;
+          }
+          if (k === '/') {
+            e.preventDefault();
+            append('/');
+            return;
+          }
+          if (k === '(') {
+            e.preventDefault();
+            append('(');
+            return;
+          }
+          if (k === ')') {
+            e.preventDefault();
+            append(')');
+            return;
+          }
+          if (k === '^') {
+            e.preventDefault();
+            append('^');
+            return;
+          }
+          if (k === 'Enter' || k === '=') {
+            e.preventDefault();
+            doEquals();
+            return;
+          }
+          if (k === 'Escape') {
+            e.preventDefault();
+            allClear();
+            return;
+          }
+          if (k === 'Backspace') {
+            e.preventDefault();
+            backspace();
+            return;
+          }
+        }
+
+        if (window.__DoItSwiftSciKey) {
+          document.removeEventListener('keydown', window.__DoItSwiftSciKey);
+        }
+        window.__DoItSwiftSciKey = onKey;
+        document.addEventListener('keydown', onKey);
+
+        syncModeButton();
+        syncMemHint();
+        updateExprDisplay();
+        updatePreview();
+      }
+
+      function boot() {
+        waitMath(init);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', boot);
+      } else {
+        boot();
+      }
+    })();
+  </script>
+
+  <style>
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 16px 0 0;
+      max-width: 960px;
+    }
+    .breadcrumb a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+    .hero {
+      padding: 36px 0 16px;
+      text-align: center;
+    }
+    .hero--sci {
+      padding: 22px 0 8px;
+    }
+    .hero--sci .subtitle {
+      font-size: 16px;
+      margin-bottom: 14px;
+    }
+    .subtitle {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      margin: 0 auto 24px;
+      line-height: 1.55;
+    }
+    .calc-section.sci-page {
+      padding: 8px 0 28px;
+    }
+    .sci-page-inner {
+      display: flex;
+      justify-content: center;
+      max-width: 100%;
+    }
+    .sci-shell {
+      width: 100%;
+      max-width: 380px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .sci-display {
+      background: var(--gray-100);
+      border-radius: 10px;
+      padding: 10px 12px;
+      min-height: 56px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+    }
+    :global([data-theme='dark']) .sci-display {
+      background: var(--gray-200);
+    }
+    .sci-expr {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.3;
+      min-height: 1.3em;
+      word-break: break-all;
+      text-align: right;
+    }
+    .sci-result {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.2;
+      text-align: right;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .sci-memrow {
+      font-size: 11px;
+      color: var(--blue);
+      font-weight: 600;
+      margin: -4px 0 8px;
+      min-height: 1.2em;
+    }
+    .sci-memrow[hidden] {
+      display: none;
+    }
+    .sci-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
+    }
+    .sci-btn {
+      padding: 9px 2px;
+      min-height: 36px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+    }
+    .sci-btn:hover {
+      background: var(--gray-100);
+      transform: translateY(-1px);
+    }
+    .sci-btn:active {
+      transform: translateY(0);
+    }
+    :global([data-theme='dark']) .sci-btn:hover {
+      background: var(--gray-200);
+    }
+    .sci-btn--num {
+      background: var(--card);
+    }
+    .sci-btn--op {
+      background: var(--blue);
+      color: #fff;
+      border-color: var(--blue);
+    }
+    .sci-btn--op:hover {
+      background: var(--blue-dark);
+      border-color: var(--blue-dark);
+      color: #fff;
+    }
+    .sci-btn--fn {
+      background: var(--blue-light);
+      color: var(--blue);
+      border-color: rgba(0, 102, 255, 0.25);
+    }
+    :global([data-theme='dark']) .sci-btn--fn {
+      background: rgba(0, 102, 255, 0.2);
+      border-color: rgba(0, 102, 255, 0.35);
+      color: #93c5fd;
+    }
+    .sci-btn--fn:hover {
+      filter: brightness(0.97);
+      color: var(--blue);
+    }
+    .sci-btn--mem,
+    .sci-btn--gray {
+      background: var(--gray-100);
+      color: var(--text);
+    }
+    :global([data-theme='dark']) .sci-btn--mem,
+    :global([data-theme='dark']) .sci-btn--gray {
+      background: var(--gray-200);
+    }
+    .sci-btn--mode {
+      background: var(--gray-100);
+      font-weight: 600;
+    }
+    .sci-btn--mode[aria-pressed='false'] {
+      background: var(--blue-light);
+      color: var(--blue);
+    }
+    .sci-btn--eq {
+      background: var(--blue);
+      color: #fff;
+      border-color: var(--blue);
+      font-weight: 700;
+    }
+    .sci-btn--eq:hover {
+      background: var(--blue-dark);
+      border-color: var(--blue-dark);
+      color: #fff;
+    }
+    .sci-btn--eq-tall {
+      grid-row: span 2;
+    }
+    .sci-btn--zero {
+      grid-column: span 2;
+    }
+    @media (max-width: 480px) {
+      .hero--sci {
+        padding: 18px 0 6px;
+      }
+      .sci-result {
+        font-size: 19px;
+      }
+      .sci-btn {
+        font-size: 12px;
+        padding: 8px 1px;
+        min-height: 34px;
+      }
+      .sci-shell {
+        max-width: 100%;
+        padding: 10px 10px;
+      }
+    }
+    .edu {
+      padding: 36px 0 48px;
+    }
+    .edu .container {
+      max-width: 760px;
+    }
+    .edu p {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 18px;
+      font-size: 1.5rem;
+    }
+    .related {
+      text-align: center;
+      padding-bottom: 48px;
+    }
+    .related-links a {
+      color: var(--blue);
+      font-weight: 600;
+    }
+  </style>
+</MainLayout>

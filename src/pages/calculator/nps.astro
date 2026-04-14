@@ -1,0 +1,323 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/nps/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'NPS Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'National Pension Scheme corpus estimate, lump sum vs annuity split, and illustrative pension.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is the minimum annuity under NPS?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'At exit, a minimum portion of the corpus must be used to purchase a life annuity; the remainder can be taken as lump sum subject to rules — this tool lets you model the split.',
+          },
+        },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="NPS Calculator 2026 — National Pension Scheme Returns | DoItSwift"
+  description="Estimate NPS maturity corpus, lump sum vs annuity split, illustrative monthly pension, and year-by-year growth — educational model only."
+  keywords="nps calculator, national pension scheme calculator, nps maturity calculator, nps pension calculator"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>NPS Calculator</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>NPS Calculator (National Pension System)</h1>
+      <p class="subtitle">
+        Project your <strong>Tier I</strong> corpus from monthly contributions with compound growth, then split the corpus between <strong>lump sum</strong> and <strong>annuity purchase</strong> and see an illustrative monthly pension. Rules change — verify with PFRDA / your PoP.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <p class="disclaimer container">
+    <strong>Disclaimer:</strong> NPS has regulatory minimums, multiple fund managers, and evolving exit norms. Tax positions depend on salary and regime — treat outputs as learning aids, not tax or product advice.
+  </p>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label for="npsAge">Current age</label>
+          <input type="range" id="npsAgeR" min="18" max="60" step="1" value="30" aria-hidden="true" />
+          <input type="number" id="npsAge" min="18" max="60" step="1" value="30" inputmode="numeric" />
+        </div>
+        <div class="field">
+          <label for="npsRet">Retirement age</label>
+          <input type="range" id="npsRetR" min="55" max="75" step="1" value="60" aria-hidden="true" />
+          <input type="number" id="npsRet" min="55" max="75" step="1" value="60" inputmode="numeric" />
+        </div>
+        <div class="field">
+          <label for="npsMo">Monthly contribution (₹)</label>
+          <input type="range" id="npsMoR" min="500" max="50000" step="500" value="5000" aria-hidden="true" />
+          <input type="number" id="npsMo" min="500" max="50000" step="500" value="5000" inputmode="numeric" />
+        </div>
+        <div class="field">
+          <label for="npsR">Expected annual return (%)</label>
+          <input type="range" id="npsRR" min="6" max="15" step="0.5" value="10" aria-hidden="true" />
+          <input type="number" id="npsR" min="6" max="15" step="0.1" value="10" inputmode="decimal" />
+        </div>
+        <div class="field">
+          <label for="npsAnn">Corpus used for annuity purchase (%)</label>
+          <input type="range" id="npsAnnR" min="40" max="100" step="1" value="40" aria-hidden="true" />
+          <input type="number" id="npsAnn" min="40" max="100" step="1" value="40" inputmode="numeric" />
+          <p class="field-hint">Minimum commonly 40% — adjust to see lump sum vs annuity trade-off.</p>
+        </div>
+        <div class="field">
+          <label for="npsAr">Annuity expected return / payout basis (% p.a.)</label>
+          <input type="range" id="npsArR" min="4" max="10" step="0.5" value="6" aria-hidden="true" />
+          <input type="number" id="npsAr" min="4" max="10" step="0.1" value="6" inputmode="decimal" />
+          <p class="field-hint">Used here as a simple rate to illustrate monthly income from the annuity corpus.</p>
+        </div>
+      </div>
+
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <div class="result-hero" id="npsCorp">₹0</div>
+        <p class="result-label">Estimated corpus at retirement</p>
+        <div class="result-grid">
+          <div><div class="result-sub" id="npsTot">₹0</div><div class="result-caption">Total contributed</div></div>
+          <div><div class="result-sub" id="npsLump">₹0</div><div class="result-caption">Lump sum (est.)</div></div>
+          <div><div class="result-sub" id="npsAcorp">₹0</div><div class="result-caption">Annuity purchase</div></div>
+          <div><div class="result-sub" id="npsPen">₹0</div><div class="result-caption">Illustr. monthly pension</div></div>
+        </div>
+        <p class="tax-note" id="npsTax"></p>
+        <div class="bar-chart" role="img" aria-label="Contributed versus growth">
+          <div class="bar-row"><span class="bar-label">Paid in</span><div class="bar-track"><div class="bar-fill bar-fill--inv" id="npsBarIn"></div></div></div>
+          <div class="bar-row"><span class="bar-label">Growth</span><div class="bar-track"><div class="bar-fill bar-fill--ret" id="npsBarGr"></div></div></div>
+        </div>
+        <details class="calc-details">
+          <summary>Year-by-year corpus (illustrative)</summary>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Year</th><th>Cumulative invested</th><th>Est. corpus</th></tr></thead>
+              <tbody id="npsTable"></tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">NPS basics (India)</h2>
+      <p>
+        <strong>NPS</strong> is a defined-contribution pension system: you invest regularly, choose asset allocation within allowed schemes, and at exit you typically use part of the corpus to buy a <strong>life annuity</strong> and withdraw the rest as lump sum (within regulatory limits). Returns are not guaranteed — we use your assumed growth rate only for illustration.
+      </p>
+      <p>
+        <strong>Tax benefits:</strong> Employee contributions may count within Section 80C limits; an <strong>additional deduction</strong> under <strong>80CCD(1B)</strong> (up to ₹50,000 a year for Tier I) is widely used — confirm eligibility with your CA. Employer contributions have separate treatment.
+      </p>
+      <p>
+        <strong>Tier I vs Tier II:</strong> Tier I is the locked pension account; Tier II is more liquid and does not carry the same bundle of pension-only rules — many people focus on Tier I for long retirement savings.
+      </p>
+      <p>
+        <strong>Compared to PPF / EPF:</strong> PPF is a sovereign small savings product with a known rate rhythm; EPF is salary-linked; NPS is market-linked with pension fund choices — compare liquidity, tax on exit, and annuity requirement before choosing one as “the” vehicle.
+      </p>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner">
+        <div class="affiliate-icon">🏛️</div>
+        <div class="affiliate-content">
+          <h3>Learn the rules</h3>
+          <p>Check PFRDA / CRA portals for current exit and annuity norms.</p>
+        </div>
+        <a href="/calculator/ppf" class="btn btn-orange">PPF calculator →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>Is the pension guaranteed?</h4><p>No — annuity rates and market returns vary; the “pension” line is a simplified illustration.</p></div>
+        <div class="faq-item"><h4>Why doesn’t lump sum show 60%?</h4><p>You control the annuity %; if it is 40%, lump sum is roughly 60% of corpus in a simple split model.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/ppf">PPF</a> · <a href="/calculator/retirement">Retirement</a> · <a href="/calculator/sip">SIP</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      const fmt = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+      function debounce(fn, ms) {
+        let t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      function sipFV(P, annualPct, years) {
+        const r = annualPct / 100 / 12;
+        const n = Math.round(years * 12);
+        if (n <= 0) return 0;
+        if (r === 0) return P * n;
+        return P * ((Math.pow(1 + r, n) - 1) / r) * (1 + r);
+      }
+      function syncRange(id, idR) {
+        document.getElementById(idR).value = document.getElementById(id).value;
+      }
+      function run() {
+        let age = Math.min(60, Math.max(18, parseFloat(document.getElementById('npsAge').value) || 30));
+        let ret = Math.min(75, Math.max(55, parseFloat(document.getElementById('npsRet').value) || 60));
+        if (ret <= age) ret = age + 1;
+        document.getElementById('npsAge').value = age;
+        document.getElementById('npsRet').value = ret;
+        syncRange('npsAge', 'npsAgeR');
+        syncRange('npsRet', 'npsRetR');
+        let mo = Math.min(50000, Math.max(500, parseFloat(document.getElementById('npsMo').value) || 5000));
+        const rate = Math.min(15, Math.max(6, parseFloat(document.getElementById('npsR').value) || 10));
+        let ann = Math.min(100, Math.max(40, parseFloat(document.getElementById('npsAnn').value) || 40));
+        const ar = Math.min(10, Math.max(4, parseFloat(document.getElementById('npsAr').value) || 6));
+        document.getElementById('npsMo').value = mo;
+        syncRange('npsMo', 'npsMoR');
+        document.getElementById('npsR').value = rate;
+        syncRange('npsR', 'npsRR');
+        document.getElementById('npsAnn').value = ann;
+        syncRange('npsAnn', 'npsAnnR');
+        document.getElementById('npsAr').value = ar;
+        syncRange('npsAr', 'npsArR');
+        const yrs = ret - age;
+        const invested = mo * 12 * yrs;
+        const corpus = sipFV(mo, rate, yrs);
+        const growth = Math.max(0, corpus - invested);
+        const lump = corpus * (1 - ann / 100);
+        const acorp = corpus * (ann / 100);
+        const penMo = (acorp * (ar / 100)) / 12;
+        document.getElementById('npsCorp').textContent = fmt.format(Math.round(corpus));
+        document.getElementById('npsTot').textContent = fmt.format(Math.round(invested));
+        document.getElementById('npsLump').textContent = fmt.format(Math.round(lump));
+        document.getElementById('npsAcorp').textContent = fmt.format(Math.round(acorp));
+        document.getElementById('npsPen').textContent = fmt.format(Math.round(penMo));
+        const maxCCD = Math.min(mo * 12, 50000);
+        document.getElementById('npsTax').textContent =
+          '80CCD(1B) extra deduction (Tier I) is capped at ₹50,000/year if fully used — your annual NPS subscription (~' +
+          fmt.format(Math.round(mo * 12)) +
+          ') can count toward that window (illustrative; verify with CA).';
+        const maxB = Math.max(invested, growth, 1);
+        document.getElementById('npsBarIn').style.width = (invested / maxB) * 100 + '%';
+        document.getElementById('npsBarGr').style.width = (growth / maxB) * 100 + '%';
+        const tbody = document.getElementById('npsTable');
+        tbody.innerHTML = '';
+        for (let y = 1; y <= yrs; y++) {
+          const invY = mo * 12 * y;
+          const corY = sipFV(mo, rate, y);
+          const tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td>' + y + '</td><td>' + fmt.format(Math.round(invY)) + '</td><td>' + fmt.format(Math.round(corY)) + '</td>';
+          tbody.appendChild(tr);
+        }
+      }
+      const d = debounce(run, 80);
+      ['npsAge', 'npsRet', 'npsMo', 'npsR', 'npsAnn', 'npsAr'].forEach((id) => document.getElementById(id).addEventListener('input', d));
+      [
+        ['npsAgeR', 'npsAge'],
+        ['npsRetR', 'npsRet'],
+        ['npsMoR', 'npsMo'],
+        ['npsRR', 'npsR'],
+        ['npsAnnR', 'npsAnn'],
+        ['npsArR', 'npsAr'],
+      ].forEach(function (p) {
+        document.getElementById(p[0]).addEventListener('input', function () {
+          document.getElementById(p[1]).value = this.value;
+          d();
+        });
+      });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 17px; color: var(--text-muted); max-width: 700px; margin: 0 auto 22px; line-height: 1.55; }
+    .disclaimer { font-size: 13px; color: var(--text-muted); max-width: 900px; margin: 0 auto 8px; padding: 12px 16px; background: var(--gray-100); border-radius: var(--radius); border: 1px solid var(--border); }
+    [data-theme='dark'] .disclaimer { background: var(--gray-200); }
+    .calc-section { padding: 20px 0 40px; }
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 960px; align-items: start; }
+    @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
+    .calc-inputs, .calc-results { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--shadow); }
+    .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    .field input[type='number'] { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
+    .field input[type='range'] { width: 100%; margin-bottom: 6px; }
+    .field-hint { font-size: 12px; color: var(--text-muted); margin: 6px 0 0; }
+    .result-hero { font-size: 2rem; font-weight: 800; color: var(--blue); }
+    .result-label { font-size: 14px; color: var(--text-muted); margin: 4px 0 14px; }
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+    .result-sub { font-size: 1.1rem; font-weight: 700; }
+    .result-caption { font-size: 11px; color: var(--text-muted); }
+    .tax-note { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px; }
+    .bar-chart { margin: 12px 0; }
+    .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 13px; }
+    .bar-label { width: 56px; color: var(--text-muted); }
+    .bar-track { flex: 1; height: 22px; background: var(--gray-100); border-radius: 6px; overflow: hidden; }
+    [data-theme='dark'] .bar-track { background: var(--gray-200); }
+    .bar-fill { height: 100%; border-radius: 6px; transition: width 0.2s ease; }
+    .bar-fill--inv { background: var(--blue); opacity: 0.9; }
+    .bar-fill--ret { background: var(--green); }
+    .calc-details summary { cursor: pointer; font-weight: 600; }
+    .table-wrap { overflow: auto; max-height: 260px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 8px; border-bottom: 1px solid var(--border); text-align: right; }
+    th:first-child, td:first-child { text-align: left; }
+    .edu { padding: 36px 0; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
+    .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .affiliate { padding: 28px 0; }
+    .affiliate .container { max-width: 900px; }
+    .affiliate-inner { background: linear-gradient(135deg, #ecfdf5, #d1fae5); border: 1px solid #6ee7b7; border-radius: var(--radius-lg); padding: 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    [data-theme='dark'] .affiliate-inner { background: rgba(16, 185, 129, 0.12); border-color: rgba(52, 211, 153, 0.4); }
+    .affiliate-icon { font-size: 36px; }
+    .affiliate-content { flex: 1; min-width: 200px; }
+    .faq { padding: 28px 0 48px; }
+    .faq .container { max-width: 760px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 10px; }
+    .related { text-align: center; padding-bottom: 48px; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

@@ -1,0 +1,395 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
+
+const canonical = 'https://doitswift.com/calculator/retirement/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Retirement Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Estimate retirement corpus, inflation-adjusted expenses, and monthly SIP needed with year-by-year projections.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is the 25× rule?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'A rough rule of thumb: target a corpus about 25 times your first year of annual retirement expenses, assuming a ~4% sustainable withdrawal rate — useful as a sanity check, not a guarantee.',
+          },
+        },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Retirement Calculator — How Much You Need to Retire | DoItSwift"
+  description="Plan retirement in India: inflation-adjusted expenses, corpus using real returns, monthly SIP to bridge the gap, and a year-by-year expense table."
+  keywords="retirement calculator, retirement planning calculator, how much money to retire, retirement corpus calculator india"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Retirement Calculator</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Retirement Calculator</h1>
+      <p class="subtitle">
+        See how inflation lifts future expenses, how large a corpus supports your retirement years, and what monthly SIP could close the gap from today — using growth and inflation assumptions you control.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label for="retCcy">Currency (display)</label>
+          <select id="retCcy" aria-label="Currency">
+            {CALCULATOR_CURRENCY_OPTIONS.map((o) => (
+              <option value={o.code} selected={o.code === 'INR'}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div class="field">
+          <label for="retCurAge">Current age</label>
+          <input type="range" id="retCurAgeR" min="18" max="65" step="1" value="30" aria-hidden="true" />
+          <input type="number" id="retCurAge" min="18" max="65" step="1" value="30" inputmode="numeric" />
+        </div>
+        <div class="field">
+          <label for="retRetAge">Retirement age</label>
+          <input type="range" id="retRetAgeR" min="45" max="75" step="1" value="60" aria-hidden="true" />
+          <input type="number" id="retRetAge" min="45" max="75" step="1" value="60" inputmode="numeric" />
+        </div>
+        <div class="field">
+          <label for="retLife">Life expectancy</label>
+          <input type="range" id="retLifeR" min="60" max="100" step="1" value="85" aria-hidden="true" />
+          <input type="number" id="retLife" min="60" max="100" step="1" value="85" inputmode="numeric" />
+        </div>
+        <div class="field">
+          <label for="retExp">Current monthly expenses</label>
+          <input type="number" id="retExp" min="0" step="1000" value="50000" inputmode="numeric" />
+        </div>
+        <div class="field">
+          <label for="retInf">Expected inflation (% p.a.)</label>
+          <input type="range" id="retInfR" min="4" max="12" step="0.5" value="6" aria-hidden="true" />
+          <input type="number" id="retInf" min="4" max="12" step="0.1" value="6" inputmode="decimal" />
+        </div>
+        <div class="field">
+          <label for="retPre">Pre-retirement return (% p.a.)</label>
+          <input type="range" id="retPreR" min="6" max="15" step="0.5" value="12" aria-hidden="true" />
+          <input type="number" id="retPre" min="6" max="15" step="0.1" value="12" inputmode="decimal" />
+        </div>
+        <div class="field">
+          <label for="retPost">Post-retirement return (% p.a.)</label>
+          <input type="range" id="retPostR" min="4" max="10" step="0.5" value="7" aria-hidden="true" />
+          <input type="number" id="retPost" min="4" max="10" step="0.1" value="7" inputmode="decimal" />
+        </div>
+        <div class="field">
+          <label for="retSave">Current savings / investments (optional)</label>
+          <input type="number" id="retSave" min="0" step="10000" value="0" inputmode="numeric" />
+        </div>
+      </div>
+
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <div class="result-hero" id="retCorpus">—</div>
+        <p class="result-label">Total retirement corpus required (est.)</p>
+        <div class="result-grid">
+          <div>
+            <div class="result-sub" id="retFutMo">—</div>
+            <div class="result-caption">Monthly expense at retirement</div>
+          </div>
+          <div>
+            <div class="result-sub" id="retSip">—</div>
+            <div class="result-caption">Monthly SIP needed (est.)</div>
+          </div>
+        </div>
+        <p class="rule-hint" id="ret25x"></p>
+        <div class="bar-chart" role="img" aria-label="Working years versus retirement years">
+          <div class="bar-row"><span class="bar-label">Work</span><div class="bar-track"><div class="bar-fill bar-fill--inv" id="retBarWork"></div></div></div>
+          <div class="bar-row"><span class="bar-label">Retire</span><div class="bar-track"><div class="bar-fill bar-fill--ret" id="retBarRet"></div></div></div>
+        </div>
+        <details class="calc-details">
+          <summary>Year-by-year expense projection (to retirement)</summary>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Year</th><th>Monthly expense</th><th>Annual expense</th></tr></thead>
+              <tbody id="retTable"></tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Retirement planning — concepts</h2>
+      <p>
+        <strong>The 25× rule:</strong> If you expect to withdraw about 4% of your corpus in the first year of retirement, needing roughly 25× your <em>first year’s annual expenses</em> is a quick cross-check. Real life adds taxes, medical shocks, and return variability — use it as a conversation starter, not a guarantee.
+      </p>
+      <p>
+        <strong>Why many Indians underestimate needs:</strong> Longevity is rising, medical inflation often runs ahead of CPI, and lifestyle costs do not always shrink after work. Building a buffer beyond the minimum spreadsheet number reduces the risk of outliving assets.
+      </p>
+      <p>
+        <strong>Inflation compounds on expenses:</strong> Even 6% inflation doubles costs in ~12 years. That is why “₹50,000/month today” becomes a much larger number at age 60 — the calculator shows that explicitly in the table.
+      </p>
+      <p>
+        <strong>Start early:</strong> Pre-retirement returns apply to both your existing corpus and a disciplined SIP. More years mean more compounding cycles before you switch to a typically lower post-retirement allocation (this tool lets you set both return levels separately).
+      </p>
+      <p>
+        <strong>Balance today vs tomorrow:</strong> Not every rupee must go to retirement — but knowing the SIP required helps you decide what is sustainable after non-negotiable goals and emergency funds.
+      </p>
+      <p>
+        <strong>Math note:</strong> Corpus here is the present value at retirement of annual expenses that grow with inflation, discounted at your post-retirement return — a standard inflation-indexed annuity model. Actual sequencing risk, fees, and taxes are not modeled.
+      </p>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner">
+        <div class="affiliate-icon">📈</div>
+        <div class="affiliate-content">
+          <h3>Stay invested for the long run</h3>
+          <p>Use a SEBI-registered platform for mutual funds; review asset mix as you near retirement.</p>
+        </div>
+        <a href="https://groww.in/?ref=doitswift" class="btn btn-orange" target="_blank" rel="sponsored noopener noreferrer">Groww →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>Is the corpus guaranteed?</h4><p>No — returns and inflation are assumptions. Revisit them every few years.</p></div>
+        <div class="faq-item"><h4>Why is my SIP so high?</h4><p>A short runway to retirement or high real expenses raises required savings. Try adjusting retirement age or expense growth modestly to see sensitivity.</p></div>
+        <div class="faq-item"><h4>Does this include pension or rental income?</h4><p>No — add those mentally or reduce expense inputs to reflect other income.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/sip">SIP Calculator</a> · <a href="/calculator/ppf">PPF Calculator</a> · <a href="/calculator/fd">FD Calculator</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline define:vars={{ LOCALE_BY_CURRENCY }}>
+    (function () {
+      function localeForCurrency(code) {
+        return LOCALE_BY_CURRENCY[code] || 'en-US';
+      }
+      function makeFmt() {
+        var code = document.getElementById('retCcy').value || 'INR';
+        return new Intl.NumberFormat(localeForCurrency(code), { style: 'currency', currency: code, maximumFractionDigits: 0 });
+      }
+      function debounce(fn, ms) {
+        let t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      function pvRetirementCorpus(A, g, r, n) {
+        if (n <= 0) return 0;
+        if (Math.abs(r - g) < 1e-9) {
+          let s = 0;
+          for (let t = 1; t <= n; t++) s += (A * Math.pow(1 + g, t - 1)) / Math.pow(1 + r, t);
+          return s;
+        }
+        return (A * (1 - Math.pow((1 + g) / (1 + r), n))) / (r - g);
+      }
+      function sipPayment(target, annualPct, years) {
+        const r = annualPct / 100 / 12;
+        const n = Math.round(years * 12);
+        if (n <= 0 || target <= 0) return 0;
+        if (r === 0) return target / n;
+        const factor = ((Math.pow(1 + r, n) - 1) / r) * (1 + r);
+        return target / factor;
+      }
+      function syncRange(inp, rng) {
+        rng.value = inp.value;
+      }
+      function run() {
+        const fmt = makeFmt();
+        let cur = Math.min(65, Math.max(18, parseFloat(document.getElementById('retCurAge').value) || 30));
+        let ret = Math.min(75, Math.max(45, parseFloat(document.getElementById('retRetAge').value) || 60));
+        let life = Math.min(100, Math.max(60, parseFloat(document.getElementById('retLife').value) || 85));
+        if (ret <= cur) ret = cur + 1;
+        if (life <= ret) life = ret + 1;
+        document.getElementById('retCurAge').value = cur;
+        document.getElementById('retRetAge').value = ret;
+        document.getElementById('retLife').value = life;
+        syncRange(document.getElementById('retCurAge'), document.getElementById('retCurAgeR'));
+        syncRange(document.getElementById('retRetAge'), document.getElementById('retRetAgeR'));
+        syncRange(document.getElementById('retLife'), document.getElementById('retLifeR'));
+
+        const exp = Math.max(0, parseFloat(document.getElementById('retExp').value) || 0);
+        const inf = Math.min(12, Math.max(4, parseFloat(document.getElementById('retInf').value) || 6));
+        const pre = Math.min(15, Math.max(6, parseFloat(document.getElementById('retPre').value) || 12));
+        const post = Math.min(10, Math.max(4, parseFloat(document.getElementById('retPost').value) || 7));
+        const save = Math.max(0, parseFloat(document.getElementById('retSave').value) || 0);
+        document.getElementById('retInf').value = inf;
+        document.getElementById('retPre').value = pre;
+        document.getElementById('retPost').value = post;
+        syncRange(document.getElementById('retInf'), document.getElementById('retInfR'));
+        syncRange(document.getElementById('retPre'), document.getElementById('retPreR'));
+        syncRange(document.getElementById('retPost'), document.getElementById('retPostR'));
+
+        const yrsWork = ret - cur;
+        const yrsRet = life - ret;
+        const g = inf / 100;
+        const r = post / 100;
+        const futMo = exp * Math.pow(1 + g, yrsWork);
+        const A = futMo * 12;
+        const corpus = yrsRet <= 0 ? 0 : pvRetirementCorpus(A, g, r, yrsRet);
+
+        const fvSave = save * Math.pow(1 + pre / 100, yrsWork);
+        const need = Math.max(0, corpus - fvSave);
+        const sip = sipPayment(need, pre, yrsWork);
+
+        document.getElementById('retCorpus').textContent = fmt.format(Math.round(corpus));
+        document.getElementById('retFutMo').textContent = fmt.format(Math.round(futMo));
+        document.getElementById('retSip').textContent = fmt.format(Math.round(sip));
+        const ann25 = futMo * 12;
+        const rule25 = ann25 * 25;
+        document.getElementById('ret25x').textContent =
+          '25× rule check: 25 × first-year annual expenses ≈ ' + fmt.format(Math.round(rule25)) + ' (compare to corpus above).';
+
+        const maxY = Math.max(yrsWork, yrsRet, 1);
+        document.getElementById('retBarWork').style.width = (yrsWork / maxY) * 100 + '%';
+        document.getElementById('retBarRet').style.width = (yrsRet / maxY) * 100 + '%';
+
+        const tbody = document.getElementById('retTable');
+        tbody.innerHTML = '';
+        for (let y = 0; y <= yrsWork; y++) {
+          const mo = exp * Math.pow(1 + g, y);
+          const tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td>' +
+            y +
+            '</td><td>' +
+            fmt.format(Math.round(mo)) +
+            '</td><td>' +
+            fmt.format(Math.round(mo * 12)) +
+            '</td>';
+          tbody.appendChild(tr);
+        }
+      }
+      const debRun = debounce(run, 80);
+      document.getElementById('retCcy').addEventListener('change', debRun);
+      [
+        'retCurAge',
+        'retRetAge',
+        'retLife',
+        'retExp',
+        'retInf',
+        'retPre',
+        'retPost',
+        'retSave',
+      ].forEach((id) => document.getElementById(id).addEventListener('input', debRun));
+      [
+        ['retCurAgeR', 'retCurAge'],
+        ['retRetAgeR', 'retRetAge'],
+        ['retLifeR', 'retLife'],
+        ['retInfR', 'retInf'],
+        ['retPreR', 'retPre'],
+        ['retPostR', 'retPost'],
+      ].forEach(function (pair) {
+        document.getElementById(pair[0]).addEventListener('input', function () {
+          document.getElementById(pair[1]).value = this.value;
+          debRun();
+        });
+      });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 18px; color: var(--text-muted); max-width: 680px; margin: 0 auto 24px; line-height: 1.6; }
+    .calc-section { padding: 24px 0 40px; }
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; max-width: 960px; }
+    @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
+    .calc-inputs, .calc-results {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--shadow);
+    }
+    .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+    .field { margin-bottom: 18px; }
+    .field label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    .field input[type='number'] { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
+    .field input[type='range'] { width: 100%; margin-bottom: 6px; }
+    .result-hero { font-size: 2.25rem; font-weight: 800; color: var(--blue); letter-spacing: -0.02em; }
+    .result-label { font-size: 14px; color: var(--text-muted); margin: 4px 0 16px; }
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .result-sub { font-size: 1.25rem; font-weight: 700; }
+    .result-caption { font-size: 12px; color: var(--text-muted); }
+    .rule-hint { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; }
+    .bar-chart { margin: 16px 0; }
+    .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 13px; }
+    .bar-label { width: 52px; color: var(--text-muted); }
+    .bar-track { flex: 1; height: 22px; background: var(--gray-100); border-radius: 6px; overflow: hidden; }
+    [data-theme='dark'] .bar-track { background: var(--gray-200); }
+    .bar-fill { height: 100%; border-radius: 6px; transition: width 0.2s ease; }
+    .bar-fill--inv { background: var(--blue); opacity: 0.9; }
+    .bar-fill--ret { background: var(--green); }
+    .calc-details { margin-top: 12px; font-size: 14px; }
+    .calc-details summary { cursor: pointer; font-weight: 600; padding: 8px 0; }
+    .table-wrap { overflow-x: auto; max-height: 280px; overflow-y: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 8px 10px; border-bottom: 1px solid var(--border); text-align: right; }
+    th:first-child, td:first-child { text-align: left; }
+    .edu { padding: 40px 0; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
+    .section-title { text-align: center; margin-bottom: 20px; font-size: 1.5rem; }
+    .affiliate { padding: 32px 0; }
+    .affiliate .container { max-width: 900px; }
+    .affiliate-inner {
+      background: linear-gradient(135deg, #ecfdf5, #d1fae5); border: 1px solid #6ee7b7; border-radius: var(--radius-lg); padding: 24px;
+      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    }
+    [data-theme='dark'] .affiliate-inner { background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), transparent); border-color: rgba(52, 211, 153, 0.4); }
+    .affiliate-icon { font-size: 36px; }
+    .affiliate-content { flex: 1; min-width: 200px; }
+    .affiliate-content h3 { font-size: 17px; margin-bottom: 4px; }
+    .affiliate-content p { font-size: 14px; color: var(--text-muted); }
+    .faq { padding: 32px 0 48px; }
+    .faq .container { max-width: 760px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 10px; }
+    .faq-item h4 { font-size: 15px; margin-bottom: 4px; }
+    .faq-item p { font-size: 14px; color: var(--text-muted); }
+    .related { padding: 24px 0 48px; text-align: center; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

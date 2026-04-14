@@ -3,35 +3,63 @@ import MainLayout from '../../layouts/MainLayout.astro';
 
 const finance = [
   { href: '/calculator/sip', icon: '📈', title: 'SIP Calculator', desc: 'Systematic investment plan maturity & returns' },
-  { href: '/calculator/lumpsum', icon: '💵', title: 'Lumpsum Calculator', desc: 'One-time investment growth & chart' },
-  { href: '/calculator/ppf', icon: '🏛️', title: 'PPF Calculator', desc: 'Public Provident Fund maturity & yearly table' },
   { href: '/calculator/emi', icon: '🏦', title: 'EMI Calculator', desc: 'Loan EMI, interest & amortization' },
   { href: '/calculator/home-loan', icon: '🏠', title: 'Home Loan + Prepay', desc: 'EMI with prepayment simulation' },
   { href: '/calculator/income-tax', icon: '📋', title: 'Income Tax', desc: 'India FY — new vs old regime' },
   { href: '/calculator/fd', icon: '💰', title: 'FD Calculator', desc: 'Fixed deposit maturity & interest' },
   { href: '/calculator/gst', icon: '🧾', title: 'GST Calculator', desc: 'Add or remove GST; CGST/SGST split' },
+  { href: '/calculator/ppf', icon: '🏛️', title: 'PPF Calculator', desc: 'Public Provident Fund maturity & yearly table' },
+  { href: '/calculator/lumpsum', icon: '💵', title: 'Lumpsum Calculator', desc: 'One-time investment growth & chart' },
   { href: '/calculator/hra', icon: '🏘️', title: 'HRA Calculator', desc: 'House rent allowance exemption' },
+  { href: '/calculator/retirement', icon: '🌴', title: 'Retirement', desc: 'Corpus, inflation & SIP to goal' },
+  { href: '/calculator/rd', icon: '📅', title: 'RD Calculator', desc: 'Recurring deposit maturity & quarters' },
+  { href: '/calculator/salary', icon: '💼', title: 'Salary (CTC → in-hand)', desc: 'India take-home & regime compare' },
+  { href: '/calculator/nps', icon: '🏛️', title: 'NPS Calculator', desc: 'National Pension Scheme corpus & pension estimate' },
+  { href: '/calculator/compound-interest', icon: '📊', title: 'Compound Interest', desc: 'Growth, EAR, and year-by-year table' },
+  { href: '/calculator/swp', icon: '💧', title: 'SWP Calculator', desc: 'Systematic withdrawal & sustainability' },
+  { href: '/calculator/personal-loan', icon: '💳', title: 'Personal Loan EMI', desc: 'Unsecured loan EMI, fees & amortization' },
+  { href: '/calculator/mortgage', icon: '🏡', title: 'Mortgage (US)', desc: 'PITI, PMI, taxes & yearly schedule' },
+  { href: '/calculator/stock-average', icon: '📉', title: 'Stock Average / P&L', desc: 'Average buy price & profit after charges' },
 ];
 const health = [
   { href: '/calculator/bmi', icon: '⚖️', title: 'BMI Calculator', desc: 'Body mass index & categories' },
   { href: '/calculator/calorie', icon: '🔥', title: 'Calorie / TDEE', desc: 'Daily calories, BMR, macro example' },
   { href: '/calculator/ideal-weight', icon: '📏', title: 'Ideal Weight', desc: 'Devine, Robinson, Miller, Hamwi + BMI band' },
+  { href: '/calculator/body-fat', icon: '📐', title: 'Body Fat (US Navy)', desc: 'Tape method body fat percentage' },
+  { href: '/calculator/pregnancy-due-date', icon: '🍼', title: 'Due Date', desc: 'EDD from LMP (280-day & Naegele)' },
+  { href: '/calculator/water-intake', icon: '💧', title: 'Water Intake', desc: 'Daily hydration from weight & activity' },
+  { href: '/calculator/macro', icon: '🥗', title: 'Macro Calculator', desc: 'Protein, carbs & fat for your goal' },
+  { href: '/calculator/period-ovulation', icon: '🌸', title: 'Period & Ovulation', desc: 'Cycle estimates & fertile window' },
+  { href: '/calculator/heart-rate', icon: '❤️', title: 'Heart Rate Zones', desc: 'Max HR & training zones' },
 ];
-const general = [
-  { href: '/calculator/age', icon: '🎂', title: 'Age Calculator', desc: 'Years, months, days from date of birth' },
+const mathEducation = [
   { href: '/calculator/percentage', icon: '🔢', title: 'Percentage', desc: 'Percent of, change, increase/decrease' },
-  { href: '/calculator/tip', icon: '🧾', title: 'Tip Calculator', desc: 'Gratuity & bill split, INR or USD' },
+  { href: '/calculator/scientific', icon: '🔬', title: 'Scientific Calculator', desc: 'Trig, logs, powers & history' },
+  { href: '/calculator/gpa', icon: '🎓', title: 'GPA Calculator', desc: 'India 10-point & US 4.0 weighted GPA' },
+  { href: '/calculator/fraction', icon: '➗', title: 'Fraction Calculator', desc: 'Add, multiply, simplify, decimal → fraction' },
+  { href: '/calculator/statistics', icon: '📊', title: 'Statistics', desc: 'Mean, median, SD, quartiles & charts' },
+];
+const timeDate = [
+  { href: '/calculator/age', icon: '🎂', title: 'Age Calculator', desc: 'Years, months, days from date of birth' },
+  { href: '/calculator/date-difference', icon: '📆', title: 'Date Difference', desc: 'Days, weeks & approx. months' },
+  { href: '/calculator/time', icon: '⏱️', title: 'Time Math', desc: 'Add or subtract durations' },
+];
+const everyday = [
+  { href: '/calculator/tip', icon: '🧾', title: 'Tip Calculator', desc: 'Gratuity & bill split, many currencies' },
   { href: '/calculator/discount', icon: '🏷️', title: 'Discount', desc: 'Sale price, % off, stacked deals' },
+  { href: '/calculator/unit-converter', icon: '🔁', title: 'Unit Converter', desc: 'Length, weight & temperature' },
+  { href: '/calculator/emi-vs-rent', icon: '🆚', title: 'Buy vs Rent', desc: 'EMI vs rent + invest comparison' },
+  { href: '/calculator/markup-margin', icon: '💹', title: 'Markup & Margin', desc: 'Selling price, margin & bulk pricing' },
 ];
 
-const allTools = [...finance, ...health, ...general];
+const allTools = [...finance, ...health, ...mathEducation, ...timeDate, ...everyday];
 
 const collectionJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
   name: 'Free Online Calculators',
   description:
-    'Sixteen free online calculators for SIP, EMI, home loan prepayment, PPF, income tax, HRA, FD, GST, BMI, calories, ideal weight, age, percentage, tips, discounts, and more.',
+    'Forty free online calculators: finance (SIP, EMI, home loan, personal loan, mortgage, stock average, retirement, salary, tax, deposits, GST), health (BMI, calories, pregnancy, period, heart rate), math (fraction, statistics, GPA), time (age, date difference), and everyday tools (tip, discount, markup, buy vs rent).',
   url: new URL(Astro.url.pathname, Astro.site).href,
   isPartOf: { '@type': 'WebSite', name: 'DoItSwift', url: new URL('/', Astro.site).href },
   mainEntity: {
@@ -50,8 +78,8 @@ const collectionJsonLd = {
 
 <MainLayout
   title="Free Online Calculators — Finance, Health, Math | DoItSwift"
-  description="Sixteen free calculators: SIP, EMI, home loan prepayment, PPF, income tax, HRA, FD, GST, BMI, TDEE, ideal weight, age, percentage, tip, and discount. Instant results, no signup."
-  keywords="online calculator, SIP calculator, EMI calculator, PPF calculator, HRA calculator, calorie calculator, tip calculator"
+  description="Forty free calculators: SIP, EMI, home loan, personal loan, mortgage, stock P&amp;L, retirement, salary, tax, FD, RD, GST, BMI, pregnancy, period & ovulation, heart rate, fraction, statistics, GPA, age, time math, tip, discount, markup & margin, buy vs rent, and more. Instant results, no signup."
+  keywords="online calculator, SIP calculator, EMI calculator, mortgage calculator, personal loan EMI, retirement calculator, statistics calculator, fraction calculator, salary calculator India, markup calculator"
   canonical={new URL(Astro.url.pathname, Astro.site).toString()}
 >
   <script type="application/ld+json" set:html={JSON.stringify(collectionJsonLd)} />
@@ -61,7 +89,7 @@ const collectionJsonLd = {
       <div class="badge">🧮 Calculators</div>
       <h1>Free Online Calculators</h1>
       <p class="subtitle">
-        <strong>16 calculators</strong> for finance, health, and everyday math — all in your browser. No signup; math runs locally in JavaScript.
+        <strong>40 calculators</strong> across finance, health, math &amp; education, time &amp; date, and everyday use — all in your browser. No signup; math runs locally in JavaScript.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> No signup</span>
@@ -84,7 +112,13 @@ const collectionJsonLd = {
             <a href="#health">Health <span class="jump-nav-count">({health.length})</span></a>
           </li>
           <li>
-            <a href="#everyday">Everyday <span class="jump-nav-count">({general.length})</span></a>
+            <a href="#math">Math &amp; education <span class="jump-nav-count">({mathEducation.length})</span></a>
+          </li>
+          <li>
+            <a href="#time">Time &amp; date <span class="jump-nav-count">({timeDate.length})</span></a>
+          </li>
+          <li>
+            <a href="#everyday">Everyday <span class="jump-nav-count">({everyday.length})</span></a>
           </li>
           <li>
             <a href="#faq">FAQ</a>
@@ -126,12 +160,44 @@ const collectionJsonLd = {
     </div>
   </section>
 
+  <section id="math" class="tools-section calc-anchor">
+    <div class="container">
+      <h2 class="section-title">Math &amp; education</h2>
+      <p class="section-sub">Fractions, statistics, percentages, GPA, and a full scientific keypad — homework and desk work without installing software.</p>
+      <div class="grid">
+        {mathEducation.map((tool) => (
+          <a href={tool.href} class="tool-card">
+            <span class="icon">{tool.icon}</span>
+            <h3>{tool.title}</h3>
+            <p>{tool.desc}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="time" class="tools-section tools-section--alt calc-anchor">
+    <div class="container">
+      <h2 class="section-title">Time &amp; date</h2>
+      <p class="section-sub">Age from birthday, span between dates, and clock arithmetic for shifts and travel.</p>
+      <div class="grid">
+        {timeDate.map((tool) => (
+          <a href={tool.href} class="tool-card">
+            <span class="icon">{tool.icon}</span>
+            <h3>{tool.title}</h3>
+            <p>{tool.desc}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <section id="everyday" class="tools-section calc-anchor">
     <div class="container">
       <h2 class="section-title">Everyday calculators</h2>
-      <p class="section-sub">Age, percentages, tipping, and shopping discounts — quick mental-load helpers.</p>
+      <p class="section-sub">Tips, discounts, unit conversion, rent vs buy, and retail markup vs margin — quick mental-load helpers.</p>
       <div class="grid">
-        {general.map((tool) => (
+        {everyday.map((tool) => (
           <a href={tool.href} class="tool-card">
             <span class="icon">{tool.icon}</span>
             <h3>{tool.title}</h3>
@@ -155,8 +221,10 @@ const collectionJsonLd = {
           <p>Calculations run locally in JavaScript. We do not receive your salary, loan, or health numbers unless a future feature explicitly says otherwise.</p>
         </div>
         <div class="faq-item">
-          <h4>What’s included in the 16 calculators?</h4>
-          <p>Finance (SIP, lumpsum, PPF, EMI, home loan prepayment, income tax, FD, GST, HRA), health (BMI, calorie/TDEE, ideal weight), and everyday tools (age, percentage, tip, discount).</p>
+          <h4>What’s included in the 40 calculators?</h4>
+          <p>
+            Finance (SIP, EMI, home loan, personal loan, mortgage, stock average, income tax, FD, GST, PPF, lumpsum, HRA, retirement, RD, salary, NPS, compound interest, SWP), health (BMI, calorie/TDEE, ideal weight, body fat, pregnancy due date, water intake, macros, period &amp; ovulation, heart rate zones), math &amp; education (percentage, scientific, GPA, fraction, statistics), time &amp; date (age, date difference, time math), and everyday tools (tip, discount, units, buy vs rent, markup &amp; margin). Highlights include <strong>mortgage (PITI)</strong>, <strong>period tracking estimates</strong>, and <strong>descriptive statistics</strong> with charts.
+          </p>
         </div>
         <div class="faq-item">
           <h4>Are tax and EMI numbers legally binding?</h4>

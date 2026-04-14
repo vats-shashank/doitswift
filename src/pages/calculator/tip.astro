@@ -1,5 +1,6 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
 
 const site = Astro.site?.href ?? 'https://doitswift.com';
 const canonical = `${site}calculator/tip/`;
@@ -13,7 +14,7 @@ const jsonLd = {
       applicationCategory: 'UtilityApplication',
       operatingSystem: 'Web',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Restaurant tip and bill split with INR or USD, presets, and service quality shortcuts.',
+      description: 'Restaurant tip and bill split with multiple currencies, presets, and service quality shortcuts.',
     },
     {
       '@type': 'FAQPage',
@@ -42,7 +43,7 @@ const jsonLd = {
 
 <MainLayout
   title="Tip Calculator — Calculate Tips & Split Bills | DoItSwift"
-  description="Compute tip amount, grand total, and per-person split in INR or USD. Preset percentages, service-quality shortcuts, and optional round-up."
+  description="Compute tip amount, grand total, and per-person split in your chosen currency. Preset percentages, service-quality shortcuts, and optional round-up."
   keywords="tip calculator, bill split calculator, restaurant tip calculator, gratuity calculator"
   canonical={canonical}
 >
@@ -72,11 +73,14 @@ const jsonLd = {
       <div class="calc-inputs">
         <h2 class="calc-heading">Inputs</h2>
         <div class="field">
-          <label>Currency</label>
-          <div class="seg">
-            <label><input type="radio" name="tipCur" value="INR" checked /> INR (₹)</label>
-            <label><input type="radio" name="tipCur" value="USD" /> USD ($)</label>
-          </div>
+          <label for="tipCur">Currency</label>
+          <select id="tipCur" aria-label="Currency">
+            {CALCULATOR_CURRENCY_OPTIONS.map((o) => (
+              <option value={o.code} selected={o.code === 'INR'}>
+                {o.label}
+              </option>
+            ))}
+          </select>
         </div>
         <div class="field">
           <label for="tipBill">Bill amount</label>
@@ -170,7 +174,7 @@ const jsonLd = {
     </div>
   </section>
 
-  <script is:inline>
+  <script is:inline define:vars={{ LOCALE_BY_CURRENCY }}>
     (function () {
       function debounce(fn, ms) {
         let t;
@@ -179,12 +183,14 @@ const jsonLd = {
           t = setTimeout(fn, ms);
         };
       }
-      function fmtMoney(n, cur) {
-        if (cur === 'USD') return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
-        return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 }).format(n);
+      function localeForCurrency(code) {
+        return LOCALE_BY_CURRENCY[code] || 'en-US';
+      }
+      function fmtMoney(n, code) {
+        return new Intl.NumberFormat(localeForCurrency(code), { style: 'currency', currency: code, maximumFractionDigits: 2 }).format(n);
       }
       function run() {
-        const cur = document.querySelector('input[name="tipCur"]:checked').value;
+        const cur = document.getElementById('tipCur').value || 'INR';
         let bill = Math.max(0, parseFloat(document.getElementById('tipBill').value) || 0);
         let pct = Math.max(0, Math.min(30, parseFloat(document.getElementById('tipPct').value) || 0));
         document.getElementById('tipPctR').value = pct;
@@ -215,9 +221,7 @@ const jsonLd = {
         });
         if (id === 'tipRound') el.addEventListener('change', d);
       });
-      document.querySelectorAll('input[name="tipCur"]').forEach(function (el) {
-        el.addEventListener('change', d);
-      });
+      document.getElementById('tipCur').addEventListener('change', d);
       document.querySelectorAll('.preset, .qual button').forEach(function (btn) {
         btn.addEventListener('click', function () {
           const p = this.getAttribute('data-p');

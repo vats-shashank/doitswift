@@ -3,6 +3,8 @@
  * Run: node scripts/test-calculators.mjs
  */
 
+const CM_PER_IN = 2.54;
+
 let passed = 0;
 let failed = 0;
 
@@ -217,13 +219,24 @@ function dayDiff(dob, end) {
   assertApprox(adj, -550, 0.01, 'Goal -0.5 kg/wk delta');
 }
 
-// --- Ideal weight (same as page) ---
+// --- Ideal weight Devine (same as page: result is kg, not lb) ---
 {
-  const inh = 175 / 2.54;
+  const inh = 175 / CM_PER_IN;
   const over = Math.max(0, inh - 60);
-  const devLb = 50 + 2.3 * over;
-  const kg = devLb * 0.45359237;
-  assertApprox(kg, 70.47 * 0.45359237, 0.01, 'Devine kg');
+  const devKg = 50 + 2.3 * over;
+  assertApprox(devKg, 70.464567, 0.02, 'Devine male 175cm (kg)');
+}
+
+// --- Height / weight unit sync (2.54 cm per inch) ---
+{
+  const cm = 173.73;
+  const totalIn = cm / CM_PER_IN;
+  const ft = Math.floor(totalIn / 12);
+  const inch = totalIn - ft * 12;
+  const back = (ft * 12 + inch) * CM_PER_IN;
+  assertApprox(back, cm, 0.001, 'cm ↔ ft/in round-trip');
+  assertApprox(70 * 2.2046226218, 154.323583526, 0.001, 'kg → lb');
+  assertApprox(154.323583526 * 0.45359237, 70, 0.001, 'lb → kg');
 }
 
 // --- Home loan simulate (no prep) ---

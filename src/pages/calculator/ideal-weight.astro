@@ -105,15 +105,28 @@ const jsonLd = {
       </div>
       <div class="calc-results" aria-live="polite">
         <h2 class="calc-heading">Results</h2>
-        <p class="big" id="iwRec">— kg</p>
-        <p class="lbl">Blended recommendation (midpoint of formulas × frame)</p>
-        <div class="table-mini">
-          <p><span>Devine</span><strong id="iwD">—</strong></p>
-          <p><span>Robinson</span><strong id="iwR">—</strong></p>
-          <p><span>Miller</span><strong id="iwM">—</strong></p>
-          <p><span>Hamwi</span><strong id="iwH">—</strong></p>
+        <div class="result-unit-tabs" role="tablist" aria-label="Weight units for results">
+          <button type="button" class="unit-tab is-active" role="tab" id="iwTabKg" aria-selected="true" aria-controls="iwResultPanel" data-unit="kg">
+            kg
+          </button>
+          <button type="button" class="unit-tab" role="tab" id="iwTabLb" aria-selected="false" aria-controls="iwResultPanel" data-unit="lb">
+            lb
+          </button>
+          <button type="button" class="unit-tab" role="tab" id="iwTabSt" aria-selected="false" aria-controls="iwResultPanel" data-unit="st">
+            st&nbsp;+&nbsp;lb
+          </button>
         </div>
-        <p class="bmi-range"><strong>BMI healthy range (18.5–24.9):</strong> <span id="iwBmi">—</span></p>
+        <div id="iwResultPanel" role="tabpanel" aria-labelledby="iwTabKg">
+          <p class="big" id="iwRec">—</p>
+          <p class="lbl">Blended recommendation (midpoint of formulas × frame)</p>
+          <div class="table-mini">
+            <p><span>Devine</span><strong id="iwD">—</strong></p>
+            <p><span>Robinson</span><strong id="iwR">—</strong></p>
+            <p><span>Miller</span><strong id="iwM">—</strong></p>
+            <p><span>Hamwi</span><strong id="iwH">—</strong></p>
+          </div>
+          <p class="bmi-range"><strong>BMI healthy range (18.5–24.9):</strong> <span id="iwBmi">—</span></p>
+        </div>
       </div>
     </div>
   </section>
@@ -153,7 +166,7 @@ const jsonLd = {
     <div class="container">
       <h2 class="section-title">FAQ</h2>
       <div class="faq-list">
-        <div class="faq-item"><h4>Are results in kg or lb?</h4><p>We display kilograms; multiply by 2.20462 for pounds.</p></div>
+        <div class="faq-item"><h4>Can I see pounds or stone?</h4><p>Use the unit tabs above the results — kg, lb, or stone + lb (UK). Your choice is remembered on this device.</p></div>
         <div class="faq-item"><h4>What about kids?</h4><p>Pediatric growth charts differ — this page targets adults.</p></div>
       </div>
     </div>
@@ -171,6 +184,10 @@ const jsonLd = {
   <script is:inline>
     (function () {
       const fmt = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 1 });
+      const KG_TO_LB = 2.2046226218;
+      const STORAGE_KEY = 'idealWeightResultUnit';
+      const state = { kgArr: [0, 0, 0, 0], avg: 0, bmiLow: 0, bmiHigh: 0 };
+
       function debounce(fn, ms) {
         let t;
         return function () {
@@ -189,46 +206,129 @@ const jsonLd = {
         }
         return cm / 2.54;
       }
+      function getUnit() {
+        var el = document.querySelector('.unit-tab.is-active');
+        return el ? el.getAttribute('data-unit') : 'kg';
+      }
+      function formatKg(kg, unit) {
+        if (unit === 'kg') return fmt.format(kg) + ' kg';
+        var lb = kg * KG_TO_LB;
+        if (unit === 'lb') return fmt.format(lb) + ' lb';
+        var st = Math.floor(lb / 14);
+        var rem = lb - st * 14;
+        return st + ' st ' + fmt.format(rem) + ' lb';
+      }
+      function formatBmiRange(lowKg, highKg, unit) {
+        if (unit === 'kg') {
+          return fmt.format(lowKg) + ' – ' + fmt.format(highKg) + ' kg (from height)';
+        }
+        if (unit === 'lb') {
+          return (
+            fmt.format(lowKg * KG_TO_LB) +
+            ' – ' +
+            fmt.format(highKg * KG_TO_LB) +
+            ' lb (from height)'
+          );
+        }
+        return (
+          formatKg(lowKg, 'st') +
+          ' – ' +
+          formatKg(highKg, 'st') +
+          ' (from height)'
+        );
+      }
+      function paintResults() {
+        var u = getUnit();
+        var ids = ['iwD', 'iwR', 'iwM', 'iwH'];
+        for (var i = 0; i < 4; i++) {
+          document.getElementById(ids[i]).textContent = formatKg(state.kgArr[i], u);
+        }
+        document.getElementById('iwRec').textContent = formatKg(state.avg, u);
+        document.getElementById('iwBmi').textContent = formatBmiRange(state.bmiLow, state.bmiHigh, u);
+      }
+      /** When switching height unit, copy from the field the user was just using so values stay consistent. */
+      function syncHeightOnUnitChange(newUnit) {
+        if (newUnit === 'ft') {
+          var cm = parseFloat(document.getElementById('iwCm').value);
+          if (isNaN(cm) || cm <= 0) return;
+          var totalIn = cm / 2.54;
+          var ft = Math.floor(totalIn / 12);
+          var inch = totalIn - ft * 12;
+          document.getElementById('iwFt').value = ft;
+          document.getElementById('iwIn').value = Math.round(inch * 100) / 100;
+        } else {
+          var ft = parseFloat(document.getElementById('iwFt').value) || 0;
+          var inch = parseFloat(document.getElementById('iwIn').value) || 0;
+          var cm = (ft * 12 + inch) * 2.54;
+          document.getElementById('iwCm').value = Math.round(cm * 100) / 100;
+        }
+      }
       function run() {
         document.getElementById('iwHcm').classList.toggle('hidden', document.querySelector('input[name="iwHu"]:checked').value !== 'cm');
         document.getElementById('iwHft').classList.toggle('hidden', document.querySelector('input[name="iwHu"]:checked').value !== 'ft');
         const inh = inches();
         const male = document.querySelector('input[name="iwSex"]:checked').value === 'm';
         const over = Math.max(0, inh - 60);
+        // Formulas use height in inches above 60" (5 ft); results are already in kg — not lb.
         const d = male ? 50 + 2.3 * over : 45.5 + 2.3 * over;
         const ro = male ? 52 + 1.9 * over : 49 + 1.7 * over;
         const mi = male ? 56.2 + 1.41 * over : 53.1 + 1.36 * over;
         const ha = male ? 48 + 2.7 * over : 45.5 + 2.2 * over;
-        const lbs = [d, ro, mi, ha];
-        const kgArr = lbs.map(function (lb) {
-          return lb * 0.45359237;
-        });
+        state.kgArr = [d, ro, mi, ha];
         const frame = parseFloat(document.getElementById('iwFrame').value);
-        const avg = (kgArr.reduce(function (a, b) {
-          return a + b;
-        }, 0) /
-          4) *
+        state.avg =
+          (state.kgArr.reduce(function (a, b) {
+            return a + b;
+          }, 0) /
+            4) *
           frame;
-        document.getElementById('iwD').textContent = fmt.format(kgArr[0]) + ' kg';
-        document.getElementById('iwR').textContent = fmt.format(kgArr[1]) + ' kg';
-        document.getElementById('iwM').textContent = fmt.format(kgArr[2]) + ' kg';
-        document.getElementById('iwH').textContent = fmt.format(kgArr[3]) + ' kg';
-        document.getElementById('iwRec').textContent = fmt.format(avg) + ' kg';
         const hcm =
           document.querySelector('input[name="iwHu"]:checked').value === 'cm'
             ? parseFloat(document.getElementById('iwCm').value) || 0
             : inches() * 2.54;
         const hM = hcm / 100;
-        const low = 18.5 * hM * hM;
-        const high = 24.9 * hM * hM;
-        document.getElementById('iwBmi').textContent =
-          fmt.format(low) + ' – ' + fmt.format(high) + ' kg (from height)';
+        state.bmiLow = 18.5 * hM * hM;
+        state.bmiHigh = 24.9 * hM * hM;
+        paintResults();
+      }
+      function setUnitTab(unit) {
+        document.querySelectorAll('.unit-tab').forEach(function (btn) {
+          var on = btn.getAttribute('data-unit') === unit;
+          btn.classList.toggle('is-active', on);
+          btn.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        try {
+          localStorage.setItem(STORAGE_KEY, unit);
+        } catch (e) {}
+        paintResults();
+      }
+      document.querySelectorAll('.unit-tab').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          setUnitTab(btn.getAttribute('data-unit'));
+        });
+      });
+      var saved = null;
+      try {
+        saved = localStorage.getItem(STORAGE_KEY);
+      } catch (e) {}
+      if (saved === 'kg' || saved === 'lb' || saved === 'st') {
+        document.querySelectorAll('.unit-tab').forEach(function (btn) {
+          var on = btn.getAttribute('data-unit') === saved;
+          btn.classList.toggle('is-active', on);
+          btn.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
       }
       const d = debounce(run, 60);
       ['iwCm', 'iwFt', 'iwIn', 'iwFrame'].forEach(function (id) {
         document.getElementById(id).addEventListener('input', d);
       });
-      document.querySelectorAll('input[name="iwHu"], input[name="iwSex"]').forEach(function (el) {
+      document.querySelectorAll('input[name="iwHu"]').forEach(function (el) {
+        el.addEventListener('change', function () {
+          syncHeightOnUnitChange(this.value);
+          d();
+        });
+      });
+      document.querySelectorAll('input[name="iwSex"]').forEach(function (el) {
         el.addEventListener('change', d);
       });
       run();
@@ -281,10 +381,38 @@ const jsonLd = {
     }
     .calc-heading {
       font-size: 1rem;
-      margin: 0 0 16px;
+      margin: 0 0 12px;
       color: var(--text-muted);
       text-transform: uppercase;
       font-weight: 700;
+    }
+    .result-unit-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .unit-tab {
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--gray-100);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--text);
+    }
+    [data-theme='dark'] .unit-tab {
+      background: var(--gray-200);
+    }
+    .unit-tab.is-active {
+      border-color: var(--blue);
+      color: var(--blue);
+      box-shadow: 0 0 0 1px var(--blue);
+    }
+    .unit-tab:focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: 2px;
     }
     .field {
       margin-bottom: 14px;

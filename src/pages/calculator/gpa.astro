@@ -1,0 +1,185 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/gpa/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'GPA Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Grade point average from credits and grades — Indian 10-point or US 4.0 scale.',
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="GPA Calculator — Indian CGPA & US 4.0 Grade Point | DoItSwift"
+  description="Compute weighted GPA or CGPA from course credits and grades — switch between a 10-point (India-style) input or US 4.0 letter mapping."
+  keywords="gpa calculator, cgpa calculator, grade point average calculator india, gpa calculator 4.0 scale"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>GPA Calculator</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>GPA Calculator</h1>
+      <p class="subtitle">
+        Enter <strong>credits</strong> (or credit hours) and <strong>grades</strong> for each course row. Choose <strong>India 10-point</strong> numeric grades or <strong>US 4.0</strong> letter mapping — we weight by credits and show cumulative GPA.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container">
+      <div class="field mode-field">
+        <label>Grading scale</label>
+        <div class="seg">
+          <label><input type="radio" name="gpaSys" value="in" checked /> India (10-point)</label>
+          <label><input type="radio" name="gpaSys" value="us" /> United States (4.0)</label>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="gpa-table">
+          <thead>
+            <tr>
+              <th>Course (optional)</th>
+              <th>Credits</th>
+              <th class="th-in">Grade (0–10)</th>
+              <th class="th-us hidden">Grade</th>
+            </tr>
+          </thead>
+          <tbody id="gpaBody">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <tr data-row={i}>
+                <td><input type="text" class="gpa-name" placeholder={`Course ${i + 1}`} aria-label={`Course name ${i + 1}`} /></td>
+                <td><input type="number" class="gpa-cr" min="0" step="0.5" value={i < 3 ? '4' : '0'} aria-label={`Credits row ${i + 1}`} /></td>
+                <td class="td-in"><input type="number" class="gpa-g-in" min="0" max="10" step="0.1" value={i === 0 ? '8' : i === 1 ? '7.5' : i === 2 ? '9' : ''} aria-label={`Grade India row ${i + 1}`} /></td>
+                <td class="td-us hidden">
+                  <select class="gpa-g-us" aria-label={`Grade US row ${i + 1}`}>
+                    <option value="4">A / 4.0</option>
+                    <option value="3.7">A− / 3.7</option>
+                    <option value="3.3">B+ / 3.3</option>
+                    <option value="3">B / 3.0</option>
+                    <option value="2.7">B− / 2.7</option>
+                    <option value="2.3">C+ / 2.3</option>
+                    <option value="2">C / 2.0</option>
+                    <option value="1.7">C− / 1.7</option>
+                    <option value="1">D / 1.0</option>
+                    <option value="0">F / 0</option>
+                  </select>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="gpa-result" aria-live="polite">
+        <p class="gpa-big" id="gpaVal">GPA: —</p>
+        <p class="gpa-sub" id="gpaHint"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">India vs US grading</h2>
+      <p>
+        Indian universities often report <strong>CGPA on 10</strong>; US schools use a <strong>4.0 scale</strong> with letter bands. This tool only does the weighted average — your institution’s official rules for drops, repeats, and rounding may differ.
+      </p>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/percentage">Percentage</a> · <a href="/calculator/age">Age</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      function debounce(fn, ms) {
+        let t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      function run() {
+        const us = document.querySelector('input[name="gpaSys"]:checked').value === 'us';
+        document.querySelectorAll('.th-in, .td-in').forEach((el) => el.classList.toggle('hidden', us));
+        document.querySelectorAll('.th-us, .td-us').forEach((el) => el.classList.toggle('hidden', !us));
+        let sumGP = 0;
+        let sumC = 0;
+        document.querySelectorAll('#gpaBody tr').forEach(function (tr) {
+          const c = parseFloat(tr.querySelector('.gpa-cr').value) || 0;
+          if (c <= 0) return;
+          let g = 0;
+          if (us) g = parseFloat(tr.querySelector('.gpa-g-us').value) || 0;
+          else g = parseFloat(tr.querySelector('.gpa-g-in').value) || 0;
+          sumGP += g * c;
+          sumC += c;
+        });
+        const gpa = sumC > 0 ? sumGP / sumC : 0;
+        document.getElementById('gpaVal').textContent = sumC > 0 ? 'GPA: ' + gpa.toFixed(2) + (us ? ' / 4.0' : ' / 10') : 'GPA: —';
+        document.getElementById('gpaHint').textContent =
+          sumC > 0 ? 'Weighted by ' + sumC + ' credits.' : 'Enter at least one course with credits &gt; 0.';
+      }
+      const d = debounce(run, 60);
+      document.querySelectorAll('#gpaBody input, #gpaBody select').forEach(function (el) {
+        el.addEventListener('input', d);
+        el.addEventListener('change', d);
+      });
+      document.querySelectorAll('input[name="gpaSys"]').forEach(function (el) {
+        el.addEventListener('change', d);
+      });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 16px; color: var(--text-muted); max-width: 720px; margin: 0 auto 22px; line-height: 1.55; }
+    .calc-section { padding: 24px 0 40px; }
+    .calc-section .container { max-width: 900px; }
+    .mode-field { margin-bottom: 18px; }
+    .mode-field label { display: block; font-weight: 600; margin-bottom: 8px; }
+    .table-wrap { overflow-x: auto; margin-bottom: 20px; }
+    .gpa-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .gpa-table th, .gpa-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); text-align: left; }
+    .gpa-table input, .gpa-table select { width: 100%; min-width: 80px; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 15px; }
+    .hidden { display: none !important; }
+    .gpa-result { text-align: center; padding: 16px; background: var(--gray-100); border-radius: var(--radius); border: 1px solid var(--border); }
+    [data-theme='dark'] .gpa-result { background: var(--gray-200); }
+    .gpa-big { font-size: 1.75rem; font-weight: 800; color: var(--blue); margin: 0; }
+    .gpa-sub { font-size: 14px; color: var(--text-muted); margin: 8px 0 0; }
+    .edu { padding: 28px 0 48px; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); }
+    .section-title { text-align: center; margin-bottom: 16px; font-size: 1.5rem; }
+    .related { text-align: center; padding-bottom: 48px; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

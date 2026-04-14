@@ -1,0 +1,314 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
+
+const canonical = 'https://doitswift.com/calculator/emi-vs-rent/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Buy vs Rent Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Compare home loan EMI path with renting and investing the difference at a chosen return.',
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Buy vs Rent Calculator — EMI vs Rent & Invest | DoItSwift"
+  description="Compare buying a home with a loan versus renting and investing: horizon, rent growth, home appreciation, and portfolio return — illustrative."
+  keywords="buy vs rent calculator, emi vs rent india, rent or buy home calculator"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Buy vs Rent</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Buy vs Rent Calculator</h1>
+      <p class="subtitle">
+        Set a <strong>comparison horizon</strong> in years. The buy side tracks <strong>EMI</strong>, loan balance, and <strong>home value</strong> with appreciation. The rent side pays <strong>rising rent</strong> and invests the <strong>down payment</strong> plus any monthly surplus when rent is lower than EMI (simple growth model).
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label for="brCcy">Currency (display)</label>
+          <select id="brCcy" aria-label="Currency">
+            {CALCULATOR_CURRENCY_OPTIONS.map((o) => (
+              <option value={o.code} selected={o.code === 'INR'}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div class="field">
+          <label for="brPrice">Home price</label>
+          <input type="number" id="brPrice" min="0" step="50000" value="7500000" inputmode="numeric" />
+        </div>
+        <div class="field">
+          <label for="brDown">Down payment (%)</label>
+          <input type="range" id="brDownR" min="10" max="50" step="1" value="20" aria-hidden="true" />
+          <input type="number" id="brDown" min="10" max="50" step="1" value="20" inputmode="numeric" />
+        </div>
+        <div class="field">
+          <label for="brRate">Loan interest (% p.a.)</label>
+          <input type="range" id="brRateR" min="6" max="15" step="0.1" value="8.5" aria-hidden="true" />
+          <input type="number" id="brRate" min="6" max="15" step="0.05" value="8.5" inputmode="decimal" />
+        </div>
+        <div class="field">
+          <label for="brYears">Loan tenure (years)</label>
+          <input type="range" id="brYearsR" min="5" max="30" step="1" value="20" aria-hidden="true" />
+          <input type="number" id="brYears" min="5" max="30" step="1" value="20" inputmode="numeric" />
+        </div>
+        <div class="field">
+          <label for="brRent">Current monthly rent</label>
+          <input type="number" id="brRent" min="0" step="1000" value="25000" inputmode="numeric" />
+        </div>
+        <div class="field">
+          <label for="brRentGr">Annual rent increase (%)</label>
+          <input type="range" id="brRentGrR" min="0" max="15" step="0.5" value="5" aria-hidden="true" />
+          <input type="number" id="brRentGr" min="0" max="15" step="0.1" value="5" inputmode="decimal" />
+        </div>
+        <div class="field">
+          <label for="brApp">Annual home appreciation (%)</label>
+          <input type="range" id="brAppR" min="0" max="15" step="0.5" value="5" aria-hidden="true" />
+          <input type="number" id="brApp" min="0" max="15" step="0.1" value="5" inputmode="decimal" />
+        </div>
+        <div class="field">
+          <label for="brInv">Portfolio return if renting (% p.a.)</label>
+          <input type="range" id="brInvR" min="4" max="15" step="0.5" value="10" aria-hidden="true" />
+          <input type="number" id="brInv" min="4" max="15" step="0.1" value="10" inputmode="decimal" />
+        </div>
+        <div class="field">
+          <label for="brHorizon">Comparison horizon (years)</label>
+          <input type="number" id="brHorizon" min="1" max="30" step="1" value="10" inputmode="numeric" />
+        </div>
+      </div>
+
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results (end of horizon)</h2>
+        <div class="compare-grid">
+          <div class="compare-card">
+            <h3>Buy + loan</h3>
+            <p class="big" id="brNetBuy">—</p>
+            <p class="small">Net equity (home − loan)</p>
+            <p class="line"><span>Home value</span><span id="brHomeVal">—</span></p>
+            <p class="line"><span>Loan balance</span><span id="brLoanBal">—</span></p>
+          </div>
+          <div class="compare-card">
+            <h3>Rent + invest</h3>
+            <p class="big" id="brNetRent">—</p>
+            <p class="small">Investment corpus</p>
+            <p class="line"><span>Rent paid (cumulative)</span><span id="brRentPaid">—</span></p>
+          </div>
+        </div>
+        <p class="verdict" id="brVerdict"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">What this model does (and does not) do</h2>
+      <p>
+        <strong>Buy path:</strong> Down payment is treated as upfront equity; the rest is a fixed-rate loan with standard EMI amortization. Home value grows each year by your appreciation input. <strong>Net equity</strong> ≈ value − outstanding principal — no transaction costs, registration, or tax on sale.
+      </p>
+      <p>
+        <strong>Rent path:</strong> Rent increases once per year. Any month where rent is below EMI, the difference is added to a portfolio earning your stated annual return (compounded monthly for the monthly surplus flow). The <strong>down payment</strong> is invested from day one at the same return. If rent exceeds EMI, the shortfall reduces the portfolio when possible.
+      </p>
+      <p>
+        Real decisions involve liquidity, tax benefits on home loans, rent flexibility, maintenance, and emotional preference — use this as a structured sketch, not a prophecy.
+      </p>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner">
+        <div class="affiliate-icon">🏠</div>
+        <div class="affiliate-content">
+          <h3>Loan math</h3>
+          <p>Cross-check EMI with our standalone EMI calculator before you sign.</p>
+        </div>
+        <a href="/calculator/emi" class="btn btn-orange">EMI calculator →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/home-loan">Home loan + prepay</a> · <a href="/calculator/sip">SIP</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline define:vars={{ LOCALE_BY_CURRENCY }}>
+    (function () {
+      function localeForCurrency(code) {
+        return LOCALE_BY_CURRENCY[code] || 'en-US';
+      }
+      function makeFmt() {
+        var code = document.getElementById('brCcy').value || 'INR';
+        return new Intl.NumberFormat(localeForCurrency(code), { style: 'currency', currency: code, maximumFractionDigits: 0 });
+      }
+      function debounce(fn, ms) {
+        let t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      function emiAmount(P, annual, months) {
+        const r = annual / 100 / 12;
+        if (months <= 0) return 0;
+        if (r === 0) return P / months;
+        return (P * r * Math.pow(1 + r, months)) / (Math.pow(1 + r, months) - 1);
+      }
+      function run() {
+        const fmt = makeFmt();
+        const price = Math.max(0, parseFloat(document.getElementById('brPrice').value) || 0);
+        const downPct = Math.min(50, Math.max(10, parseFloat(document.getElementById('brDown').value) || 20));
+        const rate = Math.min(15, Math.max(6, parseFloat(document.getElementById('brRate').value) || 8.5));
+        const loanYears = Math.min(30, Math.max(5, parseFloat(document.getElementById('brYears').value) || 20));
+        let rent = Math.max(0, parseFloat(document.getElementById('brRent').value) || 0);
+        const rentGr = Math.min(15, Math.max(0, parseFloat(document.getElementById('brRentGr').value) || 5)) / 100;
+        const app = Math.min(15, Math.max(0, parseFloat(document.getElementById('brApp').value) || 5)) / 100;
+        const inv = Math.min(15, Math.max(4, parseFloat(document.getElementById('brInv').value) || 10)) / 100;
+        let horizon = Math.min(30, Math.max(1, parseFloat(document.getElementById('brHorizon').value) || 10));
+
+        document.getElementById('brDown').value = downPct;
+        document.getElementById('brDownR').value = downPct;
+        document.getElementById('brRate').value = rate;
+        document.getElementById('brRateR').value = rate;
+        document.getElementById('brYears').value = loanYears;
+        document.getElementById('brYearsR').value = loanYears;
+        document.getElementById('brRentGr').value = (rentGr * 100).toFixed(1);
+        document.getElementById('brRentGrR').value = rentGr * 100;
+        document.getElementById('brApp').value = (app * 100).toFixed(1);
+        document.getElementById('brAppR').value = app * 100;
+        document.getElementById('brInv').value = (inv * 100).toFixed(1);
+        document.getElementById('brInvR').value = inv * 100;
+
+        const down = price * (downPct / 100);
+        const loan = Math.max(0, price - down);
+        const monthsLoan = loanYears * 12;
+        const emi = emiAmount(loan, rate, monthsLoan);
+        const rm = inv / 12;
+        let portfolio = down;
+        let rentPaid = 0;
+        let homeVal = price;
+        let bal = loan;
+        const r = rate / 100 / 12;
+
+        for (let y = 1; y <= horizon; y++) {
+          if (y > 1) rent *= 1 + rentGr;
+          for (let m = 0; m < 12; m++) {
+            rentPaid += rent;
+            const ownerPays = bal > 0 ? emi : 0;
+            const surplus = ownerPays - rent;
+            portfolio = portfolio * (1 + rm) + surplus;
+            if (bal > 0) {
+              const intr = bal * r;
+              const pr = emi - intr;
+              bal -= pr;
+            }
+          }
+          homeVal *= 1 + app;
+        }
+
+        const netBuy = Math.max(0, homeVal) - Math.max(0, bal);
+        const netRent = Math.max(0, portfolio);
+
+        document.getElementById('brHomeVal').textContent = fmt.format(Math.round(homeVal));
+        document.getElementById('brLoanBal').textContent = fmt.format(Math.round(Math.max(0, bal)));
+        document.getElementById('brNetBuy').textContent = fmt.format(Math.round(netBuy));
+        document.getElementById('brRentPaid').textContent = fmt.format(Math.round(rentPaid));
+        document.getElementById('brNetRent').textContent = fmt.format(Math.round(netRent));
+
+        let v = '';
+        if (netBuy > netRent * 1.02) v = 'At these inputs, estimated net equity from buying exceeds the rent-and-invest corpus at the horizon — before costs and taxes.';
+        else if (netRent > netBuy * 1.02) v = 'At these inputs, the rent-and-invest corpus edges higher — sensitivity to return and rent growth is high.';
+        else v = 'Both paths finish in a similar band — small input changes could flip the picture.';
+        document.getElementById('brVerdict').textContent = v;
+      }
+      const d = debounce(run, 80);
+      document.getElementById('brCcy').addEventListener('change', d);
+      [
+        'brPrice',
+        'brDown',
+        'brRate',
+        'brYears',
+        'brRent',
+        'brRentGr',
+        'brApp',
+        'brInv',
+        'brHorizon',
+      ].forEach((id) => document.getElementById(id).addEventListener('input', d));
+      [['brDownR', 'brDown'], ['brRateR', 'brRate'], ['brYearsR', 'brYears'], ['brRentGrR', 'brRentGr'], ['brAppR', 'brApp'], ['brInvR', 'brInv']].forEach(function (p) {
+        document.getElementById(p[0]).addEventListener('input', function () {
+          document.getElementById(p[1]).value = this.value;
+          d();
+        });
+      });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 16px; color: var(--text-muted); max-width: 720px; margin: 0 auto 22px; line-height: 1.6; }
+    .calc-section { padding: 24px 0 40px; }
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 1000px; align-items: start; }
+    @media (max-width: 900px) { .calc-layout { grid-template-columns: 1fr; } }
+    .calc-inputs, .calc-results { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--shadow); }
+    .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    .field input[type='number'] { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
+    .field input[type='range'] { width: 100%; margin-bottom: 4px; }
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    @media (max-width: 520px) { .compare-grid { grid-template-columns: 1fr; } }
+    .compare-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; background: var(--gray-100); }
+    [data-theme='dark'] .compare-card { background: var(--gray-200); }
+    .compare-card h3 { font-size: 13px; margin: 0 0 8px; text-transform: uppercase; color: var(--text-muted); }
+    .big { font-size: 1.5rem; font-weight: 800; color: var(--blue); margin: 0; }
+    .small { font-size: 12px; color: var(--text-muted); margin: 4px 0 10px; }
+    .line { display: flex; justify-content: space-between; font-size: 13px; margin: 4px 0; gap: 8px; }
+    .verdict { font-size: 14px; color: var(--text-muted); line-height: 1.55; margin-top: 8px; }
+    .edu { padding: 32px 0 40px; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
+    .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .affiliate { padding: 28px 0; }
+    .affiliate .container { max-width: 900px; }
+    .affiliate-inner { background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #93c5fd; border-radius: var(--radius-lg); padding: 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    [data-theme='dark'] .affiliate-inner { background: rgba(59, 130, 246, 0.12); border-color: rgba(147, 197, 253, 0.4); }
+    .affiliate-icon { font-size: 36px; }
+    .affiliate-content { flex: 1; min-width: 200px; }
+    .related { text-align: center; padding-bottom: 48px; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

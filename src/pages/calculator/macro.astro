@@ -1,0 +1,216 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/macro/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Macro Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'HealthApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Protein, carbs, and fat grams from calorie target and goal preset with per-meal split.',
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Macro Calculator — Protein, Carbs, Fat for Your Goals | DoItSwift"
+  description="Turn a daily calorie target into protein, carbohydrate, and fat grams using goal presets — with per-meal split and a simple macro pie visual."
+  keywords="macro calculator, macronutrient calculator, protein carbs fat calculator, iifym calculator"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Macro Calculator</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Macro Calculator</h1>
+      <p class="subtitle">
+        Pick a <strong>daily calorie target</strong> (from our <a href="/calculator/calorie">calorie calculator</a> or elsewhere), choose a <strong>goal preset</strong>, and see protein / carb / fat in grams — plus a four-meal split. Numbers are a planning template, not medical advice.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label for="mCal">Daily calorie target (kcal)</label>
+          <input type="number" id="mCal" min="800" max="6000" step="50" value="2000" inputmode="numeric" />
+        </div>
+        <div class="field">
+          <label for="mKg">Body weight (kg, for g/kg hints)</label>
+          <input type="number" id="mKg" min="30" max="200" step="0.1" value="72" inputmode="decimal" />
+        </div>
+        <div class="field">
+          <label for="mGoal">Goal preset</label>
+          <select id="mGoal">
+            <option value="30,40,30">Maintain — 30% P / 40% C / 30% F</option>
+            <option value="40,30,30">Lose weight (cut) — 40% / 30% / 30%</option>
+            <option value="25,50,25">Gain weight (bulk) — 25% / 50% / 25%</option>
+            <option value="35,35,30">Body recomposition — 35% / 35% / 30%</option>
+            <option value="25,60,15">Athletic performance — 25% / 60% / 15%</option>
+            <option value="20,5,75">Keto — 20% / 5% / 75%</option>
+            <option value="30,20,50">Low-carb — 30% / 20% / 50%</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <div class="macro-grid">
+          <div><span class="lab">Protein</span><strong id="mP">0 g</strong><span class="sub" id="mPP"></span></div>
+          <div><span class="lab">Carbs</span><strong id="mC">0 g</strong><span class="sub" id="mCP"></span></div>
+          <div><span class="lab">Fat</span><strong id="mF">0 g</strong><span class="sub" id="mFP"></span></div>
+        </div>
+        <p class="verify" id="mVer"></p>
+        <div class="pie-wrap">
+          <div class="pie" id="mPie" role="img" aria-label="Macro split pie chart"></div>
+          <ul class="pie-leg">
+            <li><span class="dot dp"></span> Protein</li>
+            <li><span class="dot dc"></span> Carbs</li>
+            <li><span class="dot df"></span> Fat</li>
+          </ul>
+        </div>
+        <details class="calc-details">
+          <summary>Per meal (4 meals)</summary>
+          <ul id="mMeal" class="meal-list"></ul>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Macros and meals</h2>
+      <p>
+        <strong>Protein</strong> supports muscle repair; <strong>carbs</strong> fuel hard training; <strong>fats</strong> carry vitamins and hormones. Indian staples vary widely — <strong>dal</strong>, <strong>rice</strong>, <strong>roti</strong>, and <strong>paneer</strong> can be mixed to hit similar targets; read labels for your brands.
+      </p>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/calorie">Calorie / TDEE</a> · <a href="/calculator/bmi">BMI</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      function debounce(fn, ms) {
+        let t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      function run() {
+        const cal = Math.max(800, Math.min(6000, parseFloat(document.getElementById('mCal').value) || 2000));
+        const kg = Math.max(30, Math.min(200, parseFloat(document.getElementById('mKg').value) || 70));
+        document.getElementById('mCal').value = cal;
+        const parts = document.getElementById('mGoal').value.split(',').map(parseFloat);
+        const pPct = parts[0],
+          cPct = parts[1],
+          fPct = parts[2];
+        const pG = (cal * (pPct / 100)) / 4;
+        const cG = (cal * (cPct / 100)) / 4;
+        const fG = (cal * (fPct / 100)) / 9;
+        document.getElementById('mP').textContent = Math.round(pG) + ' g';
+        document.getElementById('mC').textContent = Math.round(cG) + ' g';
+        document.getElementById('mF').textContent = Math.round(fG) + ' g';
+        document.getElementById('mPP').textContent = pPct + '% kcal · ~' + (pG / kg).toFixed(2) + ' g/kg';
+        document.getElementById('mCP').textContent = cPct + '% kcal';
+        document.getElementById('mFP').textContent = fPct + '% kcal';
+        const check = Math.round(pG) * 4 + Math.round(cG) * 4 + Math.round(fG) * 9;
+        document.getElementById('mVer').textContent =
+          'Macro calories (rounded): ~' + check + ' kcal vs target ' + Math.round(cal) + ' kcal.';
+        const pie = document.getElementById('mPie');
+        pie.style.background =
+          'conic-gradient(var(--blue) 0% ' +
+          pPct +
+          '%, var(--orange) ' +
+          pPct +
+          '% ' +
+          (pPct + cPct) +
+          '%, var(--green) ' +
+          (pPct + cPct) +
+          '% 100%)';
+        const ul = document.getElementById('mMeal');
+        ul.innerHTML = '';
+        for (let i = 1; i <= 4; i++) {
+          const li = document.createElement('li');
+          li.textContent =
+            'Meal ' +
+            i +
+            ': ~' +
+            Math.round(pG / 4) +
+            ' g protein · ' +
+            Math.round(cG / 4) +
+            ' g carbs · ' +
+            Math.round(fG / 4) +
+            ' g fat';
+          ul.appendChild(li);
+        }
+      }
+      const d = debounce(run, 60);
+      ['mCal', 'mKg', 'mGoal'].forEach((id) => document.getElementById(id).addEventListener('input', d));
+      document.getElementById('mGoal').addEventListener('change', d);
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .hero .subtitle a { color: var(--blue); font-weight: 600; }
+    .subtitle { font-size: 16px; color: var(--text-muted); max-width: 720px; margin: 0 auto 22px; line-height: 1.55; }
+    .calc-section { padding: 24px 0 40px; }
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 960px; align-items: start; }
+    @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
+    .calc-inputs, .calc-results { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--shadow); }
+    .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    .field input, .field select { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
+    .macro-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px; }
+    @media (max-width: 520px) { .macro-grid { grid-template-columns: 1fr; } }
+    .macro-grid .lab { display: block; font-size: 12px; color: var(--text-muted); }
+    .macro-grid strong { font-size: 1.35rem; color: var(--blue); }
+    .macro-grid .sub { display: block; font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    .verify { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; }
+    .pie-wrap { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin: 12px 0; }
+    .pie { width: 120px; height: 120px; border-radius: 50%; }
+    .pie-leg { list-style: none; padding: 0; margin: 0; font-size: 14px; }
+    .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+    .dp { background: var(--blue); }
+    .dc { background: var(--orange); }
+    .df { background: var(--green); }
+    .calc-details summary { cursor: pointer; font-weight: 600; }
+    .meal-list { margin: 10px 0 0; padding-left: 18px; font-size: 14px; color: var(--text-muted); line-height: 1.65; }
+    .edu { padding: 36px 0 48px; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); }
+    .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .related { text-align: center; padding-bottom: 48px; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

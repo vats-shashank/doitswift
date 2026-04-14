@@ -1,0 +1,182 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/time/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Time Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Add or subtract durations in days, hours, minutes, and seconds.',
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Time Calculator — Add & Subtract Durations | DoItSwift"
+  description="Add or subtract two durations expressed as days, hours, minutes, and seconds — for scheduling and quick arithmetic."
+  keywords="time calculator, duration calculator, add time, subtract time"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Time Calculator</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Time Arithmetic Calculator</h1>
+      <p class="subtitle">
+        Enter two <strong>durations</strong> (A and B) as days, hours, minutes, and seconds — then <strong>add</strong> or <strong>subtract</strong> (A − B). Useful for rosters, travel, or study blocks — not for high-precision physics.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-one">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Durations</h2>
+        <div class="field">
+          <label>Operation</label>
+          <div class="seg">
+            <label><input type="radio" name="tOp" value="add" checked /> A + B</label>
+            <label><input type="radio" name="tOp" value="sub" /> A − B</label>
+          </div>
+        </div>
+        <fieldset class="dur">
+          <legend>Duration A</legend>
+          <div class="row4">
+            <div><label for="tAd">Days</label><input type="number" id="tAd" min="0" step="1" value="0" /></div>
+            <div><label for="tAh">Hours</label><input type="number" id="tAh" min="0" step="1" value="2" /></div>
+            <div><label for="tAm">Min</label><input type="number" id="tAm" min="0" step="1" value="30" /></div>
+            <div><label for="tAs">Sec</label><input type="number" id="tAs" min="0" step="1" value="0" /></div>
+          </div>
+        </fieldset>
+        <fieldset class="dur">
+          <legend>Duration B</legend>
+          <div class="row4">
+            <div><label for="tBd">Days</label><input type="number" id="tBd" min="0" step="1" value="0" /></div>
+            <div><label for="tBh">Hours</label><input type="number" id="tBh" min="0" step="1" value="1" /></div>
+            <div><label for="tBm">Min</label><input type="number" id="tBm" min="0" step="1" value="15" /></div>
+            <div><label for="tBs">Sec</label><input type="number" id="tBs" min="0" step="1" value="0" /></div>
+          </div>
+        </fieldset>
+      </div>
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Result</h2>
+        <p class="big" id="tOut">—</p>
+        <p class="sub" id="tSec"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Notes</h2>
+      <p>Negative totals from <strong>A − B</strong> mean B is longer than A — we still show the absolute span. For clock times on a calendar, combine with our <a href="/calculator/date-difference">date difference</a> tool.</p>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/date-difference">Date difference</a> · <a href="/calculator/age">Age</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      function toSec(d, h, m, s) {
+        return (
+          (parseInt(d, 10) || 0) * 86400 +
+          (parseInt(h, 10) || 0) * 3600 +
+          (parseInt(m, 10) || 0) * 60 +
+          (parseInt(s, 10) || 0)
+        );
+      }
+      function fmt(sec) {
+        sec = Math.abs(Math.round(sec));
+        const d = Math.floor(sec / 86400);
+        sec -= d * 86400;
+        const h = Math.floor(sec / 3600);
+        sec -= h * 3600;
+        const m = Math.floor(sec / 60);
+        const s = sec - m * 60;
+        return { d, h, m, s, str: d + 'd ' + h + 'h ' + m + 'm ' + s + 's' };
+      }
+      function run() {
+        const a = toSec(
+          document.getElementById('tAd').value,
+          document.getElementById('tAh').value,
+          document.getElementById('tAm').value,
+          document.getElementById('tAs').value
+        );
+        const b = toSec(
+          document.getElementById('tBd').value,
+          document.getElementById('tBh').value,
+          document.getElementById('tBm').value,
+          document.getElementById('tBs').value
+        );
+        const sub = document.querySelector('input[name="tOp"]:checked').value === 'sub';
+        let r = sub ? a - b : a + b;
+        const neg = r < 0;
+        const f = fmt(r);
+        document.getElementById('tOut').textContent = (neg ? '−' : '') + f.str.trim();
+        document.getElementById('tSec').textContent = 'Total seconds: ' + Math.abs(Math.round(sub ? a - b : a + b)).toLocaleString('en-IN');
+      }
+      function debounce(fn, ms) {
+        let t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      const d = debounce(run, 60);
+      ['tAd', 'tAh', 'tAm', 'tAs', 'tBd', 'tBh', 'tBm', 'tBs'].forEach((id) =>
+        document.getElementById(id).addEventListener('input', d)
+      );
+      document.querySelectorAll('input[name="tOp"]').forEach((el) => el.addEventListener('change', d));
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 16px; color: var(--text-muted); max-width: 680px; margin: 0 auto 22px; line-height: 1.55; }
+    .calc-section { padding: 24px 0 40px; }
+    .calc-one { max-width: 720px; margin: 0 auto; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--shadow); }
+    .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+    .field { margin-bottom: 14px; }
+    .dur { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 14px; }
+    .dur legend { font-weight: 600; font-size: 14px; padding: 0 6px; }
+    .row4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .row4 label { display: block; font-size: 12px; margin-bottom: 4px; color: var(--text-muted); }
+    .row4 input { width: 100%; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
+    .big { font-size: 1.5rem; font-weight: 800; color: var(--blue); margin: 12px 0 8px; }
+    .sub { font-size: 14px; color: var(--text-muted); }
+    .edu { padding: 28px 0 40px; }
+    .edu .container { max-width: 760px; }
+    .edu a { color: var(--blue); font-weight: 600; }
+    .edu p { font-size: 15px; line-height: 1.7; color: var(--text-muted); }
+    .section-title { text-align: center; margin-bottom: 16px; font-size: 1.5rem; }
+    .related { text-align: center; padding-bottom: 48px; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

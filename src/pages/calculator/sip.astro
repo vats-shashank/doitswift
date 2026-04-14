@@ -1,5 +1,6 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
 
 const canonical = 'https://doitswift.com/calculator/sip/';
 const jsonLd = {
@@ -60,10 +61,20 @@ const jsonLd = {
       <div class="calc-inputs">
         <h2 class="calc-heading">Inputs</h2>
         <div class="field">
-          <label for="sipMonthly">Monthly investment (₹)</label>
+          <label for="sipCur">Currency (display)</label>
+          <select id="sipCur" aria-label="Currency">
+            {CALCULATOR_CURRENCY_OPTIONS.map((o) => (
+              <option value={o.code} selected={o.code === 'INR'}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div class="field">
+          <label for="sipMonthly">Monthly investment</label>
           <input type="range" id="sipMonthlyRange" min="500" max="100000" step="500" value="5000" aria-hidden="true" />
           <input type="number" id="sipMonthly" min="500" max="100000" step="500" value="5000" inputmode="numeric" aria-describedby="sipMonthly-hint" />
-          <p id="sipMonthly-hint" class="field-hint">Between ₹500 and ₹1,00,000</p>
+          <p id="sipMonthly-hint" class="field-hint">Adjust amount to match your platform’s minimums</p>
         </div>
         <div class="field">
           <label for="sipRate">Expected annual return (%)</label>
@@ -79,15 +90,15 @@ const jsonLd = {
 
       <div class="calc-results" aria-live="polite">
         <h2 class="calc-heading">Results</h2>
-        <div class="result-hero" id="sipMaturity">₹0</div>
+        <div class="result-hero" id="sipMaturity">—</div>
         <p class="result-label">Maturity value (estimated)</p>
         <div class="result-grid">
           <div>
-            <div class="result-sub" id="sipInvested">₹0</div>
+            <div class="result-sub" id="sipInvested">—</div>
             <div class="result-caption">Total invested</div>
           </div>
           <div>
-            <div class="result-sub" id="sipReturns">₹0</div>
+            <div class="result-sub" id="sipReturns">—</div>
             <div class="result-caption">Est. returns</div>
           </div>
         </div>
@@ -164,9 +175,15 @@ const jsonLd = {
     </div>
   </section>
 
-  <script is:inline>
+  <script is:inline define:vars={{ LOCALE_BY_CURRENCY }}>
     (function () {
-      const fmt = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+      function localeForCurrency(code) {
+        return LOCALE_BY_CURRENCY[code] || 'en-US';
+      }
+      function makeFmt() {
+        var code = document.getElementById('sipCur').value || 'INR';
+        return new Intl.NumberFormat(localeForCurrency(code), { style: 'currency', currency: code, maximumFractionDigits: 0 });
+      }
       function debounce(fn, ms) {
         let t;
         return function () {
@@ -185,6 +202,7 @@ const jsonLd = {
         rng.value = inp.value;
       }
       function run() {
+        const fmt = makeFmt();
         const P = Math.min(100000, Math.max(500, parseFloat(document.getElementById('sipMonthly').value) || 0));
         const rate = Math.min(30, Math.max(1, parseFloat(document.getElementById('sipRate').value) || 0));
         const yrs = Math.min(40, Math.max(1, parseFloat(document.getElementById('sipYears').value) || 0));
@@ -215,6 +233,7 @@ const jsonLd = {
         }
       }
       const debRun = debounce(run, 80);
+      document.getElementById('sipCur').addEventListener('change', debRun);
       ['sipMonthly', 'sipRate', 'sipYears'].forEach((id) => {
         document.getElementById(id).addEventListener('input', debRun);
       });

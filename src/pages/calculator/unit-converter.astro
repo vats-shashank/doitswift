@@ -1,0 +1,968 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/unit-converter/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Unit Converter — DoItSwift',
+      url: canonical,
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description:
+        'Convert length, mass, temperature, volume, area, speed, time, energy, power, pressure, data, frequency, fuel economy, and angle — bidirectional, offline.',
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Unit Converter — Length, Weight, Temperature & More | DoItSwift"
+  description="Free unit converter with 14 categories: metric and imperial length, mass, temperature, volume, area, speed, time, energy, power, pressure, digital storage, frequency, fuel economy, and angle. Works offline."
+  keywords="unit converter, km to miles, kg to lbs, celsius to fahrenheit, gallons to litres, hectares to acres, GB to MB"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Unit Converter</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Unit Converter</h1>
+      <p class="subtitle">
+        Convert <strong>14 categories</strong> of units with a clean, two-sided layout — type on either side, pick units below, and see the formula update instantly. No signup; math runs in your browser.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="uc-section">
+    <div class="container uc-wrap">
+      <div class="uc-card" id="ucRoot">
+        <label class="sr-only" for="ucCategory">Conversion category</label>
+        <select id="ucCategory" class="uc-cat" aria-describedby="ucCatHint"></select>
+        <p id="ucCatHint" class="uc-hint">Choose a category, then enter a value on either side.</p>
+
+        <div class="uc-values" id="ucValuesRow">
+          <div class="uc-valwrap">
+            <label class="sr-only" for="ucVal1">First value</label>
+            <input type="text" id="ucVal1" class="uc-input" inputmode="decimal" autocomplete="off" aria-label="First value" />
+          </div>
+          <span class="uc-eq" aria-hidden="true">=</span>
+          <div class="uc-valwrap">
+            <label class="sr-only" for="ucVal2">Second value</label>
+            <input type="text" id="ucVal2" class="uc-input" inputmode="decimal" autocomplete="off" aria-label="Second value" />
+          </div>
+        </div>
+
+        <div class="uc-units">
+          <label class="sr-only" for="ucUnit1">First unit</label>
+          <select id="ucUnit1" class="uc-select" aria-label="First unit"></select>
+          <label class="sr-only" for="ucUnit2">Second unit</label>
+          <select id="ucUnit2" class="uc-select" aria-label="Second unit"></select>
+        </div>
+
+        <div class="uc-formula" id="ucFormula" role="status"></div>
+
+        <details class="uc-details" id="ucQuick">
+          <summary>Common conversions in this category</summary>
+          <ul class="uc-quick" id="ucQuickList"></ul>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu uc-edu">
+    <div class="container">
+      <h2 class="section-title">How to use this unit converter</h2>
+      <p>
+        Pick a <strong>category</strong> from the menu at the top (length, mass, temperature, and so on). Enter a number in <strong>either</strong> large field — the other side updates immediately. Use the <strong>unit dropdowns</strong> under each value to change meters to feet, kilograms to pounds, Celsius to Fahrenheit, or any other pair in that category. The shaded <strong>formula</strong> line explains the relationship for your current pair (multiply, divide, or a temperature rule). Expand <strong>Common conversions</strong> for a short cheat sheet of popular equivalents in that category.
+      </p>
+
+      <h3 class="uc-h3">Categories explained</h3>
+      <p>
+        <strong>Length</strong> is used for distance and size — from nanometres in chip design to light years in astronomy. <strong>Mass</strong> (often called weight in everyday speech) uses the kilogram as the SI anchor; carats and atomic mass units appear for gems and chemistry. <strong>Temperature</strong> needs <em>offsets</em> as well as scales, so Celsius, Fahrenheit, Kelvin, Rankine, and Réaumur are linked by formulas, not a single multiplier. <strong>Volume</strong> separates liquid cooking measures (US cups, teaspoons) from litres and cubic metres. <strong>Area</strong> covers floors, land, and fields — including hectare and a practical Indian <strong>bigha</strong> reference (definitions vary by state). <strong>Speed</strong> includes km/h, mph, knots, and fixed references like Mach at sea level and the speed of light in vacuum.
+      </p>
+      <p>
+        <strong>Time</strong> spans nanoseconds to centuries; “month” and “year” use common averages because calendar months differ. <strong>Energy</strong> and <strong>power</strong> connect joules, calories, kilowatt-hours, and horsepower. <strong>Pressure</strong> maps pascals to PSI, bar, atmospheres, and millimetres of mercury. <strong>Data storage</strong> here uses <strong>binary</strong> kilo/mega/giga (powers of 1024), which matches how operating systems report file and RAM sizes. <strong>Frequency</strong> links hertz to RPM. <strong>Fuel economy</strong> ties together US mpg, Imperial mpg, km/L, and the inverse L/100 km style common in Europe. <strong>Angle</strong> uses radians as the mathematical base, with degrees, gradians, and arc minutes/seconds for surveying and astronomy.
+      </p>
+
+      <h3 class="uc-h3">Common conversions reference</h3>
+      <p>
+        Handy anchors: <strong>1 inch = 2.54 cm</strong> exactly; <strong>1 mile ≈ 1.609 km</strong>; <strong>1 kg ≈ 2.2046 lb</strong>; <strong>1 US gallon ≈ 3.785 L</strong>; <strong>1 Imperial gallon ≈ 4.546 L</strong>; <strong>0 °C = 32 °F</strong>; <strong>100 °C = 212 °F</strong>; <strong>1 hectare ≈ 2.471 acres</strong>. For digital sizes, <strong>1 KiB = 1024 bytes</strong> (often shown as “KB” in software). For fuel, remember <strong>L/100 km</strong> drops as efficiency improves, while <strong>km/L</strong> and <strong>mpg</strong> rise.
+      </p>
+
+      <h3 class="uc-h3">Why metric vs imperial?</h3>
+      <p>
+        The <strong>metric system</strong> (SI) uses decimal prefixes and shared bases, which simplifies science, trade, and education. The <strong>US customary</strong> and <strong>British imperial</strong> systems persist in everyday life in several countries — road signs in miles, body weight in stones in the UK, US fluid ounces for recipes. Converters bridge the two without replacing local convention; precision matters when engineering or baking.
+      </p>
+
+      <h3 class="uc-h3">Precision and rounding</h3>
+      <p>
+        Factors and constants follow internationally used values (e.g. exact inch–centimetre definition). Displayed numbers are <strong>rounded for readability</strong>; very large or small results may use <strong>scientific notation</strong>. If you need legal or contract-critical figures, confirm against primary standards.
+      </p>
+
+      <h3 class="uc-h3">Why temperature is different</h3>
+      <p>
+        Most units are <strong>proportional</strong>: doubling the number doubles the physical quantity when converted. Temperature scales have different <strong>zeros</strong> and <strong>step sizes</strong>, so you cannot convert °C to °F by multiplying alone — you use a linear formula with an offset (and different handling for Kelvin as an absolute scale). That is why this tool shows explicit temperature rules in the formula box instead of a single “multiply by k” line.
+      </p>
+
+      <h3 class="uc-h3">Tips for students, cooks, and travellers</h3>
+      <p>
+        When doing <strong>homework</strong>, write the unit symbol beside every number until the final answer; this catches mismatched scales early. In the <strong>kitchen</strong>, liquid volumes differ between US cups and metric millilitres — pick the column that matches your recipe card. For <strong>travel</strong>, mentally anchor a few conversions (your height in feet, driving speed in mph, or luggage weight in pounds) so foreign signs feel less abstract. When you only need a rough estimate, rounding to two significant figures is often enough; when you are comparing prices per kilogram in a supermarket, one more digit helps. If two results disagree slightly, check whether one source used US definitions and another used imperial or metric — the labels on this page follow the definitions in the dropdowns.
+      </p>
+    </div>
+  </section>
+
+  <section class="faq uc-faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <h4>Why are the conversions so precise?</h4>
+          <p>
+            Definitions such as the inch (exactly 2.54 cm) and fixed physical constants allow exact factors. We show enough digits for practical use; rounding happens only for display.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>What’s the difference between US gallon and Imperial gallon?</h4>
+          <p>
+            They are different historical measures. A <strong>US liquid gallon</strong> is about 3.785 litres; an <strong>Imperial gallon</strong> is about 4.546 litres. Mixing them breaks recipes and fuel calculations — always check which system a number uses.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Why does megabyte show 1024 KB instead of 1000?</h4>
+          <p>
+            Software often uses <strong>binary</strong> prefixes (1024 = 2¹⁰). Drive makers sometimes advertise decimal GB (1000³ bytes), which is why a “1 TB” disk can show a lower capacity in Windows. This converter uses <strong>1024-based</strong> steps between KB, MB, GB, as on most OS labels.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Can I add custom units?</h4>
+          <p>
+            Not on this page — only listed units are supported. For one-off ratios, use a spreadsheet or divide by the conversion factor shown in the formula line.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Why is temperature conversion different from other units?</h4>
+          <p>
+            Temperature intervals can scale linearly, but <strong>absolute values</strong> require offsets between Celsius, Fahrenheit, and Kelvin-style scales. This tool converts via a consistent internal path (usually through Celsius or Kelvin) so combinations stay correct.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Does this work offline?</h4>
+          <p>
+            Yes. After the page loads once, calculations run locally in JavaScript with no server round-trip for your numbers.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>What about currency conversion?</h4>
+          <p>
+            Live exchange rates need a trusted API and ongoing maintenance, so <strong>currency is not included</strong> here. Use your bank or a dedicated finance site for up-to-date rates.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>How accurate is the speed of light reference?</h4>
+          <p>
+            The value <strong>299,792,458 m/s</strong> is the defined speed of light in vacuum in SI units. It is exact under current definitions; this tool uses it as a fixed conversion reference for speed mode.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/bmi">BMI</a>
+        ·
+        <a href="/calculator/percentage">Percentage</a>
+        ·
+        <a href="/calculator/scientific">Scientific calculator</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      var PI = Math.PI;
+      var categories = {
+        length: {
+          name: 'Length',
+          type: 'factor',
+          base: 'm',
+          units: {
+            pm: { name: 'Picometre (pm)', factor: 1e-12 },
+            nm: { name: 'Nanometre (nm)', factor: 1e-9 },
+            um: { name: 'Micrometre (μm)', factor: 1e-6 },
+            mm: { name: 'Millimetre (mm)', factor: 0.001 },
+            cm: { name: 'Centimetre (cm)', factor: 0.01 },
+            m: { name: 'Metre (m)', factor: 1 },
+            km: { name: 'Kilometre (km)', factor: 1000 },
+            in: { name: 'Inch (in)', factor: 0.0254 },
+            ft: { name: 'Foot (ft)', factor: 0.3048 },
+            yd: { name: 'Yard (yd)', factor: 0.9144 },
+            mi: { name: 'Mile (mi)', factor: 1609.344 },
+            nmi: { name: 'Nautical mile (nmi)', factor: 1852 },
+            ly: { name: 'Light year (ly)', factor: 9.4607e15 },
+            au: { name: 'Astronomical unit (au)', factor: 1.496e11 },
+            pc: { name: 'Parsec (pc)', factor: 3.0857e16 },
+          },
+        },
+        mass: {
+          name: 'Weight / Mass',
+          type: 'factor',
+          base: 'kg',
+          units: {
+            ug: { name: 'Microgram (μg)', factor: 1e-9 },
+            mg: { name: 'Milligram (mg)', factor: 1e-6 },
+            g: { name: 'Gram (g)', factor: 0.001 },
+            kg: { name: 'Kilogram (kg)', factor: 1 },
+            t: { name: 'Tonne (t)', factor: 1000 },
+            oz: { name: 'Ounce (oz)', factor: 0.02834952 },
+            lb: { name: 'Pound (lb)', factor: 0.45359237 },
+            st: { name: 'Stone (st)', factor: 6.35029318 },
+            us_ton: { name: 'US ton', factor: 907.18474 },
+            imp_ton: { name: 'Imperial ton', factor: 1016.04691 },
+            ct: { name: 'Carat', factor: 0.0002 },
+            u: { name: 'Atomic mass unit (u)', factor: 1.66054e-27 },
+          },
+        },
+        temperature: {
+          name: 'Temperature',
+          type: 'temp',
+          units: {
+            C: {
+              name: 'Celsius (°C)',
+              toC: function (v) {
+                return v;
+              },
+              fromC: function (v) {
+                return v;
+              },
+            },
+            F: {
+              name: 'Fahrenheit (°F)',
+              toC: function (v) {
+                return ((v - 32) * 5) / 9;
+              },
+              fromC: function (v) {
+                return (v * 9) / 5 + 32;
+              },
+            },
+            K: {
+              name: 'Kelvin (K)',
+              toC: function (v) {
+                return v - 273.15;
+              },
+              fromC: function (v) {
+                return v + 273.15;
+              },
+            },
+            R: {
+              name: 'Rankine (°R)',
+              toC: function (v) {
+                return (v * 5) / 9 - 273.15;
+              },
+              fromC: function (v) {
+                return (v + 273.15) * (9 / 5);
+              },
+            },
+            Re: {
+              name: 'Réaumur (°Ré)',
+              toC: function (v) {
+                return (v * 5) / 4;
+              },
+              fromC: function (v) {
+                return (v * 4) / 5;
+              },
+            },
+          },
+        },
+        volume: {
+          name: 'Volume',
+          type: 'factor',
+          base: 'L',
+          units: {
+            uL: { name: 'Microlitre (μL)', factor: 1e-6 },
+            mL: { name: 'Millilitre (mL)', factor: 0.001 },
+            cL: { name: 'Centilitre (cL)', factor: 0.01 },
+            dL: { name: 'Decilitre (dL)', factor: 0.1 },
+            L: { name: 'Litre (L)', factor: 1 },
+            m3: { name: 'Cubic metre (m³)', factor: 1000 },
+            tsp: { name: 'US teaspoon (tsp)', factor: 0.00492892 },
+            tbsp: { name: 'US tablespoon (tbsp)', factor: 0.01478676 },
+            floz: { name: 'US fluid ounce (fl oz)', factor: 0.02957353 },
+            cup: { name: 'US cup', factor: 0.2365882 },
+            pt_us: { name: 'US pint', factor: 0.4731765 },
+            qt_us: { name: 'US quart', factor: 0.946353 },
+            gal_us: { name: 'US gallon (gal)', factor: 3.785412 },
+            pt_imp: { name: 'Imperial pint', factor: 0.5683 },
+            qt_imp: { name: 'Imperial quart', factor: 1.1365 },
+            gal_imp: { name: 'Imperial gallon', factor: 4.546 },
+          },
+        },
+        area: {
+          name: 'Area',
+          type: 'factor',
+          base: 'm²',
+          units: {
+            mm2: { name: 'Square millimetre (mm²)', factor: 1e-6 },
+            cm2: { name: 'Square centimetre (cm²)', factor: 1e-4 },
+            m2: { name: 'Square metre (m²)', factor: 1 },
+            ha: { name: 'Hectare (ha)', factor: 10000 },
+            km2: { name: 'Square kilometre (km²)', factor: 1e6 },
+            in2: { name: 'Square inch (in²)', factor: 0.00064516 },
+            ft2: { name: 'Square foot (ft²)', factor: 0.09290304 },
+            yd2: { name: 'Square yard (yd²)', factor: 0.836127 },
+            acre: { name: 'Acre', factor: 4046.86 },
+            mi2: { name: 'Square mile (mi²)', factor: 2.59e6 },
+            bigha: { name: 'Bigha (India, approx. 2500 m²)', factor: 2500 },
+          },
+        },
+        speed: {
+          name: 'Speed',
+          type: 'factor',
+          base: 'm/s',
+          units: {
+            ms: { name: 'Metre per second (m/s)', factor: 1 },
+            kmh: { name: 'Kilometre per hour (km/h)', factor: 1 / 3.6 },
+            mph: { name: 'Mile per hour (mph)', factor: 0.44704 },
+            fts: { name: 'Foot per second (ft/s)', factor: 0.3048 },
+            kn: { name: 'Knot', factor: 0.514444 },
+            mach: { name: 'Mach (sea level ~343 m/s)', factor: 343 },
+            c: { name: 'Speed of light (c)', factor: 299792458 },
+          },
+        },
+        time: {
+          name: 'Time',
+          type: 'factor',
+          base: 's',
+          units: {
+            ns: { name: 'Nanosecond (ns)', factor: 1e-9 },
+            us: { name: 'Microsecond (μs)', factor: 1e-6 },
+            ms: { name: 'Millisecond (ms)', factor: 0.001 },
+            s: { name: 'Second (s)', factor: 1 },
+            min: { name: 'Minute (min)', factor: 60 },
+            h: { name: 'Hour (h)', factor: 3600 },
+            d: { name: 'Day (d)', factor: 86400 },
+            wk: { name: 'Week', factor: 604800 },
+            mo: { name: 'Month (avg)', factor: 2629743.83 },
+            yr: { name: 'Year (avg 365.25 d)', factor: 31557600 },
+            dec: { name: 'Decade', factor: 315576000 },
+            cent: { name: 'Century', factor: 3155760000 },
+          },
+        },
+        energy: {
+          name: 'Energy',
+          type: 'factor',
+          base: 'J',
+          units: {
+            J: { name: 'Joule (J)', factor: 1 },
+            kJ: { name: 'Kilojoule (kJ)', factor: 1000 },
+            cal: { name: 'Calorie (cal)', factor: 4.184 },
+            kcal: { name: 'Kilocalorie (kcal)', factor: 4184 },
+            Wh: { name: 'Watt-hour (Wh)', factor: 3600 },
+            kWh: { name: 'Kilowatt-hour (kWh)', factor: 3.6e6 },
+            eV: { name: 'Electron-volt (eV)', factor: 1.60218e-19 },
+            BTU: { name: 'BTU', factor: 1055.06 },
+            ftlb: { name: 'Foot-pound (ft·lb)', factor: 1.35582 },
+          },
+        },
+        power: {
+          name: 'Power',
+          type: 'factor',
+          base: 'W',
+          units: {
+            W: { name: 'Watt (W)', factor: 1 },
+            kW: { name: 'Kilowatt (kW)', factor: 1000 },
+            MW: { name: 'Megawatt (MW)', factor: 1e6 },
+            hp: { name: 'Horsepower (mechanical hp)', factor: 745.7 },
+            PS: { name: 'Metric horsepower (PS)', factor: 735.499 },
+            btuh: { name: 'BTU per hour', factor: 0.293071 },
+            ftlbs: { name: 'Foot-pound per second', factor: 1.35582 },
+            cals: { name: 'Calorie per second', factor: 4.184 },
+          },
+        },
+        pressure: {
+          name: 'Pressure',
+          type: 'factor',
+          base: 'Pa',
+          units: {
+            Pa: { name: 'Pascal (Pa)', factor: 1 },
+            kPa: { name: 'Kilopascal (kPa)', factor: 1000 },
+            MPa: { name: 'Megapascal (MPa)', factor: 1e6 },
+            bar: { name: 'Bar', factor: 100000 },
+            mbar: { name: 'Millibar (mbar)', factor: 100 },
+            psi: { name: 'PSI (lb/in²)', factor: 6894.76 },
+            atm: { name: 'Atmosphere (atm)', factor: 101325 },
+            Torr: { name: 'Torr', factor: 133.322 },
+            mmHg: { name: 'mmHg', factor: 133.322 },
+            inHg: { name: 'inHg', factor: 3386.39 },
+          },
+        },
+        data: {
+          name: 'Data storage',
+          type: 'factor',
+          base: 'B',
+          note: 'Binary (1024-based). Drive labels often use decimal GB (1000³ bytes).',
+          units: {
+            b: { name: 'Bit (b)', factor: 0.125 },
+            B: { name: 'Byte (B)', factor: 1 },
+            Kb: { name: 'Kilobit (Kb)', factor: 128 },
+            KB: { name: 'Kilobyte (KB)', factor: 1024 },
+            Mb: { name: 'Megabit (Mb)', factor: 131072 },
+            MB: { name: 'Megabyte (MB)', factor: 1048576 },
+            Gb: { name: 'Gigabit (Gb)', factor: 134217728 },
+            GB: { name: 'Gigabyte (GB)', factor: 1073741824 },
+            Tb: { name: 'Terabit (Tb)', factor: 137438953472 },
+            TB: { name: 'Terabyte (TB)', factor: 1099511627776 },
+            PB: { name: 'Petabyte (PB)', factor: 1125899906842624 },
+          },
+        },
+        frequency: {
+          name: 'Frequency',
+          type: 'factor',
+          base: 'Hz',
+          units: {
+            Hz: { name: 'Hertz (Hz)', factor: 1 },
+            kHz: { name: 'Kilohertz (kHz)', factor: 1000 },
+            MHz: { name: 'Megahertz (MHz)', factor: 1e6 },
+            GHz: { name: 'Gigahertz (GHz)', factor: 1e9 },
+            THz: { name: 'Terahertz (THz)', factor: 1e12 },
+            rpm: { name: 'RPM (revolutions per minute)', factor: 1 / 60 },
+          },
+        },
+        fuel: {
+          name: 'Fuel economy',
+          type: 'fuel',
+          units: {
+            mpg_us: { name: 'Miles per US gallon (mpg)' },
+            mpg_imp: { name: 'Miles per Imperial mpg' },
+            km_l: { name: 'Kilometres per litre (km/L)' },
+            l100: { name: 'Litres per 100 km (L/100 km)' },
+          },
+        },
+        angle: {
+          name: 'Angle',
+          type: 'factor',
+          base: 'rad',
+          units: {
+            rad: { name: 'Radian (rad)', factor: 1 },
+            deg: { name: 'Degree (°)', factor: PI / 180 },
+            grad: { name: 'Gradian (grad)', factor: PI / 200 },
+            amin: { name: 'Arcminute (′)', factor: PI / (180 * 60) },
+            asec: { name: 'Arcsecond (″)', factor: PI / (180 * 3600) },
+            rev: { name: 'Revolution', factor: 2 * PI },
+          },
+        },
+      };
+
+      var MILE_KM = 1.609344;
+      var GAL_US_L = 3.785411784;
+      var GAL_IMP_L = 4.54609;
+
+      function fuelToKmPerL(v, id) {
+        if (id === 'km_l') return v;
+        if (id === 'l100') return v > 0 ? 100 / v : NaN;
+        if (id === 'mpg_us') return (v * MILE_KM) / GAL_US_L;
+        if (id === 'mpg_imp') return (v * MILE_KM) / GAL_IMP_L;
+        return NaN;
+      }
+
+      function kmPerLToFuel(k, id) {
+        if (id === 'km_l') return k;
+        if (id === 'l100') return k > 0 ? 100 / k : NaN;
+        if (id === 'mpg_us') return (k * GAL_US_L) / MILE_KM;
+        if (id === 'mpg_imp') return (k * GAL_IMP_L) / MILE_KM;
+        return NaN;
+      }
+
+      var quickRef = {
+        length: [
+          '1 metre = 3.28084 feet',
+          '1 kilometre = 0.621371 miles',
+          '1 inch = 2.54 centimetres (exact)',
+          '1 mile = 1.60934 kilometres',
+          '1 nautical mile = 1.852 km',
+        ],
+        mass: ['1 kilogram ≈ 2.20462 pounds', '1 pound ≈ 0.453592 kg', '1 ounce ≈ 28.35 g', '1 stone = 14 lb'],
+        temperature: ['0 °C = 32 °F', '100 °C = 212 °F', '0 K = −273.15 °C', 'Δ1 °C = Δ1.8 °F'],
+        volume: ['1 litre ≈ 0.264 US gallons', '1 US gallon ≈ 3.785 litres', '1 Imperial gallon ≈ 4.546 litres', '1 US cup ≈ 236.6 mL'],
+        area: ['1 hectare = 10 000 m² ≈ 2.471 acres', '1 acre ≈ 4047 m²', '1 m² ≈ 10.764 ft²'],
+        speed: ['1 km/h ≈ 0.621 mph', '60 mph ≈ 96.56 km/h', '1 knot ≈ 1.852 km/h', 'Mach 1 ≈ 343 m/s at sea level'],
+        time: ['1 hour = 3600 seconds', '1 day = 86 400 s', '1 average year ≈ 365.25 days'],
+        energy: ['1 kcal ≈ 4184 J', '1 kWh = 3.6 MJ', '1 eV ≈ 1.602×10⁻¹⁹ J'],
+        power: ['1 hp (mechanical) ≈ 745.7 W', '1 PS ≈ 735.5 W', '1 W = 1 J/s'],
+        pressure: ['1 atm = 101 325 Pa', '1 bar = 100 000 Pa', '1 PSI ≈ 6895 Pa'],
+        data: ['1 KB = 1024 bytes (binary)', '1 MB = 1024 KB', '8 bits = 1 byte'],
+        frequency: ['1 kHz = 1000 Hz', '60 RPM = 1 Hz'],
+        fuel: ['Higher km/L or mpg means better fuel economy', 'L/100 km decreases as efficiency improves', 'US and Imperial gallons differ'],
+        angle: ['π rad = 180°', '1 revolution = 2π rad', '1° = π/180 rad'],
+      };
+
+      var lastEdited = 'left';
+      var selCat = document.getElementById('ucCategory');
+      var v1 = document.getElementById('ucVal1');
+      var v2 = document.getElementById('ucVal2');
+      var u1 = document.getElementById('ucUnit1');
+      var u2 = document.getElementById('ucUnit2');
+      var formulaEl = document.getElementById('ucFormula');
+      var quickList = document.getElementById('ucQuickList');
+
+      function catKeys() {
+        return Object.keys(categories);
+      }
+
+      function fillCategories() {
+        selCat.innerHTML = '';
+        catKeys().forEach(function (k) {
+          var o = document.createElement('option');
+          o.value = k;
+          o.textContent = categories[k].name;
+          selCat.appendChild(o);
+        });
+      }
+
+      function fillUnits(selectEl, catKey, selectedId) {
+        var cat = categories[catKey];
+        selectEl.innerHTML = '';
+        Object.keys(cat.units).forEach(function (id) {
+          var o = document.createElement('option');
+          o.value = id;
+          o.textContent = cat.units[id].name;
+          selectEl.appendChild(o);
+        });
+        if (selectedId && cat.units[selectedId]) selectEl.value = selectedId;
+        else selectEl.selectedIndex = 0;
+      }
+
+      function parseNum(s) {
+        if (s === '' || s === null || s === undefined) return NaN;
+        var t = String(s).replace(/,/g, '').trim();
+        if (t === '' || t === '-' || t === '.' || t === '-.') return NaN;
+        return parseFloat(t);
+      }
+
+      function formatOut(x) {
+        if (x === null || x === undefined || (typeof x === 'number' && !isFinite(x))) return '';
+        var ax = Math.abs(x);
+        if (ax !== 0 && (ax >= 1e15 || ax < 1e-9)) return x.toExponential(8);
+        var rounded = Math.round(x * 1e12) / 1e12;
+        var s = String(rounded);
+        if (s.length > 18) return x.toPrecision(12);
+        return s;
+      }
+
+      function convertFactor(val, fromId, toId, cat) {
+        var fu = cat.units[fromId].factor;
+        var tu = cat.units[toId].factor;
+        return (val * fu) / tu;
+      }
+
+      function convertTemp(val, fromId, toId, cat) {
+        var c = cat.units[fromId].toC(val);
+        return cat.units[toId].fromC(c);
+      }
+
+      function convertFuel(val, fromId, toId) {
+        var k = fuelToKmPerL(val, fromId);
+        return kmPerLToFuel(k, toId);
+      }
+
+      function updateFormula(catKey, id1, id2) {
+        var cat = categories[catKey];
+        if (cat.type === 'temp') {
+          formulaEl.textContent =
+            'Formula: (°F − 32) × 5/9 = °C; °C × 9/5 + 32 = °F; K = °C + 273.15; °R = (°C + 273.15) × 9/5; °Ré = °C × 4/5. Temperatures need offsets, not a single multiplier.';
+          return;
+        }
+        if (cat.type === 'fuel') {
+          formulaEl.textContent =
+            'Formula: convert via km/L — L/100 km = 100 ÷ (km/L). US mpg uses US gallons (3.785 L); Imperial mpg uses Imperial gallons (4.546 L).';
+          return;
+        }
+        if (cat.type === 'factor') {
+          var f1 = cat.units[id1].factor;
+          var f2 = cat.units[id2].factor;
+          var ratio = f1 / f2;
+          var line =
+            Math.abs(ratio - 1) < 1e-15
+              ? 'Same unit — no conversion.'
+              : Math.abs(ratio) > 0 && Math.abs(Math.log10(Math.abs(ratio))) < 8
+                ? 'Multiply the first value by ' + formatOut(ratio) + ' to obtain the second (factors relative to ' + cat.base + ').'
+                : 'Multiply the first value by ' + ratio.toExponential(10) + ' to obtain the second (via base ' + cat.base + ').';
+          if (cat.note) line += ' ' + cat.note;
+          formulaEl.textContent = 'Formula: ' + line;
+          return;
+        }
+        formulaEl.textContent = '';
+      }
+
+      function updateQuick(catKey) {
+        var lines = quickRef[catKey] || [];
+        quickList.innerHTML = '';
+        lines.forEach(function (line) {
+          var li = document.createElement('li');
+          li.textContent = line;
+          quickList.appendChild(li);
+        });
+      }
+
+      function runFromSide(side) {
+        var catKey = selCat.value;
+        var cat = categories[catKey];
+        var id1 = u1.value;
+        var id2 = u2.value;
+        var n1 = parseNum(v1.value);
+        var n2 = parseNum(v2.value);
+        lastEdited = side;
+
+        if (cat.type === 'factor') {
+          if (side === 'left') {
+            if (isNaN(n1)) {
+              v2.value = '';
+              return;
+            }
+            v2.value = formatOut(convertFactor(n1, id1, id2, cat));
+          } else {
+            if (isNaN(n2)) {
+              v1.value = '';
+              return;
+            }
+            v1.value = formatOut(convertFactor(n2, id2, id1, cat));
+          }
+        } else if (cat.type === 'temp') {
+          if (side === 'left') {
+            if (isNaN(n1)) {
+              v2.value = '';
+              return;
+            }
+            v2.value = formatOut(convertTemp(n1, id1, id2, cat));
+          } else {
+            if (isNaN(n2)) {
+              v1.value = '';
+              return;
+            }
+            v1.value = formatOut(convertTemp(n2, id2, id1, cat));
+          }
+        } else if (cat.type === 'fuel') {
+          if (side === 'left') {
+            if (isNaN(n1)) {
+              v2.value = '';
+              return;
+            }
+            v2.value = formatOut(convertFuel(n1, id1, id2));
+          } else {
+            if (isNaN(n2)) {
+              v1.value = '';
+              return;
+            }
+            v1.value = formatOut(convertFuel(n2, id2, id1));
+          }
+        }
+        updateFormula(catKey, id1, id2);
+      }
+
+      function onCategoryChange() {
+        var k = selCat.value;
+        var ids = Object.keys(categories[k].units);
+        var def = {
+          length: ['m', 'cm'],
+          mass: ['kg', 'lb'],
+          temperature: ['C', 'F'],
+          volume: ['L', 'gal_us'],
+          area: ['ha', 'acre'],
+          speed: ['kmh', 'mph'],
+          time: ['h', 'min'],
+          energy: ['kWh', 'J'],
+          power: ['kW', 'hp'],
+          pressure: ['atm', 'Pa'],
+          data: ['GB', 'MB'],
+          frequency: ['GHz', 'MHz'],
+          fuel: ['mpg_us', 'km_l'],
+          angle: ['deg', 'rad'],
+        };
+        var pair = def[k] || [ids[0], ids[Math.min(1, ids.length - 1)]];
+        fillUnits(u1, k, pair[0]);
+        fillUnits(u2, k, pair[1]);
+        v1.value = '1';
+        v2.value = '';
+        lastEdited = 'left';
+        runFromSide('left');
+        updateQuick(k);
+      }
+
+      function wire() {
+        fillCategories();
+        selCat.value = 'length';
+        onCategoryChange();
+
+        selCat.addEventListener('change', onCategoryChange);
+        u1.addEventListener('change', function () {
+          runFromSide(lastEdited);
+        });
+        u2.addEventListener('change', function () {
+          runFromSide(lastEdited);
+        });
+        v1.addEventListener('input', function () {
+          runFromSide('left');
+        });
+        v2.addEventListener('input', function () {
+          runFromSide('right');
+        });
+        v1.addEventListener('focus', function () {
+          lastEdited = 'left';
+        });
+        v2.addEventListener('focus', function () {
+          lastEdited = 'right';
+        });
+      }
+
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
+      else wire();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 16px 0 0;
+      max-width: 960px;
+    }
+    .breadcrumb a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+    .hero {
+      padding: 36px 0 16px;
+      text-align: center;
+    }
+    .subtitle {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto 22px;
+      line-height: 1.6;
+    }
+    .uc-section {
+      padding: 16px 0 32px;
+    }
+    .uc-wrap {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .uc-card {
+      padding: 0 4px;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+    .uc-cat {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 14px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+    .uc-hint {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin: 0 0 20px;
+    }
+    .uc-values {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 12px 16px;
+      margin-bottom: 20px;
+    }
+    .uc-valwrap {
+      flex: 1 1 200px;
+      min-width: 0;
+      max-width: 260px;
+    }
+    .uc-input {
+      width: 100%;
+      min-height: 52px;
+      padding: 10px 8px;
+      font-size: 32px;
+      font-weight: 600;
+      text-align: center;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      outline: none;
+    }
+    .uc-input:focus {
+      background: var(--gray-100);
+      border-radius: 8px;
+    }
+    :global([data-theme='dark']) .uc-input:focus {
+      background: var(--gray-200);
+    }
+    .uc-eq {
+      font-size: 28px;
+      color: var(--text-muted);
+      font-weight: 500;
+      flex: 0 0 auto;
+      padding: 0 4px;
+    }
+    .uc-units {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .uc-select {
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 12px;
+      font-size: 15px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      cursor: pointer;
+    }
+    .uc-formula {
+      font-size: 14px;
+      line-height: 1.45;
+      color: var(--text-muted);
+      background: var(--blue-light);
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      min-height: 2.8em;
+    }
+    :global([data-theme='dark']) .uc-formula {
+      background: rgba(0, 102, 255, 0.15);
+      color: var(--text-muted);
+    }
+    .uc-details {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      background: var(--card);
+    }
+    .uc-details summary {
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--text);
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+    }
+    .uc-quick {
+      margin: 12px 0 0;
+      padding-left: 1.2em;
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+    .uc-quick li {
+      margin-bottom: 6px;
+    }
+    .uc-edu {
+      padding: 28px 0 20px;
+    }
+    .uc-edu .container {
+      max-width: 760px;
+    }
+    .uc-edu p {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .uc-h3 {
+      font-size: 1.1rem;
+      margin: 22px 0 10px;
+      color: var(--text);
+    }
+    .uc-faq {
+      padding: 16px 0 40px;
+    }
+    .uc-faq .container {
+      max-width: 760px;
+    }
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .faq-item h4 {
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+    .faq-item p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+      line-height: 1.6;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 18px;
+      font-size: 1.5rem;
+    }
+    .related {
+      text-align: center;
+      padding-bottom: 48px;
+    }
+    .related-links a {
+      color: var(--blue);
+      font-weight: 600;
+    }
+    @media (max-width: 540px) {
+      .uc-values {
+        flex-direction: column;
+      }
+      .uc-eq {
+        order: 2;
+      }
+      .uc-valwrap {
+        max-width: 100%;
+      }
+      .uc-input {
+        font-size: 24px;
+        min-height: 48px;
+      }
+      .uc-units {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</MainLayout>

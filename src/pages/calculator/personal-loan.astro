@@ -1,0 +1,310 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
+
+const canonical = 'https://doitswift.com/calculator/personal-loan/';
+const site = 'https://doitswift.com';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Personal Loan EMI Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Calculate personal loan EMI, processing fee impact, effective rate, and amortization in India.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        { '@type': 'Question', name: 'What is personal loan EMI?', acceptedAnswer: { '@type': 'Answer', text: 'Fixed monthly payment covering principal and interest on a reducing balance, often with upfront processing fees.' } },
+        { '@type': 'Question', name: 'Why are personal loan rates higher than home loans?', acceptedAnswer: { '@type': 'Answer', text: 'Personal loans are usually unsecured, so lenders charge higher interest to cover risk.' } },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: site + '/' },
+        { '@type': 'ListItem', position: 2, name: 'Calculators', item: site + '/calculator/' },
+        { '@type': 'ListItem', position: 3, name: 'Personal Loan EMI', item: canonical },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Personal Loan EMI Calculator — Calculate Monthly Payment | DoItSwift"
+  description="Free personal loan EMI calculator for India: monthly payment, total interest, processing fee, effective rate, year-wise amortization, and principal vs interest vs fees chart."
+  keywords="personal loan emi calculator, personal loan calculator, loan emi calculator, instant loan calculator"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Personal Loan EMI</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Personal Loan EMI Calculator</h1>
+      <p class="subtitle">
+        Estimate <strong>monthly EMI</strong>, <strong>total interest</strong>, and the impact of <strong>processing fees</strong> on your personal loan — typical unsecured loan ranges in Indian rupees.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label for="plCcy">Currency (display)</label>
+          <select id="plCcy" aria-label="Currency">
+            {CALCULATOR_CURRENCY_OPTIONS.map((o) => (
+              <option value={o.code} selected={o.code === 'INR'}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div class="field">
+          <label for="plAmt">Loan amount</label>
+          <input type="range" id="plAmtR" min="10000" max="5000000" step="10000" value="500000" aria-hidden="true" />
+          <input type="number" id="plAmt" min="10000" max="5000000" step="1000" value="500000" />
+        </div>
+        <div class="field">
+          <label for="plRate">Interest rate (% p.a.)</label>
+          <input type="range" id="plRateR" min="8" max="36" step="0.1" value="12" aria-hidden="true" />
+          <input type="number" id="plRate" min="8" max="36" step="0.01" value="12" />
+        </div>
+        <div class="field">
+          <label for="plYears">Tenure (years)</label>
+          <input type="range" id="plYearsR" min="0.25" max="7" step="0.25" value="3" aria-hidden="true" />
+          <input type="number" id="plYears" min="0.25" max="7" step="0.25" value="3" />
+          <p class="field-hint">3 months–7 years (use decimals for months, e.g. 0.5 = 6 months)</p>
+        </div>
+        <div class="field">
+          <label for="plFee">Processing fee (% of loan, optional)</label>
+          <input type="number" id="plFee" min="0" max="10" step="0.1" value="2" />
+        </div>
+      </div>
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <div class="result-hero" id="plEmi">—</div>
+        <p class="result-label">Monthly EMI</p>
+        <div class="result-grid">
+          <div><div class="result-sub" id="plInt">—</div><div class="result-caption">Total interest</div></div>
+          <div><div class="result-sub" id="plTot">—</div><div class="result-caption">Total outflow (EMI×n + fee)</div></div>
+        </div>
+        <p class="result-note" id="plEff"></p>
+        <div class="pie-wrap" role="img" aria-label="Principal, interest, fees">
+          <div class="pie pie--tri" id="plPie"></div>
+          <ul class="pie-legend">
+            <li><span class="dot dot-p"></span> Principal <span id="plPctP">0%</span></li>
+            <li><span class="dot dot-i"></span> Interest <span id="plPctI">0%</span></li>
+            <li><span class="dot dot-f"></span> Fees <span id="plPctF">0%</span></li>
+          </ul>
+        </div>
+        <details class="calc-details">
+          <summary>Year-wise amortization</summary>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Year</th><th>Principal</th><th>Interest</th><th>Balance</th></tr></thead>
+              <tbody id="plTable"></tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Personal loans in India — context and costs</h2>
+      <p>
+        A <strong>personal loan</strong> is usually <strong>unsecured</strong>: you do not pledge property as collateral. Banks and NBFCs price that risk into a higher interest rate than a typical <strong>home loan</strong>, and tenures are shorter — often a few years rather than decades. That makes the EMI larger relative to the amount borrowed, and the total interest meaningful even when the rate looks modest in headline terms.
+      </p>
+      <p>
+        <strong>Processing fees</strong> are often quoted as a percentage of the sanctioned amount, sometimes with GST on top. They do not reduce your principal; they are an upfront cost of taking the loan. This calculator adds the fee to your total cash outflow so you can compare “true” cost. The <strong>effective interest rate</strong> here is a simple annualized cost measure: total cost minus principal, divided by principal and years — useful for comparing two offers with different fees and rates.
+      </p>
+      <p>
+        <strong>When personal loans can make sense:</strong> consolidating high-interest credit card debt (if the blended rate falls), managing a genuine emergency, or a time-bound expense where you can afford the EMI. <strong>When to be cautious:</strong> funding depreciating consumption, stretching tenure to afford a larger loan (you pay more interest), or borrowing because investments “will surely” beat the loan rate — markets are uncertain.
+      </p>
+      <p>
+        <strong>Credit card EMI</strong> versus personal loan: cards may offer easy EMIs on purchases, but effective rates and fees vary. A personal loan often has a fixed schedule and clear APR-style comparison — always normalize to the same tenure and fee structure before choosing.
+      </p>
+      <p>
+        <strong>Tips for better rates:</strong> a strong <strong>credit score</strong>, stable income, lower <strong>debt-to-income</strong>, and an existing banking relationship can help. Read the sanction letter for <strong>prepayment</strong> charges, <strong>late fees</strong>, and whether insurance is bundled. Use our <a href="/calculator/emi">EMI</a>, <a href="/calculator/home-loan">Home Loan</a>, <a href="/calculator/salary">Salary</a>, and <a href="/calculator/compound-interest">Compound Interest</a> calculators alongside this page for a fuller picture.
+      </p>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/emi">EMI Calculator</a>
+        ·
+        <a href="/calculator/home-loan">Home Loan</a>
+        ·
+        <a href="/calculator/salary">Salary</a>
+        ·
+        <a href="/calculator/compound-interest">Compound Interest</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline define:vars={{ LOCALE_BY_CURRENCY }}>
+    (function () {
+      function localeForCurrency(code) {
+        return LOCALE_BY_CURRENCY[code] || 'en-US';
+      }
+      function makeFmt() {
+        var code = document.getElementById('plCcy').value || 'INR';
+        return new Intl.NumberFormat(localeForCurrency(code), { style: 'currency', currency: code, maximumFractionDigits: 0 });
+      }
+      function emi(P, annual, months) {
+        var r = annual / 100 / 12;
+        if (months <= 0) return 0;
+        if (r === 0) return P / months;
+        var p = Math.pow(1 + r, months);
+        return (P * r * p) / (p - 1);
+      }
+      function sync(a, b) {
+        b.value = a.value;
+      }
+      function run() {
+        var fmt = makeFmt();
+        var P = Math.min(5000000, Math.max(10000, parseFloat(document.getElementById('plAmt').value) || 0));
+        var rate = Math.min(36, Math.max(8, parseFloat(document.getElementById('plRate').value) || 0));
+        var yrs = Math.min(7, Math.max(0.25, parseFloat(document.getElementById('plYears').value) || 0));
+        var feePct = Math.max(0, parseFloat(document.getElementById('plFee').value) || 0);
+        document.getElementById('plAmt').value = P;
+        sync(document.getElementById('plAmt'), document.getElementById('plAmtR'));
+        sync(document.getElementById('plRate'), document.getElementById('plRateR'));
+        sync(document.getElementById('plYears'), document.getElementById('plYearsR'));
+        var n = Math.round(yrs * 12);
+        var E = emi(P, rate, n);
+        var fee = (P * feePct) / 100;
+        var totalInt = E * n - P;
+        var totalOut = E * n + fee;
+        var years = n / 12;
+        var eff = years > 0 ? ((totalOut - P) / P / years) * 100 : 0;
+        document.getElementById('plEmi').textContent = fmt.format(Math.round(E));
+        document.getElementById('plInt').textContent = fmt.format(Math.round(totalInt));
+        document.getElementById('plTot').textContent = fmt.format(Math.round(totalOut));
+        document.getElementById('plEff').textContent =
+          'Approx. effective annual cost (incl. fee): ' + eff.toFixed(2) + '% — for comparison only; not a lender quote.';
+        var totPie = P + totalInt + fee;
+        var pp = totPie > 0 ? (P / totPie) * 100 : 0;
+        var ip = totPie > 0 ? (totalInt / totPie) * 100 : 0;
+        var fp = totPie > 0 ? (fee / totPie) * 100 : 0;
+        document.getElementById('plPctP').textContent = pp.toFixed(1) + '%';
+        document.getElementById('plPctI').textContent = ip.toFixed(1) + '%';
+        document.getElementById('plPctF').textContent = fp.toFixed(1) + '%';
+        var pie = document.getElementById('plPie');
+        pie.style.background =
+          'conic-gradient(var(--blue) 0% ' +
+          pp +
+          '%, var(--green) ' +
+          pp +
+          '% ' +
+          (pp + ip) +
+          '%, var(--orange, #f59e0b) ' +
+          (pp + ip) +
+          '% 100%)';
+        var tbody = document.getElementById('plTable');
+        tbody.innerHTML = '';
+        var bal = P;
+        var r = rate / 100 / 12;
+        var yPrin = 0,
+          yInt = 0,
+          y = 1;
+        for (var m = 1; m <= n; m++) {
+          var intP = bal * r;
+          var prinP = E - intP;
+          bal -= prinP;
+          yPrin += prinP;
+          yInt += intP;
+          if (m % 12 === 0 || m === n) {
+            var tr = document.createElement('tr');
+            tr.innerHTML =
+              '<td>' +
+              y +
+              '</td><td>' +
+              fmt.format(Math.round(yPrin)) +
+              '</td><td>' +
+              fmt.format(Math.round(yInt)) +
+              '</td><td>' +
+              fmt.format(Math.max(0, Math.round(bal))) +
+              '</td>';
+            tbody.appendChild(tr);
+            y++;
+            yPrin = 0;
+            yInt = 0;
+          }
+        }
+      }
+      document.getElementById('plCcy').addEventListener('change', run);
+      ['plAmt', 'plRate', 'plYears', 'plFee'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', run);
+      });
+      [['plAmtR', 'plAmt'], ['plRateR', 'plRate'], ['plYearsR', 'plYears']].forEach(function (p) {
+        document.getElementById(p[0]).addEventListener('input', function () {
+          document.getElementById(p[1]).value = this.value;
+          run();
+        });
+      });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 17px; color: var(--text-muted); max-width: 700px; margin: 0 auto 22px; line-height: 1.6; }
+    .calc-section { padding: 24px 0 40px; }
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; max-width: 960px; }
+    @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
+    .calc-inputs, .calc-results { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--shadow); }
+    .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    .field input { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
+    .field-hint { font-size: 12px; color: var(--text-muted); margin: 6px 0 0; }
+    .result-hero { font-size: 2.25rem; font-weight: 800; color: var(--blue); }
+    .result-label { font-size: 14px; color: var(--text-muted); margin: 4px 0 16px; }
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .result-sub { font-size: 1.2rem; font-weight: 700; }
+    .result-caption { font-size: 12px; color: var(--text-muted); }
+    .result-note { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; }
+    .pie-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin: 16px 0; }
+    .pie { width: 120px; height: 120px; border-radius: 50%; }
+    .pie-legend { list-style: none; margin: 0; padding: 0; font-size: 13px; }
+    .dot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; }
+    .dot-p { background: var(--blue); }
+    .dot-i { background: var(--green); }
+    .dot-f { background: #f59e0b; }
+    .calc-details summary { cursor: pointer; font-weight: 600; padding: 8px 0; }
+    .table-wrap { overflow: auto; max-height: 280px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 8px; border-bottom: 1px solid var(--border); text-align: right; }
+    th:first-child, td:first-child { text-align: left; }
+    .edu { padding: 36px 0 48px; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
+    .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .related { text-align: center; padding-bottom: 48px; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

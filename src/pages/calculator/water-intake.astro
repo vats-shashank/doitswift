@@ -1,0 +1,229 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/water-intake/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Water Intake Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'HealthApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Daily hydration estimate from weight, activity, climate, and optional adjustments.',
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Water Intake Calculator — Daily Water Needs by Weight & Activity | DoItSwift"
+  description="Estimate daily water needs (liters and cups) from body weight, activity, climate, pregnancy or breastfeeding, and optional caffeine or alcohol adjustments."
+  keywords="water intake calculator, daily water calculator, how much water should i drink, hydration calculator"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Water Intake</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Water Intake Calculator</h1>
+      <p class="subtitle">
+        A practical <strong>starting range</strong> from weight (35 ml/kg baseline), bumped for activity, heat, pregnancy or breastfeeding, and optional extras — not a medical prescription.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label>Weight</label>
+          <div class="seg">
+            <label><input type="radio" name="wUnit" value="kg" checked /> kg</label>
+            <label><input type="radio" name="wUnit" value="lb" /> lb</label>
+          </div>
+          <input type="number" id="wW" min="20" max="300" step="0.1" value="70" />
+        </div>
+        <div class="field">
+          <label for="wAct">Activity level</label>
+          <select id="wAct">
+            <option value="0">Sedentary</option>
+            <option value="250">Lightly active (+250 ml)</option>
+            <option value="500" selected>Moderately active (+500 ml)</option>
+            <option value="750">Very active (+750 ml)</option>
+            <option value="1000">Athlete (+1000 ml)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="wCl">Climate</label>
+          <select id="wCl">
+            <option value="0">Cold (&lt;15°C)</option>
+            <option value="250" selected>Moderate (15–25°C) (+250 ml)</option>
+            <option value="500">Hot (25–35°C) (+500 ml)</option>
+            <option value="750">Very hot (&gt;35°C) (+750 ml)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="wPb">Pregnancy / breastfeeding</label>
+          <select id="wPb">
+            <option value="0" selected>Neither</option>
+            <option value="300">Pregnancy (+300 ml)</option>
+            <option value="700">Breastfeeding (+700 ml)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="chk"><input type="checkbox" id="wCaf" /> Extra caffeine (+250 ml)</label>
+          <label class="chk"><input type="checkbox" id="wAlc" /> Alcohol today (+500 ml)</label>
+          <label class="chk"><input type="checkbox" id="wSick" /> Fever / illness (+500 ml)</label>
+        </div>
+      </div>
+
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <div class="result-hero" id="wTot">0 L</div>
+        <p class="result-label">≈ <span id="wCups">0</span> cups (250 ml each)</p>
+        <p class="hourly" id="wHr"></p>
+        <div class="glass-row" id="wGlass" role="img" aria-label="Glasses visual"></div>
+        <div class="schedule">
+          <h3 class="sched-h">Rough daytime split (example)</h3>
+          <ul id="wSched" class="sched-list"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Hydration context</h2>
+      <p>
+        Thirst, urine colour, and activity matter. <strong>“8 glasses”</strong> is not universal — needs scale with size, sweat, and environment. In India, <strong>safe drinking water</strong> (boiling, RO maintenance, storage hygiene) matters as much as volume.
+      </p>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/calorie">Calorie / TDEE</a> · <a href="/calculator/bmi">BMI</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      function debounce(fn, ms) {
+        let t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      function kg() {
+        const w = parseFloat(document.getElementById('wW').value) || 0;
+        return document.querySelector('input[name="wUnit"]:checked').value === 'lb' ? w * 0.45359237 : w;
+      }
+      function run() {
+        const k = kg();
+        let ml = k * 35;
+        ml += parseInt(document.getElementById('wAct').value, 10) || 0;
+        ml += parseInt(document.getElementById('wCl').value, 10) || 0;
+        ml += parseInt(document.getElementById('wPb').value, 10) || 0;
+        if (document.getElementById('wCaf').checked) ml += 250;
+        if (document.getElementById('wAlc').checked) ml += 500;
+        if (document.getElementById('wSick').checked) ml += 500;
+        const L = ml / 1000;
+        const cups = ml / 250;
+        document.getElementById('wTot').textContent = L.toFixed(2) + ' L';
+        document.getElementById('wCups').textContent = cups.toFixed(1);
+        const per16 = ml / 16;
+        document.getElementById('wHr').textContent =
+          'Spread over ~16 waking hours: ~' + Math.round(per16) + ' ml/hour on average.';
+        const g = document.getElementById('wGlass');
+        g.innerHTML = '';
+        const n = Math.min(16, Math.round(cups));
+        for (let i = 0; i < n; i++) {
+          const s = document.createElement('span');
+          s.className = 'glass';
+          s.title = 'Cup ' + (i + 1);
+          g.appendChild(s);
+        }
+        const parts = [
+          ['Morning (wake–noon)', 0.3],
+          ['Afternoon', 0.35],
+          ['Evening', 0.25],
+          ['Night (late)', 0.1],
+        ];
+        const ul = document.getElementById('wSched');
+        ul.innerHTML = '';
+        parts.forEach(function (p) {
+          const li = document.createElement('li');
+          li.textContent = p[0] + ': ~' + Math.round((ml * p[1]) / 250) + ' cups';
+          ul.appendChild(li);
+        });
+      }
+      const d = debounce(run, 60);
+      ['wW', 'wAct', 'wCl', 'wPb', 'wCaf', 'wAlc', 'wSick'].forEach(function (id) {
+        const el = document.getElementById(id);
+        el.addEventListener('input', d);
+        el.addEventListener('change', d);
+      });
+      document.querySelectorAll('input[name="wUnit"]').forEach(function (el) {
+        el.addEventListener('change', function () {
+          const inp = document.getElementById('wW');
+          let v = parseFloat(inp.value);
+          if (isNaN(v)) v = 0;
+          if (document.querySelector('input[name="wUnit"]:checked').value === 'lb') {
+            inp.value = String(Math.round((v / 0.45359237) * 10) / 10);
+          } else {
+            inp.value = String(Math.round(v * 0.45359237 * 10) / 10);
+          }
+          d();
+        });
+      });
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 16px; color: var(--text-muted); max-width: 700px; margin: 0 auto 22px; line-height: 1.55; }
+    .calc-section { padding: 24px 0 40px; }
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 960px; align-items: start; }
+    @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
+    .calc-inputs, .calc-results { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--shadow); }
+    .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    .field input, .field select { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
+    .chk { display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 14px; margin-bottom: 8px; cursor: pointer; }
+    .result-hero { font-size: 2rem; font-weight: 800; color: var(--blue); }
+    .result-label { font-size: 15px; color: var(--text-muted); margin: 6px 0 10px; }
+    .hourly { font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px; }
+    .glass-row { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 16px; }
+    .glass { width: 14px; height: 22px; border-radius: 3px; background: linear-gradient(180deg, #93c5fd, #3b82f6); border: 1px solid var(--border); }
+    .sched-h { font-size: 14px; margin-bottom: 8px; }
+    .sched-list { margin: 0; padding-left: 18px; font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+    .edu { padding: 36px 0 48px; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); }
+    .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .related { text-align: center; padding-bottom: 48px; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

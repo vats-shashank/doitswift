@@ -8,9 +8,14 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "postbuild": "npm run verify:sitemap",
     "preview": "astro preview",
     "astro": "astro",
-    "test:calculators": "node scripts/test-calculators.mjs"
+    "test:calculators": "node scripts/test-calculators.mjs",
+    "verify:sitemap": "node scripts/verify-sitemap.mjs",
+    "smoke:preview": "node scripts/smoke-preview.mjs",
+    "check:prod-sitemap": "node scripts/check-prod-sitemap.mjs",
+    "verify:deploy": "npm run build && npm run smoke:preview && npm run check:prod-sitemap"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.2",

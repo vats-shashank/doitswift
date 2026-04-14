@@ -1,0 +1,207 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = 'https://doitswift.com/calculator/pregnancy-due-date/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'Pregnancy Due Date Calculator — DoItSwift',
+      url: canonical,
+      applicationCategory: 'HealthApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      description: 'Estimate due date from last menstrual period using 280-day and Naegele rules.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Is the due date exact?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No — it is an estimate. Only a small fraction of births occur exactly on the predicted day.',
+          },
+        },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Pregnancy Due Date Calculator — EDD from LMP | DoItSwift"
+  description="Estimate your due date from the first day of your last menstrual period (LMP): 280-day rule and Naegele’s rule side by side."
+  keywords="pregnancy due date calculator, edd calculator, lmp due date, pregnancy calculator"
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Pregnancy Due Date</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🧮 Free Calculator</div>
+      <h1>Pregnancy Due Date Calculator</h1>
+      <p class="subtitle">
+        Enter the <strong>first day of your last menstrual period (LMP)</strong>. We show an EDD by adding <strong>280 days (40 weeks)</strong> and the common <strong>Naegele</strong> shortcut (LMP + 1 year − 3 months + 7 days).
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> No signup</span>
+        <span><span class="check">✓</span> Instant results</span>
+        <span><span class="check">✓</span> Works offline</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-section">
+    <div class="container calc-layout">
+      <div class="calc-inputs">
+        <h2 class="calc-heading">Inputs</h2>
+        <div class="field">
+          <label for="pregLmp">First day of last period (LMP)</label>
+          <input type="date" id="pregLmp" />
+        </div>
+      </div>
+      <div class="calc-results" aria-live="polite">
+        <h2 class="calc-heading">Results</h2>
+        <div class="result-hero" id="pregEdd280">—</div>
+        <p class="result-label">EDD (+280 days from LMP)</p>
+        <div class="result-grid">
+          <div>
+            <div class="result-sub" id="pregNae">—</div>
+            <div class="result-caption">Naegele rule (LMP + 1y − 3m + 7d)</div>
+          </div>
+          <div>
+            <div class="result-sub" id="pregGa">—</div>
+            <div class="result-caption">Gestational age from LMP (today)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">How due dates are estimated</h2>
+      <p>
+        Obstetric dating often uses LMP assuming a <strong>28-day cycle</strong> with ovulation around day 14 — individual cycles vary, and ultrasound dating may adjust the EDD. Treat these dates as planning aids; clinical dating trumps online tools.
+      </p>
+      <p>
+        <strong>Naegele’s rule</strong> matches adding 280 days for many calendar situations but can differ by 1 day from strict millisecond addition depending on month lengths — both are shown for transparency.
+      </p>
+    </div>
+  </section>
+
+  <section class="affiliate">
+    <div class="container">
+      <div class="affiliate-inner health">
+        <div class="affiliate-icon">🩺</div>
+        <div class="affiliate-content">
+          <h3>Medical care</h3>
+          <p>Follow your doctor’s schedule — this page is educational only.</p>
+        </div>
+        <a href="/calculator/date-difference" class="btn btn-orange">Date difference →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>Why two dates?</h4><p>280-day addition and Naegele usually align closely; small differences come from calendar math.</p></div>
+        <div class="faq-item"><h4>What if cycles are long?</h4><p>EDD from LMP alone may be early vs true conception — ultrasound is used to refine.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="related">
+    <div class="container">
+      <h2 class="section-title">Related calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/date-difference">Date difference</a> · <a href="/calculator/age">Age</a> · <a href="/calculator/period-ovulation">Period &amp; ovulation</a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      function fmtLong(d) {
+        return d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+      }
+      function run() {
+        var raw = document.getElementById('pregLmp').value;
+        if (!raw) {
+          document.getElementById('pregEdd280').textContent = '—';
+          document.getElementById('pregNae').textContent = '—';
+          document.getElementById('pregGa').textContent = '—';
+          return;
+        }
+        var lmp = new Date(raw + 'T12:00:00');
+        var edd280 = new Date(lmp);
+        edd280.setDate(edd280.getDate() + 280);
+        var nae = new Date(lmp);
+        nae.setFullYear(nae.getFullYear() + 1);
+        nae.setMonth(nae.getMonth() - 3);
+        nae.setDate(nae.getDate() + 7);
+        var today = new Date();
+        today.setHours(0, 0, 0, 0);
+        var lmp0 = new Date(lmp);
+        lmp0.setHours(0, 0, 0, 0);
+        var diffMs = today - lmp0;
+        var days = Math.floor(diffMs / 86400000);
+        var weeks = Math.floor(days / 7);
+        var drem = days % 7;
+        document.getElementById('pregEdd280').textContent = fmtLong(edd280);
+        document.getElementById('pregNae').textContent = fmtLong(nae);
+        document.getElementById('pregGa').textContent =
+          days >= 0 ? weeks + ' w ' + drem + ' d' : 'LMP is in the future';
+      }
+      document.getElementById('pregLmp').addEventListener('change', run);
+      document.getElementById('pregLmp').addEventListener('input', run);
+      var def = new Date();
+      def.setDate(def.getDate() - 56);
+      document.getElementById('pregLmp').value = def.toISOString().slice(0, 10);
+      run();
+    })();
+  </script>
+
+  <style>
+    .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .hero { padding: 36px 0 16px; text-align: center; }
+    .subtitle { font-size: 17px; color: var(--text-muted); max-width: 680px; margin: 0 auto 22px; line-height: 1.6; }
+    .calc-section { padding: 24px 0 40px; }
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 960px; align-items: start; }
+    @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
+    .calc-inputs, .calc-results { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--shadow); }
+    .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+    .field label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    .field input { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
+    .result-hero { font-size: 1.65rem; font-weight: 800; color: var(--blue); line-height: 1.3; }
+    .result-label { font-size: 14px; color: var(--text-muted); margin: 4px 0 20px; }
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .result-sub { font-size: 1.05rem; font-weight: 700; }
+    .result-caption { font-size: 12px; color: var(--text-muted); }
+    .edu { padding: 36px 0 40px; }
+    .edu .container { max-width: 760px; }
+    .edu p { font-size: 15px; line-height: 1.8; color: var(--text-muted); margin-bottom: 14px; }
+    .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .affiliate { padding: 28px 0; }
+    .affiliate .container { max-width: 900px; }
+    .affiliate-inner.health { background: linear-gradient(135deg, #fdf2f8, #fce7f3); border: 1px solid #f9a8d4; border-radius: var(--radius-lg); padding: 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    [data-theme='dark'] .affiliate-inner.health { background: rgba(244, 114, 182, 0.1); border-color: rgba(249, 168, 212, 0.45); }
+    .affiliate-icon { font-size: 36px; }
+    .affiliate-content { flex: 1; min-width: 200px; }
+    .affiliate-content h3 { font-size: 17px; margin-bottom: 4px; }
+    .faq-list { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+    .related { text-align: center; padding-bottom: 48px; }
+    .related-links a { color: var(--blue); font-weight: 600; }
+  </style>
+</MainLayout>

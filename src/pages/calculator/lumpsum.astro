@@ -1,5 +1,6 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
 
 const site = Astro.site?.href ?? 'https://doitswift.com';
 const canonical = `${site}calculator/lumpsum/`;
@@ -69,7 +70,17 @@ const jsonLd = {
       <div class="calc-inputs">
         <h2 class="calc-heading">Inputs</h2>
         <div class="field">
-          <label for="lsP">Lumpsum amount (₹)</label>
+          <label for="lsCur">Currency (display)</label>
+          <select id="lsCur" aria-label="Currency">
+            {CALCULATOR_CURRENCY_OPTIONS.map((o) => (
+              <option value={o.code} selected={o.code === 'INR'}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div class="field">
+          <label for="lsP">Lumpsum amount</label>
           <input type="number" id="lsP" min="1000" max="100000000" step="1000" value="100000" />
         </div>
         <div class="field">
@@ -85,11 +96,11 @@ const jsonLd = {
       </div>
       <div class="calc-results" aria-live="polite">
         <h2 class="calc-heading">Results</h2>
-        <div class="result-hero" id="lsMat">₹0</div>
+        <div class="result-hero" id="lsMat">—</div>
         <p class="result-label">Maturity value</p>
         <div class="result-grid">
-          <div><div class="result-sub" id="lsInv">₹0</div><div class="result-caption">Principal (one-time)</div></div>
-          <div><div class="result-sub" id="lsRet">₹0</div><div class="result-caption">Estimated returns</div></div>
+          <div><div class="result-sub" id="lsInv">—</div><div class="result-caption">Principal (one-time)</div></div>
+          <div><div class="result-sub" id="lsRet">—</div><div class="result-caption">Estimated returns</div></div>
         </div>
         <div class="grow-chart" role="img" aria-label="Year by year balance bars" id="lsChart"></div>
         <details class="calc-details">
@@ -158,9 +169,15 @@ const jsonLd = {
     </div>
   </section>
 
-  <script is:inline>
+  <script is:inline define:vars={{ LOCALE_BY_CURRENCY }}>
     (function () {
-      const fmt = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+      function localeForCurrency(code) {
+        return LOCALE_BY_CURRENCY[code] || 'en-US';
+      }
+      function makeFmt() {
+        var code = document.getElementById('lsCur').value || 'INR';
+        return new Intl.NumberFormat(localeForCurrency(code), { style: 'currency', currency: code, maximumFractionDigits: 0 });
+      }
       function debounce(fn, ms) {
         let t;
         return function () {
@@ -169,6 +186,7 @@ const jsonLd = {
         };
       }
       function run() {
+        const fmt = makeFmt();
         let P = Math.max(1000, Math.min(1e8, parseFloat(document.getElementById('lsP').value) || 0));
         let r = Math.max(1, Math.min(30, parseFloat(document.getElementById('lsR').value) || 0));
         let y = Math.max(1, Math.min(40, parseInt(document.getElementById('lsY').value, 10) || 1));
@@ -208,6 +226,7 @@ const jsonLd = {
         });
       }
       const d = debounce(run, 80);
+      document.getElementById('lsCur').addEventListener('change', d);
       ['lsP', 'lsR', 'lsY', 'lsRR', 'lsYR'].forEach(function (id) {
         document.getElementById(id).addEventListener('input', function () {
           if (id === 'lsRR') document.getElementById('lsR').value = this.value;
