@@ -11,6 +11,17 @@ const absolute = 'https://doitswift.com' + redirectUrl;
     <meta http-equiv="refresh" content={`0;url=${redirectUrl}`} />
     <link rel="canonical" href={absolute} />
     <title>Redirecting…</title>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HFRCW0V7Y1"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-HFRCW0V7Y1', {
+        anonymize_ip: true,
+        cookie_flags: 'SameSite=None;Secure'
+      });
+    </script>
   </head>
   <body>
     <p>Redirecting to <a href={redirectUrl}>{redirectUrl}</a></p>

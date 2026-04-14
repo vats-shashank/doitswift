@@ -68,6 +68,17 @@ const ogImageUrl =
     <link rel="stylesheet" href="/styles/global.css" />
     <script src="/pending-transfer.js" defer></script>
     <script src="/js/file-results-ui.js" defer></script>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HFRCW0V7Y1"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-HFRCW0V7Y1', {
+        anonymize_ip: true,
+        cookie_flags: 'SameSite=None;Secure'
+      });
+    </script>
   </head>
   <body>
     <!-- NAV -->
