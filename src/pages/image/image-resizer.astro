@@ -110,21 +110,6 @@ import MainLayout from '../../layouts/MainLayout.astro';
     </div>
   </section>
 
-  <section class="affiliate">
-    <div class="container">
-      <div class="affiliate-inner">
-        <div class="affiliate-icon">📐</div>
-        <div class="affiliate-content">
-          <h3>Design social posts in exact sizes</h3>
-          <p>Canva includes thousands of templates sized for Instagram, Stories, and more.</p>
-        </div>
-        <a href="https://www.canva.com/" class="btn btn-orange" target="_blank" rel="sponsored noopener">
-          Try Canva →
-        </a>
-      </div>
-    </div>
-  </section>
-
   <section class="faq">
     <div class="container">
       <h2 class="section-title">Frequently Asked Questions</h2>
@@ -636,27 +621,6 @@ import MainLayout from '../../layouts/MainLayout.astro';
       cursor: pointer;
     }
     .check-row input { width: 18px; height: 18px; }
-    .affiliate { padding: 40px 0; }
-    .affiliate .container { max-width: 820px; }
-    .affiliate-inner {
-      background: linear-gradient(135deg, #fff7ed, #ffedd5);
-      border: 1px solid #fed7aa;
-      border-radius: var(--radius-lg);
-      padding: 28px;
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-    [data-theme="dark"] .affiliate-inner {
-      background: linear-gradient(135deg, rgba(249, 115, 22, .1), rgba(245, 158, 11, .1));
-      border-color: rgba(249, 115, 22, .3);
-    }
-    .affiliate-icon { font-size: 42px; }
-    .affiliate-content { flex: 1; min-width: 200px; }
-    .affiliate-content h3 { font-size: 18px; margin-bottom: 4px; }
-    .affiliate-content p { font-size: 14px; color: var(--text-muted); }
-
     .faq { padding: 60px 0; }
     .faq .container { max-width: 820px; }
     .section-title { text-align: center; margin-bottom: 32px; }
