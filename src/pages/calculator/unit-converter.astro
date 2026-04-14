@@ -47,34 +47,57 @@ const jsonLd = {
   </section>
 
   <section class="uc-section">
-    <div class="container uc-wrap">
-      <div class="uc-card" id="ucRoot">
-        <label class="sr-only" for="ucCategory">Conversion category</label>
-        <select id="ucCategory" class="uc-cat" aria-describedby="ucCatHint"></select>
+    <div class="container">
+      <div class="converter-box" id="ucRoot">
+        <div class="category-select">
+          <label for="ucCategory">Category</label>
+          <select id="ucCategory" aria-describedby="ucCatHint"></select>
+        </div>
         <p id="ucCatHint" class="uc-hint">Choose a category, then enter a value on either side.</p>
 
-        <div class="uc-values" id="ucValuesRow">
-          <div class="uc-valwrap">
-            <label class="sr-only" for="ucVal1">First value</label>
-            <input type="text" id="ucVal1" class="uc-input" inputmode="decimal" autocomplete="off" aria-label="First value" />
+        <div class="conversion-area">
+          <div class="converter-side">
+            <label class="side-label" for="value-1">From</label>
+            <input
+              type="text"
+              id="value-1"
+              class="value-input"
+              inputmode="decimal"
+              autocomplete="off"
+              placeholder="Enter value"
+              aria-label="Value to convert from"
+            />
+            <label class="sr-only" for="unit-1">Unit from</label>
+            <select id="unit-1" class="unit-select" aria-label="Unit from"></select>
           </div>
-          <span class="uc-eq" aria-hidden="true">=</span>
-          <div class="uc-valwrap">
-            <label class="sr-only" for="ucVal2">Second value</label>
-            <input type="text" id="ucVal2" class="uc-input" inputmode="decimal" autocomplete="off" aria-label="Second value" />
+
+          <div class="converter-divider">
+            <span class="equals-desktop" aria-hidden="true">=</span>
+            <span class="equals-mobile" aria-hidden="true">⇅</span>
+          </div>
+
+          <div class="converter-side">
+            <label class="side-label" for="value-2">To</label>
+            <input
+              type="text"
+              id="value-2"
+              class="value-input"
+              inputmode="decimal"
+              autocomplete="off"
+              placeholder="Converted value"
+              aria-label="Converted value"
+            />
+            <label class="sr-only" for="unit-2">Unit to</label>
+            <select id="unit-2" class="unit-select" aria-label="Unit to"></select>
           </div>
         </div>
 
-        <div class="uc-units">
-          <label class="sr-only" for="ucUnit1">First unit</label>
-          <select id="ucUnit1" class="uc-select" aria-label="First unit"></select>
-          <label class="sr-only" for="ucUnit2">Second unit</label>
-          <select id="ucUnit2" class="uc-select" aria-label="Second unit"></select>
+        <div class="formula-box" role="status">
+          <span class="formula-label">Formula</span>
+          <div class="formula-text" id="ucFormula"></div>
         </div>
 
-        <div class="uc-formula" id="ucFormula" role="status"></div>
-
-        <details class="uc-details" id="ucQuick">
+        <details class="common-conversions" id="ucQuick">
           <summary>Common conversions in this category</summary>
           <ul class="uc-quick" id="ucQuickList"></ul>
         </details>
@@ -513,10 +536,10 @@ const jsonLd = {
 
       var lastEdited = 'left';
       var selCat = document.getElementById('ucCategory');
-      var v1 = document.getElementById('ucVal1');
-      var v2 = document.getElementById('ucVal2');
-      var u1 = document.getElementById('ucUnit1');
-      var u2 = document.getElementById('ucUnit2');
+      var v1 = document.getElementById('value-1');
+      var v2 = document.getElementById('value-2');
+      var u1 = document.getElementById('unit-1');
+      var u2 = document.getElementById('unit-2');
       var formulaEl = document.getElementById('ucFormula');
       var quickList = document.getElementById('ucQuickList');
 
@@ -759,13 +782,6 @@ const jsonLd = {
     .uc-section {
       padding: 16px 0 32px;
     }
-    .uc-wrap {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    .uc-card {
-      padding: 0 4px;
-    }
     .sr-only {
       position: absolute;
       width: 1px;
@@ -776,101 +792,209 @@ const jsonLd = {
       clip: rect(0, 0, 0, 0);
       border: 0;
     }
-    .uc-cat {
-      width: 100%;
-      min-height: 48px;
-      padding: 12px 14px;
-      font-size: 16px;
-      font-weight: 600;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-      background: var(--card);
-      color: var(--text);
-      margin-bottom: 8px;
-      cursor: pointer;
-    }
     .uc-hint {
       font-size: 13px;
       color: var(--text-muted);
       margin: 0 0 20px;
     }
-    .uc-values {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 12px 16px;
+
+    .converter-box {
+      max-width: 600px;
+      margin: 24px auto;
+      padding: 24px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .category-select {
+      margin-bottom: 24px;
+    }
+
+    .category-select label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .category-select select {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 16px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background-color: var(--card);
+      color: var(--text);
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23666' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+      cursor: pointer;
+      min-height: 48px;
+      font-weight: 600;
+    }
+
+    .conversion-area {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 16px;
+      align-items: start;
       margin-bottom: 20px;
     }
-    .uc-valwrap {
-      flex: 1 1 200px;
+
+    .converter-side {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
       min-width: 0;
-      max-width: 260px;
     }
-    .uc-input {
+
+    .side-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .value-input {
       width: 100%;
-      min-height: 52px;
-      padding: 10px 8px;
-      font-size: 32px;
+      padding: 16px 12px;
+      font-size: 24px;
       font-weight: 600;
       text-align: center;
-      border: none;
-      background: transparent;
-      color: var(--text);
-      outline: none;
-    }
-    .uc-input:focus {
-      background: var(--gray-100);
-      border-radius: 8px;
-    }
-    :global([data-theme='dark']) .uc-input:focus {
-      background: var(--gray-200);
-    }
-    .uc-eq {
-      font-size: 28px;
-      color: var(--text-muted);
-      font-weight: 500;
-      flex: 0 0 auto;
-      padding: 0 4px;
-    }
-    .uc-units {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-    .uc-select {
-      width: 100%;
-      min-height: 44px;
-      padding: 10px 12px;
-      font-size: 15px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
+      border: 2px solid var(--border);
+      border-radius: 12px;
       background: var(--card);
       color: var(--text);
-      cursor: pointer;
+      transition: border-color 0.15s ease;
+      -moz-appearance: textfield;
+      appearance: textfield;
+      min-height: 52px;
+      box-sizing: border-box;
     }
-    .uc-formula {
+
+    .value-input::-webkit-outer-spin-button,
+    .value-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .value-input:focus {
+      outline: none;
+      border-color: var(--blue);
+    }
+
+    .unit-select {
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background-color: var(--card);
+      color: var(--text);
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23666' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+      min-height: 44px;
+      cursor: pointer;
+      box-sizing: border-box;
+    }
+
+    .unit-select:focus {
+      outline: none;
+      border-color: var(--blue);
+    }
+
+    .converter-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-self: center;
+      padding-top: 30px;
+    }
+
+    .equals-desktop {
+      font-size: 28px;
+      color: var(--text-muted);
+      font-weight: 300;
+    }
+
+    .equals-mobile {
+      display: none;
+      font-size: 24px;
+      color: var(--text-muted);
+      padding: 8px;
+      background: var(--gray-100);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    :global([data-theme='dark']) .equals-mobile {
+      background: var(--gray-200);
+    }
+
+    .formula-box {
+      background: #fff9e6;
+      border: 1px solid #f7c100;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 14px;
+      margin-top: 20px;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    :global([data-theme='dark']) .formula-box {
+      background: rgba(247, 193, 0, 0.1);
+      border-color: rgba(247, 193, 0, 0.3);
+    }
+
+    .formula-box .formula-label {
+      background: #f7c100;
+      color: #333;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+    }
+
+    :global([data-theme='dark']) .formula-box .formula-label {
+      color: #111;
+    }
+
+    .formula-text {
+      flex: 1;
+      min-width: 0;
       font-size: 14px;
       line-height: 1.45;
       color: var(--text-muted);
-      background: var(--blue-light);
-      padding: 12px 16px;
-      border-radius: 8px;
-      margin-bottom: 16px;
-      min-height: 2.8em;
     }
-    :global([data-theme='dark']) .uc-formula {
-      background: rgba(0, 102, 255, 0.15);
-      color: var(--text-muted);
-    }
-    .uc-details {
+
+    .common-conversions {
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 12px 16px;
       background: var(--card);
     }
-    .uc-details summary {
+
+    .common-conversions summary {
       cursor: pointer;
       font-weight: 600;
       font-size: 15px;
@@ -879,6 +1003,7 @@ const jsonLd = {
       display: flex;
       align-items: center;
     }
+
     .uc-quick {
       margin: 12px 0 0;
       padding-left: 1.2em;
@@ -888,6 +1013,56 @@ const jsonLd = {
     }
     .uc-quick li {
       margin-bottom: 6px;
+    }
+
+    @media (max-width: 640px) {
+      .converter-box {
+        padding: 16px;
+        margin: 16px 0;
+      }
+
+      .conversion-area {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .converter-divider {
+        padding-top: 0;
+        padding: 4px 0;
+        align-self: stretch;
+      }
+
+      .equals-desktop {
+        display: none;
+      }
+
+      .equals-mobile {
+        display: flex;
+      }
+
+      .value-input {
+        font-size: 22px;
+        padding: 14px 10px;
+      }
+
+      .side-label {
+        font-size: 11px;
+      }
+
+      .unit-select {
+        font-size: 14px;
+        padding: 12px 14px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .value-input {
+        font-size: 18px;
+      }
+
+      .converter-box {
+        padding: 12px;
+      }
     }
     .uc-edu {
       padding: 28px 0 20px;
@@ -945,24 +1120,6 @@ const jsonLd = {
     .related-links a {
       color: var(--blue);
       font-weight: 600;
-    }
-    @media (max-width: 540px) {
-      .uc-values {
-        flex-direction: column;
-      }
-      .uc-eq {
-        order: 2;
-      }
-      .uc-valwrap {
-        max-width: 100%;
-      }
-      .uc-input {
-        font-size: 24px;
-        min-height: 48px;
-      }
-      .uc-units {
-        grid-template-columns: 1fr;
-      }
     }
   </style>
 </MainLayout>
