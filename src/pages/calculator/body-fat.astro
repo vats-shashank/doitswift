@@ -303,7 +303,7 @@ const jsonLd = {
     .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
     .field { margin-bottom: 16px; }
     .field > label:first-child { display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; }
-    .field input, .field select { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
+    .field input:not([type="radio"]):not([type="checkbox"]), .field select { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
     .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: center; }
     .row2 > div { display: flex; align-items: center; gap: 6px; }
     .unit { font-size: 13px; color: var(--text-muted); }

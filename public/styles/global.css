@@ -108,11 +108,15 @@ img { max-width: 100%; display: block; }
   line-height: 1.35;
   cursor: pointer;
 }
+/* `!important` wins over scoped calculator rules like `.field input { width: 100% }` so radios do not stretch and overlap label text. */
 .field .seg input[type="radio"] {
-  width: 1.125rem;
-  height: 1.125rem;
+  width: 1.125rem !important;
+  max-width: 1.125rem;
+  min-width: 1.125rem;
+  height: 1.125rem !important;
   margin: 0;
   flex-shrink: 0;
+  box-sizing: border-box;
   accent-color: var(--blue);
 }
 
