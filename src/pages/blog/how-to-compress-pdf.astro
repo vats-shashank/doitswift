@@ -1,0 +1,778 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const title = "How to Compress a PDF Without Losing Quality (Free, No Upload)";
+const description = "Reduce PDF file size by 50-90% without visible quality loss. Free browser-based compression, no upload to servers. Covers how PDF compression works, best settings, and when to use each method.";
+const publishDate = "2026-04-17";
+const lastUpdated = "2026-04-17";
+---
+
+<MainLayout
+  title={`${title} | DoItSwift`}
+  description={description}
+  keywords="compress pdf, reduce pdf size, pdf compressor, compress pdf without losing quality, make pdf smaller, shrink pdf, pdf file size reducer, compress pdf online free, pdf compression"
+  canonical="https://doitswift.com/blog/how-to-compress-pdf/"
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": lastUpdated,
+    "author": { "@type": "Organization", "name": "DoItSwift" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "DoItSwift",
+      "logo": { "@type": "ImageObject", "url": "https://doitswift.com/og-default.svg" }
+    },
+    "mainEntityOfPage": "https://doitswift.com/blog/how-to-compress-pdf/"
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I reduce the size of a PDF file?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use a PDF compressor tool to reduce image resolution, strip metadata, and optimize the file structure. Browser-based tools like DoItSwift's PDF Compressor process your file locally without uploading to servers. Typical reduction is 50-90% for image-heavy PDFs and 10-30% for text-heavy documents."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I compress a PDF without losing quality?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, to an extent. Lossless compression (stripping metadata, removing duplicate objects, optimizing fonts) reduces size without any visual change. Lossy compression (reducing image resolution) can reduce size dramatically with minimal visible difference at moderate settings. Avoid aggressive compression for documents with important images or diagrams."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why is my PDF file so large?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Large PDFs are typically caused by embedded high-resolution images (scanned documents, photographs), embedded fonts (especially multiple font families), layers from design software (Illustrator, InDesign), or redundant metadata. A single scanned page at 300 DPI can be 2-5 MB, making multi-page scans 50-100+ MB easily."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is it safe to compress PDFs online?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It depends on the tool. Most online PDF compressors upload your file to their servers, which means your document content is transmitted over the internet. Browser-based compressors like DoItSwift process files entirely in your browser using JavaScript — your PDF never leaves your device, making it safe for sensitive documents like financial statements, contracts, and medical records."
+        }
+      }
+    ]
+  })} />
+
+  <article class="article">
+    <div class="container">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> › <a href="/blog/">Blog</a> › <span>How to Compress PDF</span>
+      </nav>
+
+      <header class="article-header">
+        <div class="article-meta">
+          <span class="cat">PDF</span>
+          <time>Updated April 17, 2026</time>
+          <span>· 12 min read</span>
+        </div>
+        <h1>How to Compress a PDF Without Losing Quality</h1>
+        <p class="lede">
+          Your PDF is 25 MB. Gmail's limit is 25 MB. WhatsApp rejects anything over 100 MB.
+          Your college portal caps uploads at 5 MB. Sound familiar? PDF compression is one
+          of the most common file tasks in the world — and most people either don't know how
+          to do it or use tools that <strong>upload their sensitive documents to unknown
+          servers</strong>. This guide covers how PDF compression actually works, which
+          settings to use for different situations, and how to shrink your files
+          <strong>without uploading them anywhere</strong>.
+        </p>
+      </header>
+
+      <div class="toc card">
+        <strong>In this guide:</strong>
+        <ul>
+          <li><a href="#compress-now">Compress your PDF now (free tool)</a></li>
+          <li><a href="#why-large">Why PDFs get so large</a></li>
+          <li><a href="#how-works">How PDF compression actually works</a></li>
+          <li><a href="#step-by-step">Step-by-step: compress a PDF in your browser</a></li>
+          <li><a href="#settings">Which compression setting to use (light vs heavy)</a></li>
+          <li><a href="#scenarios">Best approach for 7 common PDF scenarios</a></li>
+          <li><a href="#privacy">The privacy problem with online PDF compressors</a></li>
+          <li><a href="#other-ways">5 other ways to reduce PDF size</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+
+      <section id="compress-now">
+        <h2>Compress your PDF now — free, no upload</h2>
+        <div class="callout">
+          <strong>🎯 Skip to the tool:</strong>
+          Our <a href="/pdf/compress-pdf/">PDF Compressor</a> runs entirely in your browser.
+          Drop your PDF, choose a compression level, download the smaller file. Your document
+          never leaves your device — no server upload, no account, no limits.
+        </div>
+      </section>
+
+      <section id="why-large">
+        <h2>Why PDFs get so large</h2>
+        <p>
+          Before compressing, it helps to understand what's making your PDF big. The cause
+          determines the best compression approach.
+        </p>
+
+        <h3>1. Embedded images (the #1 cause)</h3>
+        <p>
+          This is responsible for 80%+ of oversized PDFs. When you scan a document, paste
+          photos into a report, or export from design software, images are embedded at their
+          original resolution. A single scanned A4 page at 300 DPI is about 2-5 MB. A
+          50-page scanned document can easily be 100-250 MB.
+        </p>
+        <p>
+          Even PDFs that look text-heavy can have hidden image bloat. Many export tools
+          (especially from PowerPoint and Word) save charts, logos, and backgrounds as
+          full-resolution images.
+        </p>
+
+        <h3>2. Embedded fonts</h3>
+        <p>
+          PDFs embed fonts to ensure the document looks identical on every device. Each font
+          family (regular, bold, italic, bold-italic) can add 100-500 KB. A document using
+          5 different fonts might carry 1-2 MB of font data. Design-heavy documents with
+          decorative or custom fonts are the worst offenders.
+        </p>
+
+        <h3>3. Multiple layers and objects</h3>
+        <p>
+          PDFs exported from Adobe Illustrator, InDesign, or Canva often contain layers,
+          transparency effects, vector paths, and metadata from the design application. These
+          add size without being visible in the final document.
+        </p>
+
+        <h3>4. Redundant or duplicate objects</h3>
+        <p>
+          When you merge multiple PDFs or edit a PDF repeatedly, the file accumulates
+          redundant objects — old versions of images, unused fonts, orphaned bookmarks. The
+          file grows even though the visible content hasn't changed. This is "PDF bloat."
+        </p>
+
+        <h3>5. Metadata and attachments</h3>
+        <p>
+          Author information, creation timestamps, revision history, embedded attachments,
+          and XMP metadata can add hundreds of KB. Legal documents often carry extensive
+          metadata that serves no purpose for the reader.
+        </p>
+
+        <div class="callout">
+          <strong>📏 Size reference:</strong>
+          A typical text-only PDF is 10-50 KB per page. A PDF with moderate images is
+          100-500 KB per page. A scanned document is 1-5 MB per page. If your PDF is
+          significantly larger than these benchmarks, compression will likely help.
+        </div>
+      </section>
+
+      <section id="how-works">
+        <h2>How PDF compression actually works</h2>
+        <p>
+          PDF compression isn't a single technique — it's a collection of methods applied
+          to different parts of the file. Understanding these helps you choose the right
+          settings.
+        </p>
+
+        <h3>Lossless compression (no quality change)</h3>
+        <p>
+          These techniques reduce file size without any visible change to the document:
+        </p>
+        <ul>
+          <li><strong>Object deduplication:</strong> Finds identical objects (like a logo used on every page) and stores them once instead of repeating</li>
+          <li><strong>Metadata stripping:</strong> Removes author info, editing history, software tags, and other non-visible data</li>
+          <li><strong>Font subsetting:</strong> Keeps only the characters actually used in the document instead of the full font file. A font using 50 characters keeps only those 50, not all 65,000+ glyphs</li>
+          <li><strong>Stream optimization:</strong> Re-compresses internal data streams using more efficient algorithms (like Flate instead of uncompressed)</li>
+          <li><strong>Linearization:</strong> Restructures the PDF for web viewing, which can slightly reduce size</li>
+        </ul>
+        <p>
+          Lossless compression typically achieves <strong>10-30% reduction</strong>. Not
+          dramatic, but the document is bit-for-bit identical in appearance.
+        </p>
+
+        <h3>Lossy compression (visible at extreme settings)</h3>
+        <p>
+          These techniques achieve larger reductions by sacrificing some quality:
+        </p>
+        <ul>
+          <li><strong>Image downsampling:</strong> Reduces image resolution from 300 DPI to 150 or 72 DPI. A 300 DPI image at 150 DPI is 75% smaller with barely noticeable difference on screen. At 72 DPI, images become visibly softer</li>
+          <li><strong>Image recompression:</strong> Re-saves embedded images at lower JPEG quality (e.g., 85% instead of 100%). At 85%, quality difference is invisible to most eyes. At 50%, compression artifacts become obvious</li>
+          <li><strong>Color space conversion:</strong> Converts CMYK images (designed for print) to RGB (for screen), which uses fewer bytes</li>
+          <li><strong>Grayscale conversion:</strong> Converts color images to grayscale when color isn't essential (text documents, black-and-white scans)</li>
+        </ul>
+        <p>
+          Lossy compression can achieve <strong>50-90% reduction</strong> for image-heavy
+          PDFs. The tradeoff is quality — but at moderate settings, most people can't see
+          the difference on screen.
+        </p>
+      </section>
+
+      <section id="step-by-step">
+        <h2>Step-by-step: compress a PDF in your browser</h2>
+        <p>
+          Here's how to compress any PDF using our free
+          <a href="/pdf/compress-pdf/">PDF Compressor</a>:
+        </p>
+
+        <h3>Step 1: Open the compressor</h3>
+        <p>
+          Navigate to <a href="/pdf/compress-pdf/">doitswift.com/pdf/compress-pdf</a>.
+          No account or signup needed. The tool loads entirely in your browser.
+        </p>
+
+        <h3>Step 2: Drop your PDF file</h3>
+        <p>
+          Drag your PDF onto the drop zone or click to browse. The file is loaded into your
+          browser's memory — it is NOT uploaded to any server. You can verify this by
+          disconnecting your internet after the page loads and the tool still works.
+        </p>
+
+        <h3>Step 3: Choose compression level</h3>
+        <p>
+          Pick the level that matches your needs:
+        </p>
+        <ul>
+          <li><strong>Light:</strong> Minimal reduction, preserves quality. Good for documents you'll print</li>
+          <li><strong>Medium:</strong> Balanced reduction. Good for email and sharing</li>
+          <li><strong>Heavy:</strong> Maximum reduction. Good for web uploads and archival where quality is secondary</li>
+        </ul>
+
+        <h3>Step 4: Download the compressed file</h3>
+        <p>
+          The tool shows you the before and after file size. Download the compressed PDF.
+          If the reduction isn't enough, try a heavier setting. If quality is too degraded,
+          try a lighter setting.
+        </p>
+
+        <h3>Step 5: Verify the output</h3>
+        <p>
+          Open the compressed PDF and check: Are images still sharp enough? Is text clear?
+          Are diagrams readable? If yes, you're done. If not, adjust settings and try again.
+        </p>
+      </section>
+
+      <section id="settings">
+        <h2>Which compression setting to use</h2>
+        <p>
+          The right setting depends entirely on what you're doing with the PDF afterward:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Situation</th>
+                <th>Recommended setting</th>
+                <th>Expected reduction</th>
+                <th>Why</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sending via email</td>
+                <td>Medium</td>
+                <td>40-70%</td>
+                <td>Needs to be under 25 MB, quality matters less for viewing</td>
+              </tr>
+              <tr>
+                <td>Uploading to government portal</td>
+                <td>Medium to Heavy</td>
+                <td>50-80%</td>
+                <td>Portals often have 2-5 MB limits, readability is key</td>
+              </tr>
+              <tr>
+                <td>Sharing on WhatsApp</td>
+                <td>Heavy</td>
+                <td>60-90%</td>
+                <td>WhatsApp compresses further anyway, small file is faster</td>
+              </tr>
+              <tr>
+                <td>Printing at home</td>
+                <td>Light</td>
+                <td>10-30%</td>
+                <td>Print quality depends on image resolution — preserve it</td>
+              </tr>
+              <tr>
+                <td>Professional printing</td>
+                <td>Don't compress</td>
+                <td>—</td>
+                <td>Print shops need original quality, especially for photos</td>
+              </tr>
+              <tr>
+                <td>Archiving old documents</td>
+                <td>Medium</td>
+                <td>40-60%</td>
+                <td>Saves storage while keeping documents readable</td>
+              </tr>
+              <tr>
+                <td>Uploading to college/job portal</td>
+                <td>Medium to Heavy</td>
+                <td>50-80%</td>
+                <td>Portals have strict size limits, readability matters</td>
+              </tr>
+              <tr>
+                <td>Embedding in website</td>
+                <td>Heavy</td>
+                <td>70-90%</td>
+                <td>Page load speed is critical for web</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          <strong>General rule:</strong> Start with Medium. If the file is still too large,
+          try Heavy. Only use Light if you need to preserve exact quality for printing or
+          legal documents.
+        </p>
+      </section>
+
+      <section id="scenarios">
+        <h2>Best approach for 7 common PDF scenarios</h2>
+
+        <h3>1. "My scanned document is 50 MB"</h3>
+        <p>
+          Scanned PDFs are the most compressible type. Each page is essentially a large
+          image. Use Heavy compression — scanned text is readable even at 150 DPI, and you
+          can easily get a 50 MB scan down to 5-10 MB.
+        </p>
+        <p>
+          If the scan is black-and-white text, grayscale conversion adds further savings.
+        </p>
+
+        <h3>2. "I need to email a PDF under 25 MB"</h3>
+        <p>
+          Gmail, Outlook, and most email providers cap attachments at 25 MB. Use Medium
+          compression first. If still over 25 MB, try Heavy. If the PDF is truly enormous
+          (100+ MB), consider splitting it into smaller parts using our
+          <a href="/pdf/split-pdf/">Split PDF</a> tool before compressing each part.
+        </p>
+
+        <h3>3. "Government portal says maximum 2 MB"</h3>
+        <p>
+          Indian government portals (income tax, passport, EPFO) often have 1-5 MB upload
+          limits. This requires aggressive compression. Use Heavy setting. If the PDF is
+          a scanned document, consider rescanning at lower resolution (150 DPI instead of
+          300 DPI) for better results.
+        </p>
+        <p>
+          Pro tip: If it's a form that needs to be filled and scanned, use our
+          <a href="/pdf/image-to-pdf/">Image to PDF</a> tool to create a clean PDF from
+          photos rather than a flatbed scanner — phone cameras at default settings produce
+          smaller files.
+        </p>
+
+        <h3>4. "My PowerPoint export is huge"</h3>
+        <p>
+          PowerPoint embeds images at original resolution and often duplicates them across
+          slides. Export at lower quality ("Minimum size" option in PowerPoint) before
+          compressing the PDF. If that's not an option, Medium compression usually cuts
+          PowerPoint PDFs by 40-60%.
+        </p>
+
+        <h3>5. "I merged 10 PDFs and now it's massive"</h3>
+        <p>
+          Merged PDFs accumulate font files from each source document. If each original used
+          3 different fonts, your merged file might embed 30 font files. Compression strips
+          duplicates and subsets fonts, often reducing merged PDFs by 30-50% with Light
+          settings alone.
+        </p>
+        <p>
+          Used our <a href="/pdf/merge-pdf/">Merge PDF</a> tool? Run the merged output
+          through <a href="/pdf/compress-pdf/">Compress PDF</a> immediately after for
+          best results.
+        </p>
+
+        <h3>6. "I need to compress a PDF with important photos"</h3>
+        <p>
+          If image quality truly matters (portfolio, photography, medical imaging), use
+          Light compression only. This strips metadata and optimizes structure without
+          touching image quality. Accept smaller reduction (10-30%) to preserve what matters.
+        </p>
+
+        <h3>7. "I want to send a PDF on WhatsApp"</h3>
+        <p>
+          WhatsApp limits documents to 100 MB but practically, large PDFs are slow to send
+          and download on mobile data. Heavy compression makes PDFs load faster for the
+          recipient. For a 20 MB PDF, Heavy compression often gets it under 3-5 MB — fast
+          enough for mobile networks.
+        </p>
+      </section>
+
+      <section id="privacy">
+        <h2>The privacy problem with online PDF compressors</h2>
+        <p>
+          This is something most people don't think about — and it matters more than you
+          might expect.
+        </p>
+
+        <h3>What happens when you use most online compressors</h3>
+        <p>
+          When you use a typical online PDF compressor (Smallpdf, iLovePDF, PDF24, etc.),
+          here's what actually happens:
+        </p>
+        <ol>
+          <li>Your PDF is <strong>uploaded to their server</strong> over the internet</li>
+          <li>Their server processes (compresses) your file</li>
+          <li>You download the compressed version</li>
+          <li>Your original file <strong>remains on their server</strong> for some period (usually "deleted after 1-2 hours" according to their policies)</li>
+        </ol>
+
+        <h3>Why this matters</h3>
+        <p>
+          Think about what PDFs typically contain:
+        </p>
+        <ul>
+          <li><strong>Financial documents:</strong> Bank statements, tax returns, salary slips — with account numbers and PAN</li>
+          <li><strong>Legal documents:</strong> Contracts, agreements, court filings — with personal details and signatures</li>
+          <li><strong>Medical records:</strong> Lab reports, prescriptions, insurance claims — with health information</li>
+          <li><strong>Identity documents:</strong> Aadhaar, passport scans, voter ID — with identifying information</li>
+          <li><strong>Business documents:</strong> Financial statements, client data, proprietary information</li>
+        </ul>
+        <p>
+          When you upload these to a third-party server, you're trusting that company with
+          your sensitive data. Their servers could be anywhere in the world, subject to
+          different data protection laws.
+        </p>
+
+        <h3>The browser-based alternative</h3>
+        <p>
+          Browser-based compressors like <a href="/pdf/compress-pdf/">DoItSwift's PDF Compressor</a>
+          process your file entirely in your browser using JavaScript. Your PDF is read
+          from your device into browser memory, compressed, and downloaded back to your
+          device. <strong>The file never leaves your computer.</strong>
+        </p>
+        <p>
+          You can verify this yourself: load the page, disconnect your internet, and the
+          compressor still works. That's impossible with server-based tools.
+        </p>
+        <p>
+          For financial statements, Aadhaar scans, medical reports, or any sensitive
+          document — browser-based compression is the responsible choice.
+        </p>
+      </section>
+
+      <section id="other-ways">
+        <h2>5 other ways to reduce PDF file size</h2>
+        <p>
+          Compression isn't the only option. Depending on your situation, these alternative
+          approaches might be more appropriate:
+        </p>
+
+        <h3>1. Split the PDF into smaller parts</h3>
+        <p>
+          If a portal limits uploads to 5 MB and your document is 30 MB, split it into
+          6 parts instead of compressing. Our <a href="/pdf/split-pdf/">Split PDF</a> tool
+          lets you extract specific pages or split by page range. Each part stays at full
+          quality.
+        </p>
+
+        <h3>2. Convert to images first, then create a new PDF</h3>
+        <p>
+          Use our <a href="/pdf/pdf-to-jpg/">PDF to JPG</a> tool to convert pages to
+          images. Compress the images using our
+          <a href="/image/image-compressor/">Image Compressor</a>. Then recombine using
+          <a href="/pdf/image-to-pdf/">Image to PDF</a>. This gives you precise control
+          over image quality per page.
+        </p>
+
+        <h3>3. Remove unnecessary pages</h3>
+        <p>
+          Before compressing, check if your PDF has blank pages, cover pages, or appendices
+          you don't need. Use <a href="/pdf/split-pdf/">Split PDF</a> to extract only the
+          pages that matter. Fewer pages = smaller file, regardless of compression.
+        </p>
+
+        <h3>4. Recreate the PDF from source</h3>
+        <p>
+          If you have the original Word/PowerPoint/design file, re-export as PDF with
+          lower quality settings. This produces better results than compressing after the
+          fact because the export process optimizes from the source data.
+        </p>
+
+        <h3>5. Use print-to-PDF on the existing PDF</h3>
+        <p>
+          Open the PDF in Chrome or Edge → Print → Save as PDF. This re-renders the
+          document and often produces a smaller file because the browser strips unnecessary
+          objects. Quality may vary — always check the output.
+        </p>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+          <h3>How do I reduce the size of a PDF file?</h3>
+          <p>
+            Use a PDF compression tool. Drop your file into our free
+            <a href="/pdf/compress-pdf/">PDF Compressor</a>, choose a compression level
+            (Light, Medium, or Heavy), and download the smaller file. Processing happens
+            entirely in your browser — no upload to servers. Typical reduction is 40-80%
+            for image-heavy documents.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can I compress a PDF without losing quality?</h3>
+          <p>
+            Yes — to a point. Lossless techniques (stripping metadata, deduplicating objects,
+            subsetting fonts) reduce size without ANY quality change but typically achieve
+            only 10-30% reduction. For larger reductions (50-90%), lossy techniques like
+            image downsampling are needed. At moderate settings, quality loss is invisible
+            to most people on screen.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Why is my PDF file so large?</h3>
+          <p>
+            The most common cause is embedded high-resolution images. Scanned documents,
+            photos pasted into reports, and PowerPoint exports are the usual suspects. A
+            single scanned A4 page at 300 DPI can be 2-5 MB. Other causes include multiple
+            embedded fonts, design layers, and accumulated metadata from repeated editing.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Is it safe to compress PDFs online?</h3>
+          <p>
+            Most online compressors upload your file to their servers — meaning your
+            document content is transmitted over the internet. For sensitive documents
+            (bank statements, Aadhaar, contracts), this is a privacy risk. Browser-based
+            tools like DoItSwift process files entirely in your browser — nothing is
+            uploaded. Verify by disconnecting internet after page loads.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How much can I compress a PDF?</h3>
+          <p>
+            It depends on content. Image-heavy PDFs (scans, presentations): 50-90%
+            reduction is common. Text-heavy PDFs (reports, contracts): 10-30% reduction
+            typical. Already-compressed PDFs: minimal further reduction possible. The
+            compressor shows before/after sizes so you can see exactly how much was saved.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Does compressing a PDF make it blurry?</h3>
+          <p>
+            At Light and Medium settings, no — differences are invisible on screen and in
+            most prints. At Heavy settings with aggressive image downsampling, images may
+            appear softer, especially when zoomed in. Text is never affected by PDF
+            compression — only embedded images are reduced.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can I compress a password-protected PDF?</h3>
+          <p>
+            Not directly — the compression tool needs to read the file contents, which a
+            password prevents. First remove the password using our
+            <a href="/pdf/unlock-pdf/">Unlock PDF</a> tool (you'll need to know the
+            password), then compress the unlocked file.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How to compress PDF for email?</h3>
+          <p>
+            Most email services cap attachments at 25 MB. Use Medium compression as a
+            starting point. If still too large, try Heavy. If the PDF is over 100 MB,
+            consider splitting it using our <a href="/pdf/split-pdf/">Split PDF</a> tool
+            and sending multiple emails, or use a file sharing service for very large files.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How to reduce PDF size for government portals (2 MB limit)?</h3>
+          <p>
+            Indian government portals often have strict 1-5 MB limits. Use Heavy compression.
+            If the document is a scan, consider rescanning at 150 DPI instead of 300 DPI.
+            For forms, take a phone photo and convert using
+            <a href="/pdf/image-to-pdf/">Image to PDF</a> — phone cameras produce smaller
+            files than flatbed scanners at default settings.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Will compression remove my bookmarks and links?</h3>
+          <p>
+            Basic compression preserves bookmarks, hyperlinks, and document structure.
+            Only very aggressive compression or the "flatten" approach may affect interactive
+            elements. Our compressor maintains bookmarks and links at all compression levels.
+          </p>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <h2>Compress your PDF now — free and private</h2>
+        <p>
+          Drop your file, pick a compression level, download the smaller version.
+          Your document never leaves your device.
+        </p>
+        <div class="cta-buttons">
+          <a href="/pdf/compress-pdf/" class="btn btn-lg">
+            → Compress My PDF
+          </a>
+          <a href="/pdf/merge-pdf/" class="btn btn-lg btn-secondary">
+            → Merge PDFs First
+          </a>
+        </div>
+      </section>
+
+      <section class="related">
+        <h2>Related PDF Tools & Guides</h2>
+        <ul>
+          <li><a href="/pdf/compress-pdf/">PDF Compressor — Shrink Files in Your Browser</a></li>
+          <li><a href="/pdf/merge-pdf/">Merge PDF — Combine Multiple PDFs into One</a></li>
+          <li><a href="/pdf/split-pdf/">Split PDF — Extract Pages or Page Ranges</a></li>
+          <li><a href="/pdf/pdf-to-jpg/">PDF to JPG — Export Pages as Images</a></li>
+          <li><a href="/pdf/image-to-pdf/">Image to PDF — Create PDF from Photos</a></li>
+          <li><a href="/pdf/unlock-pdf/">Unlock PDF — Remove Password Protection</a></li>
+          <li><a href="/image/image-compressor/">Image Compressor — Shrink Images Up to 80%</a></li>
+          <li><a href="/blog/how-to-calculate-bmi/">How to Calculate Your BMI (Indian Ranges)</a></li>
+          <li><a href="/blog/ctc-vs-in-hand-salary/">CTC vs In-Hand Salary: Full Breakdown</a></li>
+        </ul>
+      </section>
+
+    </div>
+  </article>
+
+  <style>
+    .article { padding: 40px 0 60px; }
+    .article .container { max-width: 760px; }
+
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .article-header { margin-bottom: 32px; }
+    .article-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .article-meta .cat {
+      color: var(--blue);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      font-size: 11px;
+    }
+    .article h1 { font-size: 38px; line-height: 1.2; margin-bottom: 18px; }
+    .lede { font-size: 19px; color: var(--text-muted); line-height: 1.6; }
+
+    .toc {
+      padding: 20px 24px;
+      margin: 32px 0;
+    }
+    .toc strong { display: block; margin-bottom: 10px; }
+    .toc ul { list-style: none; padding: 0; }
+    .toc li { margin-bottom: 6px; font-size: 14px; }
+    .toc a { color: var(--blue); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    .article h2 {
+      font-size: 28px;
+      margin-top: 48px;
+      margin-bottom: 16px;
+    }
+    .article h3 {
+      font-size: 20px;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+    .article p, .article ul, .article ol {
+      font-size: 16px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .article ul, .article ol { padding-left: 24px; }
+    .article li { margin-bottom: 6px; }
+    .article a:not(.btn) { color: var(--blue); text-decoration: underline; }
+    .article strong { font-weight: 700; }
+
+    .callout {
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 15px;
+    }
+    [data-theme="dark"] .callout { background: rgba(0, 102, 255, .1); }
+
+    .table-wrap { overflow-x: auto; margin: 20px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td {
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--gray-100);
+      font-weight: 700;
+    }
+
+    .faq-item {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item h3 { font-size: 17px; margin-bottom: 8px; }
+    .faq-item p { font-size: 15px; margin-bottom: 0; }
+
+    .cta-section {
+      background: linear-gradient(135deg, var(--blue-light), #fff);
+      border: 1px solid var(--blue-light);
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      margin: 48px 0;
+    }
+    [data-theme="dark"] .cta-section {
+      background: linear-gradient(135deg, rgba(0, 102, 255, .1), transparent);
+      border-color: rgba(0, 102, 255, .2);
+    }
+    .cta-section h2 { margin-top: 0; }
+    .cta-section p { margin-bottom: 24px; }
+    .cta-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--blue);
+      color: var(--blue);
+    }
+    .btn-secondary:hover {
+      background: var(--blue-light);
+    }
+
+    .related h2 { font-size: 22px; }
+    .related ul { list-style: none; padding: 0; }
+    .related li { margin-bottom: 10px; }
+  </style>
+</MainLayout>

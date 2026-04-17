@@ -1,12 +1,21 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 
-/** Newest first — add new entries at the top */
+/** Newest first — add new entries at the top. `categoryKey` drives filters + badges (finance | health | image | pdf). */
 const posts = [
+  {
+    title: 'How to Compress a PDF Without Losing Quality (Free, No Upload)',
+    href: '/blog/how-to-compress-pdf',
+    categoryKey: 'pdf',
+    date: 'April 17, 2026',
+    dateIso: '2026-04-17',
+    excerpt:
+      'Reduce PDF file size by 50-90% without visible quality loss. Free browser-based compression, no upload to servers. Best settings for email, WhatsApp, and government portals.',
+  },
   {
     title: 'How Many Calories Should You Eat Per Day? (Calculator + Indian Food Guide)',
     href: '/blog/how-many-calories-per-day/',
-    category: 'Health',
+    categoryKey: 'health',
     date: 'April 17, 2026',
     dateIso: '2026-04-17',
     excerpt:
@@ -15,7 +24,7 @@ const posts = [
   {
     title: 'Old vs New Tax Regime in India: Which Saves You More Money? (FY 2025-26)',
     href: '/blog/old-vs-new-tax-regime/',
-    category: 'Finance',
+    categoryKey: 'finance',
     date: 'April 17, 2026',
     dateIso: '2026-04-17',
     excerpt:
@@ -24,7 +33,7 @@ const posts = [
   {
     title: 'How to Calculate Your BMI: Formula, Chart, and What Your Number Really Means (2026 Guide)',
     href: '/blog/how-to-calculate-bmi/',
-    category: 'Health',
+    categoryKey: 'health',
     date: 'April 17, 2026',
     dateIso: '2026-04-17',
     excerpt:
@@ -33,7 +42,7 @@ const posts = [
   {
     title: 'CTC vs In-Hand Salary: Where Does Your Money Actually Go? (2026 Breakdown)',
     href: '/blog/ctc-vs-in-hand-salary/',
-    category: 'Finance',
+    categoryKey: 'finance',
     date: 'April 17, 2026',
     dateIso: '2026-04-17',
     excerpt:
@@ -42,7 +51,7 @@ const posts = [
   {
     title: 'Buy vs Rent a House in India 2026: Honest Math (with Calculator)',
     href: '/blog/buy-vs-rent-india/',
-    category: 'Finance',
+    categoryKey: 'finance',
     date: 'April 14, 2026',
     dateIso: '2026-04-14',
     excerpt:
@@ -51,7 +60,7 @@ const posts = [
   {
     title: 'How Much Money Do You REALLY Need to Retire in India? (2026 Math)',
     href: '/blog/how-much-to-retire-india/',
-    category: 'Finance',
+    categoryKey: 'finance',
     date: 'April 14, 2026',
     dateIso: '2026-04-14',
     excerpt:
@@ -60,7 +69,7 @@ const posts = [
   {
     title: 'SIP vs Lumpsum: Which Investment Wins in 2026? (Real Numbers)',
     href: '/blog/sip-vs-lumpsum/',
-    category: 'Finance',
+    categoryKey: 'finance',
     date: 'April 13, 2026',
     dateIso: '2026-04-13',
     excerpt:
@@ -69,7 +78,7 @@ const posts = [
   {
     title: 'How to Convert iPhone Photos to JPG Without Losing Quality (2026 Guide)',
     href: '/blog/convert-iphone-photos-to-jpg/',
-    category: 'Tutorial',
+    categoryKey: 'image',
     date: 'April 13, 2026',
     dateIso: '2026-04-13',
     excerpt:
@@ -78,7 +87,7 @@ const posts = [
   {
     title: 'HEIC vs JPG: Complete Format Comparison for 2026',
     href: '/blog/heic-vs-jpg/',
-    category: 'Comparison',
+    categoryKey: 'image',
     date: 'April 13, 2026',
     dateIso: '2026-04-13',
     excerpt:
@@ -87,13 +96,25 @@ const posts = [
   {
     title: 'How to Open HEIC Files on Windows 11 in 2026 (3 Free Methods)',
     href: '/blog/open-heic-windows-11/',
-    category: 'Tutorial',
+    categoryKey: 'image',
     date: 'April 12, 2026',
     dateIso: '2026-04-12',
     excerpt:
       "Your iPhone photos won't open on your Windows 11 PC. Here are the three simplest free methods to view and convert HEIC files, including one that requires zero installation.",
   },
-];
+] as const;
+
+type CategoryKey = 'finance' | 'health' | 'image' | 'pdf';
+
+const badgeLabel: Record<CategoryKey, string> = {
+  finance: 'Finance',
+  health: 'Health',
+  image: 'Image',
+  pdf: 'PDF',
+};
+
+const countBy = (key: CategoryKey | 'all') =>
+  key === 'all' ? posts.length : posts.filter((p) => p.categoryKey === key).length;
 ---
 
 <MainLayout
@@ -111,17 +132,42 @@ const posts = [
       </p>
 
       <h2 class="blog-list-heading">Latest posts</h2>
-      <ul class="blog-card-list">
+
+      <div class="blog-filters" role="tablist" aria-label="Filter posts by category">
+        <button
+          type="button"
+          class="blog-filter-btn active"
+          data-category="all"
+          role="tab"
+          aria-selected="true"
+        >
+          All ({countBy('all')})
+        </button>
+        <button type="button" class="blog-filter-btn" data-category="finance" role="tab" aria-selected="false">
+          Finance ({countBy('finance')})
+        </button>
+        <button type="button" class="blog-filter-btn" data-category="health" role="tab" aria-selected="false">
+          Health ({countBy('health')})
+        </button>
+        <button type="button" class="blog-filter-btn" data-category="image" role="tab" aria-selected="false">
+          Image ({countBy('image')})
+        </button>
+        <button type="button" class="blog-filter-btn" data-category="pdf" role="tab" aria-selected="false">
+          PDF ({countBy('pdf')})
+        </button>
+      </div>
+
+      <ul class="blog-card-list blog-post-grid">
         {
           posts.map((post) => (
-            <li>
+            <li class="blog-post-card" data-category={post.categoryKey}>
               <a href={post.href} class="blog-card">
-                <span class="blog-card-meta">
-                  <span class="blog-card-category">{post.category}</span>
+                <span class:list={['category-badge', post.categoryKey]}>{badgeLabel[post.categoryKey]}</span>
+                <div class="blog-card-meta">
                   <time datetime={post.dateIso} class="blog-card-date">
                     {post.date}
                   </time>
-                </span>
+                </div>
                 <h3 class="blog-card-title">{post.title}</h3>
                 <p class="blog-card-excerpt">{post.excerpt}</p>
                 <span class="blog-card-cta">Read article →</span>
@@ -131,6 +177,14 @@ const posts = [
         }
       </ul>
 
+      <div class="pagination">
+        <button type="button" class="pagination-btn pagination-prev" disabled>← Previous</button>
+        <span class="pagination-info">
+          Page <span class="pagination-current">1</span> of <span class="pagination-total">1</span>
+        </span>
+        <button type="button" class="pagination-btn pagination-next">Next →</button>
+      </div>
+
       <p class="section-tail">
         <a href="/image/" class="link-back">Browse image tools →</a>
         {' · '}
@@ -138,6 +192,89 @@ const posts = [
       </p>
     </div>
   </section>
+
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      const POSTS_PER_PAGE = 6;
+      const buttons = document.querySelectorAll('.blog-filter-btn');
+      const allPosts = Array.from(document.querySelectorAll('.blog-post-card'));
+      const prevBtn = document.querySelector('.pagination-prev');
+      const nextBtn = document.querySelector('.pagination-next');
+      const currentPageEl = document.querySelector('.pagination-current');
+      const totalPagesEl = document.querySelector('.pagination-total');
+      const postGrid = document.querySelector('.blog-post-grid');
+      const paginationEl = document.querySelector('.pagination');
+
+      if (!prevBtn || !nextBtn || !currentPageEl || !totalPagesEl || !postGrid || !paginationEl) return;
+
+      let currentCategory = 'all';
+      let currentPage = 1;
+
+      function getFilteredPosts() {
+        if (currentCategory === 'all') return allPosts;
+        return allPosts.filter((p) => p.dataset.category === currentCategory);
+      }
+
+      function getTotalPages() {
+        return Math.max(1, Math.ceil(getFilteredPosts().length / POSTS_PER_PAGE));
+      }
+
+      function render() {
+        const filtered = getFilteredPosts();
+        let totalPages = getTotalPages();
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        const start = (currentPage - 1) * POSTS_PER_PAGE;
+        const end = start + POSTS_PER_PAGE;
+
+        allPosts.forEach((post) => {
+          const inCategory = currentCategory === 'all' || post.dataset.category === currentCategory;
+          const idx = filtered.indexOf(post);
+          const inPage = idx >= start && idx < end;
+          post.style.display = inCategory && inPage ? '' : 'none';
+        });
+
+        currentPageEl.textContent = String(currentPage);
+        totalPagesEl.textContent = String(totalPages);
+        prevBtn.disabled = currentPage <= 1;
+        nextBtn.disabled = currentPage >= totalPages;
+
+        paginationEl.style.display = totalPages <= 1 ? 'none' : 'flex';
+      }
+
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          currentCategory = btn.dataset.category || 'all';
+          currentPage = 1;
+          buttons.forEach((b) => {
+            b.classList.remove('active');
+            b.setAttribute('aria-selected', 'false');
+          });
+          btn.classList.add('active');
+          btn.setAttribute('aria-selected', 'true');
+          render();
+        });
+      });
+
+      prevBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          render();
+          postGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+
+      nextBtn.addEventListener('click', () => {
+        if (currentPage < getTotalPages()) {
+          currentPage++;
+          render();
+          postGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+
+      render();
+    });
+  </script>
 
   <style>
     .blog-index .blog-list-heading {
@@ -149,6 +286,45 @@ const posts = [
       margin-top: 8px;
       margin-bottom: 18px;
     }
+
+    .blog-filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 32px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      -webkit-overflow-scrolling: touch;
+      max-width: 720px;
+    }
+
+    .blog-filter-btn {
+      padding: 8px 18px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      background: var(--card);
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition:
+        border-color 0.15s ease,
+        color 0.15s ease,
+        background 0.15s ease;
+      font-family: inherit;
+    }
+
+    .blog-filter-btn:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .blog-filter-btn.active {
+      background: var(--blue);
+      color: #fff;
+      border-color: var(--blue);
+    }
+
     .blog-card-list {
       list-style: none;
       margin: 0;
@@ -157,6 +333,7 @@ const posts = [
       gap: 16px;
       max-width: 720px;
     }
+
     .blog-card {
       display: block;
       background: var(--card);
@@ -169,14 +346,68 @@ const posts = [
         box-shadow 0.2s,
         transform 0.2s;
     }
+
     .blog-card:hover {
       border-color: rgba(0, 102, 255, 0.28);
       box-shadow: var(--shadow-lg);
       transform: translateY(-2px);
     }
-    [data-theme='dark'] .blog-card:hover {
+
+    :global([data-theme='dark']) .blog-card:hover {
       border-color: rgba(96, 165, 250, 0.35);
     }
+
+    .category-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .category-badge.finance {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .category-badge.health {
+      background: #d1fae5;
+      color: #047857;
+    }
+
+    .category-badge.image {
+      background: #ffedd5;
+      color: #c2410c;
+    }
+
+    .category-badge.pdf {
+      background: #fce7f3;
+      color: #be185d;
+    }
+
+    :global([data-theme='dark']) .category-badge.finance {
+      background: rgba(29, 78, 216, 0.2);
+      color: #93bbfd;
+    }
+
+    :global([data-theme='dark']) .category-badge.health {
+      background: rgba(4, 120, 87, 0.2);
+      color: #6ee7b7;
+    }
+
+    :global([data-theme='dark']) .category-badge.image {
+      background: rgba(194, 65, 12, 0.2);
+      color: #fdba74;
+    }
+
+    :global([data-theme='dark']) .category-badge.pdf {
+      background: rgba(190, 24, 93, 0.2);
+      color: #f9a8d4;
+    }
+
     .blog-card-meta {
       display: flex;
       flex-wrap: wrap;
@@ -185,23 +416,12 @@ const posts = [
       margin-bottom: 10px;
       font-size: 13px;
     }
-    .blog-card-category {
-      display: inline-flex;
-      align-items: center;
-      font-weight: 600;
-      color: var(--blue);
-      background: var(--blue-light);
-      padding: 4px 10px;
-      border-radius: 999px;
-    }
-    [data-theme='dark'] .blog-card-category {
-      background: rgba(0, 102, 255, 0.18);
-      color: #93c5fd;
-    }
+
     .blog-card-date {
       color: var(--text-muted);
       font-weight: 500;
     }
+
     .blog-card-title {
       font-size: 1.25rem;
       font-weight: 800;
@@ -210,19 +430,72 @@ const posts = [
       margin: 0 0 10px;
       color: var(--text);
     }
+
     .blog-card-excerpt {
       font-size: 15px;
       line-height: 1.6;
       color: var(--text-muted);
       margin: 0 0 14px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
+
     .blog-card-cta {
       font-size: 14px;
       font-weight: 600;
       color: var(--blue);
     }
+
     .blog-card:hover .blog-card-cta {
       text-decoration: underline;
+    }
+
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      max-width: 720px;
+    }
+
+    .pagination-btn {
+      padding: 10px 20px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition:
+        border-color 0.15s ease,
+        color 0.15s ease;
+      font-family: inherit;
+    }
+
+    .pagination-btn:hover:not(:disabled) {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .pagination-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .pagination-info {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .pagination-current {
+      font-weight: 700;
+      color: var(--text);
     }
   </style>
 </MainLayout>
