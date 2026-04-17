@@ -26,7 +26,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     "publisher": {
       "@type": "Organization",
       "name": "DoItSwift",
-      "logo": { "@type": "ImageObject", "url": "https://doitswift.com/og-default.svg" }
+      "logo": { "@type": "ImageObject", "url": "https://doitswift.com/images/doitswift-logo.png" }
     },
     "mainEntityOfPage": "https://doitswift.com/blog/convert-iphone-photos-to-jpg/"
   })} />
@@ -108,7 +108,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         <ol>
           <li>
             Open
-            <a href="/image/heic-to-jpg">DoItSwift's HEIC to JPG converter</a>
+            <a href="/image/heic-to-jpg/">DoItSwift's HEIC to JPG converter</a>
             in your browser.
           </li>
           <li>Drag HEIC files onto the dropzone, or click to select multiple files at once.</li>
@@ -404,7 +404,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
           <p>
             Email it to yourself from the Photos app. iOS auto-converts to JPG during email. Takes
             10 seconds. For batches, use a
-            <a href="/image/heic-to-jpg">browser-based converter</a> instead.
+            <a href="/image/heic-to-jpg/">browser-based converter</a> instead.
           </p>
         </div>
 
@@ -472,7 +472,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
           The simplest method for most people: drop your iPhone photos on our free browser-based
           converter. No signup, no upload, your files stay on your device.
         </p>
-        <a href="/image/heic-to-jpg" class="btn btn-lg">
+        <a href="/image/heic-to-jpg/" class="btn btn-lg">
           → Convert HEIC to JPG Now
         </a>
       </section>
@@ -482,8 +482,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         <ul>
           <li><a href="/blog/open-heic-windows-11/">How to Open HEIC Files on Windows 11 in 2026</a></li>
           <li><a href="/blog/heic-vs-jpg/">HEIC vs JPG: Complete Format Comparison</a></li>
-          <li><a href="/blog/why-iphone-saves-as-heic/">Why Does My iPhone Save Photos as HEIC?</a> <em>(coming soon)</em></li>
-          <li><a href="/blog/best-image-format-for-web/">Best Image Format for Web in 2026</a> <em>(coming soon)</em></li>
+          <li>
+            <span class="related-planned">Why Does My iPhone Save Photos as HEIC?</span>
+            <em>(coming soon)</em>
+          </li>
+          <li>
+            <span class="related-planned">Best Image Format for Web in 2026</span>
+            <em>(coming soon)</em>
+          </li>
         </ul>
       </section>
 
@@ -591,5 +597,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     .related ul { list-style: none; padding: 0; }
     .related li { margin-bottom: 10px; }
     .related em { color: var(--text-muted); font-style: normal; font-size: 13px; }
+    .related-planned { color: var(--text-muted); font-weight: 500; }
   </style>
 </MainLayout>

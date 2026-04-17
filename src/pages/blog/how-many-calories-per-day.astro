@@ -1,0 +1,973 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const title = "How Many Calories Should You Eat Per Day? (Calculator + Indian Food Guide)";
+const description = "Find your daily calorie needs using TDEE science. Includes calorie calculator, Indian food calorie chart, macros for weight loss/gain, and meal planning guidance for Indian diets.";
+const publishDate = "2026-04-17";
+const lastUpdated = "2026-04-17";
+---
+
+<MainLayout
+  title={`${title} | DoItSwift`}
+  description={description}
+  keywords="how many calories per day, calorie calculator, daily calorie intake, tdee calculator, calories for weight loss, indian food calories, calorie deficit, how many calories should i eat, maintenance calories, calorie intake for indian diet"
+  canonical="https://doitswift.com/blog/how-many-calories-per-day/"
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": lastUpdated,
+    "author": { "@type": "Organization", "name": "DoItSwift" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "DoItSwift",
+      "logo": { "@type": "ImageObject", "url": "https://doitswift.com/og-default.svg" }
+    },
+    "mainEntityOfPage": "https://doitswift.com/blog/how-many-calories-per-day/"
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How many calories should I eat a day?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The average adult needs 1,600 to 3,000 calories per day depending on age, sex, height, weight, and activity level. Sedentary women typically need 1,600-2,000 calories while active men may need 2,400-3,000. Use a TDEE calculator with your specific stats for an accurate number."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How many calories for weight loss?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "To lose weight safely, eat 300-500 calories below your TDEE (Total Daily Energy Expenditure). This creates a deficit that leads to roughly 0.25-0.5 kg of fat loss per week. A 500-calorie deficit yields about 0.45 kg per week. Never go below 1,200 calories for women or 1,500 for men without medical supervision."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is TDEE?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "TDEE stands for Total Daily Energy Expenditure — the total number of calories your body burns in a day including your basal metabolic rate (BMR), physical activity, digestion (thermic effect of food), and non-exercise activity. TDEE is calculated by multiplying your BMR by an activity factor ranging from 1.2 (sedentary) to 1.9 (very active)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How many calories in Indian food?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Common Indian foods: 1 roti is about 70-80 calories, 1 cup cooked rice is 200-240 calories, 1 cup dal is 180-220 calories, 1 dosa is 120-150 calories, 1 cup chicken curry is 240-300 calories, and 1 samosa is 250-300 calories. Indian meals can range from 400-800 calories depending on oil, ghee, and portion size."
+        }
+      }
+    ]
+  })} />
+
+  <article class="article">
+    <div class="container">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> › <a href="/blog/">Blog</a> › <span>How Many Calories Per Day</span>
+      </nav>
+
+      <header class="article-header">
+        <div class="article-meta">
+          <span class="cat">Health</span>
+          <time>Updated April 17, 2026</time>
+          <span>· 14 min read</span>
+        </div>
+        <h1>How Many Calories Should You Eat Per Day?</h1>
+        <p class="lede">
+          "Eat 2,000 calories a day" is printed on every nutrition label — but it's wrong
+          for most people. A 55 kg sedentary woman needs about 1,500. A 90 kg active man
+          needs 3,000+. Your actual number depends on your body, your activity, and your
+          goals. This guide shows you exactly how to find it — and includes an
+          <strong>Indian food calorie reference</strong> because most calorie guides assume
+          you're eating burgers and salads, not dal-chawal and parathas.
+        </p>
+      </header>
+
+      <div class="toc card">
+        <strong>In this guide:</strong>
+        <ul>
+          <li><a href="#quick-answer">Quick answer: your calorie range</a></li>
+          <li><a href="#tdee">What is TDEE? (the real number that matters)</a></li>
+          <li><a href="#bmr">How your body burns calories (BMR explained)</a></li>
+          <li><a href="#calculate">How to calculate your exact daily calories</a></li>
+          <li><a href="#goals">Calories for weight loss, maintenance, and weight gain</a></li>
+          <li><a href="#indian-food">Indian food calorie chart (50+ common foods)</a></li>
+          <li><a href="#macros">Macros: why calories alone aren't enough</a></li>
+          <li><a href="#meal-plan">Sample Indian meal plans at 1,500, 2,000, and 2,500 calories</a></li>
+          <li><a href="#mistakes">7 calorie counting mistakes to avoid</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+
+      <div class="callout">
+        <strong>🎯 Find your exact number:</strong>
+        Use our free <a href="/calculator/calorie/">Calorie / TDEE Calculator</a> — enter
+        age, height, weight, and activity level. See your maintenance calories, weight loss
+        target, and weight gain target instantly. No signup.
+      </div>
+
+      <section id="quick-answer">
+        <h2>Quick answer: general calorie ranges</h2>
+        <p>
+          Before we dive into the science, here are approximate daily calorie needs for
+          average Indian adults. These are rough guides — your exact number could be 200-500
+          calories different based on your specific stats.
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Profile</th>
+                <th>Sedentary</th>
+                <th>Moderately active</th>
+                <th>Very active</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Woman, 50-60 kg, 25-35 years</td>
+                <td>1,500-1,700</td>
+                <td>1,800-2,100</td>
+                <td>2,200-2,500</td>
+              </tr>
+              <tr>
+                <td>Woman, 60-75 kg, 25-35 years</td>
+                <td>1,700-1,900</td>
+                <td>2,000-2,300</td>
+                <td>2,400-2,700</td>
+              </tr>
+              <tr>
+                <td>Man, 60-70 kg, 25-35 years</td>
+                <td>1,800-2,000</td>
+                <td>2,200-2,500</td>
+                <td>2,700-3,000</td>
+              </tr>
+              <tr>
+                <td>Man, 75-90 kg, 25-35 years</td>
+                <td>2,000-2,300</td>
+                <td>2,500-2,800</td>
+                <td>3,000-3,400</td>
+              </tr>
+              <tr>
+                <td>Older adult (60+ years)</td>
+                <td>1,400-1,800</td>
+                <td>1,700-2,200</td>
+                <td>2,000-2,500</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          These are <strong>maintenance calories</strong> — the amount to stay at your
+          current weight. For weight loss, subtract 300-500. For weight gain, add 300-500.
+          For your personalized number, use our
+          <a href="/calculator/calorie/">Calorie Calculator</a>.
+        </p>
+      </section>
+
+      <section id="tdee">
+        <h2>What is TDEE? (the number that actually matters)</h2>
+        <p>
+          <strong>TDEE — Total Daily Energy Expenditure</strong> — is the total number of
+          calories your body burns in an entire day. Not just during exercise, but everything:
+          breathing, digesting, walking to the kitchen, fidgeting in your chair, sleeping.
+        </p>
+        <p>
+          TDEE is made up of four components:
+        </p>
+
+        <h3>1. BMR — Basal Metabolic Rate (60-70% of TDEE)</h3>
+        <p>
+          The calories your body burns just being alive: heart pumping, lungs breathing,
+          cells repairing, brain functioning. Even if you lay in bed all day, your body
+          burns this much. For most adults, BMR is 1,200-2,000 calories. Taller, heavier,
+          younger, and more muscular people have higher BMR.
+        </p>
+
+        <h3>2. TEF — Thermic Effect of Food (8-15% of TDEE)</h3>
+        <p>
+          Digesting food costs energy. Protein takes the most energy to digest (20-30% of
+          its calories). Carbs take 5-10%. Fats take 0-3%. This is one reason high-protein
+          diets help with weight management — you burn more calories just processing the food.
+        </p>
+
+        <h3>3. EAT — Exercise Activity Thermogenesis (5-15% of TDEE)</h3>
+        <p>
+          The calories burned during intentional exercise: gym, running, yoga, sports.
+          Despite what fitness marketing suggests, this is usually the <em>smallest</em>
+          variable component of TDEE. A 30-minute run burns about 300 calories — which
+          is one samosa. Exercise matters for health, but diet drives weight loss.
+        </p>
+
+        <h3>4. NEAT — Non-Exercise Activity Thermogenesis (15-30% of TDEE)</h3>
+        <p>
+          The unsung hero. NEAT is everything you do that isn't sleeping, eating, or
+          exercising: walking to the bus, typing, cooking, standing, even fidgeting. NEAT
+          can vary by 500-1,000 calories/day between a desk worker and someone with an active
+          job. This is why "take 10,000 steps daily" advice is so effective — it boosts NEAT.
+        </p>
+
+        <div class="callout">
+          <strong>📊 The math:</strong>
+          TDEE = BMR + TEF + EAT + NEAT<br><br>
+          For a typical Indian office worker (30 years, 70 kg, 170 cm):<br>
+          BMR (~1,650) + TEF (~200) + EAT (~200) + NEAT (~350) = <strong>TDEE ≈ 2,400 calories/day</strong><br><br>
+          Calculate yours: <a href="/calculator/calorie/">Calorie / TDEE Calculator →</a>
+        </div>
+      </section>
+
+      <section id="bmr">
+        <h2>How your body burns calories: BMR formulas</h2>
+        <p>
+          Two main formulas are used to estimate BMR. Both are reasonably accurate for most
+          people:
+        </p>
+
+        <h3>Mifflin-St Jeor equation (most widely recommended)</h3>
+        <p>
+          <strong>Men:</strong> BMR = (10 × weight in kg) + (6.25 × height in cm) - (5 × age) + 5
+        </p>
+        <p>
+          <strong>Women:</strong> BMR = (10 × weight in kg) + (6.25 × height in cm) - (5 × age) - 161
+        </p>
+        <p>
+          <strong>Example:</strong> 30-year-old man, 75 kg, 175 cm:<br>
+          BMR = (10 × 75) + (6.25 × 175) - (5 × 30) + 5 = 750 + 1,093.75 - 150 + 5 = <strong>1,699 calories</strong>
+        </p>
+
+        <h3>Harris-Benedict equation (older, slightly less accurate)</h3>
+        <p>
+          <strong>Men:</strong> BMR = 88.362 + (13.397 × weight) + (4.799 × height) - (5.677 × age)
+        </p>
+        <p>
+          <strong>Women:</strong> BMR = 447.593 + (9.247 × weight) + (3.098 × height) - (4.330 × age)
+        </p>
+
+        <h3>From BMR to TDEE: the activity multiplier</h3>
+        <p>
+          Once you know BMR, multiply by your activity level:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Activity level</th>
+                <th>Multiplier</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sedentary</td>
+                <td>1.2</td>
+                <td>Desk job, no exercise, minimal walking</td>
+              </tr>
+              <tr>
+                <td>Lightly active</td>
+                <td>1.375</td>
+                <td>Light exercise 1-3 days/week or walking 4,000-7,000 steps</td>
+              </tr>
+              <tr>
+                <td>Moderately active</td>
+                <td>1.55</td>
+                <td>Moderate exercise 3-5 days/week, 7,000-10,000 steps</td>
+              </tr>
+              <tr>
+                <td>Very active</td>
+                <td>1.725</td>
+                <td>Hard exercise 6-7 days/week or physical job</td>
+              </tr>
+              <tr>
+                <td>Extremely active</td>
+                <td>1.9</td>
+                <td>Athlete-level training or very physical job + exercise</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          <strong>Be honest about your activity level.</strong> Most people overestimate.
+          If you work a desk job and exercise 3 times a week for 30 minutes, you're
+          "lightly active" not "moderately active." Overestimating activity is the #1 reason
+          calorie calculations fail.
+        </p>
+
+        <p>
+          Our <a href="/calculator/calorie/">Calorie Calculator</a> uses Mifflin-St Jeor
+          and applies the correct multiplier automatically. Enter your details once, get
+          all the numbers.
+        </p>
+      </section>
+
+      <section id="calculate">
+        <h2>How to calculate your exact daily calories</h2>
+        <p>
+          Here's the step-by-step process:
+        </p>
+
+        <h3>Step 1: Calculate your BMR</h3>
+        <p>
+          Use the Mifflin-St Jeor formula above, or just use our
+          <a href="/calculator/calorie/">calculator</a> which does it automatically.
+        </p>
+
+        <h3>Step 2: Multiply by activity factor</h3>
+        <p>
+          BMR × activity multiplier = your TDEE (maintenance calories).
+        </p>
+
+        <h3>Step 3: Adjust for your goal</h3>
+        <ul>
+          <li><strong>Maintain weight:</strong> Eat at your TDEE</li>
+          <li><strong>Lose weight:</strong> Eat 300-500 calories below TDEE (calorie deficit)</li>
+          <li><strong>Gain weight:</strong> Eat 300-500 calories above TDEE (calorie surplus)</li>
+        </ul>
+
+        <h3>Step 4: Set your macros</h3>
+        <p>
+          Calories tell you how much to eat. Macros tell you what to eat. Use our
+          <a href="/calculator/macro/">Macro Calculator</a> to split your calories into
+          protein, carbs, and fat based on your goal.
+        </p>
+
+        <h3>Step 5: Track and adjust</h3>
+        <p>
+          The formula gives you a starting point. Track your weight for 2 weeks. If you're
+          not losing/gaining as expected, adjust by 100-200 calories. Bodies aren't perfect
+          calculators — real-world results matter more than formulas.
+        </p>
+      </section>
+
+      <section id="goals">
+        <h2>Calories for weight loss, maintenance, and gain</h2>
+
+        <h3>For weight loss: the calorie deficit</h3>
+        <p>
+          To lose fat, you must eat fewer calories than your body burns. This forces your
+          body to use stored energy (fat). The size of the deficit determines the speed of
+          weight loss:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Daily deficit</th>
+                <th>Weekly fat loss</th>
+                <th>Monthly fat loss</th>
+                <th>Sustainable?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>250 calories</td>
+                <td>~0.25 kg</td>
+                <td>~1 kg</td>
+                <td>Very sustainable</td>
+              </tr>
+              <tr>
+                <td>500 calories</td>
+                <td>~0.45 kg</td>
+                <td>~2 kg</td>
+                <td>Sustainable for most</td>
+              </tr>
+              <tr>
+                <td>750 calories</td>
+                <td>~0.7 kg</td>
+                <td>~3 kg</td>
+                <td>Aggressive, hard to maintain</td>
+              </tr>
+              <tr>
+                <td>1,000+ calories</td>
+                <td>~1 kg</td>
+                <td>~4 kg</td>
+                <td>Not recommended — muscle loss risk</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          <strong>The sweet spot:</strong> 300-500 calorie deficit. Aggressive enough to see
+          results in 2-3 weeks, sustainable enough to maintain for months. Going below 1,200
+          calories (women) or 1,500 calories (men) is not recommended without medical
+          supervision.
+        </p>
+        <p>
+          Check your <a href="/calculator/bmi/">BMI</a> and
+          <a href="/calculator/ideal-weight/">ideal weight</a> to set a realistic target
+          before starting a deficit.
+        </p>
+
+        <h3>For maintenance: the equilibrium</h3>
+        <p>
+          Eating at TDEE means weight stays roughly stable. This is your "cruise" mode —
+          ideal after reaching a goal weight. Weight may fluctuate 1-2 kg daily due to water,
+          food volume, and sodium. Don't panic at daily changes; track weekly averages.
+        </p>
+
+        <h3>For weight gain: the calorie surplus</h3>
+        <p>
+          To build muscle, eat 300-500 calories above TDEE combined with resistance training.
+          Without strength training, excess calories become fat. With proper training and
+          adequate protein (1.6-2.2g per kg bodyweight), most of the gain will be muscle.
+        </p>
+        <p>
+          Use our <a href="/calculator/macro/">Macro Calculator</a> to ensure you're getting
+          enough protein for muscle building.
+        </p>
+      </section>
+
+      <section id="indian-food">
+        <h2>Indian food calorie chart: 50+ common foods</h2>
+        <p>
+          Most calorie databases are dominated by Western foods. Here's a comprehensive
+          reference for <strong>common Indian foods</strong> that you'll actually eat. All
+          values are approximate and depend on preparation method, oil/ghee used, and
+          portion size.
+        </p>
+
+        <h3>Staples (rice, roti, bread)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Food</th>
+                <th>Portion</th>
+                <th>Calories</th>
+                <th>Key macros</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Roti / Chapati (wheat)</td><td>1 medium (30g flour)</td><td>70-80</td><td>12g carbs, 2.5g protein</td></tr>
+              <tr><td>Paratha (plain)</td><td>1 medium</td><td>150-200</td><td>Higher fat due to ghee/oil</td></tr>
+              <tr><td>Stuffed paratha (aloo)</td><td>1 medium</td><td>250-300</td><td>20g carbs, 12g fat</td></tr>
+              <tr><td>Cooked white rice</td><td>1 cup (200g)</td><td>200-240</td><td>45g carbs, 4g protein</td></tr>
+              <tr><td>Cooked brown rice</td><td>1 cup (200g)</td><td>215-250</td><td>45g carbs, 5g protein, more fiber</td></tr>
+              <tr><td>Puri (deep fried)</td><td>1 medium</td><td>100-120</td><td>High fat from frying</td></tr>
+              <tr><td>Naan (tandoori)</td><td>1 piece</td><td>260-310</td><td>Large portion, butter adds 50+ cal</td></tr>
+              <tr><td>Idli</td><td>1 medium</td><td>60-75</td><td>Low fat, 12g carbs</td></tr>
+              <tr><td>Dosa (plain)</td><td>1 medium</td><td>120-150</td><td>Oil adds significant calories</td></tr>
+              <tr><td>Masala dosa</td><td>1 full</td><td>250-350</td><td>Potato + oil increases calories</td></tr>
+              <tr><td>Poha</td><td>1 plate (150g)</td><td>250-300</td><td>Peanuts add protein and fat</td></tr>
+              <tr><td>Upma</td><td>1 bowl (200g)</td><td>200-270</td><td>Semolina + oil</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Dals, curries, and gravies</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Food</th>
+                <th>Portion</th>
+                <th>Calories</th>
+                <th>Key macros</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Dal (toor/moong)</td><td>1 cup (200ml)</td><td>180-220</td><td>12-15g protein, good fiber</td></tr>
+              <tr><td>Rajma (kidney beans)</td><td>1 cup</td><td>220-280</td><td>15g protein, high fiber</td></tr>
+              <tr><td>Chole / Chana masala</td><td>1 cup</td><td>250-320</td><td>12g protein, oil adds calories</td></tr>
+              <tr><td>Paneer butter masala</td><td>1 cup</td><td>350-450</td><td>High fat from cream + butter</td></tr>
+              <tr><td>Chicken curry (home)</td><td>1 cup (2 pieces)</td><td>240-320</td><td>25g protein, oil varies</td></tr>
+              <tr><td>Egg curry</td><td>1 cup (2 eggs)</td><td>250-300</td><td>14g protein</td></tr>
+              <tr><td>Fish curry</td><td>1 cup (1 piece)</td><td>200-280</td><td>20g protein, varies by fish</td></tr>
+              <tr><td>Palak paneer</td><td>1 cup</td><td>280-350</td><td>15g protein, cream adds calories</td></tr>
+              <tr><td>Sambar</td><td>1 cup</td><td>130-170</td><td>8g protein, low fat if less oil</td></tr>
+              <tr><td>Rasam</td><td>1 cup</td><td>50-80</td><td>Very low calorie, mostly water</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Snacks and street food</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Food</th>
+                <th>Portion</th>
+                <th>Calories</th>
+                <th>Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Samosa</td><td>1 medium</td><td>250-300</td><td>Deep fried — high fat</td></tr>
+              <tr><td>Vada pav</td><td>1</td><td>290-350</td><td>Fried vada + pav + chutney</td></tr>
+              <tr><td>Pani puri / Golgappa</td><td>6 pieces</td><td>150-200</td><td>Small individually, adds up</td></tr>
+              <tr><td>Bhel puri</td><td>1 plate</td><td>200-250</td><td>Puffed rice keeps it moderate</td></tr>
+              <tr><td>Pakoda / Bhaji</td><td>5-6 pieces</td><td>200-280</td><td>Deep fried</td></tr>
+              <tr><td>Dhokla</td><td>4 pieces</td><td>150-180</td><td>Steamed — relatively healthy</td></tr>
+              <tr><td>Kachori</td><td>1 medium</td><td>250-350</td><td>Deep fried, stuffed</td></tr>
+              <tr><td>Pav bhaji</td><td>1 plate (2 pav)</td><td>400-500</td><td>Butter-heavy in restaurants</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Beverages</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Drink</th>
+                <th>Portion</th>
+                <th>Calories</th>
+                <th>Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Chai (with milk + sugar)</td><td>1 cup</td><td>70-100</td><td>2-3 cups = 210-300 hidden calories</td></tr>
+              <tr><td>Black coffee (no sugar)</td><td>1 cup</td><td>2-5</td><td>Nearly zero</td></tr>
+              <tr><td>Coffee with milk + sugar</td><td>1 cup</td><td>80-120</td><td>Sugar is the main culprit</td></tr>
+              <tr><td>Lassi (sweet)</td><td>1 glass</td><td>200-280</td><td>Yogurt + sugar</td></tr>
+              <tr><td>Buttermilk / Chaas</td><td>1 glass</td><td>40-60</td><td>Low calorie, good for digestion</td></tr>
+              <tr><td>Mango shake</td><td>1 glass</td><td>200-300</td><td>Mango pulp + sugar + milk</td></tr>
+              <tr><td>Nimbu pani (sweetened)</td><td>1 glass</td><td>60-100</td><td>Depends on sugar amount</td></tr>
+              <tr><td>Coconut water</td><td>1 glass (200ml)</td><td>40-50</td><td>Natural electrolytes</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout">
+          <strong>🍵 The hidden calorie bomb: chai</strong><br>
+          Three cups of standard Indian chai with full-fat milk and 2 teaspoons sugar adds
+          210-300 calories per day — that's 15-20% of a weight-loss calorie budget. Switching
+          to black tea or reducing sugar saves significant calories over time.
+        </div>
+      </section>
+
+      <section id="macros">
+        <h2>Macros: why calories alone aren't enough</h2>
+        <p>
+          Calories determine <em>how much</em> to eat. <strong>Macronutrients</strong>
+          (protein, carbohydrates, fat) determine <em>what</em> to eat. Two diets at 2,000
+          calories can produce very different body composition results.
+        </p>
+
+        <h3>Protein: the most important macro</h3>
+        <p>
+          Protein preserves muscle during weight loss, builds muscle during weight gain,
+          and keeps you feeling full longer. Indian diets are chronically low in protein —
+          the average Indian consumes 0.6-0.8g per kg bodyweight, while optimal intake is
+          1.2-2.0g per kg.
+        </p>
+        <p>
+          <strong>Target:</strong> 1.2g per kg bodyweight (maintenance), 1.6-2.0g per kg
+          (muscle building or weight loss). For a 70 kg person, that's 84-140g protein daily.
+        </p>
+        <p>
+          Good Indian protein sources: paneer (18g per 100g), eggs (6g each), chicken
+          (27g per 100g), dal (8-9g per cup), soy chunks (52g per 100g), curd (4g per 100g),
+          whey protein (24g per scoop).
+        </p>
+
+        <h3>Carbohydrates: your energy source</h3>
+        <p>
+          Indian diets are naturally carb-heavy (rice, roti, potatoes). Carbs aren't bad —
+          they fuel activity and brain function. But excess carbs beyond your energy needs
+          get stored as fat.
+        </p>
+        <p>
+          <strong>Target:</strong> 40-55% of total calories. At 2,000 calories, that's
+          200-275g carbs (from rice, roti, vegetables, fruits — not sugar and maida).
+        </p>
+
+        <h3>Fats: essential but calorie-dense</h3>
+        <p>
+          Fats are necessary for hormones, vitamin absorption, and brain health. But fat
+          has 9 calories per gram (vs 4 for protein and carbs) — so small amounts add up
+          fast. One tablespoon of ghee or oil is 120 calories.
+        </p>
+        <p>
+          <strong>Target:</strong> 20-35% of total calories. At 2,000 calories, that's
+          44-78g fat. Include healthy fats: ghee (moderate), nuts, seeds, mustard oil,
+          coconut oil, fatty fish.
+        </p>
+
+        <p>
+          Use our <a href="/calculator/macro/">Macro Calculator</a> to get your exact
+          protein, carb, and fat targets based on your calorie goal and preferences.
+        </p>
+      </section>
+
+      <section id="meal-plan">
+        <h2>Sample Indian meal plans</h2>
+        <p>
+          These are framework templates — adjust portions and foods to your preferences.
+          The goal is to show that Indian food can fit any calorie target with smart choices.
+        </p>
+
+        <h3>1,500 calorie plan (weight loss for most women)</h3>
+        <ul>
+          <li><strong>Breakfast (350 cal):</strong> 2 idli + sambar + 1 cup chai (no sugar)</li>
+          <li><strong>Mid-morning (100 cal):</strong> 1 small fruit (banana or apple)</li>
+          <li><strong>Lunch (450 cal):</strong> 2 roti + 1 cup dal + sabzi + small salad</li>
+          <li><strong>Evening snack (100 cal):</strong> Handful of roasted chana or makhana</li>
+          <li><strong>Dinner (400 cal):</strong> 1 cup rice + 1 cup chicken/egg curry + raita</li>
+          <li><strong>Before bed (100 cal):</strong> 1 glass warm milk (or skip)</li>
+        </ul>
+
+        <h3>2,000 calorie plan (maintenance for most adults)</h3>
+        <ul>
+          <li><strong>Breakfast (450 cal):</strong> 2 egg omelette + 2 toast + chai with milk</li>
+          <li><strong>Mid-morning (150 cal):</strong> Fruit + handful of almonds (10-12)</li>
+          <li><strong>Lunch (550 cal):</strong> 1.5 cups rice + rajma + sabzi + curd</li>
+          <li><strong>Evening snack (150 cal):</strong> Sprouts chaat or dhokla (3 pieces)</li>
+          <li><strong>Dinner (550 cal):</strong> 2 roti + paneer sabzi + dal + salad</li>
+          <li><strong>Before bed (150 cal):</strong> Glass of milk + 1 tsp honey (or skip)</li>
+        </ul>
+
+        <h3>2,500 calorie plan (active men or weight gain)</h3>
+        <ul>
+          <li><strong>Breakfast (500 cal):</strong> Poha with peanuts + 2 boiled eggs + banana + chai</li>
+          <li><strong>Mid-morning (200 cal):</strong> Protein shake or curd + fruit bowl</li>
+          <li><strong>Lunch (700 cal):</strong> 2 cups rice + chicken curry + dal + sabzi + raita</li>
+          <li><strong>Evening snack (200 cal):</strong> Peanut butter toast or chana + makhana</li>
+          <li><strong>Dinner (650 cal):</strong> 3 roti + egg bhurji + palak paneer + salad</li>
+          <li><strong>Before bed (250 cal):</strong> Banana shake with milk + 10 almonds</li>
+        </ul>
+
+        <p>
+          Track your intake for one week using a food diary or app. Then adjust based on
+          actual weight changes. Our <a href="/calculator/calorie/">Calorie Calculator</a>
+          gives you the target; consistency and tracking close the gap.
+        </p>
+      </section>
+
+      <section id="mistakes">
+        <h2>7 calorie counting mistakes to avoid</h2>
+
+        <h3>1. Not counting cooking oil</h3>
+        <p>
+          Indian cooking uses generous oil and ghee. One tablespoon = 120 calories. A typical
+          home-cooked meal uses 2-3 tablespoons — that's 240-360 <em>invisible</em> calories
+          you're probably not counting. Restaurant food uses even more.
+        </p>
+
+        <h3>2. Ignoring chai and beverages</h3>
+        <p>
+          Three cups of chai daily = 210-300 calories. Add a sweet lassi or cold coffee and
+          you're at 500+ calories from drinks alone. Liquid calories don't trigger fullness
+          signals, so they don't reduce your food intake.
+        </p>
+
+        <h3>3. Overestimating exercise calories</h3>
+        <p>
+          Gym machines and fitness apps overestimate calories burned by 20-50%. A 30-minute
+          walk doesn't earn you a samosa. Don't "eat back" exercise calories — your TDEE
+          activity multiplier already accounts for regular exercise.
+        </p>
+
+        <h3>4. Weekend amnesia</h3>
+        <p>
+          Eating 1,800 calories Monday-Friday and 3,500 on Saturday-Sunday averages out to
+          2,286/day — potentially above your deficit target. One restaurant buffet or wedding
+          meal can undo a week of careful eating if it becomes a regular pattern.
+        </p>
+
+        <h3>5. Choosing "low fat" over "right calories"</h3>
+        <p>
+          Low-fat products often compensate with added sugar. A "low-fat" mango yogurt can
+          have more calories than full-fat plain curd. Read nutrition labels, not marketing
+          claims. Total calories and protein content matter more than fat percentage.
+        </p>
+
+        <h3>6. Using generic "Indian thali" calorie counts</h3>
+        <p>
+          Online calorie databases often list "Indian thali: 800 calories." But thalis
+          vary enormously: a simple dal-roti-sabzi home meal is 400-500 calories. A
+          restaurant Rajasthani thali with 12 items and ghee is 1,500+. Always estimate
+          your specific foods, not generic meal labels.
+        </p>
+
+        <h3>7. Aiming for perfection instead of consistency</h3>
+        <p>
+          You don't need to hit 2,000 calories exactly every day. Hitting 1,900-2,100 range
+          consistently is far more effective than alternating between 1,500 and 2,800.
+          Consistency over weeks matters more than precision on any single day.
+        </p>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+          <h3>How many calories should I eat a day to lose weight?</h3>
+          <p>
+            Eat 300-500 calories below your TDEE (Total Daily Energy Expenditure). For most
+            adults this means 1,400-2,200 calories depending on size and activity. Calculate
+            your specific number with our
+            <a href="/calculator/calorie/">Calorie Calculator</a>. Never go below 1,200
+            (women) or 1,500 (men) without medical guidance.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Is 1,200 calories enough for an Indian woman?</h3>
+          <p>
+            1,200 calories is the absolute minimum recommended for women, suitable only for
+            very petite, sedentary women under medical supervision. Most Indian women need
+            1,500-2,000 calories even for weight loss. Going too low causes muscle loss,
+            metabolic slowdown, nutrient deficiency, and is not sustainable. Aim for a
+            moderate deficit instead.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How many calories in 1 roti?</h3>
+          <p>
+            One medium wheat roti (made from about 30g atta) contains approximately 70-80
+            calories. A thicker or larger roti can be 90-110 calories. Adding ghee or
+            butter adds 40-50 calories per teaspoon. Most adults eat 2-4 rotis per meal,
+            totaling 140-400+ calories from roti alone.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How many calories in 1 cup rice?</h3>
+          <p>
+            One cup of cooked white rice (approximately 200g) has 200-240 calories. Brown
+            rice is similar in calories (215-250) but has more fiber and micronutrients.
+            Most Indians eat 1-2 cups per meal, so rice contributes 200-480 calories per
+            sitting.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How do I count calories in homemade Indian food?</h3>
+          <p>
+            Break each dish into ingredients: dal = lentils (calories by weight) + oil used
+            + tempering (tadka) ingredients. Use our food chart above as reference. Key tip:
+            measure the oil you cook with — this is where most hidden calories come from in
+            Indian cooking. One tablespoon of any oil or ghee adds 120 calories.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Should I count calories or just eat healthy?</h3>
+          <p>
+            Both approaches work. Calorie counting is more precise but requires effort.
+            "Eating healthy" (whole foods, lean protein, vegetables, minimal processed food)
+            can work without counting — but portion control is still needed. If you've been
+            eating healthy but not losing weight, counting for 2-4 weeks reveals where the
+            excess calories are hiding.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Do I need to count calories forever?</h3>
+          <p>
+            No. Count for 4-8 weeks to learn portion sizes and calorie values of foods you
+            regularly eat. After that, most people develop enough intuition to estimate
+            meals without tracking. Revisit tracking if weight stalls or goals change.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How many calories should I eat to gain muscle?</h3>
+          <p>
+            Eat 300-500 calories above your TDEE while consuming 1.6-2.0g protein per kg
+            bodyweight and doing progressive resistance training. Without adequate protein
+            and training, extra calories become fat, not muscle. Calculate your surplus
+            with our <a href="/calculator/calorie/">Calorie Calculator</a> and macros with
+            our <a href="/calculator/macro/">Macro Calculator</a>.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Why am I not losing weight even in a calorie deficit?</h3>
+          <p>
+            Common reasons: underestimating calories (not counting oil, snacks, weekends),
+            overestimating activity level, water retention masking fat loss (weigh weekly not
+            daily), metabolic adaptation after prolonged dieting (take a diet break for 1-2
+            weeks at maintenance), or medical conditions (thyroid, PCOS — consult a doctor).
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What is my BMR and why does it matter?</h3>
+          <p>
+            BMR (Basal Metabolic Rate) is the calories your body burns at complete rest —
+            just keeping you alive. It's 60-70% of your total daily burn. Knowing your BMR
+            helps set a safe calorie floor: eating below BMR for extended periods is risky
+            and counterproductive. Our <a href="/calculator/calorie/">Calorie Calculator</a>
+            shows both BMR and TDEE.
+          </p>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <h2>Find your daily calorie target now</h2>
+        <p>
+          Enter your age, height, weight, and activity level. Get your maintenance calories,
+          weight loss target, and weight gain target — with macro breakdown.
+        </p>
+        <div class="cta-buttons">
+          <a href="/calculator/calorie/" class="btn btn-lg">
+            → Calculate My Daily Calories
+          </a>
+          <a href="/calculator/macro/" class="btn btn-lg btn-secondary">
+            → Get My Macro Split
+          </a>
+        </div>
+      </section>
+
+      <section class="related">
+        <h2>Related Health Calculators & Guides</h2>
+        <ul>
+          <li><a href="/calculator/calorie/">Calorie / TDEE Calculator — Daily Energy Needs</a></li>
+          <li><a href="/calculator/macro/">Macro Calculator — Protein, Carbs, Fat Split</a></li>
+          <li><a href="/calculator/bmi/">BMI Calculator — Check Your Body Mass Index</a></li>
+          <li><a href="/calculator/ideal-weight/">Ideal Weight Calculator — Multiple Formulas</a></li>
+          <li><a href="/calculator/body-fat/">Body Fat Calculator — US Navy Method</a></li>
+          <li><a href="/calculator/water-intake/">Water Intake Calculator — Daily Hydration</a></li>
+          <li><a href="/blog/how-to-calculate-bmi/">How to Calculate Your BMI (Indian Ranges Included)</a></li>
+          <li><a href="/blog/how-much-to-retire-india/">How Much Money Do You Need to Retire in India?</a></li>
+        </ul>
+      </section>
+
+    </div>
+  </article>
+
+  <style>
+    .article { padding: 40px 0 60px; }
+    .article .container { max-width: 760px; }
+
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .article-header { margin-bottom: 32px; }
+    .article-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .article-meta .cat {
+      color: var(--blue);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      font-size: 11px;
+    }
+    .article h1 { font-size: 38px; line-height: 1.2; margin-bottom: 18px; }
+    .lede { font-size: 19px; color: var(--text-muted); line-height: 1.6; }
+
+    .toc {
+      padding: 20px 24px;
+      margin: 32px 0;
+    }
+    .toc strong { display: block; margin-bottom: 10px; }
+    .toc ul { list-style: none; padding: 0; }
+    .toc li { margin-bottom: 6px; font-size: 14px; }
+    .toc a { color: var(--blue); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    .article h2 {
+      font-size: 28px;
+      margin-top: 48px;
+      margin-bottom: 16px;
+    }
+    .article h3 {
+      font-size: 20px;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+    .article p, .article ul, .article ol {
+      font-size: 16px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .article ul, .article ol { padding-left: 24px; }
+    .article li { margin-bottom: 6px; }
+    .article a:not(.btn) { color: var(--blue); text-decoration: underline; }
+    .article strong { font-weight: 700; }
+
+    .callout {
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 15px;
+    }
+    [data-theme="dark"] .callout { background: rgba(0, 102, 255, .1); }
+
+    .table-wrap { overflow-x: auto; margin: 20px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td {
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--gray-100);
+      font-weight: 700;
+    }
+
+    .faq-item {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item h3 { font-size: 17px; margin-bottom: 8px; }
+    .faq-item p { font-size: 15px; margin-bottom: 0; }
+
+    .cta-section {
+      background: linear-gradient(135deg, var(--blue-light), #fff);
+      border: 1px solid var(--blue-light);
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      margin: 48px 0;
+    }
+    [data-theme="dark"] .cta-section {
+      background: linear-gradient(135deg, rgba(0, 102, 255, .1), transparent);
+      border-color: rgba(0, 102, 255, .2);
+    }
+    .cta-section h2 { margin-top: 0; }
+    .cta-section p { margin-bottom: 24px; }
+    .cta-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--blue);
+      color: var(--blue);
+    }
+    .btn-secondary:hover {
+      background: var(--blue-light);
+    }
+
+    .related h2 { font-size: 22px; }
+    .related ul { list-style: none; padding: 0; }
+    .related li { margin-bottom: 10px; }
+  </style>
+</MainLayout>

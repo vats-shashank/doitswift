@@ -14,6 +14,11 @@ const base = `http://${HOST}:${PORT}`;
 
 const paths = [
   '/',
+  '/blog/',
+  '/blog/heic-vs-jpg/',
+  '/image/',
+  '/image/heic-to-jpg/',
+  '/pdf/',
   '/calculator/',
   '/calculator/ppf/',
   '/calculator/emi/',

@@ -26,7 +26,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     "publisher": {
       "@type": "Organization",
       "name": "DoItSwift",
-      "logo": { "@type": "ImageObject", "url": "https://doitswift.com/og-default.svg" }
+      "logo": { "@type": "ImageObject", "url": "https://doitswift.com/images/doitswift-logo.png" }
     },
     "mainEntityOfPage": "https://doitswift.com/blog/heic-vs-jpg/"
   })} />
@@ -437,7 +437,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
             Technically yes, but imperceptibly. At the default 92% quality setting used by most
             converters, the quality loss is invisible to the human eye. The conversion produces
             a JPG that looks identical to the HEIC original for all practical purposes. Our
-            <a href="/image/heic-to-jpg">HEIC to JPG converter</a> maintains this quality by default.
+            <a href="/image/heic-to-jpg/">HEIC to JPG converter</a> maintains this quality by default.
           </p>
         </div>
 
@@ -500,7 +500,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
           Drop your HEIC files on our free browser-based converter. No upload, no signup,
           no quality loss. Files stay on your device the entire time.
         </p>
-        <a href="/image/heic-to-jpg" class="btn btn-lg">
+        <a href="/image/heic-to-jpg/" class="btn btn-lg">
           → Convert HEIC to JPG Now
         </a>
       </section>
@@ -509,9 +509,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         <h2>Related Guides</h2>
         <ul>
           <li><a href="/blog/open-heic-windows-11/">How to Open HEIC Files on Windows 11 in 2026</a></li>
-          <li><a href="/blog/convert-iphone-photos-to-jpg/">How to Convert iPhone Photos to JPG Without Losing Quality</a> <em>(coming soon)</em></li>
-          <li><a href="/blog/why-iphone-saves-as-heic/">Why Does My iPhone Save Photos as HEIC?</a> <em>(coming soon)</em></li>
-          <li><a href="/blog/best-image-format-for-web/">Best Image Format for Web in 2026</a> <em>(coming soon)</em></li>
+          <li><a href="/blog/convert-iphone-photos-to-jpg/">How to Convert iPhone Photos to JPG Without Losing Quality</a></li>
+          <li>
+            <span class="related-planned">Why Does My iPhone Save Photos as HEIC?</span>
+            <em>(coming soon)</em>
+          </li>
+          <li>
+            <span class="related-planned">Best Image Format for Web in 2026</span>
+            <em>(coming soon)</em>
+          </li>
         </ul>
       </section>
 
@@ -631,5 +637,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     .related ul { list-style: none; padding: 0; }
     .related li { margin-bottom: 10px; }
     .related em { color: var(--text-muted); font-style: normal; font-size: 13px; }
+    .related-planned { color: var(--text-muted); font-weight: 500; }
   </style>
 </MainLayout>

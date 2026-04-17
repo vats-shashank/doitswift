@@ -13,9 +13,13 @@
     "astro": "astro",
     "test:calculators": "node scripts/test-calculators.mjs",
     "verify:sitemap": "node scripts/verify-sitemap.mjs",
+    "check:links": "node scripts/check-internal-links.mjs",
+    "audit:seo": "node scripts/seo-audit.mjs",
+    "test:indexing": "npm run build && npm run check:links && node scripts/seo-audit.mjs",
+    "normalize:hrefs": "node scripts/normalize-href-trailing-slash.mjs",
     "smoke:preview": "node scripts/smoke-preview.mjs",
     "check:prod-sitemap": "node scripts/check-prod-sitemap.mjs",
-    "verify:deploy": "npm run build && npm run smoke:preview && npm run check:prod-sitemap"
+    "verify:deploy": "npm run test:indexing && npm run smoke:preview && npm run check:prod-sitemap"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.2",

@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="DoItSwift">
   <defs>
-    <linearGradient id="pv" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0066ff"/>
-      <stop offset="100%" stop-color="#00aaff"/>
+    <linearGradient id="bolt" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#40C4FF"/>
+      <stop offset="100%" stop-color="#0070FF"/>
     </linearGradient>
   </defs>
-  <rect width="32" height="32" rx="8" fill="url(#pv)"/>
-  <text x="16" y="22" text-anchor="middle" fill="#fff" font-family="system-ui,-apple-system,sans-serif" font-size="17" font-weight="800">D</text>
+  <rect width="32" height="32" rx="8" fill="#0A0E14"/>
+  <path fill="url(#bolt)" d="M17.3 4 8.2 17.2h5.4L9.8 28l14.7-12.4h-5.9L23.5 4Z"/>
 </svg>

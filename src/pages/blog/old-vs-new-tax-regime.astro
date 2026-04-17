@@ -1,0 +1,1011 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const title = "Old vs New Tax Regime in India: Which Saves You More Money? (FY 2025-26)";
+const description = "Compare old vs new tax regime with real examples at ₹8, ₹12, ₹15, ₹20, and ₹30 LPA. Side-by-side tax calculations, deduction breakdowns, and a clear decision rule to pick the right regime.";
+const publishDate = "2026-04-17";
+const lastUpdated = "2026-04-17";
+---
+
+<MainLayout
+  title={`${title} | DoItSwift`}
+  description={description}
+  keywords="old vs new tax regime, new tax regime, income tax slabs 2026, old regime vs new regime which is better, income tax calculator india, tax regime comparison, section 80c, new tax regime slabs, income tax india"
+  canonical="https://doitswift.com/blog/old-vs-new-tax-regime/"
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": lastUpdated,
+    "author": { "@type": "Organization", "name": "DoItSwift" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "DoItSwift",
+      "logo": { "@type": "ImageObject", "url": "https://doitswift.com/og-default.svg" }
+    },
+    "mainEntityOfPage": "https://doitswift.com/blog/old-vs-new-tax-regime/"
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Which is better old or new tax regime?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It depends on your deductions. If your total deductions (80C + 80D + HRA + home loan interest + NPS) exceed ₹3.75 lakh, old regime typically saves more. Below ₹3.75 lakh in deductions, new regime wins. For income up to ₹12 lakh, new regime is almost always better since income is effectively tax-free under Section 87A rebate."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is income up to 12 lakh tax free in new regime?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Under the new tax regime for FY 2025-26, resident individuals with taxable income up to ₹12 lakh pay zero tax due to the Section 87A rebate of up to ₹60,000. For salaried individuals, the effective tax-free limit is ₹12.75 lakh after the ₹75,000 standard deduction."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I switch between old and new regime every year?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, if you are a salaried individual without business income. You can choose your regime when filing your ITR each year. For those with business income, switching from old to new regime is allowed only once in a lifetime via Form 10-IEA."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What deductions are not allowed in new tax regime?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The new tax regime does not allow deductions under Section 80C (PPF, ELSS, LIC), Section 80D (health insurance), HRA exemption, home loan interest under Section 24(b), LTA, and most other Chapter VI-A deductions. Only the ₹75,000 standard deduction, employer NPS contribution under 80CCD(2), and a few specific exemptions are available."
+        }
+      }
+    ]
+  })} />
+
+  <article class="article">
+    <div class="container">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> › <a href="/blog/">Blog</a> › <span>Old vs New Tax Regime</span>
+      </nav>
+
+      <header class="article-header">
+        <div class="article-meta">
+          <span class="cat">Finance</span>
+          <time>Updated April 17, 2026</time>
+          <span>· 14 min read</span>
+        </div>
+        <h1>Old vs New Tax Regime: Which Saves You More Money?</h1>
+        <p class="lede">
+          Every Indian salaried employee faces the same annual question: <strong>old regime
+          or new regime?</strong> The wrong choice can cost you ₹20,000-₹80,000 per year
+          in unnecessary taxes. This guide gives you exact calculations at every income level,
+          a clear decision rule, and the tools to figure out which regime works for YOUR
+          specific situation.
+        </p>
+      </header>
+
+      <div class="toc card">
+        <strong>In this guide:</strong>
+        <ul>
+          <li><a href="#quick-answer">Quick answer: which regime should you pick?</a></li>
+          <li><a href="#new-slabs">New tax regime slabs for FY 2025-26</a></li>
+          <li><a href="#old-slabs">Old tax regime slabs for FY 2025-26</a></li>
+          <li><a href="#side-by-side">Side-by-side comparison at every income level</a></li>
+          <li><a href="#deductions">Every deduction available in old regime (that you lose in new)</a></li>
+          <li><a href="#breakeven">The break-even calculation: your magic number</a></li>
+          <li><a href="#examples">5 real-life examples with full calculations</a></li>
+          <li><a href="#who-should">Who should choose old regime vs new regime</a></li>
+          <li><a href="#mistakes">5 costly mistakes people make choosing regimes</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+
+      <div class="callout">
+        <strong>🎯 Don't guess — calculate:</strong>
+        Use our <a href="/calculator/income-tax/">Income Tax Calculator</a> to compare
+        your exact tax under both regimes. Enter your income, deductions, and see which
+        regime saves you more — in under 60 seconds.
+      </div>
+
+      <section id="quick-answer">
+        <h2>Quick answer: which tax regime should you pick?</h2>
+        <p>
+          If you don't want to read the full analysis, here's the decision rule that works
+          for 80% of salaried Indians:
+        </p>
+
+        <div class="callout">
+          <strong>The ₹3.75 lakh rule:</strong><br><br>
+          Add up ALL your deductions and exemptions: Section 80C + 80D + HRA exemption +
+          home loan interest + NPS + any other Chapter VI-A deductions.<br><br>
+          <strong>Total deductions above ₹3.75 lakh?</strong> → Old regime likely saves more<br>
+          <strong>Total deductions below ₹3.75 lakh?</strong> → New regime likely saves more<br>
+          <strong>Income up to ₹12 lakh?</strong> → New regime (zero tax with rebate)<br>
+          <strong>Not sure?</strong> → Use our <a href="/calculator/income-tax/">Income Tax Calculator</a> to compare both
+        </div>
+
+        <p>
+          Why ₹3.75 lakh? Because the new regime's lower rates create roughly this much
+          advantage. You need deductions exceeding this threshold to offset the rate
+          difference. Below this threshold, the new regime's lower rates win. Above it, the
+          old regime's deductions win.
+        </p>
+        <p>
+          Now let's look at the actual numbers.
+        </p>
+      </section>
+
+      <section id="new-slabs">
+        <h2>New tax regime slabs for FY 2025-26 (AY 2026-27)</h2>
+        <p>
+          The new regime is the <strong>default regime</strong> since FY 2023-24. You don't
+          need to do anything to opt in — you're automatically on it unless you explicitly
+          choose old regime. Budget 2026 has retained these slabs without changes.
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Income slab</th>
+                <th>Tax rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Up to ₹4,00,000</td>
+                <td>Nil</td>
+              </tr>
+              <tr>
+                <td>₹4,00,001 – ₹8,00,000</td>
+                <td>5%</td>
+              </tr>
+              <tr>
+                <td>₹8,00,001 – ₹12,00,000</td>
+                <td>10%</td>
+              </tr>
+              <tr>
+                <td>₹12,00,001 – ₹16,00,000</td>
+                <td>15%</td>
+              </tr>
+              <tr>
+                <td>₹16,00,001 – ₹20,00,000</td>
+                <td>20%</td>
+              </tr>
+              <tr>
+                <td>₹20,00,001 – ₹24,00,000</td>
+                <td>25%</td>
+              </tr>
+              <tr>
+                <td>Above ₹24,00,000</td>
+                <td>30%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Key features of the new regime</h3>
+        <ul>
+          <li><strong>Standard deduction:</strong> ₹75,000 for salaried individuals</li>
+          <li><strong>Section 87A rebate:</strong> Income up to ₹12 lakh = zero tax (rebate of up to ₹60,000)</li>
+          <li><strong>Effectively tax-free for salaried:</strong> Up to ₹12.75 lakh (₹12L + ₹75K standard deduction)</li>
+          <li><strong>Employer NPS allowed:</strong> Section 80CCD(2) deduction available — up to 14% of basic salary</li>
+          <li><strong>No 80C, no HRA, no home loan interest:</strong> Most popular deductions not available</li>
+        </ul>
+      </section>
+
+      <section id="old-slabs">
+        <h2>Old tax regime slabs for FY 2025-26 (AY 2026-27)</h2>
+        <p>
+          You must explicitly opt into the old regime when filing your ITR. For salaried
+          individuals without business income, you can switch between regimes every year.
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Income slab (below 60 years)</th>
+                <th>Tax rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Up to ₹2,50,000</td>
+                <td>Nil</td>
+              </tr>
+              <tr>
+                <td>₹2,50,001 – ₹5,00,000</td>
+                <td>5%</td>
+              </tr>
+              <tr>
+                <td>₹5,00,001 – ₹10,00,000</td>
+                <td>20%</td>
+              </tr>
+              <tr>
+                <td>Above ₹10,00,000</td>
+                <td>30%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Key features of the old regime</h3>
+        <ul>
+          <li><strong>Standard deduction:</strong> ₹50,000 for salaried individuals</li>
+          <li><strong>Section 80C:</strong> Up to ₹1,50,000 (PPF, ELSS, EPF, LIC, home loan principal)</li>
+          <li><strong>Section 80D:</strong> Up to ₹25,000 self + ₹25,000-₹50,000 parents (health insurance)</li>
+          <li><strong>HRA exemption:</strong> Based on rent paid — significant for metro employees</li>
+          <li><strong>Section 24(b):</strong> Home loan interest up to ₹2,00,000</li>
+          <li><strong>Section 80CCD(1B):</strong> Additional ₹50,000 for NPS</li>
+          <li><strong>Section 87A rebate:</strong> Income up to ₹5 lakh = zero tax</li>
+        </ul>
+      </section>
+
+      <section id="side-by-side">
+        <h2>Tax comparison at every income level</h2>
+        <p>
+          This is the table everyone needs to see. Tax calculated under both regimes for
+          a salaried individual with <strong>no deductions claimed</strong> (pure rate
+          comparison):
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Gross income</th>
+                <th>New regime tax</th>
+                <th>Old regime tax (no deductions)</th>
+                <th>Winner</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>₹6 LPA</td>
+                <td>₹0 (rebate)</td>
+                <td>₹23,400</td>
+                <td>New ✅</td>
+              </tr>
+              <tr>
+                <td>₹8 LPA</td>
+                <td>₹0 (rebate)</td>
+                <td>₹62,400</td>
+                <td>New ✅</td>
+              </tr>
+              <tr>
+                <td>₹10 LPA</td>
+                <td>₹0 (rebate)</td>
+                <td>₹1,04,000</td>
+                <td>New ✅</td>
+              </tr>
+              <tr>
+                <td>₹12 LPA</td>
+                <td>₹0 (rebate)</td>
+                <td>₹1,45,600</td>
+                <td>New ✅</td>
+              </tr>
+              <tr>
+                <td>₹12.75 LPA</td>
+                <td>₹0 (rebate+SD)</td>
+                <td>₹1,61,200</td>
+                <td>New ✅</td>
+              </tr>
+              <tr>
+                <td>₹15 LPA</td>
+                <td>₹1,04,000</td>
+                <td>₹2,08,000</td>
+                <td>New ✅</td>
+              </tr>
+              <tr>
+                <td>₹20 LPA</td>
+                <td>₹2,73,000</td>
+                <td>₹3,64,000</td>
+                <td>New ✅</td>
+              </tr>
+              <tr>
+                <td>₹25 LPA</td>
+                <td>₹4,68,000</td>
+                <td>₹5,20,000</td>
+                <td>New ✅</td>
+              </tr>
+              <tr>
+                <td>₹30 LPA</td>
+                <td>₹6,24,000</td>
+                <td>₹6,76,000</td>
+                <td>New ✅</td>
+              </tr>
+              <tr>
+                <td>₹50 LPA</td>
+                <td>₹12,48,000</td>
+                <td>₹12,87,600</td>
+                <td>New ✅ (marginal)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          <strong>Important:</strong> This table assumes ZERO deductions under old regime.
+          That's obviously unrealistic — the real question is how much your deductions shift
+          the old regime column. Let's calculate that.
+        </p>
+
+        <p>
+          Note: All figures above are approximate and include 4% health and education cess.
+          For your exact calculation, use our
+          <a href="/calculator/income-tax/">Income Tax Calculator</a>.
+        </p>
+      </section>
+
+      <section id="deductions">
+        <h2>Every deduction available in old regime</h2>
+        <p>
+          The old regime's entire advantage comes from deductions. Here's every major one
+          and its typical value:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Deduction</th>
+                <th>Section</th>
+                <th>Maximum limit</th>
+                <th>Typical claimed amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Standard deduction</td>
+                <td>—</td>
+                <td>₹50,000</td>
+                <td>₹50,000</td>
+              </tr>
+              <tr>
+                <td>EPF + PPF + ELSS + LIC</td>
+                <td>80C</td>
+                <td>₹1,50,000</td>
+                <td>₹1,00,000 – ₹1,50,000</td>
+              </tr>
+              <tr>
+                <td>Health insurance premium</td>
+                <td>80D</td>
+                <td>₹25,000 (₹50,000 for parents 60+)</td>
+                <td>₹15,000 – ₹50,000</td>
+              </tr>
+              <tr>
+                <td>NPS contribution</td>
+                <td>80CCD(1B)</td>
+                <td>₹50,000</td>
+                <td>₹50,000</td>
+              </tr>
+              <tr>
+                <td>HRA exemption</td>
+                <td>10(13A)</td>
+                <td>Based on rent paid</td>
+                <td>₹1,00,000 – ₹3,00,000</td>
+              </tr>
+              <tr>
+                <td>Home loan interest</td>
+                <td>24(b)</td>
+                <td>₹2,00,000</td>
+                <td>₹1,00,000 – ₹2,00,000</td>
+              </tr>
+              <tr>
+                <td>Home loan principal</td>
+                <td>80C (within limit)</td>
+                <td>Included in ₹1.5L</td>
+                <td>₹50,000 – ₹1,00,000</td>
+              </tr>
+              <tr>
+                <td>Education loan interest</td>
+                <td>80E</td>
+                <td>No limit</td>
+                <td>₹50,000 – ₹2,00,000</td>
+              </tr>
+              <tr>
+                <td>Donations</td>
+                <td>80G</td>
+                <td>50-100% of donation</td>
+                <td>₹5,000 – ₹25,000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          <strong>Maximum possible deductions:</strong> A person claiming all of the above
+          could potentially deduct ₹6-8 lakh from taxable income. This would make old
+          regime significantly better.
+        </p>
+        <p>
+          <strong>Realistic deductions for most people:</strong> ₹2.5-4 lakh. This is
+          where the regime choice becomes close and calculation is essential.
+        </p>
+        <p>
+          Calculate your HRA exemption precisely with our
+          <a href="/calculator/hra/">HRA Calculator</a>. Model your NPS contributions
+          with our <a href="/calculator/nps/">NPS Calculator</a>. See your PPF growth
+          with our <a href="/calculator/ppf/">PPF Calculator</a>.
+        </p>
+      </section>
+
+      <section id="breakeven">
+        <h2>The break-even calculation: finding your magic number</h2>
+        <p>
+          Instead of guessing, here's how to find your personal break-even point:
+        </p>
+
+        <h3>Step 1: Calculate tax under new regime</h3>
+        <p>
+          Take your gross salary, subtract ₹75,000 standard deduction. Apply new regime
+          slabs. This is your new regime tax.
+        </p>
+
+        <h3>Step 2: Calculate tax under old regime with your actual deductions</h3>
+        <p>
+          Take gross salary, subtract ₹50,000 standard deduction, then subtract all your
+          80C, 80D, HRA, home loan, NPS deductions. Apply old regime slabs.
+        </p>
+
+        <h3>Step 3: Compare</h3>
+        <p>
+          Whichever regime produces the lower tax number is your answer.
+        </p>
+
+        <h3>Break-even deduction thresholds by income</h3>
+        <p>
+          Here's the approximate deduction amount you need under old regime to match new
+          regime's tax:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Gross income</th>
+                <th>Deductions needed for old regime to win</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>₹10 LPA</td>
+                <td>Not possible (new regime = ₹0 tax with rebate)</td>
+              </tr>
+              <tr>
+                <td>₹12 LPA</td>
+                <td>Not possible (new regime = ₹0 tax with rebate)</td>
+              </tr>
+              <tr>
+                <td>₹15 LPA</td>
+                <td>₹3.5 lakh+</td>
+              </tr>
+              <tr>
+                <td>₹20 LPA</td>
+                <td>₹3.75 lakh+</td>
+              </tr>
+              <tr>
+                <td>₹25 LPA</td>
+                <td>₹4 lakh+</td>
+              </tr>
+              <tr>
+                <td>₹30 LPA</td>
+                <td>₹4 lakh+</td>
+              </tr>
+              <tr>
+                <td>₹50 LPA</td>
+                <td>₹4.5 lakh+ (returns diminish at very high income)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout">
+          <strong>🎯 Don't calculate manually:</strong>
+          Our <a href="/calculator/income-tax/">Income Tax Calculator</a> runs both
+          regimes simultaneously and tells you which saves more. Enter your salary, list
+          your deductions, and see the comparison instantly.
+        </div>
+      </section>
+
+      <section id="examples">
+        <h2>5 real-life examples with full calculations</h2>
+
+        <h3>Example 1: Fresh graduate — ₹8 LPA, no deductions</h3>
+        <p><strong>Profile:</strong> 23 years old, first job, lives with parents, no investments.</p>
+        <ul>
+          <li>New regime: ₹0 tax (₹12L rebate covers this income)</li>
+          <li>Old regime: ~₹49,400 (even with ₹50K standard deduction)</li>
+          <li><strong>Winner: New regime saves ₹49,400</strong></li>
+        </ul>
+        <p>
+          <strong>Verdict:</strong> For anyone earning up to ₹12 lakh, new regime is the
+          obvious choice. Don't overthink it.
+        </p>
+
+        <h3>Example 2: Mid-career — ₹15 LPA, moderate deductions</h3>
+        <p><strong>Profile:</strong> 30 years old, rents in Bangalore (₹22,000/month), has ELSS + PPF.</p>
+        <p>Deductions claimed:</p>
+        <ul>
+          <li>Standard deduction: ₹50,000</li>
+          <li>80C (EPF + ELSS): ₹1,50,000</li>
+          <li>80D (health insurance): ₹20,000</li>
+          <li>HRA exemption: ₹1,50,000</li>
+          <li>Total deductions: ₹3,70,000</li>
+        </ul>
+        <ul>
+          <li>New regime tax: ~₹1,04,000</li>
+          <li>Old regime tax: ~₹1,10,000</li>
+          <li><strong>Winner: New regime — but barely (₹6,000 difference)</strong></li>
+        </ul>
+        <p>
+          <strong>Verdict:</strong> At ₹15 LPA with ₹3.7 lakh deductions, it's almost
+          a tie. New regime wins by a small margin. If this person added NPS (₹50K more),
+          old regime would win.
+        </p>
+
+        <h3>Example 3: Home loan + rent — ₹20 LPA, heavy deductions</h3>
+        <p><strong>Profile:</strong> 35 years old, rents in Mumbai (₹35,000/month), has home loan on investment property.</p>
+        <p>Deductions claimed:</p>
+        <ul>
+          <li>Standard deduction: ₹50,000</li>
+          <li>80C (EPF + PPF + ELSS + home loan principal): ₹1,50,000</li>
+          <li>80D (self + parents): ₹50,000</li>
+          <li>HRA exemption: ₹2,40,000</li>
+          <li>Home loan interest (Sec 24b): ₹2,00,000</li>
+          <li>NPS (80CCD1B): ₹50,000</li>
+          <li>Total deductions: ₹6,40,000</li>
+        </ul>
+        <ul>
+          <li>New regime tax: ~₹2,73,000</li>
+          <li>Old regime tax: ~₹1,66,400</li>
+          <li><strong>Winner: Old regime saves ₹1,06,600 (₹8,883/month)</strong></li>
+        </ul>
+        <p>
+          <strong>Verdict:</strong> Heavy deduction users at ₹20 LPA+ save significantly
+          with old regime. The ₹6.4 lakh total deductions are well above the ₹3.75 lakh
+          break-even threshold.
+        </p>
+
+        <h3>Example 4: Simple salaried — ₹20 LPA, basic deductions only</h3>
+        <p><strong>Profile:</strong> 32 years old, lives with parents, minimal investments.</p>
+        <p>Deductions claimed:</p>
+        <ul>
+          <li>Standard deduction: ₹50,000</li>
+          <li>80C (EPF only): ₹80,000</li>
+          <li>80D: ₹15,000</li>
+          <li>Total deductions: ₹1,45,000</li>
+        </ul>
+        <ul>
+          <li>New regime tax: ~₹2,73,000</li>
+          <li>Old regime tax: ~₹3,20,000</li>
+          <li><strong>Winner: New regime saves ₹47,000</strong></li>
+        </ul>
+        <p>
+          <strong>Verdict:</strong> Same ₹20 LPA salary, but without heavy deductions,
+          new regime wins comfortably. This is why the deduction total matters more than
+          income level.
+        </p>
+
+        <h3>Example 5: Senior professional — ₹30 LPA, maximum deductions</h3>
+        <p><strong>Profile:</strong> 40 years old, home loan + rent + full investments.</p>
+        <p>Deductions claimed:</p>
+        <ul>
+          <li>Standard deduction: ₹50,000</li>
+          <li>80C (maxed out): ₹1,50,000</li>
+          <li>80D (self + senior parents): ₹75,000</li>
+          <li>HRA exemption: ₹3,00,000</li>
+          <li>Home loan interest: ₹2,00,000</li>
+          <li>NPS: ₹50,000</li>
+          <li>Total deductions: ₹7,25,000</li>
+        </ul>
+        <ul>
+          <li>New regime tax: ~₹6,24,000</li>
+          <li>Old regime tax: ~₹4,26,400</li>
+          <li><strong>Winner: Old regime saves ₹1,97,600 (₹16,467/month)</strong></li>
+        </ul>
+        <p>
+          <strong>Verdict:</strong> At ₹30 LPA with maxed-out deductions, old regime is a
+          clear winner. The ₹1.97 lakh annual savings is the cost of NOT choosing optimally.
+        </p>
+      </section>
+
+      <section id="who-should">
+        <h2>Who should choose which regime?</h2>
+
+        <h3>Choose NEW regime if you are:</h3>
+        <ul>
+          <li>Earning up to ₹12 lakh (zero tax with rebate — no contest)</li>
+          <li>Earning up to ₹12.75 lakh if salaried (standard deduction takes you to ₹12L)</li>
+          <li>Young professional with minimal investments and no rent/home loan</li>
+          <li>Living with parents (no HRA claim possible)</li>
+          <li>Someone who doesn't want the hassle of collecting receipts and investment proofs</li>
+          <li>Anyone whose total deductions are below ₹3.75 lakh</li>
+        </ul>
+
+        <h3>Choose OLD regime if you have:</h3>
+        <ul>
+          <li>Home loan with significant interest component (₹1.5-2 lakh/year)</li>
+          <li>High rent in a metro city (HRA exemption of ₹1-3 lakh/year)</li>
+          <li>Maxed out 80C investments (₹1.5 lakh in PPF + ELSS + EPF)</li>
+          <li>Health insurance for self + parents (₹50,000-75,000 80D deduction)</li>
+          <li>NPS contribution (additional ₹50,000 under 80CCD1B)</li>
+          <li>Total deductions exceeding ₹3.75 lakh</li>
+          <li>Income above ₹15 lakh — old regime benefits increase with income</li>
+        </ul>
+
+        <h3>The typical profiles</h3>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Profile</th>
+                <th>Best regime</th>
+                <th>Why</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Fresh graduate, ₹6-10 LPA</td>
+                <td>New ✅</td>
+                <td>Zero tax with rebate</td>
+              </tr>
+              <tr>
+                <td>Young professional, ₹12-15 LPA, no rent</td>
+                <td>New ✅</td>
+                <td>Few deductions to claim</td>
+              </tr>
+              <tr>
+                <td>Mid-career, ₹15-20 LPA, renting</td>
+                <td>Close — calculate</td>
+                <td>Depends on actual HRA and investments</td>
+              </tr>
+              <tr>
+                <td>Mid-career, ₹15-20 LPA, home loan</td>
+                <td>Old ✅</td>
+                <td>Home loan interest + 80C pushes deductions over ₹4L</td>
+              </tr>
+              <tr>
+                <td>Senior, ₹25 LPA+, rent + investments</td>
+                <td>Old ✅</td>
+                <td>Maxed deductions far exceed break-even</td>
+              </tr>
+              <tr>
+                <td>Freelancer, ₹20 LPA+, no employer PF</td>
+                <td>Depends — calculate</td>
+                <td>No automatic PF, but can claim 80C on own investments</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="mistakes">
+        <h2>5 costly mistakes people make when choosing regimes</h2>
+
+        <h3>Mistake 1: Assuming new regime is always better because slabs are lower</h3>
+        <p>
+          Lower slab rates don't automatically mean lower tax. A person earning ₹25 LPA
+          with ₹5 lakh in deductions saves ₹1.5+ lakh more with old regime despite its
+          higher rates. Always calculate with deductions, not just slabs.
+        </p>
+
+        <h3>Mistake 2: Forgetting to inform your employer at the start of the year</h3>
+        <p>
+          Your employer deducts TDS based on the regime you declare. If you don't
+          communicate at the start of FY, they use the default new regime. You can
+          still switch when filing ITR, but your monthly in-hand salary will be
+          suboptimal throughout the year. Inform HR in April itself.
+        </p>
+        <p>
+          See how regime choice affects your in-hand salary with our
+          <a href="/calculator/salary/">Salary Calculator</a>.
+        </p>
+
+        <h3>Mistake 3: Not claiming HRA even when paying rent</h3>
+        <p>
+          Many employees don't submit rent receipts to HR — they just don't bother. HRA
+          exemption for someone paying ₹25,000/month rent in a metro can be ₹1.5-2 lakh
+          per year. That's ₹45,000-60,000 in tax savings at 30% bracket.
+        </p>
+        <p>
+          Use our <a href="/calculator/hra/">HRA Calculator</a> to calculate your exact
+          HRA exemption.
+        </p>
+
+        <h3>Mistake 4: Not investing enough to make old regime worthwhile</h3>
+        <p>
+          Some people choose old regime because "it has deductions" but only claim ₹1-2
+          lakh in deductions — well below the ₹3.75 lakh break-even. If you're going to
+          choose old regime, commit to maximizing your deductions.
+        </p>
+        <p>
+          <strong>Minimum deductions you should claim if choosing old regime:</strong>
+          80C maxed (₹1.5 lakh) + 80D (₹25,000+) + NPS (₹50,000) + HRA (variable) =
+          ₹2.75 lakh before HRA. If your HRA pushes this above ₹3.75 lakh, old regime works.
+        </p>
+        <p>
+          Model your PPF contributions with our
+          <a href="/calculator/ppf/">PPF Calculator</a> and NPS projections with our
+          <a href="/calculator/nps/">NPS Calculator</a>.
+        </p>
+
+        <h3>Mistake 5: Not recalculating every year</h3>
+        <p>
+          Your financial situation changes. You might start renting, get a home loan,
+          switch jobs, get a raise, or stop certain investments. What was optimal last
+          year may not be optimal this year. <strong>Recalculate every April.</strong>
+        </p>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+          <h3>Which is better: old or new tax regime?</h3>
+          <p>
+            It depends entirely on your deductions. If your total deductions exceed
+            ₹3.75 lakh (including 80C, 80D, HRA, home loan, NPS), old regime typically
+            saves more. Below that, new regime's lower rates win. For income up to
+            ₹12 lakh, new regime is always better (zero tax with rebate). Use our
+            <a href="/calculator/income-tax/">Income Tax Calculator</a> to compare both.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Is income up to ₹12 lakh tax free under new regime?</h3>
+          <p>
+            Yes. Resident individuals with taxable income up to ₹12 lakh pay zero tax
+            under new regime due to Section 87A rebate (up to ₹60,000). For salaried
+            individuals, the standard deduction of ₹75,000 makes gross salary up to
+            ₹12.75 lakh effectively tax-free.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can I switch between regimes every year?</h3>
+          <p>
+            Yes — if you're salaried without business income. You choose your regime when
+            filing ITR each year. For those with business income, switching from old to
+            new is allowed only once in a lifetime via Form 10-IEA.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What deductions are available in new tax regime?</h3>
+          <p>
+            Very few. The new regime allows: ₹75,000 standard deduction for salaried
+            individuals, employer's NPS contribution under 80CCD(2) (up to 14% of basic),
+            and a few specific exemptions. It does NOT allow 80C, 80D, HRA, home loan
+            interest (24b), LTA, or most Chapter VI-A deductions.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Is Section 80C available in new tax regime?</h3>
+          <p>
+            No. Section 80C deductions (PPF, ELSS, EPF, LIC, tuition fees, home loan
+            principal) are NOT available under new tax regime. This is the single biggest
+            deduction most people lose by choosing new regime.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What is the standard deduction in new vs old regime?</h3>
+          <p>
+            New regime: ₹75,000. Old regime: ₹50,000. The new regime has a higher
+            standard deduction, which partially compensates for losing other deductions.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Is NPS tax benefit available in new regime?</h3>
+          <p>
+            Partially. Your own NPS contribution under 80CCD(1B) (₹50,000) is NOT
+            available in new regime. However, your employer's NPS contribution under
+            80CCD(2) (up to 14% of basic) IS available in both regimes. Ask your HR
+            if employer NPS contribution is part of your CTC.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How much tax do I save with ₹1.5 lakh 80C investment?</h3>
+          <p>
+            Depends on your tax bracket. At 30% bracket: saves ₹46,800 (including cess).
+            At 20% bracket: saves ₹31,200. At 5% bracket: saves ₹7,800. This saving only
+            applies under old regime — new regime doesn't allow 80C. Use our
+            <a href="/calculator/income-tax/">Income Tax Calculator</a> to see your
+            exact savings.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What happens if I don't choose a regime?</h3>
+          <p>
+            New regime is the default since FY 2023-24. If you don't explicitly opt for
+            old regime, you're automatically taxed under new regime. For employer TDS,
+            inform your HR at the beginning of the financial year about your preference.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Should I invest in PPF if I'm on new regime?</h3>
+          <p>
+            You lose the tax deduction on PPF under new regime, but PPF still earns 7.1%
+            tax-free returns (interest and maturity are tax-free regardless of regime). For
+            risk-free long-term savings, PPF remains attractive even without the deduction.
+            Model your returns with our <a href="/calculator/ppf/">PPF Calculator</a>.
+          </p>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <h2>Compare both regimes with your actual numbers</h2>
+        <p>
+          Stop guessing. Enter your salary, list your deductions, and see exactly which
+          regime saves you more — in under 60 seconds.
+        </p>
+        <div class="cta-buttons">
+          <a href="/calculator/income-tax/" class="btn btn-lg">
+            → Compare Tax Under Both Regimes
+          </a>
+          <a href="/calculator/salary/" class="btn btn-lg btn-secondary">
+            → Calculate My In-Hand Salary
+          </a>
+        </div>
+      </section>
+
+      <section class="related">
+        <h2>Related Guides & Calculators</h2>
+        <ul>
+          <li><a href="/calculator/income-tax/">Income Tax Calculator — Old vs New Regime Comparison</a></li>
+          <li><a href="/calculator/salary/">Salary Calculator — CTC to In-Hand Breakup</a></li>
+          <li><a href="/calculator/hra/">HRA Calculator — Maximize Rent Exemption</a></li>
+          <li><a href="/calculator/ppf/">PPF Calculator — 7.1% Tax-Free Returns</a></li>
+          <li><a href="/calculator/nps/">NPS Calculator — Extra ₹50,000 Tax Savings</a></li>
+          <li><a href="/blog/ctc-vs-in-hand-salary/">CTC vs In-Hand Salary: Full Breakup Explained</a></li>
+          <li><a href="/blog/how-much-to-retire-india/">How Much Money Do You Need to Retire in India?</a></li>
+          <li><a href="/blog/sip-vs-lumpsum/">SIP vs Lumpsum: Which Builds More Wealth?</a></li>
+        </ul>
+      </section>
+
+    </div>
+  </article>
+
+  <style>
+    .article { padding: 40px 0 60px; }
+    .article .container { max-width: 760px; }
+
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .article-header { margin-bottom: 32px; }
+    .article-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .article-meta .cat {
+      color: var(--blue);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      font-size: 11px;
+    }
+    .article h1 { font-size: 38px; line-height: 1.2; margin-bottom: 18px; }
+    .lede { font-size: 19px; color: var(--text-muted); line-height: 1.6; }
+
+    .toc {
+      padding: 20px 24px;
+      margin: 32px 0;
+    }
+    .toc strong { display: block; margin-bottom: 10px; }
+    .toc ul { list-style: none; padding: 0; }
+    .toc li { margin-bottom: 6px; font-size: 14px; }
+    .toc a { color: var(--blue); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    .article h2 {
+      font-size: 28px;
+      margin-top: 48px;
+      margin-bottom: 16px;
+    }
+    .article h3 {
+      font-size: 20px;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+    .article p, .article ul, .article ol {
+      font-size: 16px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .article ul, .article ol { padding-left: 24px; }
+    .article li { margin-bottom: 6px; }
+    .article a:not(.btn) { color: var(--blue); text-decoration: underline; }
+    .article strong { font-weight: 700; }
+
+    .callout {
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 15px;
+    }
+    [data-theme="dark"] .callout { background: rgba(0, 102, 255, .1); }
+
+    .table-wrap { overflow-x: auto; margin: 20px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td {
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--gray-100);
+      font-weight: 700;
+    }
+
+    .faq-item {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item h3 { font-size: 17px; margin-bottom: 8px; }
+    .faq-item p { font-size: 15px; margin-bottom: 0; }
+
+    .cta-section {
+      background: linear-gradient(135deg, var(--blue-light), #fff);
+      border: 1px solid var(--blue-light);
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      margin: 48px 0;
+    }
+    [data-theme="dark"] .cta-section {
+      background: linear-gradient(135deg, rgba(0, 102, 255, .1), transparent);
+      border-color: rgba(0, 102, 255, .2);
+    }
+    .cta-section h2 { margin-top: 0; }
+    .cta-section p { margin-bottom: 24px; }
+    .cta-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--blue);
+      color: var(--blue);
+    }
+    .btn-secondary:hover {
+      background: var(--blue-light);
+    }
+
+    .related h2 { font-size: 22px; }
+    .related ul { list-style: none; padding: 0; }
+    .related li { margin-bottom: 10px; }
+  </style>
+</MainLayout>

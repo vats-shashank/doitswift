@@ -1,4 +1,5 @@
 ---
+import BrandLogo from '../components/BrandLogo.astro';
 // src/layouts/MainLayout.astro
 // Shared layout used by every page on the site.
 // Pass title, description, optional keywords. Canonical defaults to site + current path (see astro.config `site`).
@@ -21,9 +22,14 @@ const {
 } = Astro.props;
 
 const site = Astro.site;
+/** Match `trailingSlash: 'always'` so canonical/og:url never omit the final slash. */
+function canonicalPath(pathname) {
+  if (!pathname || pathname === '/') return '/';
+  return pathname.endsWith('/') ? pathname : `${pathname}/`;
+}
 const canonical =
   canonicalOverride ??
-  (site ? new URL(Astro.url.pathname, site).href : undefined);
+  (site ? new URL(canonicalPath(Astro.url.pathname), site).href : undefined);
 
 const ogImageUrl =
   site &&
@@ -85,7 +91,7 @@ const ogImageUrl =
     <nav class="nav">
       <div class="nav-inner container">
         <a href="/" class="logo">
-          <span class="logo-mark">D</span>DoItSwift
+          <BrandLogo id="nav" variant="nav" />
         </a>
         <button
           type="button"
@@ -108,10 +114,10 @@ const ogImageUrl =
           <a href="/calculator/">Calculators</a>
           <a href="/#categories">Categories</a>
           <a href="/#tools">All Tools</a>
-          <a href="/blog">Blog</a>
+          <a href="/blog/">Blog</a>
           <a href="/#faq">FAQ</a>
           <button type="button" id="themeToggle" class="theme-toggle" aria-label="Switch to dark mode">🌙</button>
-          <a href="/pro">Roadmap</a>
+          <a href="/pro/">Roadmap</a>
         </div>
       </div>
     </nav>
@@ -125,7 +131,7 @@ const ogImageUrl =
       <div class="footer-inner container">
         <div class="footer-col">
           <a href="/" class="logo footer-logo">
-            <span class="logo-mark">D</span>DoItSwift
+            <BrandLogo id="foot" variant="footer" />
           </a>
           <p class="footer-tag">
             Fast, privacy-first utilities. Everything runs in your browser when possible — your files stay on your device.
@@ -134,46 +140,46 @@ const ogImageUrl =
         <div class="footer-col">
           <h5>Image tools</h5>
           <a href="/image/">All image tools</a>
-          <a href="/image/heic-to-jpg">HEIC to JPG</a>
-          <a href="/image/webp-to-jpg">WEBP to JPG</a>
-          <a href="/image/image-compressor">Image Compressor</a>
-          <a href="/image/image-resizer">Image Resizer</a>
-          <a href="/image/svg-to-png">SVG to PNG</a>
-          <a href="/image/favicon-generator">Favicon Generator</a>
-          <a href="/image/avif-to-jpg">AVIF to JPG</a>
-          <a href="/image/image-to-base64">Image to Base64</a>
+          <a href="/image/heic-to-jpg/">HEIC to JPG</a>
+          <a href="/image/webp-to-jpg/">WEBP to JPG</a>
+          <a href="/image/image-compressor/">Image Compressor</a>
+          <a href="/image/image-resizer/">Image Resizer</a>
+          <a href="/image/svg-to-png/">SVG to PNG</a>
+          <a href="/image/favicon-generator/">Favicon Generator</a>
+          <a href="/image/avif-to-jpg/">AVIF to JPG</a>
+          <a href="/image/image-to-base64/">Image to Base64</a>
         </div>
         <div class="footer-col">
           <h5>PDF tools</h5>
           <a href="/pdf/">All PDF tools</a>
-          <a href="/pdf/merge-pdf">Merge PDFs</a>
-          <a href="/pdf/split-pdf">Split PDF</a>
-          <a href="/pdf/pdf-to-jpg">PDF to JPG</a>
-          <a href="/pdf/image-to-pdf">Image to PDF</a>
-          <a href="/pdf/compress-pdf">Compress PDF</a>
-          <a href="/pdf/unlock-pdf">Unlock PDF</a>
+          <a href="/pdf/merge-pdf/">Merge PDFs</a>
+          <a href="/pdf/split-pdf/">Split PDF</a>
+          <a href="/pdf/pdf-to-jpg/">PDF to JPG</a>
+          <a href="/pdf/image-to-pdf/">Image to PDF</a>
+          <a href="/pdf/compress-pdf/">Compress PDF</a>
+          <a href="/pdf/unlock-pdf/">Unlock PDF</a>
         </div>
         <div class="footer-col">
           <h5>Calculators</h5>
           <a href="/calculator/">All calculators</a>
-          <a href="/calculator/mortgage">Mortgage Calculator <span class="footer-new">NEW</span></a>
-          <a href="/calculator/period-ovulation">Period Calculator <span class="footer-new">NEW</span></a>
-          <a href="/calculator/fraction">Fraction Calculator <span class="footer-new">NEW</span></a>
-          <a href="/calculator/statistics">Statistics Calculator <span class="footer-new">NEW</span></a>
-          <a href="/calculator/personal-loan">Personal Loan EMI <span class="footer-new">NEW</span></a>
+          <a href="/calculator/mortgage/">Mortgage Calculator <span class="footer-new">NEW</span></a>
+          <a href="/calculator/period-ovulation/">Period Calculator <span class="footer-new">NEW</span></a>
+          <a href="/calculator/fraction/">Fraction Calculator <span class="footer-new">NEW</span></a>
+          <a href="/calculator/statistics/">Statistics Calculator <span class="footer-new">NEW</span></a>
+          <a href="/calculator/personal-loan/">Personal Loan EMI <span class="footer-new">NEW</span></a>
         </div>
         <div class="footer-col">
           <h5>Company</h5>
-          <a href="/about">About</a>
-          <a href="/blog">Blog</a>
-          <a href="/pro">Roadmap</a>
-          <a href="/contact">Contact</a>
+          <a href="/about/">About</a>
+          <a href="/blog/">Blog</a>
+          <a href="/pro/">Roadmap</a>
+          <a href="/contact/">Contact</a>
         </div>
         <div class="footer-col">
           <h5>Legal</h5>
-          <a href="/privacy">Privacy</a>
-          <a href="/terms">Terms</a>
-          <a href="/cookies">Cookies</a>
+          <a href="/privacy/">Privacy</a>
+          <a href="/terms/">Terms</a>
+          <a href="/cookies/">Cookies</a>
         </div>
       </div>
       <div class="footer-bottom container">
@@ -277,24 +283,21 @@ const ogImageUrl =
         background: var(--gray-200);
       }
       .logo {
-        font-size: 22px;
-        font-weight: 800;
-        color: var(--blue);
-        display: flex;
+        display: inline-flex;
         align-items: center;
-        gap: 8px;
+        line-height: 1;
+        flex: 0 0 auto;
+        min-width: 0;
+        max-width: min(100%, 280px);
+        text-decoration: none;
       }
-      .logo-mark {
-        width: 32px;
-        height: 32px;
-        background: linear-gradient(135deg, #0066ff, #00aaff);
-        border-radius: 8px;
-        display: flex;
+      /* Override `.footer-col a { display: block }` so the wordmark is not full-column width. */
+      .footer-logo {
+        display: inline-flex;
         align-items: center;
-        justify-content: center;
-        color: #fff;
-        font-size: 18px;
-        font-weight: 800;
+        width: fit-content;
+        max-width: 100%;
+        margin-bottom: 14px;
       }
       .nav-links {
         display: flex;
@@ -348,7 +351,6 @@ const ogImageUrl =
         text-transform: uppercase;
         letter-spacing: 0.04em;
       }
-      .footer-logo { color: #fff !important; margin-bottom: 14px; }
       .footer-tag { font-size: 13px; max-width: 280px; }
       .footer-bottom {
         margin-top: 30px;

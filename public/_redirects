@@ -1,2 +1,5 @@
 /pdf/jpg-to-pdf /pdf/image-to-pdf 301
 /pdf/jpg-to-pdf/ /pdf/image-to-pdf/ 301
+# Backlinks / crawlers hitting no-trailing-slash URLs (canonical + sitemap use trailing slash)
+/image/heic-to-jpg /image/heic-to-jpg/ 301
+/blog/open-heic-windows-11 /blog/open-heic-windows-11/ 301

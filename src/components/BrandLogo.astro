@@ -1,0 +1,90 @@
+---
+/**
+ * Vector wordmark: gradient lightning + “DoIt” / “Swift” (brand colours).
+ * `id` must be unique per page (nav + footer) for SVG gradient URLs.
+ */
+interface Props {
+  id: string;
+  variant: 'nav' | 'footer';
+}
+const { id, variant } = Astro.props;
+const gid = `brand-bolt-${id}`;
+---
+
+<span class:list={['brand-logo', variant === 'footer' && 'brand-logo--footer']}>
+  <svg
+    class="brand-logo-bolt"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <defs>
+      <linearGradient id={gid} x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#40C4FF" />
+        <stop offset="100%" stop-color="#0070FF" />
+      </linearGradient>
+    </defs>
+    <path fill={`url(#${gid})`} d="M12,1 3,14h6.5L8,23l11-13h-6.2L15,1Z" />
+  </svg>
+  <span class="brand-logo-type">
+    <span class="brand-logo-doit">DoIt</span><span class="brand-logo-swift">Swift</span>
+  </span>
+</span>
+
+<style>
+  .brand-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-family: var(--font, Inter, system-ui, sans-serif);
+    font-weight: 800;
+    font-size: clamp(1.05rem, 2.4vw, 1.32rem);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .brand-logo-bolt {
+    width: 1em;
+    height: 1em;
+    flex-shrink: 0;
+    display: block;
+  }
+  .brand-logo-type {
+    display: inline-flex;
+    align-items: baseline;
+  }
+  /* Light chrome (nav): “DoIt” must stay readable on white — deep navy, not white */
+  .brand-logo-doit {
+    color: #0a1628;
+  }
+  .brand-logo-swift {
+    color: #40c4ff;
+  }
+  :global([data-theme='dark']) .brand-logo:not(.brand-logo--footer) .brand-logo-doit {
+    color: #f8fafc;
+  }
+  :global([data-theme='dark']) .brand-logo:not(.brand-logo--footer) .brand-logo-swift {
+    color: #5ecdff;
+  }
+  /* Footer on gray-900: match brand card look */
+  .brand-logo--footer .brand-logo-doit {
+    color: #ffffff;
+  }
+  .brand-logo--footer .brand-logo-swift {
+    color: #40c4ff;
+  }
+  .brand-logo--footer {
+    font-size: clamp(1rem, 2.2vw, 1.22rem);
+  }
+  .brand-logo:hover .brand-logo-swift {
+    color: #2eb8f5;
+  }
+  :global([data-theme='dark']) .brand-logo:not(.brand-logo--footer):hover .brand-logo-swift {
+    color: #7dd8ff;
+  }
+  .brand-logo--footer:hover .brand-logo-swift {
+    color: #5ecdff;
+  }
+</style>

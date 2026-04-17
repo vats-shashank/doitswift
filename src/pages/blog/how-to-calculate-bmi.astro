@@ -1,0 +1,908 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const title = "How to Calculate Your BMI: Formula, Chart, and What Your Number Really Means (2026 Guide)";
+const description = "Calculate your BMI using our free calculator. Includes BMI formula, BMI chart for adults, BMI ranges for Indians and South Asians, and what to do after checking your number.";
+const publishDate = "2026-04-17";
+const lastUpdated = "2026-04-17";
+---
+
+<MainLayout
+  title={`${title} | DoItSwift`}
+  description={description}
+  keywords="bmi calculator, how to calculate bmi, bmi formula, bmi chart, bmi range, normal bmi, bmi for indians, bmi calculator kg, body mass index, healthy bmi, overweight bmi, bmi calculator india"
+  canonical="https://doitswift.com/blog/how-to-calculate-bmi/"
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": lastUpdated,
+    "author": { "@type": "Organization", "name": "DoItSwift" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "DoItSwift",
+      "logo": { "@type": "ImageObject", "url": "https://doitswift.com/og-default.svg" }
+    },
+    "mainEntityOfPage": "https://doitswift.com/blog/how-to-calculate-bmi/"
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is a normal BMI?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The standard WHO range for normal BMI is 18.5 to 24.9. However, for Indians and South Asians, research suggests a healthy BMI range of 18.0 to 22.9 due to higher body fat percentage at lower BMI levels compared to Caucasian populations."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I calculate my BMI?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "BMI = weight in kilograms divided by height in meters squared. For example, if you weigh 70 kg and are 1.75 m tall: BMI = 70 ÷ (1.75 × 1.75) = 70 ÷ 3.0625 = 22.9. You can also use a free online BMI calculator for instant results."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is BMI accurate for Indians?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Standard BMI ranges were developed primarily from Caucasian populations. Indians and South Asians tend to have higher body fat percentage and more abdominal fat at the same BMI. Many health organizations recommend lower BMI cutoffs for South Asians: overweight at 23 instead of 25, and obese at 25 instead of 30."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What BMI is overweight?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Under standard WHO classification, a BMI of 25.0 to 29.9 is considered overweight. For South Asians and Indians, many guidelines use a lower threshold of 23.0 to 24.9 as overweight due to higher metabolic risk at lower BMI levels."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can BMI be wrong?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. BMI does not distinguish between muscle and fat. Athletes and people with high muscle mass may show 'overweight' BMI despite being healthy. Conversely, older adults with low muscle mass may show 'normal' BMI despite having excess body fat. BMI is best used as a screening tool alongside other measurements like waist circumference and body fat percentage."
+        }
+      }
+    ]
+  })} />
+
+  <article class="article">
+    <div class="container">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> › <a href="/blog/">Blog</a> › <span>How to Calculate BMI</span>
+      </nav>
+
+      <header class="article-header">
+        <div class="article-meta">
+          <span class="cat">Health</span>
+          <time>Updated April 17, 2026</time>
+          <span>· 14 min read</span>
+        </div>
+        <h1>How to Calculate Your BMI: Formula, Chart, and What Your Number Really Means</h1>
+        <p class="lede">
+          BMI is the world's most-used health screening number — and also the most
+          misunderstood. A single calculation tells you something useful about weight
+          relative to height, but it doesn't tell you everything. This guide explains the
+          BMI formula, shows you the official BMI chart, covers <strong>why standard ranges
+          may not apply to Indians and South Asians</strong>, and explains what steps to
+          take after you know your number.
+        </p>
+      </header>
+
+      <div class="toc card">
+        <strong>In this guide:</strong>
+        <ul>
+          <li><a href="#what-is-bmi">What is BMI? (Body Mass Index explained)</a></li>
+          <li><a href="#formula">The BMI formula (kg/m² and lbs/inches)</a></li>
+          <li><a href="#calculate">How to calculate your BMI step by step</a></li>
+          <li><a href="#chart">BMI chart for adults: categories and ranges</a></li>
+          <li><a href="#indian-bmi">BMI for Indians: why standard ranges are misleading</a></li>
+          <li><a href="#limitations">What BMI gets wrong (and when to ignore it)</a></li>
+          <li><a href="#beyond-bmi">Beyond BMI: 4 better measures of health</a></li>
+          <li><a href="#action">What to do after checking your BMI</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+
+      <div class="callout">
+        <strong>🎯 Check your BMI now:</strong>
+        Use our free <a href="/calculator/bmi/">BMI Calculator</a> — enter height and
+        weight, see your BMI category instantly. Supports both metric (kg/cm) and imperial
+        (lbs/feet-inches). No signup required.
+      </div>
+
+      <section id="what-is-bmi">
+        <h2>What is BMI? (Body Mass Index explained simply)</h2>
+        <p>
+          <strong>Body Mass Index (BMI)</strong> is a number calculated from your weight and
+          height. It was invented in the 1830s by Belgian mathematician Adolphe Quetelet as
+          a way to estimate body fat at the population level — not as an individual health
+          diagnosis.
+        </p>
+        <p>
+          BMI gives you a single number that roughly indicates whether your weight is
+          proportional to your height. A BMI of 22 generally means healthy weight. A BMI of
+          30 suggests excess weight that may increase health risks. A BMI of 17 suggests
+          underweight.
+        </p>
+        <p>
+          Doctors, insurance companies, and public health organizations worldwide use BMI as
+          a <strong>screening tool</strong> — a quick first check, not a definitive diagnosis.
+          It's fast, free, and requires no equipment beyond a scale and a measuring tape.
+        </p>
+        <p>
+          The key word is "screening." BMI cannot measure body fat directly. It cannot tell
+          the difference between muscle and fat. It cannot account for where fat is stored in
+          your body. But as a starting point for understanding weight-related health risks,
+          it remains the most widely used metric in the world.
+        </p>
+      </section>
+
+      <section id="formula">
+        <h2>The BMI formula</h2>
+        <p>
+          BMI uses a straightforward mathematical formula with your weight and height:
+        </p>
+
+        <h3>Metric formula (kg and meters)</h3>
+        <div class="callout formula-callout">
+          <strong>BMI = weight (kg) ÷ height (m)²</strong>
+          <br><br>
+          Or equivalently: BMI = weight (kg) ÷ (height in meters × height in meters)
+        </div>
+
+        <p>
+          <strong>Example:</strong> A person weighing 70 kg and standing 1.75 m tall:
+        </p>
+        <ul>
+          <li>Height squared: 1.75 × 1.75 = 3.0625</li>
+          <li>BMI: 70 ÷ 3.0625 = <strong>22.86</strong></li>
+        </ul>
+
+        <h3>If you know height in centimeters</h3>
+        <div class="callout formula-callout">
+          <strong>BMI = weight (kg) ÷ (height in cm ÷ 100)²</strong>
+        </div>
+        <p>
+          <strong>Example:</strong> 70 kg, 175 cm tall:
+        </p>
+        <ul>
+          <li>Convert to meters: 175 ÷ 100 = 1.75 m</li>
+          <li>BMI: 70 ÷ (1.75)² = <strong>22.86</strong></li>
+        </ul>
+
+        <h3>Imperial formula (pounds and inches)</h3>
+        <div class="callout formula-callout">
+          <strong>BMI = (weight in pounds × 703) ÷ (height in inches)²</strong>
+        </div>
+        <p>
+          <strong>Example:</strong> 154 lbs, 5'9" (69 inches) tall:
+        </p>
+        <ul>
+          <li>154 × 703 = 108,262</li>
+          <li>69² = 4,761</li>
+          <li>BMI: 108,262 ÷ 4,761 = <strong>22.74</strong></li>
+        </ul>
+
+        <p>
+          Don't want to do the math manually? Our
+          <a href="/calculator/bmi/">BMI Calculator</a> handles both metric and imperial
+          units instantly — just enter your height and weight.
+        </p>
+      </section>
+
+      <section id="calculate">
+        <h2>How to calculate your BMI: step by step</h2>
+        <p>
+          Here's the practical guide to checking your BMI accurately:
+        </p>
+
+        <h3>Step 1: Measure your height correctly</h3>
+        <p>
+          Stand barefoot on a flat surface against a wall. Look straight ahead (not up or
+          down). Place a flat object (a book works) on top of your head touching the wall.
+          Mark the point where the book meets the wall. Measure from floor to mark.
+        </p>
+        <p>
+          <strong>Common mistakes:</strong> Measuring with shoes on (adds 2-3 cm), slouching
+          (reduces height by 1-2 cm), measuring at night (you're typically 1-2 cm shorter
+          due to spine compression).
+        </p>
+
+        <h3>Step 2: Weigh yourself accurately</h3>
+        <p>
+          Weigh first thing in the morning, after using the bathroom, before eating or
+          drinking. Wear minimal clothing. Use the same scale each time. Digital scales are
+          generally more consistent than mechanical ones.
+        </p>
+        <p>
+          <strong>Weight fluctuates</strong> by 1-2 kg through the day due to food, water,
+          and activity. Morning weight is most consistent.
+        </p>
+
+        <h3>Step 3: Apply the formula or use a calculator</h3>
+        <p>
+          Plug your numbers into the formula above, or save time with our
+          <a href="/calculator/bmi/">free BMI Calculator</a>. Enter height in cm or
+          feet-inches, weight in kg or pounds — get your BMI category instantly with a
+          visual gauge.
+        </p>
+
+        <h3>Step 4: Interpret your result</h3>
+        <p>
+          Compare your BMI number against the standard chart below. If you're Indian or
+          South Asian, also check the <a href="#indian-bmi">adjusted ranges</a> further
+          in this article — standard WHO ranges may underestimate your risk.
+        </p>
+      </section>
+
+      <section id="chart">
+        <h2>BMI chart for adults: categories and what they mean</h2>
+        <p>
+          The World Health Organization classifies adult BMI into these categories:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>BMI Range</th>
+                <th>Category</th>
+                <th>Health risk level</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Below 16.0</td>
+                <td>Severe underweight</td>
+                <td>High (malnutrition risk)</td>
+              </tr>
+              <tr>
+                <td>16.0 – 16.9</td>
+                <td>Moderate underweight</td>
+                <td>Moderate</td>
+              </tr>
+              <tr>
+                <td>17.0 – 18.4</td>
+                <td>Mild underweight</td>
+                <td>Low to moderate</td>
+              </tr>
+              <tr>
+                <td><strong>18.5 – 24.9</strong></td>
+                <td><strong>Normal weight</strong></td>
+                <td><strong>Low (healthy range)</strong></td>
+              </tr>
+              <tr>
+                <td>25.0 – 29.9</td>
+                <td>Overweight</td>
+                <td>Moderate (increased risk)</td>
+              </tr>
+              <tr>
+                <td>30.0 – 34.9</td>
+                <td>Obese Class I</td>
+                <td>High</td>
+              </tr>
+              <tr>
+                <td>35.0 – 39.9</td>
+                <td>Obese Class II</td>
+                <td>Very high</td>
+              </tr>
+              <tr>
+                <td>40.0 and above</td>
+                <td>Obese Class III</td>
+                <td>Extremely high</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>What these categories indicate</h3>
+        <p>
+          <strong>Normal weight (BMI 18.5–24.9):</strong> Generally associated with the
+          lowest risk of weight-related health problems. This is the range most doctors
+          recommend maintaining. Within this range, many health professionals consider
+          20-22 the "sweet spot."
+        </p>
+        <p>
+          <strong>Overweight (BMI 25–29.9):</strong> Associated with moderately increased
+          risk of type 2 diabetes, cardiovascular disease, and certain cancers. Not everyone
+          in this range is unhealthy — athletes with muscle mass often fall here — but
+          it warrants attention to diet and activity levels.
+        </p>
+        <p>
+          <strong>Obese (BMI 30+):</strong> Significantly increased risk of multiple health
+          conditions including heart disease, stroke, type 2 diabetes, sleep apnea, and
+          joint problems. Medical intervention and lifestyle changes are generally
+          recommended at this level.
+        </p>
+        <p>
+          <strong>Underweight (BMI below 18.5):</strong> Associated with nutritional
+          deficiency, weakened immune system, bone density loss, and fertility issues.
+          Underweight is medically concerning and should be evaluated by a healthcare
+          provider.
+        </p>
+
+        <p>
+          Want to know your ideal weight range for your specific height? Our
+          <a href="/calculator/ideal-weight/">Ideal Weight Calculator</a> shows you the
+          weight range that corresponds to a healthy BMI for your height — using multiple
+          formulas including Devine, Robinson, Miller, and Hamwi.
+        </p>
+      </section>
+
+      <section id="indian-bmi">
+        <h2>BMI for Indians and South Asians: why standard ranges are misleading</h2>
+        <p>
+          This is the most important section if you're reading from India.
+        </p>
+        <p>
+          <strong>Standard BMI categories were developed primarily from Caucasian
+          populations.</strong> Decades of research have shown that Indians and South Asians
+          face higher health risks at lower BMI levels compared to European populations.
+        </p>
+
+        <h3>Why Indians are different</h3>
+        <p>
+          Three factors make standard BMI ranges misleading for South Asians:
+        </p>
+        <ul>
+          <li>
+            <strong>Higher body fat percentage at the same BMI:</strong> An Indian person
+            with BMI 23 typically has 3-5% more body fat than a Caucasian person with the
+            same BMI
+          </li>
+          <li>
+            <strong>More abdominal (visceral) fat:</strong> South Asians store more fat
+            around organs even at "normal" BMI, which increases metabolic disease risk
+          </li>
+          <li>
+            <strong>Higher insulin resistance:</strong> Genetic predisposition means
+            diabetes risk kicks in at lower weight thresholds
+          </li>
+        </ul>
+
+        <h3>Adjusted BMI ranges for Indians</h3>
+        <p>
+          Based on research from institutions including AIIMS, WHO South-East Asia Regional
+          Office, and the Indian Council of Medical Research, many health professionals now
+          recommend adjusted BMI cutoffs for South Asians:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Standard WHO</th>
+                <th>Recommended for Indians</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Underweight</td>
+                <td>Below 18.5</td>
+                <td>Below 18.0</td>
+              </tr>
+              <tr>
+                <td><strong>Normal</strong></td>
+                <td><strong>18.5 – 24.9</strong></td>
+                <td><strong>18.0 – 22.9</strong></td>
+              </tr>
+              <tr>
+                <td>Overweight</td>
+                <td>25.0 – 29.9</td>
+                <td>23.0 – 24.9</td>
+              </tr>
+              <tr>
+                <td>Obese</td>
+                <td>30.0+</td>
+                <td>25.0+</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout">
+          <strong>⚠️ What this means practically:</strong>
+          An Indian person with BMI 24 is already in the "overweight" zone by adjusted
+          standards — even though standard WHO classification says "normal." If you're
+          Indian with BMI 23-25, don't assume you're in the clear. Get your waist
+          circumference, blood sugar, and lipid profile checked.
+        </div>
+
+        <h3>The Indian diabetes connection</h3>
+        <p>
+          India has over 100 million people with diabetes — the highest in the world. A
+          significant reason is that metabolic problems begin at BMI levels considered
+          "normal" by international standards. Indian doctors now routinely screen for
+          diabetes at BMI 23+, not 25+.
+        </p>
+        <p>
+          If you're Indian with a BMI between 23 and 25: you're not in immediate danger,
+          but you should be monitoring blood sugar annually and maintaining active lifestyle
+          habits. Prevention is dramatically more effective than treatment for type 2
+          diabetes.
+        </p>
+
+        <h3>Waist circumference matters more for Indians</h3>
+        <p>
+          Because Indians carry more abdominal fat, waist circumference is often a better
+          predictor of health risk than BMI alone.
+        </p>
+        <p>
+          <strong>Risk thresholds for Indians:</strong>
+        </p>
+        <ul>
+          <li>Men: waist above 90 cm (35.4 inches) = increased risk</li>
+          <li>Women: waist above 80 cm (31.5 inches) = increased risk</li>
+        </ul>
+        <p>
+          These are lower than the standard international thresholds (102 cm for men, 88 cm
+          for women) — again reflecting the higher metabolic risk South Asians face at
+          lower measurements.
+        </p>
+      </section>
+
+      <section id="limitations">
+        <h2>What BMI gets wrong (and when to ignore it)</h2>
+        <p>
+          BMI is useful, but it has well-documented limitations. Understanding these
+          prevents you from over-relying on a single number.
+        </p>
+
+        <h3>BMI doesn't distinguish muscle from fat</h3>
+        <p>
+          A bodybuilder with 8% body fat and a sedentary person with 30% body fat can have
+          the same BMI. Muscle is denser than fat, so muscular people often show "overweight"
+          BMI despite being exceptionally fit. If you lift weights regularly or have an
+          athletic build, BMI may overestimate your health risk.
+        </p>
+
+        <h3>BMI ignores fat distribution</h3>
+        <p>
+          Where fat is stored matters enormously. Visceral fat (around organs, belly) is far
+          more dangerous than subcutaneous fat (under skin, thighs/hips). Two people with
+          identical BMI can have very different health profiles based on fat distribution.
+          This is particularly relevant for Indians, who tend toward abdominal fat storage.
+        </p>
+
+        <h3>BMI doesn't account for age</h3>
+        <p>
+          As people age, they naturally lose muscle and gain fat. An older adult with BMI 23
+          may have significantly more body fat than a younger person with the same BMI. Some
+          researchers argue that slightly higher BMI (25-27) in older adults may actually be
+          protective.
+        </p>
+
+        <h3>BMI doesn't account for sex differences</h3>
+        <p>
+          Women naturally carry more body fat than men. The same BMI number means different
+          body compositions for men and women. Despite this, the BMI chart uses identical
+          ranges for both. Our
+          <a href="/calculator/body-fat/">Body Fat Calculator</a> accounts for gender
+          differences and gives more specific results.
+        </p>
+
+        <h3>When BMI is misleading</h3>
+        <ul>
+          <li><strong>Athletes and bodybuilders:</strong> high muscle mass inflates BMI</li>
+          <li><strong>Elderly adults:</strong> muscle loss masks fat gain</li>
+          <li><strong>Pregnant women:</strong> BMI not applicable during pregnancy</li>
+          <li><strong>Children and teens:</strong> need age-specific BMI percentiles, not adult charts</li>
+          <li><strong>Very tall or very short people:</strong> BMI formula slightly biased</li>
+        </ul>
+
+        <p>
+          <strong>Bottom line:</strong> Use BMI as a starting point, not a verdict. Combine
+          it with waist measurement, body fat percentage, blood work, and how you feel
+          physically. If your BMI says one thing but your doctor, blood tests, and fitness
+          level say another — trust the fuller picture.
+        </p>
+      </section>
+
+      <section id="beyond-bmi">
+        <h2>Beyond BMI: 4 better measures of health</h2>
+        <p>
+          If BMI is a rough screening tool, what gives a more complete picture? Here are
+          four measures that complement or improve upon BMI:
+        </p>
+
+        <h3>1. Waist circumference</h3>
+        <p>
+          Measure around your waist at the navel level, standing relaxed. This directly
+          indicates abdominal fat — the most metabolically dangerous type. Especially
+          important for Indians (see thresholds above). Costs nothing, takes 30 seconds,
+          and is more predictive of heart disease risk than BMI for many populations.
+        </p>
+
+        <h3>2. Waist-to-height ratio</h3>
+        <p>
+          Your waist circumference should be less than half your height. If you're 170 cm
+          tall, your waist should ideally be under 85 cm. This simple ratio works across
+          different ethnicities better than BMI and accounts for body frame size
+          automatically.
+        </p>
+
+        <h3>3. Body fat percentage</h3>
+        <p>
+          Directly measures how much of your weight is fat vs lean mass. Healthy ranges:
+          men 10-20%, women 18-28% (varies by age). Can be estimated with calipers, smart
+          scales, or DEXA scans. Our
+          <a href="/calculator/body-fat/">Body Fat Calculator</a> uses the US Navy method
+          to estimate body fat from basic measurements.
+        </p>
+
+        <h3>4. Blood markers</h3>
+        <p>
+          Ultimately, health risk is best assessed by what's happening inside your body:
+          fasting blood sugar, HbA1c, lipid profile (cholesterol, triglycerides), and blood
+          pressure. A person with "normal" BMI but high fasting sugar is at greater risk
+          than someone with "overweight" BMI and perfect blood work.
+        </p>
+
+        <p>
+          The ideal approach: use BMI as a quick screen, add waist measurement for
+          abdominal fat insight, check body fat percentage for composition detail, and get
+          annual blood work for the complete picture. Our health calculators help with the
+          first three — start with the <a href="/calculator/bmi/">BMI Calculator</a>,
+          then try <a href="/calculator/body-fat/">Body Fat</a> and
+          <a href="/calculator/calorie/">Calorie/TDEE Calculator</a> for a fuller view.
+        </p>
+      </section>
+
+      <section id="action">
+        <h2>What to do after checking your BMI</h2>
+        <p>
+          Your BMI number is just the starting point. Here's what to do with it:
+        </p>
+
+        <h3>If your BMI is 18.5–24.9 (normal range)</h3>
+        <p>
+          You're in the healthy range by standard classification. Maintain current habits.
+          Focus on:
+        </p>
+        <ul>
+          <li>Regular physical activity (150 minutes moderate exercise per week)</li>
+          <li>Balanced nutrition — use our <a href="/calculator/calorie/">Calorie Calculator</a> to find your daily needs</li>
+          <li>Annual health checkups including blood sugar and lipids</li>
+          <li>If you're Indian with BMI 23-25: monitor more closely (see adjusted ranges above)</li>
+        </ul>
+
+        <h3>If your BMI is 25–29.9 (overweight)</h3>
+        <p>
+          Don't panic, but take action. Small sustained changes are more effective than
+          crash diets:
+        </p>
+        <ul>
+          <li>Calculate your daily calorie needs with our <a href="/calculator/calorie/">Calorie Calculator</a> — aim for a 300-500 calorie deficit</li>
+          <li>Find your <a href="/calculator/ideal-weight/">ideal weight target</a> and set a realistic timeline</li>
+          <li>Use our <a href="/calculator/macro/">Macro Calculator</a> to balance protein, carbs, and fats</li>
+          <li>Check your <a href="/calculator/water-intake/">daily water intake needs</a></li>
+          <li>Get blood work done — some people in this range are metabolically healthy</li>
+          <li>Increase daily movement: 10,000 steps, strength training 2-3 times per week</li>
+        </ul>
+
+        <h3>If your BMI is 30+ (obese range)</h3>
+        <p>
+          Medical attention is recommended. Speak with a healthcare provider about:
+        </p>
+        <ul>
+          <li>Complete metabolic panel (blood sugar, HbA1c, thyroid, lipids)</li>
+          <li>Structured weight management plan</li>
+          <li>Whether medication might be appropriate</li>
+          <li>Mental health support (weight and emotional health are deeply connected)</li>
+        </ul>
+
+        <h3>If your BMI is below 18.5 (underweight)</h3>
+        <p>
+          Being underweight can indicate nutritional deficiency, eating disorders, or
+          underlying health conditions. Consider:
+        </p>
+        <ul>
+          <li>See a doctor to rule out medical causes (thyroid, celiac, etc.)</li>
+          <li>Use our <a href="/calculator/calorie/">Calorie Calculator</a> to find your maintenance calories — then eat above that</li>
+          <li>Focus on nutrient-dense foods, not just calories</li>
+          <li>Strength training helps build healthy weight through muscle gain</li>
+        </ul>
+
+        <div class="callout">
+          <strong>🩺 Important reminder:</strong>
+          BMI is a screening tool, not a medical diagnosis. It provides useful general
+          information but cannot replace professional health assessment. If you have
+          concerns about your weight or health, consult a qualified healthcare provider
+          who can evaluate your individual situation comprehensively.
+        </div>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+          <h3>What is a normal BMI?</h3>
+          <p>
+            The standard WHO healthy range is 18.5 to 24.9. For Indians and South Asians,
+            research suggests a narrower healthy range of 18.0 to 22.9 due to higher body
+            fat at lower BMI levels. Check your specific number with our
+            <a href="/calculator/bmi/">BMI Calculator</a>.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What BMI is overweight for a woman?</h3>
+          <p>
+            The BMI formula and categories are the same for men and women: 25.0-29.9 is
+            overweight by WHO standards. However, women naturally have higher body fat
+            percentage, so the same BMI represents different compositions in men and women.
+            For a more gender-specific assessment, use our
+            <a href="/calculator/body-fat/">Body Fat Calculator</a>.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How often should I check my BMI?</h3>
+          <p>
+            For general health monitoring, once every 3-6 months is sufficient. If you're
+            actively trying to lose or gain weight, monthly checks help track progress.
+            Don't check daily — weight fluctuates by 1-2 kg naturally and daily checks
+            create unnecessary anxiety.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Is BMI different for children?</h3>
+          <p>
+            Yes. Children and teenagers use BMI-for-age percentiles, not the adult categories
+            listed above. A child's BMI is compared against growth charts for their specific
+            age and sex. Our calculator is designed for adults (18+). For children, consult
+            your pediatrician.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can I have a high BMI and still be healthy?</h3>
+          <p>
+            Yes — this is called "metabolically healthy obesity" or simply having more muscle
+            mass. Athletes, bodybuilders, and naturally muscular individuals often have BMI
+            25-30 with excellent health markers. If your blood pressure, blood sugar, lipid
+            profile, and fitness level are all normal, a slightly elevated BMI may not be
+            concerning. Discuss with your doctor.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What is the most accurate way to measure body fat?</h3>
+          <p>
+            DEXA scan is the gold standard but expensive (₹2,000-5,000 in India).
+            Hydrostatic weighing is very accurate but rare. Bioelectrical impedance (smart
+            scales) is convenient but varies with hydration. Skinfold calipers are
+            affordable and reasonably accurate when done by trained professionals. Our
+            <a href="/calculator/body-fat/">Body Fat Calculator</a> uses the US Navy
+            method which needs just a measuring tape.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How many calories should I eat to reach a healthy BMI?</h3>
+          <p>
+            First find your maintenance calories using our
+            <a href="/calculator/calorie/">Calorie/TDEE Calculator</a>. To lose weight
+            safely, eat 300-500 calories below maintenance. To gain weight, eat 300-500
+            above. Rate of change should be 0.25-0.5 kg per week for sustainable results.
+            Use our <a href="/calculator/macro/">Macro Calculator</a> to balance protein,
+            carbs, and fat in your target calories.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What is my ideal weight for my height?</h3>
+          <p>
+            Ideal weight depends on height, frame size, and body composition. As a rough
+            guide, the weight that gives you BMI 20-22 is generally considered ideal. For a
+            specific number using multiple clinical formulas, try our
+            <a href="/calculator/ideal-weight/">Ideal Weight Calculator</a>.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Does BMI apply during pregnancy?</h3>
+          <p>
+            No — BMI is not used to assess weight during pregnancy. Weight gain during
+            pregnancy is normal and necessary. Pre-pregnancy BMI is used to determine
+            recommended pregnancy weight gain ranges. If you're pregnant, use our
+            <a href="/calculator/pregnancy-due-date/">Pregnancy Due Date Calculator</a>
+            for timeline tracking.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Why is my BMI high but I look thin?</h3>
+          <p>
+            This can happen if you have dense bones or muscle mass (which weigh more than
+            fat by volume), or if you carry weight in areas not visible in everyday clothing.
+            It can also happen with "skinny fat" — normal weight but high body fat percentage
+            with low muscle mass. A body fat measurement is more informative in this case.
+          </p>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <h2>Check your BMI now — takes 10 seconds</h2>
+        <p>
+          Free, instant, private. Enter height and weight, see your category with a visual
+          gauge. Supports both kg/cm and lbs/feet.
+        </p>
+        <div class="cta-buttons">
+          <a href="/calculator/bmi/" class="btn btn-lg">
+            → Calculate My BMI
+          </a>
+          <a href="/calculator/ideal-weight/" class="btn btn-lg btn-secondary">
+            → Find My Ideal Weight
+          </a>
+        </div>
+      </section>
+
+      <section class="related">
+        <h2>Related Health Calculators & Guides</h2>
+        <ul>
+          <li><a href="/calculator/bmi/">BMI Calculator — Instant Body Mass Index Check</a></li>
+          <li><a href="/calculator/calorie/">Calorie / TDEE Calculator — Daily Energy Needs</a></li>
+          <li><a href="/calculator/ideal-weight/">Ideal Weight Calculator — Multiple Formulas</a></li>
+          <li><a href="/calculator/body-fat/">Body Fat Calculator — US Navy Method</a></li>
+          <li><a href="/calculator/macro/">Macro Calculator — Protein, Carbs, Fat Split</a></li>
+          <li><a href="/calculator/water-intake/">Water Intake Calculator — Daily Hydration Needs</a></li>
+          <li><a href="/calculator/pregnancy-due-date/">Pregnancy Due Date Calculator</a></li>
+          <li><a href="/blog/how-much-to-retire-india/">How Much Money Do You Need to Retire in India?</a></li>
+        </ul>
+      </section>
+
+    </div>
+  </article>
+
+  <style>
+    .article { padding: 40px 0 60px; }
+    .article .container { max-width: 760px; }
+
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .article-header { margin-bottom: 32px; }
+    .article-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .article-meta .cat {
+      color: var(--blue);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      font-size: 11px;
+    }
+    .article h1 { font-size: 38px; line-height: 1.2; margin-bottom: 18px; }
+    .lede { font-size: 19px; color: var(--text-muted); line-height: 1.6; }
+
+    .toc {
+      padding: 20px 24px;
+      margin: 32px 0;
+    }
+    .toc strong { display: block; margin-bottom: 10px; }
+    .toc ul { list-style: none; padding: 0; }
+    .toc li { margin-bottom: 6px; font-size: 14px; }
+    .toc a { color: var(--blue); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    .article h2 {
+      font-size: 28px;
+      margin-top: 48px;
+      margin-bottom: 16px;
+    }
+    .article h3 {
+      font-size: 20px;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+    .article p, .article ul, .article ol {
+      font-size: 16px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .article ul, .article ol { padding-left: 24px; }
+    .article li { margin-bottom: 6px; }
+    .article a:not(.btn) { color: var(--blue); text-decoration: underline; }
+    .article strong { font-weight: 700; }
+
+    .callout {
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 15px;
+    }
+    [data-theme="dark"] .callout { background: rgba(0, 102, 255, .1); }
+
+    .formula-callout {
+      background: #f0fdf4;
+      border-left-color: #16a34a;
+      font-family: 'Courier New', monospace;
+    }
+    [data-theme="dark"] .formula-callout {
+      background: rgba(22, 163, 74, .1);
+    }
+
+    .table-wrap { overflow-x: auto; margin: 20px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td {
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--gray-100);
+      font-weight: 700;
+    }
+
+    .faq-item {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item h3 { font-size: 17px; margin-bottom: 8px; }
+    .faq-item p { font-size: 15px; margin-bottom: 0; }
+
+    .cta-section {
+      background: linear-gradient(135deg, var(--blue-light), #fff);
+      border: 1px solid var(--blue-light);
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      margin: 48px 0;
+    }
+    [data-theme="dark"] .cta-section {
+      background: linear-gradient(135deg, rgba(0, 102, 255, .1), transparent);
+      border-color: rgba(0, 102, 255, .2);
+    }
+    .cta-section h2 { margin-top: 0; }
+    .cta-section p { margin-bottom: 24px; }
+    .cta-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--blue);
+      color: var(--blue);
+    }
+    .btn-secondary:hover {
+      background: var(--blue-light);
+    }
+
+    .related h2 { font-size: 22px; }
+    .related ul { list-style: none; padding: 0; }
+    .related li { margin-bottom: 10px; }
+  </style>
+</MainLayout>

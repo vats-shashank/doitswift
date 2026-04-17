@@ -11,9 +11,9 @@
 
 ## Hero
 
-🌐 **Live site:** [https://doitswift.com](https://doitswift.com)
+🌐 **Live site:** [https://doitswift.com/](https://doitswift.com/)
 
-📝 **Blog:** [https://doitswift.com/blog](https://doitswift.com/blog)
+📝 **Blog:** [https://doitswift.com/blog/](https://doitswift.com/blog/)
 
 DoItSwift is a growing collection of **free, privacy-minded tools** for images, PDFs, finance, health, and everyday math. Law enforcement—including the FBI—has repeatedly warned that **malicious or sketchy “file converter” sites can silently steal uploads**, infect devices, or trick users into installing malware. DoItSwift exists to offer a **privacy-first alternative**: file and PDF processing runs **in your browser** whenever possible, so your documents are not sent to our servers for those workflows. There are **no accounts**, and **calculator logic runs locally in JavaScript**—instant results without a backend holding your inputs.
 
@@ -48,23 +48,23 @@ Many online converters push **mandatory signups**, **cloud uploads**, or opaque 
 
 ### Image tools
 
-- 🔒 [**HEIC to JPG**](https://doitswift.com/image/heic-to-jpg) — Convert iPhone photos without uploading
-- 📦 [**WebP to JPG**](https://doitswift.com/image/webp-to-jpg) — Handle Google’s image format locally
-- 🗜️ [**Image compressor**](https://doitswift.com/image/image-compressor) — Reduce file size with a quality control
-- 📐 [**Image resizer**](https://doitswift.com/image/image-resizer) — Resize for social, email, or web
-- 🎨 [**SVG to PNG**](https://doitswift.com/image/svg-to-png) — Rasterize vector graphics with custom dimensions
-- ⭐ [**Favicon generator**](https://doitswift.com/image/favicon-generator) — Build multi-size ICO files for sites
-- 📱 [**AVIF to JPG**](https://doitswift.com/image/avif-to-jpg) — Convert next-gen AVIF when you need wide compatibility
-- 🔢 [**Image to Base64**](https://doitswift.com/image/image-to-base64) — Encode images for HTML or APIs
+- 🔒 [**HEIC to JPG**](https://doitswift.com/image/heic-to-jpg/) — Convert iPhone photos without uploading
+- 📦 [**WebP to JPG**](https://doitswift.com/image/webp-to-jpg/) — Handle Google’s image format locally
+- 🗜️ [**Image compressor**](https://doitswift.com/image/image-compressor/) — Reduce file size with a quality control
+- 📐 [**Image resizer**](https://doitswift.com/image/image-resizer/) — Resize for social, email, or web
+- 🎨 [**SVG to PNG**](https://doitswift.com/image/svg-to-png/) — Rasterize vector graphics with custom dimensions
+- ⭐ [**Favicon generator**](https://doitswift.com/image/favicon-generator/) — Build multi-size ICO files for sites
+- 📱 [**AVIF to JPG**](https://doitswift.com/image/avif-to-jpg/) — Convert next-gen AVIF when you need wide compatibility
+- 🔢 [**Image to Base64**](https://doitswift.com/image/image-to-base64/) — Encode images for HTML or APIs
 
 ### PDF tools
 
-- 🖼️ [**PDF to JPG**](https://doitswift.com/pdf/pdf-to-jpg) — Export pages as JPEG images
-- 📑 [**Image to PDF**](https://doitswift.com/pdf/image-to-pdf) — Combine JPG, PNG, WebP, HEIC, and more
-- ➕ [**Merge PDFs**](https://doitswift.com/pdf/merge-pdf) — Join multiple PDFs in order
-- ✂️ [**Split PDF**](https://doitswift.com/pdf/split-pdf) — Extract pages or ranges
-- 🗜️ [**Compress PDF**](https://doitswift.com/pdf/compress-pdf) — Shrink file size in the browser
-- 🔓 [**Unlock PDF**](https://doitswift.com/pdf/unlock-pdf) — Remove password protection when you have the correct key
+- 🖼️ [**PDF to JPG**](https://doitswift.com/pdf/pdf-to-jpg/) — Export pages as JPEG images
+- 📑 [**Image to PDF**](https://doitswift.com/pdf/image-to-pdf/) — Combine JPG, PNG, WebP, HEIC, and more
+- ➕ [**Merge PDFs**](https://doitswift.com/pdf/merge-pdf/) — Join multiple PDFs in order
+- ✂️ [**Split PDF**](https://doitswift.com/pdf/split-pdf/) — Extract pages or ranges
+- 🗜️ [**Compress PDF**](https://doitswift.com/pdf/compress-pdf/) — Shrink file size in the browser
+- 🔓 [**Unlock PDF**](https://doitswift.com/pdf/unlock-pdf/) — Remove password protection when you have the correct key
 
 ### Calculators (samples — [full list](https://doitswift.com/calculator/))
 
@@ -80,7 +80,7 @@ Many online converters push **mandatory signups**, **cloud uploads**, or opaque 
 
 ## Roadmap
 
-Shipped hubs are listed above. **Coming next** (also see [Roadmap on the site](https://doitswift.com/pro)):
+Shipped hubs are listed above. **Coming next** (also see [Roadmap on the site](https://doitswift.com/pro/)):
 
 - **Text tools** — word count, JSON formatter, case converter  
 - **Generators** — QR code, password, UUID, invoice  
