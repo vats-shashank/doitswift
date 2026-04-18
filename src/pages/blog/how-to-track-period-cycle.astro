@@ -1,0 +1,930 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const title = "How to Track Your Period Cycle: A Complete Guide to Understanding Your Menstrual Cycle";
+const description = "Learn how to track your menstrual cycle, predict your next period, identify your fertile window, and understand what's normal. Free period calculator included — no app download needed.";
+const publishDate = "2026-04-18";
+const lastUpdated = "2026-04-18";
+---
+
+<MainLayout
+  title={`${title} | DoItSwift`}
+  description={description}
+  keywords="how to track period, period cycle, menstrual cycle tracking, period calculator, ovulation calculator, fertile window, when is my next period, period tracker, menstrual cycle length, period cycle days"
+  canonical="https://doitswift.com/blog/how-to-track-period-cycle/"
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": lastUpdated,
+    "author": { "@type": "Organization", "name": "DoItSwift" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "DoItSwift",
+      "logo": { "@type": "ImageObject", "url": "https://doitswift.com/og-default.svg" }
+    },
+    "mainEntityOfPage": "https://doitswift.com/blog/how-to-track-period-cycle/"
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I track my period cycle?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Mark the first day of bleeding as Day 1 of your cycle. Count days until the next period starts — that count is your cycle length. Track for 3-6 months to find your average. Use a calendar, simple notes, or a free period calculator to predict future periods based on your average cycle length."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long is a normal menstrual cycle?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A normal menstrual cycle ranges from 21 to 35 days, with the average being 28 days. Cycles between 24 and 38 days are considered clinically normal. Cycle length can vary by a few days each month — a variation of up to 7-9 days between your shortest and longest cycle is within normal range."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "When do I ovulate?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ovulation typically occurs about 14 days before your next period starts, not 14 days after your last period. For a 28-day cycle, that's around Day 14. For a 32-day cycle, it's around Day 18. For a 25-day cycle, it's around Day 11. The fertile window spans 5 days before ovulation through the day of ovulation itself."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a fertile window?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The fertile window is the approximately 6-day period each cycle when pregnancy is possible: the 5 days before ovulation plus the day of ovulation itself. Sperm can survive in the reproductive tract for up to 5 days, while the egg is viable for 12-24 hours after release. Outside this window, conception is unlikely."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is it normal for periods to be irregular?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Some variation is normal — cycles can differ by a few days each month. However, consistently irregular cycles (shorter than 21 days, longer than 35 days, or varying by more than 9 days), very heavy bleeding, severe pain, or missed periods for 3+ months should be evaluated by a healthcare provider. Common causes of irregularity include stress, weight changes, PCOS, thyroid disorders, and perimenopause."
+        }
+      }
+    ]
+  })} />
+
+  <article class="article">
+    <div class="container">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> › <a href="/blog/">Blog</a> › <span>How to Track Your Period</span>
+      </nav>
+
+      <header class="article-header">
+        <div class="article-meta">
+          <span class="cat">Health</span>
+          <time>Updated April 18, 2026</time>
+          <span>· 14 min read</span>
+        </div>
+        <h1>How to Track Your Period Cycle: Understanding Your Menstrual Cycle</h1>
+        <p class="lede">
+          Knowing when your next period will arrive isn't just convenient — it's a
+          fundamental health skill. Your menstrual cycle tells you about your hormonal
+          health, fertility, and overall wellbeing. Whether you're trying to conceive,
+          avoid pregnancy, or simply want to stop being surprised by your period, tracking
+          your cycle starts with understanding a few basics. This guide explains the
+          science, shows you how to track effectively, and gives you a
+          <strong>free calculator</strong> that predicts your next period, fertile window,
+          and ovulation — without downloading an app or creating an account.
+        </p>
+      </header>
+
+      <div class="toc card">
+        <strong>In this guide:</strong>
+        <ul>
+          <li><a href="#calculator">Track your cycle now (free calculator)</a></li>
+          <li><a href="#basics">Menstrual cycle basics: the 4 phases</a></li>
+          <li><a href="#how-to-track">How to track your period (step by step)</a></li>
+          <li><a href="#cycle-length">What's a normal cycle length?</a></li>
+          <li><a href="#ovulation">When do you ovulate? (the real calculation)</a></li>
+          <li><a href="#fertile-window">Understanding your fertile window</a></li>
+          <li><a href="#irregular">Irregular periods: when to worry</a></li>
+          <li><a href="#what-to-track">Beyond dates: 5 things worth tracking</a></li>
+          <li><a href="#methods">Period tracking methods compared</a></li>
+          <li><a href="#privacy">Period tracking and data privacy</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+
+      <section id="calculator">
+        <h2>Track your cycle now — free, private, no app needed</h2>
+        <div class="callout">
+          <strong>🎯 Predict your next period:</strong>
+          Our <a href="/calculator/period-ovulation/">Period & Ovulation Calculator</a>
+          shows your upcoming periods, fertile windows, and ovulation days on a visual
+          calendar. Enter your last period date and average cycle length — results appear
+          instantly. Everything runs in your browser. No account, no data stored, no
+          tracking.
+        </div>
+      </section>
+
+      <section id="basics">
+        <h2>Menstrual cycle basics: the 4 phases</h2>
+        <p>
+          Your menstrual cycle isn't just your period. Your period is one phase of a
+          repeating cycle that involves your entire reproductive system. Understanding all
+          four phases helps you predict patterns and recognize when something is off.
+        </p>
+
+        <h3>Phase 1: Menstruation (Day 1 to Day 3-7)</h3>
+        <p>
+          This is your period — the phase most people are familiar with. The uterine lining
+          sheds because no pregnancy occurred in the previous cycle. Day 1 of bleeding is
+          Day 1 of your cycle.
+        </p>
+        <p>
+          <strong>Duration:</strong> Typically 3-7 days. Average is 5 days.<br>
+          <strong>What's happening:</strong> Estrogen and progesterone are at their lowest.
+          The uterus contracts to shed its lining, which causes cramps.<br>
+          <strong>What you might feel:</strong> Cramps, fatigue, lower back pain, mood
+          changes. Energy levels are typically lowest during the first 1-2 days.
+        </p>
+
+        <h3>Phase 2: Follicular phase (Day 1 to ovulation)</h3>
+        <p>
+          This phase overlaps with menstruation (it starts on Day 1 too) and continues
+          until ovulation. Your pituitary gland releases FSH (follicle-stimulating hormone),
+          which tells your ovaries to prepare eggs.
+        </p>
+        <p>
+          <strong>Duration:</strong> 10-16 days (variable — this phase causes most cycle
+          length variation).<br>
+          <strong>What's happening:</strong> Several follicles develop in the ovaries, each
+          containing an egg. Usually one dominant follicle emerges. Estrogen rises steadily,
+          rebuilding the uterine lining.<br>
+          <strong>What you might feel:</strong> Increasing energy, improved mood, higher
+          libido. Many people feel their best during the late follicular phase.
+        </p>
+
+        <h3>Phase 3: Ovulation (around Day 14 in a 28-day cycle)</h3>
+        <p>
+          The dominant follicle releases a mature egg. This is the most fertile moment of
+          your cycle. The egg survives only 12-24 hours if not fertilized.
+        </p>
+        <p>
+          <strong>Duration:</strong> The egg release itself takes minutes. The fertile
+          window around it spans about 6 days.<br>
+          <strong>What's happening:</strong> A surge in LH (luteinizing hormone) triggers
+          egg release. The egg travels down the fallopian tube toward the uterus.<br>
+          <strong>What you might feel:</strong> Some people notice mild cramping on one
+          side (mittelschmerz), increased cervical mucus (clear and stretchy, like egg
+          whites), slightly elevated body temperature, and heightened libido.
+        </p>
+
+        <h3>Phase 4: Luteal phase (ovulation to next period)</h3>
+        <p>
+          After the egg is released, the empty follicle transforms into the corpus luteum,
+          which produces progesterone. This phase is remarkably consistent in length.
+        </p>
+        <p>
+          <strong>Duration:</strong> Almost always 12-16 days. Average is 14 days. This
+          consistency is why ovulation is calculated as "14 days before the next period,"
+          not "14 days after the last period."<br>
+          <strong>What's happening:</strong> Progesterone thickens the uterine lining
+          further, preparing for potential implantation. If no pregnancy occurs, the corpus
+          luteum breaks down, progesterone drops, and the cycle restarts with menstruation.<br>
+          <strong>What you might feel:</strong> PMS symptoms in the last 3-7 days — bloating,
+          breast tenderness, mood swings, food cravings, acne. These are caused by the
+          drop in progesterone.
+        </p>
+
+        <div class="callout">
+          <strong>🔑 Key insight:</strong>
+          The luteal phase (ovulation to period) is almost always 14 days, regardless of
+          total cycle length. It's the follicular phase (period to ovulation) that varies.
+          This is why a 25-day cycle has ovulation around Day 11, a 28-day cycle around
+          Day 14, and a 35-day cycle around Day 21.
+        </div>
+      </section>
+
+      <section id="how-to-track">
+        <h2>How to track your period: step by step</h2>
+
+        <h3>Step 1: Mark the first day of bleeding</h3>
+        <p>
+          Day 1 is the first day of actual bleeding (not spotting). Mark this date in a
+          calendar, notebook, or our
+          <a href="/calculator/period-ovulation/">Period Calculator</a>. This is the
+          only date you absolutely need to record.
+        </p>
+
+        <h3>Step 2: Mark the first day of your next period</h3>
+        <p>
+          When your next period starts, mark that date too. The number of days from the
+          previous Day 1 to this Day 1 is your cycle length for that month.
+        </p>
+        <p>
+          <strong>Example:</strong> Period started March 5, next period started April 2.
+          March 5 to April 2 = 28 days. Your cycle length that month was 28 days.
+        </p>
+
+        <h3>Step 3: Track for 3-6 cycles</h3>
+        <p>
+          One cycle tells you very little. Track for at least 3 cycles (ideally 6) to find
+          your average cycle length. You'll also see how much your cycle varies — some
+          people are consistently 28 days, others range from 26-31.
+        </p>
+
+        <h3>Step 4: Calculate your average</h3>
+        <p>
+          Add up your tracked cycle lengths and divide by the number of cycles.
+        </p>
+        <p>
+          <strong>Example:</strong> Cycles of 27, 29, 28, 30, 28, 29 days.
+          Total: 171. Divided by 6 = average 28.5 days. Round to 28 or 29.
+        </p>
+
+        <h3>Step 5: Predict future cycles</h3>
+        <p>
+          Use your average cycle length to predict when your next period will start. Our
+          <a href="/calculator/period-ovulation/">Period & Ovulation Calculator</a> does
+          this automatically — enter your last period date and average cycle length, and it
+          shows a visual calendar with predicted periods, ovulation days, and fertile
+          windows for the next 3-12 cycles.
+        </p>
+      </section>
+
+      <section id="cycle-length">
+        <h2>What's a normal cycle length?</h2>
+        <p>
+          The "28-day cycle" is the textbook average, but actual cycles vary widely among
+          healthy individuals.
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Cycle length</th>
+                <th>Classification</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>21-24 days</td>
+                <td>Short but normal</td>
+                <td>Track consistently, mention at next checkup</td>
+              </tr>
+              <tr>
+                <td>25-30 days</td>
+                <td>Typical range</td>
+                <td>No concerns</td>
+              </tr>
+              <tr>
+                <td>31-35 days</td>
+                <td>Longer but normal</td>
+                <td>Track consistently, mention at next checkup</td>
+              </tr>
+              <tr>
+                <td>Below 21 days</td>
+                <td>Unusually short</td>
+                <td>Consult healthcare provider</td>
+              </tr>
+              <tr>
+                <td>Above 35 days</td>
+                <td>Unusually long</td>
+                <td>Consult healthcare provider</td>
+              </tr>
+              <tr>
+                <td>Varies by 9+ days between cycles</td>
+                <td>Irregular</td>
+                <td>Consult healthcare provider</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          <strong>Important:</strong> "Normal" is a range, not a fixed number. A person
+          whose cycles are consistently 33 days is just as healthy as someone with
+          consistent 26-day cycles. What matters more than the number is consistency — if
+          your cycle suddenly changes by a week or more, that's worth investigating.
+        </p>
+
+        <h3>What affects cycle length</h3>
+        <ul>
+          <li><strong>Age:</strong> Cycles tend to be more irregular in the first few years after menarche and in the years approaching menopause (perimenopause)</li>
+          <li><strong>Stress:</strong> Physical or emotional stress can delay ovulation, extending the follicular phase and making the cycle longer</li>
+          <li><strong>Weight changes:</strong> Significant weight loss or gain can affect hormones and cycle regularity</li>
+          <li><strong>Exercise:</strong> Extreme exercise (marathon training, competitive athletics) can suppress ovulation</li>
+          <li><strong>Hormonal contraception:</strong> Coming off birth control can cause temporary irregularity (3-6 months to normalize)</li>
+          <li><strong>Medical conditions:</strong> PCOS, thyroid disorders, and endometriosis can all affect cycle length and regularity</li>
+          <li><strong>Travel and time zone changes:</strong> Jet lag can shift your cycle by a few days</li>
+        </ul>
+      </section>
+
+      <section id="ovulation">
+        <h2>When do you ovulate? The real calculation</h2>
+        <p>
+          This is where most people get confused. The common belief is "ovulation happens
+          on Day 14." This is only true for 28-day cycles.
+        </p>
+
+        <h3>The correct rule</h3>
+        <div class="callout">
+          <strong>Ovulation day = Cycle length minus 14</strong><br><br>
+          The luteal phase (ovulation to period) is almost always 14 days. So ovulation
+          occurs approximately 14 days BEFORE your next period starts — not 14 days after
+          your last period started.
+        </div>
+
+        <h3>Ovulation day by cycle length</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Your cycle length</th>
+                <th>Approximate ovulation day</th>
+                <th>Fertile window</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>21 days</td>
+                <td>Day 7</td>
+                <td>Days 2-7</td>
+              </tr>
+              <tr>
+                <td>24 days</td>
+                <td>Day 10</td>
+                <td>Days 5-10</td>
+              </tr>
+              <tr>
+                <td>26 days</td>
+                <td>Day 12</td>
+                <td>Days 7-12</td>
+              </tr>
+              <tr>
+                <td>28 days</td>
+                <td>Day 14</td>
+                <td>Days 9-14</td>
+              </tr>
+              <tr>
+                <td>30 days</td>
+                <td>Day 16</td>
+                <td>Days 11-16</td>
+              </tr>
+              <tr>
+                <td>32 days</td>
+                <td>Day 18</td>
+                <td>Days 13-18</td>
+              </tr>
+              <tr>
+                <td>35 days</td>
+                <td>Day 21</td>
+                <td>Days 16-21</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          See your personal ovulation prediction on our
+          <a href="/calculator/period-ovulation/">Period & Ovulation Calculator</a> — it
+          calculates this automatically based on your cycle length and shows it on a
+          color-coded calendar.
+        </p>
+
+        <h3>Why calendar-based ovulation tracking has limitations</h3>
+        <p>
+          The "cycle length minus 14" rule gives you an <em>estimate</em>, not a guarantee.
+          Actual ovulation can vary by 1-4 days even in regular cycles. For more precise
+          tracking, consider combining calendar tracking with:
+        </p>
+        <ul>
+          <li><strong>Basal body temperature (BBT):</strong> Take temperature every morning before getting out of bed. A sustained rise of 0.2-0.5°C confirms ovulation occurred (retrospectively)</li>
+          <li><strong>Cervical mucus observation:</strong> Fertile mucus is clear, stretchy, and resembles raw egg whites. This appears in the days leading up to ovulation</li>
+          <li><strong>OPK (Ovulation Predictor Kit):</strong> Urine strips that detect the LH surge 24-36 hours before ovulation. Most accurate for timing</li>
+        </ul>
+      </section>
+
+      <section id="fertile-window">
+        <h2>Understanding your fertile window</h2>
+        <p>
+          The fertile window is the approximately 6-day period each cycle when pregnancy is
+          biologically possible. Understanding it matters whether you're trying to conceive
+          or trying to avoid pregnancy.
+        </p>
+
+        <h3>Why 6 days, not just 1?</h3>
+        <p>
+          The egg survives only 12-24 hours after ovulation. But sperm can survive in the
+          reproductive tract for up to 5 days. This means intercourse up to 5 days BEFORE
+          ovulation can result in pregnancy — the sperm waits for the egg.
+        </p>
+        <p>
+          The fertile window therefore spans: <strong>5 days before ovulation + ovulation
+          day = 6 days total</strong>.
+        </p>
+
+        <h3>Peak fertility days</h3>
+        <p>
+          While all 6 days carry some pregnancy probability, the highest fertility is
+          concentrated in the 2-3 days immediately before and including ovulation day.
+          Studies show pregnancy probability per cycle at approximately:
+        </p>
+        <ul>
+          <li>5 days before ovulation: ~4%</li>
+          <li>4 days before: ~8%</li>
+          <li>3 days before: ~15%</li>
+          <li>2 days before: ~25%</li>
+          <li>1 day before: ~30% (peak)</li>
+          <li>Ovulation day: ~12% (egg already aging)</li>
+          <li>Day after ovulation: ~0-5% (egg usually no longer viable)</li>
+        </ul>
+
+        <div class="callout">
+          <strong>⚠️ Important medical disclaimer:</strong>
+          Calendar-based fertility tracking is NOT reliable enough for contraception on its
+          own. Natural family planning methods have significantly higher failure rates than
+          other contraceptive methods when not practiced rigorously with professional
+          guidance. For contraception, consult a healthcare provider about methods
+          appropriate for your situation. For conception, this guide provides useful context
+          but does not replace medical fertility advice.
+        </div>
+      </section>
+
+      <section id="irregular">
+        <h2>Irregular periods: when to be concerned</h2>
+        <p>
+          Some cycle variation is normal. Here's how to distinguish normal variation from
+          potential health concerns:
+        </p>
+
+        <h3>Normal variation (don't worry)</h3>
+        <ul>
+          <li>Cycle length varies by 1-7 days between months</li>
+          <li>Period is a day earlier or later than expected</li>
+          <li>Flow varies slightly from month to month</li>
+          <li>Occasional light spotting between periods</li>
+          <li>Temporary irregularity after stopping birth control (3-6 months)</li>
+          <li>Slight changes during travel, stress, or illness</li>
+        </ul>
+
+        <h3>Worth mentioning at your next checkup</h3>
+        <ul>
+          <li>Cycles consistently shorter than 24 days or longer than 35 days</li>
+          <li>Cycle length varying by more than 9 days between your shortest and longest</li>
+          <li>Periods lasting more than 7 days regularly</li>
+          <li>Spotting between periods happening frequently</li>
+          <li>Noticeable change in your established pattern</li>
+        </ul>
+
+        <h3>See a healthcare provider soon</h3>
+        <ul>
+          <li>Missed periods for 3+ consecutive months (without pregnancy)</li>
+          <li>Very heavy bleeding (soaking through a pad/tampon every hour for several hours)</li>
+          <li>Severe pain that interferes with daily activities</li>
+          <li>Bleeding after menopause</li>
+          <li>Period starting before age 8 or not starting by age 16</li>
+        </ul>
+
+        <h3>Common causes of irregular cycles</h3>
+        <p>
+          <strong>PCOS (Polycystic Ovary Syndrome):</strong> The most common hormonal
+          disorder in women of reproductive age. Causes irregular or absent periods,
+          excess androgens, and sometimes ovarian cysts. Affects approximately 1 in 10
+          women globally, and rates in India are among the highest in the world.
+        </p>
+        <p>
+          <strong>Thyroid disorders:</strong> Both hypothyroidism (underactive) and
+          hyperthyroidism (overactive) can disrupt menstrual regularity. A simple blood
+          test (TSH) can screen for thyroid issues.
+        </p>
+        <p>
+          <strong>Stress and lifestyle:</strong> Chronic stress elevates cortisol, which
+          can suppress reproductive hormones and delay ovulation. Extreme dieting or
+          over-exercising can have similar effects.
+        </p>
+        <p>
+          <strong>Perimenopause:</strong> In the years leading up to menopause (typically
+          starting in the 40s), cycles become increasingly irregular as ovarian function
+          declines.
+        </p>
+      </section>
+
+      <section id="what-to-track">
+        <h2>Beyond dates: 5 things worth tracking</h2>
+        <p>
+          Tracking just your start date is the minimum. Adding these observations gives
+          you (and your doctor) a much richer picture:
+        </p>
+
+        <h3>1. Flow intensity</h3>
+        <p>
+          Light, moderate, or heavy — note it each day of your period. A sudden change in
+          flow pattern can indicate hormonal changes or health issues. This is also useful
+          information if you ever need to discuss your periods with a healthcare provider.
+        </p>
+
+        <h3>2. Pain levels</h3>
+        <p>
+          Rate cramping on a simple 1-5 scale. Tracking pain over months reveals patterns:
+          is it always worst on Day 1? Does it correlate with heavier flow? Is it getting
+          worse over time? Increasingly severe pain warrants medical evaluation to rule out
+          endometriosis or fibroids.
+        </p>
+
+        <h3>3. Mood and energy</h3>
+        <p>
+          Many people notice predictable mood patterns across their cycle. Low energy during
+          menstruation, peak energy and mood in the late follicular phase, and PMS symptoms
+          in the late luteal phase are common patterns. Recognizing your personal pattern
+          helps you plan demanding tasks for high-energy phases.
+        </p>
+
+        <h3>4. Cervical mucus (if tracking fertility)</h3>
+        <p>
+          The texture and color of cervical mucus changes predictably through the cycle.
+          Dry or sticky → creamy → wet and stretchy (fertile, like egg whites) → dry again
+          after ovulation. This is the most accessible real-time fertility indicator.
+        </p>
+
+        <h3>5. Physical symptoms</h3>
+        <p>
+          Breast tenderness, bloating, headaches, acne, food cravings, sleep quality — all
+          can follow cycle patterns. Tracking these alongside your period dates helps you
+          understand which symptoms are hormone-related versus other causes.
+        </p>
+      </section>
+
+      <section id="methods">
+        <h2>Period tracking methods compared</h2>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Cost</th>
+                <th>Privacy</th>
+                <th>Ease of use</th>
+                <th>Best for</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Paper calendar</td>
+                <td>Free</td>
+                <td>Completely private</td>
+                <td>Simple</td>
+                <td>Basic date tracking</td>
+              </tr>
+              <tr>
+                <td>Notes app on phone</td>
+                <td>Free</td>
+                <td>On-device</td>
+                <td>Simple</td>
+                <td>Quick notes with symptoms</td>
+              </tr>
+              <tr>
+                <td>Browser calculator (DoItSwift)</td>
+                <td>Free</td>
+                <td>No data stored</td>
+                <td>Very easy</td>
+                <td>Predictions without app download</td>
+              </tr>
+              <tr>
+                <td>Dedicated apps (Flo, Clue)</td>
+                <td>Free / Paid</td>
+                <td>Data on company servers</td>
+                <td>Feature-rich</td>
+                <td>Detailed daily tracking</td>
+              </tr>
+              <tr>
+                <td>Wearables (Oura, Apple Watch)</td>
+                <td>Expensive</td>
+                <td>Company servers</td>
+                <td>Automatic</td>
+                <td>Passive BBT + symptom tracking</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          For most people, our <a href="/calculator/period-ovulation/">Period & Ovulation
+          Calculator</a> provides what's needed: next period prediction, ovulation
+          estimation, and a visual calendar — without downloading an app, creating an
+          account, or sharing your intimate health data with a company.
+        </p>
+      </section>
+
+      <section id="privacy">
+        <h2>Period tracking and data privacy</h2>
+        <p>
+          Period tracking data is deeply personal — it reveals information about fertility,
+          sexual activity, pregnancy status, and reproductive health. In recent years,
+          concerns about how this data is collected, stored, and potentially shared have
+          grown significantly.
+        </p>
+
+        <h3>What period tracking apps collect</h3>
+        <p>
+          Popular period tracking apps (Flo, Clue, Natural Cycles, and others) typically
+          collect: period dates, symptoms, sexual activity, mood, medications, pregnancy
+          status, and sometimes location data. This information is stored on company
+          servers, often in jurisdictions with varying data protection standards.
+        </p>
+
+        <h3>Why this matters</h3>
+        <ul>
+          <li>Data breaches could expose reproductive health information</li>
+          <li>Some apps have been found sharing data with third-party analytics companies</li>
+          <li>Law enforcement has sought period tracking data in legal investigations in some countries</li>
+          <li>Insurance companies could theoretically use reproductive health data for pricing</li>
+        </ul>
+
+        <h3>Privacy-first alternatives</h3>
+        <p>
+          If data privacy matters to you (and it should), consider approaches that don't
+          store your data on external servers:
+        </p>
+        <ul>
+          <li><strong>Paper tracking:</strong> A physical calendar or notebook is un-hackable</li>
+          <li><strong>Browser-based calculators:</strong> Our <a href="/calculator/period-ovulation/">Period Calculator</a> runs in your browser with zero data storage — close the tab and everything disappears</li>
+          <li><strong>Local-only apps:</strong> Some apps offer an offline mode that stores data only on your device</li>
+        </ul>
+        <p>
+          The choice between convenience and privacy is personal. But it's worth making
+          that choice consciously rather than defaulting into data collection because an
+          app was free and easy to install.
+        </p>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+          <h3>How do I calculate when my next period will come?</h3>
+          <p>
+            Add your average cycle length to the first day of your last period. If your
+            last period started March 5 and your average cycle is 28 days, your next period
+            is expected around April 2. Our
+            <a href="/calculator/period-ovulation/">Period Calculator</a> does this
+            automatically and shows results on a visual calendar.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Is a 28-day cycle normal?</h3>
+          <p>
+            28 days is the commonly cited average, but cycles between 21 and 35 days are
+            considered clinically normal. Many healthy people have cycles of 25, 30, or 33
+            days. What matters more than the number is consistency — if your cycle is
+            regularly 32 days, that's perfectly healthy.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can I get pregnant during my period?</h3>
+          <p>
+            It's unlikely but possible, especially with shorter cycles. If you have a 21-day
+            cycle, ovulation occurs around Day 7. Sperm can survive up to 5 days.
+            Intercourse on Day 5 (late in your period) could potentially result in
+            pregnancy by Day 7 (ovulation). The probability is low but not zero.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Why is my period late?</h3>
+          <p>
+            Common causes include: stress (delays ovulation), recent illness, significant
+            weight change, travel/jet lag, starting or stopping hormonal contraception,
+            perimenopause, pregnancy, or normal cycle variation. A period that's 1-5 days
+            late is usually nothing to worry about. Missing a period entirely warrants a
+            pregnancy test and, if negative, a doctor visit if it happens for 3+ consecutive
+            months.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How do I know if I'm ovulating?</h3>
+          <p>
+            Signs include: clear stretchy cervical mucus, mild one-sided lower abdominal
+            cramp (mittelschmerz), slight basal body temperature rise (detected with daily
+            morning temperature tracking), increased libido, and a positive result on an
+            ovulation predictor kit (OPK). Not everyone notices physical signs — a calendar-based
+            estimate combined with OPK testing is the most practical approach for most people.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What is PCOS and how does it affect periods?</h3>
+          <p>
+            PCOS (Polycystic Ovary Syndrome) is a hormonal condition causing irregular
+            ovulation, which leads to irregular, infrequent, or absent periods. Other
+            symptoms include acne, excess hair growth, weight gain, and difficulty
+            conceiving. It affects approximately 1 in 10 women. If you suspect PCOS,
+            see a gynecologist — diagnosis involves blood tests and sometimes ultrasound.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How does age affect my menstrual cycle?</h3>
+          <p>
+            Teens (first 2-3 years after menarche): cycles are often irregular as hormones
+            stabilize. 20s-30s: cycles are typically most regular. Late 30s-40s: cycles may
+            start shortening or becoming irregular as perimenopause approaches. Average age
+            of menopause is 51, but perimenopause symptoms can start 8-10 years earlier.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Should I track my period if I'm on birth control?</h3>
+          <p>
+            On hormonal birth control (pill, patch, ring), the "period" during the hormone-free
+            week is actually withdrawal bleeding, not a true menstrual period. Tracking it
+            is still useful for knowing when breakthrough bleeding occurs and for monitoring
+            your body's response to the contraceptive. If you stop birth control, tracking
+            helps you understand when your natural cycle returns.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>If I conceive, when would the baby be due?</h3>
+          <p>
+            A rough due date is approximately 280 days (40 weeks) from the first day of
+            your last menstrual period (Naegele's rule). This is an estimate — actual
+            delivery can vary by 2 weeks in either direction. For a more detailed estimate,
+            use our <a href="/calculator/pregnancy-due-date/">Pregnancy Due Date Calculator</a>.
+            Clinical dating via ultrasound is more accurate than calendar-based estimation.
+          </p>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <h2>Predict your next period — free and private</h2>
+        <p>
+          Enter your last period date and cycle length. See upcoming periods, fertile
+          windows, and ovulation days on a visual calendar. No app download, no account,
+          no data stored.
+        </p>
+        <div class="cta-buttons">
+          <a href="/calculator/period-ovulation/" class="btn btn-lg">
+            → Track My Cycle
+          </a>
+          <a href="/calculator/pregnancy-due-date/" class="btn btn-lg btn-secondary">
+            → Calculate Due Date
+          </a>
+        </div>
+      </section>
+
+      <section class="related">
+        <h2>Related Health Calculators & Guides</h2>
+        <ul>
+          <li><a href="/calculator/period-ovulation/">Period & Ovulation Calculator</a></li>
+          <li><a href="/calculator/pregnancy-due-date/">Pregnancy Due Date Calculator</a></li>
+          <li><a href="/calculator/bmi/">BMI Calculator</a></li>
+          <li><a href="/calculator/calorie/">Calorie / TDEE Calculator</a></li>
+          <li><a href="/calculator/water-intake/">Water Intake Calculator</a></li>
+          <li><a href="/blog/how-to-calculate-bmi/">How to Calculate Your BMI (Indian Ranges)</a></li>
+          <li><a href="/blog/how-many-calories-per-day/">How Many Calories Per Day (Indian Food Guide)</a></li>
+        </ul>
+      </section>
+
+    </div>
+  </article>
+
+  <style>
+    .article { padding: 40px 0 60px; }
+    .article .container { max-width: 760px; }
+
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .article-header { margin-bottom: 32px; }
+    .article-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .article-meta .cat {
+      color: var(--blue);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      font-size: 11px;
+    }
+    .article h1 { font-size: 38px; line-height: 1.2; margin-bottom: 18px; }
+    .lede { font-size: 19px; color: var(--text-muted); line-height: 1.6; }
+
+    .toc {
+      padding: 20px 24px;
+      margin: 32px 0;
+    }
+    .toc strong { display: block; margin-bottom: 10px; }
+    .toc ul { list-style: none; padding: 0; }
+    .toc li { margin-bottom: 6px; font-size: 14px; }
+    .toc a { color: var(--blue); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    .article h2 {
+      font-size: 28px;
+      margin-top: 48px;
+      margin-bottom: 16px;
+    }
+    .article h3 {
+      font-size: 20px;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+    .article p, .article ul, .article ol {
+      font-size: 16px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .article ul, .article ol { padding-left: 24px; }
+    .article li { margin-bottom: 6px; }
+    .article a:not(.btn) { color: var(--blue); text-decoration: underline; }
+    .article strong { font-weight: 700; }
+
+    .callout {
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 15px;
+    }
+    [data-theme="dark"] .callout { background: rgba(0, 102, 255, .1); }
+
+    .table-wrap { overflow-x: auto; margin: 20px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td {
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--gray-100);
+      font-weight: 700;
+    }
+
+    .faq-item {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item h3 { font-size: 17px; margin-bottom: 8px; }
+    .faq-item p { font-size: 15px; margin-bottom: 0; }
+
+    .cta-section {
+      background: linear-gradient(135deg, var(--blue-light), #fff);
+      border: 1px solid var(--blue-light);
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      margin: 48px 0;
+    }
+    [data-theme="dark"] .cta-section {
+      background: linear-gradient(135deg, rgba(0, 102, 255, .1), transparent);
+      border-color: rgba(0, 102, 255, .2);
+    }
+    .cta-section h2 { margin-top: 0; }
+    .cta-section p { margin-bottom: 24px; }
+    .cta-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--blue);
+      color: var(--blue);
+    }
+    .btn-secondary:hover {
+      background: var(--blue-light);
+    }
+
+    .related h2 { font-size: 22px; }
+    .related ul { list-style: none; padding: 0; }
+    .related li { margin-bottom: 10px; }
+  </style>
+</MainLayout>

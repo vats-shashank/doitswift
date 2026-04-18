@@ -1,0 +1,842 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const title = "How to Split a PDF: Extract Pages, Remove Pages, or Break Into Parts (Free)";
+const description = "Split any PDF into separate pages, extract specific page ranges, or remove unwanted pages. Free browser-based tool — files never leave your device. Step-by-step guide with real examples.";
+const publishDate = "2026-04-18";
+const lastUpdated = "2026-04-18";
+---
+
+<MainLayout
+  title={`${title} | DoItSwift`}
+  description={description}
+  keywords="split pdf, extract pages from pdf, split pdf online, pdf splitter, remove pages from pdf, separate pdf pages, split pdf free, extract pdf pages, how to split pdf, pdf page extractor"
+  canonical="https://doitswift.com/blog/how-to-split-pdf/"
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": lastUpdated,
+    "author": { "@type": "Organization", "name": "DoItSwift" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "DoItSwift",
+      "logo": { "@type": "ImageObject", "url": "https://doitswift.com/og-default.svg" }
+    },
+    "mainEntityOfPage": "https://doitswift.com/blog/how-to-split-pdf/"
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I split a PDF into separate pages?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use a PDF splitter tool. Upload your PDF, specify which pages to extract (e.g., pages 1-5, or every individual page), and download the results. Browser-based splitters like DoItSwift process files locally — your document never leaves your device."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I extract specific pages from a PDF?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Most PDF splitter tools let you specify exact pages or ranges. For example, you can extract pages 3, 7, and 12-15 from a 50-page document. The extracted pages become a new, smaller PDF while the original remains unchanged."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I remove pages from a PDF?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Removing pages is the inverse of extracting. If you want to remove pages 4-6 from a 10-page PDF, extract pages 1-3 and 7-10 instead. The result is a new PDF containing only the pages you want, with the unwanted pages excluded."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I split a PDF on my phone?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Browser-based PDF splitters work on any device with a modern browser, including iPhones and Android phones. For small to medium PDFs (under 30 MB), mobile performance is good. For large files, a laptop or desktop provides better performance."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does splitting a PDF reduce quality?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. PDF splitting extracts pages exactly as they are without any recompression or quality loss. The extracted pages are identical to the originals. Quality only changes if you subsequently compress the split files."
+        }
+      }
+    ]
+  })} />
+
+  <article class="article">
+    <div class="container">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> › <a href="/blog/">Blog</a> › <span>How to Split a PDF</span>
+      </nav>
+
+      <header class="article-header">
+        <div class="article-meta">
+          <span class="cat">PDF</span>
+          <time>Updated April 18, 2026</time>
+          <span>· 12 min read</span>
+        </div>
+        <h1>How to Split a PDF: Extract Pages, Remove Pages, or Break Into Parts</h1>
+        <p class="lede">
+          Your professor sent a 200-page textbook PDF but you only need chapter 4. The HR
+          department emailed a 50-page policy document but you only need the leave policy
+          on pages 12-15. Your passport scan is one big file but the portal wants just the
+          first page. Splitting a PDF is the reverse of merging — and just as commonly
+          needed. Here's how to do it without uploading your document anywhere.
+        </p>
+      </header>
+
+      <div class="toc card">
+        <strong>In this guide:</strong>
+        <ul>
+          <li><a href="#split-now">Split your PDF now (free tool)</a></li>
+          <li><a href="#three-types">3 types of PDF splitting explained</a></li>
+          <li><a href="#step-by-step">Step-by-step: split a PDF in your browser</a></li>
+          <li><a href="#use-cases">8 real situations where splitting PDFs is essential</a></li>
+          <li><a href="#page-ranges">How to specify page ranges (with examples)</a></li>
+          <li><a href="#after-split">What to do after splitting</a></li>
+          <li><a href="#methods">4 methods to split PDFs (compared)</a></li>
+          <li><a href="#troubleshooting">Troubleshooting split problems</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+
+      <section id="split-now">
+        <h2>Split your PDF now — free, private, unlimited</h2>
+        <div class="callout">
+          <strong>🎯 Skip to the tool:</strong>
+          Our <a href="/pdf/split-pdf/">PDF Splitter</a> runs entirely in your browser.
+          Upload your PDF, choose page ranges, download the extracted pages. Your document
+          never leaves your device. No signup, no watermarks, no limits.
+        </div>
+      </section>
+
+      <section id="three-types">
+        <h2>3 types of PDF splitting</h2>
+        <p>
+          "Splitting a PDF" can mean three different things depending on what you need.
+          Understanding the difference helps you choose the right approach:
+        </p>
+
+        <h3>Type 1: Extract specific pages</h3>
+        <p>
+          Pull out certain pages and create a new PDF from them. The original file stays
+          unchanged.
+        </p>
+        <p>
+          <strong>Example:</strong> From a 30-page report, extract pages 5-12 (a specific
+          chapter) into a new 8-page PDF.
+        </p>
+        <p>
+          <strong>When you need this:</strong> Getting a specific section from a larger
+          document — a chapter from a textbook, a specific form from a bundle, one signed
+          page from a contract.
+        </p>
+
+        <h3>Type 2: Remove unwanted pages</h3>
+        <p>
+          Keep most of the document but remove certain pages. This is the inverse of
+          extracting.
+        </p>
+        <p>
+          <strong>Example:</strong> A 20-page document has 3 blank pages and 2 irrelevant
+          appendix pages. Remove pages 8, 15, 18-20 to create a clean 15-page version.
+        </p>
+        <p>
+          <strong>When you need this:</strong> Cleaning up scanned documents with blank
+          pages, removing cover sheets, trimming unnecessary appendices before sharing.
+        </p>
+
+        <h3>Type 3: Split into multiple parts</h3>
+        <p>
+          Divide one large document into several smaller files. Each part becomes its own
+          PDF.
+        </p>
+        <p>
+          <strong>Example:</strong> A 100-page document split into 10 files of 10 pages
+          each. Or a document split at chapter boundaries (pages 1-25, 26-50, 51-75, 76-100).
+        </p>
+        <p>
+          <strong>When you need this:</strong> Breaking large files for email (under 25 MB
+          per attachment), distributing chapters to different reviewers, splitting a combined
+          file back into individual documents.
+        </p>
+
+        <div class="callout">
+          <strong>📋 Quick decision:</strong><br>
+          Need specific pages? → Extract<br>
+          Need to remove certain pages? → Extract everything except those pages<br>
+          Need the whole document in smaller pieces? → Split by page ranges
+        </div>
+      </section>
+
+      <section id="step-by-step">
+        <h2>Step-by-step: split a PDF in your browser</h2>
+
+        <h3>Step 1: Open the splitter</h3>
+        <p>
+          Go to <a href="/pdf/split-pdf/">doitswift.com/pdf/split-pdf</a>. No account
+          needed. The tool runs in your browser on any device — desktop, laptop, tablet,
+          or phone.
+        </p>
+
+        <h3>Step 2: Upload your PDF</h3>
+        <p>
+          Drag your file onto the drop zone or click to browse. The tool reads your PDF
+          locally and shows the total page count. Your file is NOT uploaded to any server
+          — processing happens entirely in your browser's memory.
+        </p>
+
+        <h3>Step 3: Specify what to extract</h3>
+        <p>
+          Enter the pages or page ranges you want. Common formats:
+        </p>
+        <ul>
+          <li><strong>Single pages:</strong> <code>1, 5, 12</code> — extracts pages 1, 5, and 12</li>
+          <li><strong>Page ranges:</strong> <code>3-8</code> — extracts pages 3 through 8</li>
+          <li><strong>Combined:</strong> <code>1-3, 7, 10-15</code> — extracts pages 1-3, page 7, and pages 10-15</li>
+          <li><strong>All pages individually:</strong> Some tools offer "split every page" option</li>
+        </ul>
+
+        <h3>Step 4: Download the result</h3>
+        <p>
+          Click split/extract. The tool creates a new PDF containing only your selected
+          pages and downloads it. The original file is unchanged — you still have it as-is.
+        </p>
+
+        <h3>Step 5: Verify</h3>
+        <p>
+          Open the extracted PDF and confirm it contains the right pages in the right order.
+          If something's wrong, just run the tool again with different page numbers — there's
+          no limit on attempts.
+        </p>
+      </section>
+
+      <section id="use-cases">
+        <h2>8 real situations where splitting PDFs is essential</h2>
+
+        <h3>1. Extracting a chapter from a textbook</h3>
+        <p>
+          Your professor uploaded a 500-page textbook PDF. You need chapter 7 (pages
+          142-168) for this week's reading. Extract those 27 pages into a small, focused
+          file that loads quickly on your phone and doesn't eat storage.
+        </p>
+
+        <h3>2. Uploading one page to a government portal</h3>
+        <p>
+          Indian government portals (passport, visa, income tax, EPFO) often need specific
+          pages — first page of Aadhaar, address page of passport, or a specific form from
+          a multi-page bundle. Split out just the required page, then
+          <a href="/pdf/compress-pdf/">compress</a> it to meet the portal's size limit.
+        </p>
+
+        <h3>3. Sending a contract's signature page</h3>
+        <p>
+          A 40-page contract needs only the signed last page sent to a counterparty for
+          confirmation. Extract page 40 instead of emailing the entire sensitive document.
+          This is both more convenient and more private — you share only what's necessary.
+        </p>
+
+        <h3>4. Breaking a large file for email</h3>
+        <p>
+          Your combined report is 60 MB but email limits attachments to 25 MB. Split it
+          into three parts: pages 1-30 (Part 1), pages 31-60 (Part 2), pages 61-90 (Part 3).
+          Each part fits within the email limit. Alternatively,
+          <a href="/pdf/compress-pdf/">compress the whole file</a> first — if that brings
+          it under 25 MB, no splitting needed.
+        </p>
+
+        <h3>5. Removing blank pages from scans</h3>
+        <p>
+          Flatbed scanners and multifunction printers often create PDFs with blank pages
+          interspersed (from scanning both sides of single-sided documents). Extract only
+          the pages with actual content to reduce file size and eliminate confusion.
+        </p>
+
+        <h3>6. Distributing sections to different team members</h3>
+        <p>
+          A 100-page project report needs review from 4 team members. Split by section:
+          pages 1-25 to Reviewer A, 26-50 to Reviewer B, and so on. Each person gets only
+          their section — faster to download, focused review, and avoids accidental edits
+          to other sections.
+        </p>
+
+        <h3>7. Creating separate files from a combined download</h3>
+        <p>
+          Banks often provide combined statements (12 months in one PDF). You need just
+          March's statement for a loan application. Extract pages 5-8 (March) into a
+          standalone file. Similarly, credit card statements, investment reports, and tax
+          documents often arrive as combined PDFs that need individual separation.
+        </p>
+
+        <h3>8. Extracting images or diagrams</h3>
+        <p>
+          A report has a crucial chart on page 7 that you need for a presentation. Extract
+          page 7, then use <a href="/pdf/pdf-to-jpg/">PDF to JPG</a> to convert that
+          single page to an image. Now you can paste it into PowerPoint or share it
+          directly.
+        </p>
+      </section>
+
+      <section id="page-ranges">
+        <h2>How to specify page ranges</h2>
+        <p>
+          Page range syntax is straightforward but knowing the patterns saves time:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>What you want</th>
+                <th>What to type</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Just page 1</td>
+                <td><code>1</code></td>
+                <td>1-page PDF</td>
+              </tr>
+              <tr>
+                <td>Pages 5 through 12</td>
+                <td><code>5-12</code></td>
+                <td>8-page PDF</td>
+              </tr>
+              <tr>
+                <td>First 10 pages</td>
+                <td><code>1-10</code></td>
+                <td>10-page PDF</td>
+              </tr>
+              <tr>
+                <td>Last page of a 30-page doc</td>
+                <td><code>30</code></td>
+                <td>1-page PDF</td>
+              </tr>
+              <tr>
+                <td>Specific scattered pages</td>
+                <td><code>1, 5, 9, 13</code></td>
+                <td>4-page PDF with those pages</td>
+              </tr>
+              <tr>
+                <td>Multiple ranges</td>
+                <td><code>1-3, 8-12, 25-30</code></td>
+                <td>14-page PDF combining all ranges</td>
+              </tr>
+              <tr>
+                <td>Everything except pages 4-6</td>
+                <td><code>1-3, 7-30</code> (for 30-page doc)</td>
+                <td>27-page PDF (pages 4-6 removed)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Tips for getting page ranges right</h3>
+        <ul>
+          <li><strong>Open the PDF first</strong> and scroll to confirm which pages you need. Page numbers in the document's footer may not match the actual PDF page number (if there's a cover page or Roman numeral pages)</li>
+          <li><strong>Use the total page count</strong> shown by the splitter tool to verify your range. Requesting page 50 from a 30-page document will fail</li>
+          <li><strong>For "remove pages" tasks,</strong> list everything you want to KEEP, not what you want to remove</li>
+          <li><strong>Double-check the output.</strong> Open the extracted PDF to verify correct pages were captured before deleting the original</li>
+        </ul>
+      </section>
+
+      <section id="after-split">
+        <h2>What to do after splitting</h2>
+        <p>
+          Splitting is often just the first step in a workflow. Here are common next actions:
+        </p>
+
+        <h3>Compress the extracted pages</h3>
+        <p>
+          Even a few extracted pages might be large if the source PDF contained high-resolution
+          images. Run the split output through our
+          <a href="/pdf/compress-pdf/">PDF Compressor</a> to shrink it further. This is
+          especially useful before uploading to portals with tight size limits.
+        </p>
+        <p>
+          <strong>Full guide:</strong>
+          <a href="/blog/how-to-compress-pdf/">How to Compress PDF Without Losing Quality</a>
+        </p>
+
+        <h3>Merge split parts with other documents</h3>
+        <p>
+          Extracted a chapter from a textbook? Merge it with your notes PDF using our
+          <a href="/pdf/merge-pdf/">PDF Merger</a>. The typical workflow: split to extract
+          the relevant section, merge with other relevant materials, compress the final
+          document.
+        </p>
+        <p>
+          <strong>Full guide:</strong>
+          <a href="/blog/how-to-merge-pdf/">How to Merge PDF Files Into One</a>
+        </p>
+
+        <h3>Convert extracted pages to images</h3>
+        <p>
+          Need a page as an image for a presentation, email, or social media? Use
+          <a href="/pdf/pdf-to-jpg/">PDF to JPG</a> on the extracted file. Each page
+          becomes a separate JPG image that you can embed anywhere.
+        </p>
+
+        <h3>The complete PDF workflow</h3>
+        <p>
+          For complex document tasks, you often chain multiple operations:
+        </p>
+        <ol>
+          <li><strong>Split:</strong> Extract the pages you need (<a href="/pdf/split-pdf/">Split PDF</a>)</li>
+          <li><strong>Merge:</strong> Combine with other documents if needed (<a href="/pdf/merge-pdf/">Merge PDF</a>)</li>
+          <li><strong>Compress:</strong> Reduce file size for sharing (<a href="/pdf/compress-pdf/">Compress PDF</a>)</li>
+          <li><strong>Convert:</strong> Turn into images if needed (<a href="/pdf/pdf-to-jpg/">PDF to JPG</a>)</li>
+        </ol>
+        <p>
+          All four steps happen in your browser. No account needed for any of them. Your
+          documents never touch a server.
+        </p>
+      </section>
+
+      <section id="methods">
+        <h2>4 methods to split PDFs</h2>
+
+        <h3>Method 1: Browser-based splitter (recommended)</h3>
+        <p>
+          Tools like our <a href="/pdf/split-pdf/">PDF Splitter</a> run in your browser.
+          Your file stays on your device.
+        </p>
+        <ul>
+          <li><strong>Pros:</strong> Free, private, no installation, works on any device</li>
+          <li><strong>Cons:</strong> Very large files (500+ MB) may strain device memory</li>
+          <li><strong>Best for:</strong> Everyday splitting, sensitive documents, mobile use</li>
+        </ul>
+
+        <h3>Method 2: Google Chrome's print function</h3>
+        <p>
+          Open any PDF in Chrome → Ctrl+P (or Cmd+P on Mac) → change "Pages" to the
+          specific range → select "Save as PDF" as destination → Save.
+        </p>
+        <ul>
+          <li><strong>Pros:</strong> No tool needed, works immediately, built into Chrome</li>
+          <li><strong>Cons:</strong> Re-renders the PDF (may change formatting slightly), no batch splitting, can't extract non-continuous pages easily</li>
+          <li><strong>Best for:</strong> Quick single-range extraction when you don't want to open another tool</li>
+        </ul>
+
+        <h3>Method 3: Desktop software</h3>
+        <p>
+          Adobe Acrobat Pro, PDFsam (free), or LibreOffice Draw can split PDFs with advanced
+          options.
+        </p>
+        <ul>
+          <li><strong>Pros:</strong> Handles any file size, most features, works offline</li>
+          <li><strong>Cons:</strong> Requires installation, Adobe is expensive, PDFsam has a learning curve</li>
+          <li><strong>Best for:</strong> Complex splitting tasks, very large files, batch operations</li>
+        </ul>
+
+        <h3>Method 4: macOS Preview</h3>
+        <p>
+          On Mac: open PDF in Preview → View → Thumbnails → select pages → drag them to
+          Desktop (creates new PDF from selected pages).
+        </p>
+        <ul>
+          <li><strong>Pros:</strong> Built into Mac, free, intuitive drag-and-drop</li>
+          <li><strong>Cons:</strong> Mac only, can be finicky with large files</li>
+          <li><strong>Best for:</strong> Mac users who need quick extraction</li>
+        </ul>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Browser-based</th>
+                <th>Chrome print</th>
+                <th>Desktop software</th>
+                <th>macOS Preview</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Cost</td>
+                <td>Free</td>
+                <td>Free</td>
+                <td>Free / Paid</td>
+                <td>Free</td>
+              </tr>
+              <tr>
+                <td>Privacy</td>
+                <td>Files on device</td>
+                <td>Files on device</td>
+                <td>Files on device</td>
+                <td>Files on device</td>
+              </tr>
+              <tr>
+                <td>Specific pages</td>
+                <td>Yes</td>
+                <td>Ranges only</td>
+                <td>Yes</td>
+                <td>Yes (drag)</td>
+              </tr>
+              <tr>
+                <td>Non-continuous pages</td>
+                <td>Yes (1,5,9)</td>
+                <td>Limited</td>
+                <td>Yes</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Quality preserved</td>
+                <td>Exact copy</td>
+                <td>Re-rendered</td>
+                <td>Exact copy</td>
+                <td>Exact copy</td>
+              </tr>
+              <tr>
+                <td>Works on mobile</td>
+                <td>Yes</td>
+                <td>Limited</td>
+                <td>No</td>
+                <td>iPad only</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="troubleshooting">
+        <h2>Troubleshooting common split problems</h2>
+
+        <h3>"I extracted the wrong pages"</h3>
+        <p>
+          Check whether the PDF has a cover page or Roman-numeral preface that shifts page
+          numbers. Page "5" in the document's footer might be page 7 in the actual PDF
+          (if there are 2 unnumbered pages before the numbered content starts). Use the
+          page count displayed by the tool, not the numbers printed on the pages.
+        </p>
+
+        <h3>"The extracted PDF is larger than expected"</h3>
+        <p>
+          Some PDF structures embed shared resources (fonts, images) that get duplicated
+          when pages are extracted. A 3-page extraction from a 100-page document might be
+          disproportionately large because it carries shared font files. Solution: run
+          through our <a href="/pdf/compress-pdf/">PDF Compressor</a> after splitting.
+        </p>
+
+        <h3>"The tool can't read my PDF"</h3>
+        <p>
+          Likely causes: the PDF is password-protected (use our
+          <a href="/pdf/unlock-pdf/">Unlock PDF</a> tool first), the file is corrupted
+          (try opening in Chrome to verify), or the file isn't actually a PDF (check the
+          file extension).
+        </p>
+
+        <h3>"Pages appear blank after extraction"</h3>
+        <p>
+          Some PDFs use layers or overlays that the splitter may not fully reproduce. This
+          is rare but can happen with PDFs from advanced design software. Try the Chrome
+          print method as an alternative — it re-renders the page which sometimes resolves
+          layer issues.
+        </p>
+
+        <h3>"I need to split a scanned PDF and it's huge"</h3>
+        <p>
+          Scanned PDFs are image-heavy, so even a few pages can be large. After splitting,
+          <a href="/pdf/compress-pdf/">compress the result</a>. For scanned documents
+          specifically, Heavy compression works well since the content is already rasterized
+          — text won't degrade because it's already an image.
+        </p>
+
+        <h3>"I want to rearrange pages, not just extract them"</h3>
+        <p>
+          Splitting extracts pages in their original order. To rearrange: extract each page
+          individually (or in groups), then use <a href="/pdf/merge-pdf/">Merge PDF</a> to
+          recombine them in your desired order. This split-and-remerge workflow gives you
+          full control over page sequence.
+        </p>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+          <h3>How do I split a PDF into individual pages?</h3>
+          <p>
+            Use a PDF splitter with the "extract all pages" or "split every page" option.
+            This creates separate PDF files for each page. In our
+            <a href="/pdf/split-pdf/">PDF Splitter</a>, specify individual page numbers
+            (1, 2, 3, 4...) or use the split-all option if available. Each page becomes its
+            own downloadable PDF.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can I split a PDF for free?</h3>
+          <p>
+            Yes. Browser-based tools like DoItSwift's splitter are completely free — no
+            limits on files or pages, no watermarks, no account required. Some upload-based
+            services limit free users to 1-2 splits per hour or add watermarks.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can I extract pages from a PDF without Adobe Acrobat?</h3>
+          <p>
+            Absolutely. Adobe Acrobat Pro costs ₹1,600+/month. Free alternatives include
+            browser-based tools (like <a href="/pdf/split-pdf/">ours</a>), Chrome's
+            built-in print-to-PDF, PDFsam (free desktop software), and macOS Preview. For
+            most splitting needs, these free options work identically to Adobe.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Does splitting a PDF reduce quality?</h3>
+          <p>
+            No. Standard PDF splitting copies pages exactly as they are — no recompression
+            or quality loss. The extracted pages are bit-for-bit identical to the source
+            pages. Quality only changes if you compress the split file afterward.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can I split a password-protected PDF?</h3>
+          <p>
+            Not directly. The splitter needs to read file contents, which a password
+            prevents. First remove the password using our
+            <a href="/pdf/unlock-pdf/">Unlock PDF</a> tool (you'll need the password),
+            then split the unlocked file.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How do I remove specific pages from a PDF?</h3>
+          <p>
+            Extract everything EXCEPT the pages you want removed. For a 20-page document
+            where you want to remove pages 5-7: extract pages <code>1-4, 8-20</code>.
+            The result is a 17-page PDF without pages 5-7.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can I split a PDF on my phone?</h3>
+          <p>
+            Yes — browser-based tools work on any modern mobile browser. For PDFs under
+            30 MB, mobile performance is solid. For larger files, a laptop is recommended.
+            Both iOS Safari and Android Chrome support our
+            <a href="/pdf/split-pdf/">PDF Splitter</a>.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Is it safe to split PDFs online?</h3>
+          <p>
+            It depends on the tool. Server-based splitters upload your document for
+            processing — risky for sensitive content like financial or legal documents.
+            Browser-based splitters process files locally without uploading. For documents
+            containing personal information, always use a browser-based tool.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How do I split a large PDF into smaller files for email?</h3>
+          <p>
+            Divide the total pages into roughly equal parts. For a 90-page document with
+            25 MB email limit: try splitting into 3 parts of 30 pages each. If individual
+            parts are still too large, <a href="/pdf/compress-pdf/">compress</a> each part
+            after splitting. Alternatively, compress the original first — sometimes that
+            alone brings it under the email limit without splitting.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can I split and merge in one step?</h3>
+          <p>
+            Not in a single tool — these are separate operations. But the workflow is fast:
+            <a href="/pdf/split-pdf/">split</a> to extract pages from multiple source files,
+            then <a href="/pdf/merge-pdf/">merge</a> the extracted pages into a single new
+            document. Both steps take seconds and run in your browser.
+            <a href="/blog/how-to-merge-pdf/">Read our merge guide for details</a>.
+          </p>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <h2>Split your PDF now — free and private</h2>
+        <p>
+          Upload your PDF, specify the pages you need, download the result.
+          Your document never leaves your device.
+        </p>
+        <div class="cta-buttons">
+          <a href="/pdf/split-pdf/" class="btn btn-lg">
+            → Split My PDF
+          </a>
+          <a href="/pdf/merge-pdf/" class="btn btn-lg btn-secondary">
+            → Merge PDFs Instead
+          </a>
+        </div>
+      </section>
+
+      <section class="related">
+        <h2>Related PDF Tools & Guides</h2>
+        <ul>
+          <li><a href="/pdf/split-pdf/">PDF Splitter — Extract Pages or Ranges</a></li>
+          <li><a href="/pdf/merge-pdf/">PDF Merger — Combine Multiple PDFs</a></li>
+          <li><a href="/pdf/compress-pdf/">PDF Compressor — Shrink File Size</a></li>
+          <li><a href="/pdf/pdf-to-jpg/">PDF to JPG — Export Pages as Images</a></li>
+          <li><a href="/pdf/image-to-pdf/">Image to PDF — Create PDF from Photos</a></li>
+          <li><a href="/pdf/unlock-pdf/">Unlock PDF — Remove Password Protection</a></li>
+          <li><a href="/blog/how-to-compress-pdf/">How to Compress PDF Without Losing Quality</a></li>
+          <li><a href="/blog/how-to-merge-pdf/">How to Merge PDF Files Into One</a></li>
+          <li><a href="/blog/ctc-vs-in-hand-salary/">CTC vs In-Hand Salary: Full Breakdown</a></li>
+        </ul>
+      </section>
+
+    </div>
+  </article>
+
+  <style>
+    .article { padding: 40px 0 60px; }
+    .article .container { max-width: 760px; }
+
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .article-header { margin-bottom: 32px; }
+    .article-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .article-meta .cat {
+      color: var(--blue);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      font-size: 11px;
+    }
+    .article h1 { font-size: 38px; line-height: 1.2; margin-bottom: 18px; }
+    .lede { font-size: 19px; color: var(--text-muted); line-height: 1.6; }
+
+    .toc {
+      padding: 20px 24px;
+      margin: 32px 0;
+    }
+    .toc strong { display: block; margin-bottom: 10px; }
+    .toc ul { list-style: none; padding: 0; }
+    .toc li { margin-bottom: 6px; font-size: 14px; }
+    .toc a { color: var(--blue); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    .article h2 {
+      font-size: 28px;
+      margin-top: 48px;
+      margin-bottom: 16px;
+    }
+    .article h3 {
+      font-size: 20px;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+    .article p, .article ul, .article ol {
+      font-size: 16px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .article ul, .article ol { padding-left: 24px; }
+    .article li { margin-bottom: 6px; }
+    .article a:not(.btn) { color: var(--blue); text-decoration: underline; }
+    .article strong { font-weight: 700; }
+
+    .callout {
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 15px;
+    }
+    [data-theme="dark"] .callout { background: rgba(0, 102, 255, .1); }
+
+    .table-wrap { overflow-x: auto; margin: 20px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td {
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--gray-100);
+      font-weight: 700;
+    }
+
+    code {
+      background: var(--gray-100);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .faq-item {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item h3 { font-size: 17px; margin-bottom: 8px; }
+    .faq-item p { font-size: 15px; margin-bottom: 0; }
+
+    .cta-section {
+      background: linear-gradient(135deg, var(--blue-light), #fff);
+      border: 1px solid var(--blue-light);
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      margin: 48px 0;
+    }
+    [data-theme="dark"] .cta-section {
+      background: linear-gradient(135deg, rgba(0, 102, 255, .1), transparent);
+      border-color: rgba(0, 102, 255, .2);
+    }
+    .cta-section h2 { margin-top: 0; }
+    .cta-section p { margin-bottom: 24px; }
+    .cta-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--blue);
+      color: var(--blue);
+    }
+    .btn-secondary:hover {
+      background: var(--blue-light);
+    }
+
+    .related h2 { font-size: 22px; }
+    .related ul { list-style: none; padding: 0; }
+    .related li { margin-bottom: 10px; }
+  </style>
+</MainLayout>

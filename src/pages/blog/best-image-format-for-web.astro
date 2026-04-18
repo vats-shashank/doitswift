@@ -1,0 +1,927 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const title = "Best Image Format for Websites in 2026: WebP vs AVIF vs JPG vs PNG (Complete Guide)";
+const description = "Which image format should you use? Compare WebP, AVIF, JPG, PNG, and SVG — file size, quality, browser support, and when to use each. With free conversion tools.";
+const publishDate = "2026-04-18";
+const lastUpdated = "2026-04-18";
+---
+
+<MainLayout
+  title={`${title} | DoItSwift`}
+  description={description}
+  keywords="best image format for web, webp vs jpg, avif vs webp, png vs jpg, image format comparison, webp format, avif format, best image format 2026, image optimization, web image format"
+  canonical="https://doitswift.com/blog/best-image-format-for-web/"
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": lastUpdated,
+    "author": { "@type": "Organization", "name": "DoItSwift" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "DoItSwift",
+      "logo": { "@type": "ImageObject", "url": "https://doitswift.com/og-default.svg" }
+    },
+    "mainEntityOfPage": "https://doitswift.com/blog/best-image-format-for-web/"
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the best image format for websites?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "For photographs on modern websites, WebP is the best default choice — it offers 25-35% smaller files than JPG with equal quality and has 97%+ browser support. AVIF is even smaller (50% vs JPG) but has slightly lower browser support. Use PNG only for images requiring transparency with sharp edges. Use SVG for logos, icons, and illustrations."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is WebP better than JPG?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, for web use. WebP produces 25-35% smaller files than JPG at the same visual quality. WebP also supports transparency (like PNG) and animation (like GIF). The only downside is that some older software and email clients don't support WebP, so JPG remains better for email attachments and universal compatibility."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Should I use AVIF or WebP?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "AVIF produces smaller files than WebP (20-30% smaller) but has slightly lower browser support (93% vs 97%). For maximum compression, use AVIF with WebP fallback. For simplicity, WebP alone covers nearly all browsers. AVIF encoding is also slower, which matters for real-time conversion workflows."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "When should I use PNG instead of JPG?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use PNG when you need transparency (logos over backgrounds, UI elements), sharp edges on text and line art, or lossless quality (screenshots, diagrams). Use JPG for photographs and images where slight compression artifacts are invisible. PNG files are typically 5-10x larger than JPG for photographic content."
+        }
+      }
+    ]
+  })} />
+
+  <article class="article">
+    <div class="container">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> › <a href="/blog/">Blog</a> › <span>Best Image Format for Web</span>
+      </nav>
+
+      <header class="article-header">
+        <div class="article-meta">
+          <span class="cat">Image</span>
+          <time>Updated April 18, 2026</time>
+          <span>· 13 min read</span>
+        </div>
+        <h1>Best Image Format for Websites in 2026: WebP vs AVIF vs JPG vs PNG</h1>
+        <p class="lede">
+          Your website's images account for 50-80% of total page weight. Choosing the wrong
+          format means slower load times, worse Core Web Vitals scores, and lower Google
+          rankings. Choosing the right one means smaller files, faster pages, and better
+          user experience — especially on mobile networks. This guide compares every major
+          image format with real data, tells you exactly when to use each, and gives you
+          the tools to convert between them.
+        </p>
+      </header>
+
+      <div class="toc card">
+        <strong>In this guide:</strong>
+        <ul>
+          <li><a href="#quick-answer">Quick answer: which format to use</a></li>
+          <li><a href="#formats">Every image format explained</a></li>
+          <li><a href="#comparison">Side-by-side comparison table</a></li>
+          <li><a href="#webp-vs-jpg">WebP vs JPG: the real difference</a></li>
+          <li><a href="#avif-vs-webp">AVIF vs WebP: the next generation</a></li>
+          <li><a href="#png-vs-jpg">PNG vs JPG: when transparency matters</a></li>
+          <li><a href="#heic">What about HEIC? (iPhone photos)</a></li>
+          <li><a href="#svg">SVG: the format most people underuse</a></li>
+          <li><a href="#strategy">The optimal image strategy for 2026</a></li>
+          <li><a href="#convert">How to convert between formats</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+
+      <section id="quick-answer">
+        <h2>Quick answer: which format should you use?</h2>
+        <p>
+          If you don't want to read the full comparison, here's the decision tree that works
+          for 90% of situations:
+        </p>
+
+        <div class="callout">
+          <strong>The 2026 image format decision:</strong><br><br>
+          <strong>Photographs on websites?</strong> → WebP (or AVIF with WebP fallback)<br>
+          <strong>Photos for email/documents?</strong> → JPG (universal compatibility)<br>
+          <strong>Logos, icons, illustrations?</strong> → SVG (scalable, tiny file size)<br>
+          <strong>Screenshots and diagrams?</strong> → PNG (sharp text, lossless)<br>
+          <strong>Images needing transparency?</strong> → WebP or PNG (WebP is smaller)<br>
+          <strong>Animated images?</strong> → WebP or MP4 video (not GIF — too large)<br>
+          <strong>iPhone photos for sharing?</strong> → Convert HEIC to JPG (<a href="/image/heic-to-jpg/">free tool</a>)<br>
+          <strong>Maximum compression, modern browsers only?</strong> → AVIF
+        </div>
+      </section>
+
+      <section id="formats">
+        <h2>Every image format explained</h2>
+
+        <h3>JPG / JPEG — the universal standard</h3>
+        <p>
+          <strong>Created:</strong> 1992 by the Joint Photographic Experts Group<br>
+          <strong>Best for:</strong> Photographs, real-world images<br>
+          <strong>Compression:</strong> Lossy (quality reduces with smaller file size)<br>
+          <strong>Transparency:</strong> No<br>
+          <strong>Browser support:</strong> 100% — works everywhere, always
+        </p>
+        <p>
+          JPG has been the default web image format for over 30 years. Its lossy compression
+          makes photographs small enough for the web while maintaining acceptable visual
+          quality. At quality 80-85%, most people cannot see compression artifacts.
+        </p>
+        <p>
+          <strong>The downside:</strong> JPG is showing its age. WebP and AVIF achieve
+          the same visual quality at 25-50% smaller file sizes. JPG also doesn't support
+          transparency, so logos and overlays need a separate format.
+        </p>
+        <p>
+          <strong>Still use JPG when:</strong> Sending photos via email, uploading to
+          platforms that don't support WebP, or when universal compatibility is more
+          important than file size.
+        </p>
+
+        <h3>PNG — lossless with transparency</h3>
+        <p>
+          <strong>Created:</strong> 1996 as a patent-free GIF replacement<br>
+          <strong>Best for:</strong> Screenshots, logos, diagrams, images with text<br>
+          <strong>Compression:</strong> Lossless (no quality loss, but larger files)<br>
+          <strong>Transparency:</strong> Yes (full alpha channel)<br>
+          <strong>Browser support:</strong> 100%
+        </p>
+        <p>
+          PNG preserves every pixel exactly — no compression artifacts, ever. This makes it
+          ideal for screenshots (sharp text), diagrams (clean lines), and any image where
+          precision matters. PNG also supports transparency with smooth edges (alpha channel),
+          which is why logos are often PNG.
+        </p>
+        <p>
+          <strong>The downside:</strong> PNG files are massive for photographs. A photo
+          that's 200 KB as JPG can be 2-5 MB as PNG. Never use PNG for photographs on
+          websites — it destroys page load speed.
+        </p>
+        <p>
+          Convert PNG images with our <a href="/image/svg-to-png/">SVG to PNG</a> tool or
+          compress them with our <a href="/image/image-compressor/">Image Compressor</a>.
+        </p>
+
+        <h3>WebP — the modern standard</h3>
+        <p>
+          <strong>Created:</strong> 2010 by Google<br>
+          <strong>Best for:</strong> All web images in 2026<br>
+          <strong>Compression:</strong> Both lossy and lossless<br>
+          <strong>Transparency:</strong> Yes<br>
+          <strong>Animation:</strong> Yes<br>
+          <strong>Browser support:</strong> 97%+ (all modern browsers)
+        </p>
+        <p>
+          WebP is the closest thing to a "do everything" image format. It handles photos
+          (lossy mode, 25-35% smaller than JPG), graphics (lossless mode, 25% smaller than
+          PNG), transparency, and even animation. Browser support hit 97% in 2024 and
+          continues climbing.
+        </p>
+        <p>
+          <strong>The downside:</strong> Some older software, email clients, and social
+          media platforms still don't fully support WebP. When sharing outside the web,
+          convert to JPG for safety. Use our
+          <a href="/image/webp-to-jpg/">WebP to JPG converter</a> when you need universal
+          compatibility.
+        </p>
+
+        <h3>AVIF — the next generation</h3>
+        <p>
+          <strong>Created:</strong> 2019 by the Alliance for Open Media<br>
+          <strong>Best for:</strong> Maximum compression on modern browsers<br>
+          <strong>Compression:</strong> Both lossy and lossless<br>
+          <strong>Transparency:</strong> Yes<br>
+          <strong>Animation:</strong> Yes<br>
+          <strong>Browser support:</strong> 93%+ (Chrome, Firefox, Safari, Edge)
+        </p>
+        <p>
+          AVIF achieves remarkable compression — typically 50% smaller than JPG and 20-30%
+          smaller than WebP at the same quality. It's based on the AV1 video codec, which
+          means it benefits from billions of dollars of video compression research.
+        </p>
+        <p>
+          <strong>The downside:</strong> AVIF encoding is slow (2-5x slower than WebP),
+          browser support is slightly lower than WebP (93% vs 97%), and some image editing
+          tools don't support it yet. For maximum compatibility, use AVIF with WebP/JPG
+          fallback.
+        </p>
+        <p>
+          Need to convert AVIF images? Use our
+          <a href="/image/avif-to-jpg/">AVIF to JPG converter</a>.
+        </p>
+
+        <h3>GIF — the dinosaur</h3>
+        <p>
+          <strong>Created:</strong> 1987<br>
+          <strong>Best for:</strong> Simple animations (but WebP and MP4 are better)<br>
+          <strong>Compression:</strong> Lossless, limited to 256 colors<br>
+          <strong>Transparency:</strong> Binary only (no smooth edges)<br>
+          <strong>Browser support:</strong> 100%
+        </p>
+        <p>
+          GIF is still everywhere for memes and reactions, but technically it's terrible.
+          Limited to 256 colors, no smooth transparency, and massive file sizes for
+          animation. A 5-second GIF can be 10-20 MB. The same animation as WebP or MP4
+          video is 1-3 MB.
+        </p>
+        <p>
+          <strong>In 2026:</strong> Use GIF only when the platform requires it (some
+          messaging apps). For websites, use WebP animation or embedded MP4 video instead.
+        </p>
+      </section>
+
+      <section id="comparison">
+        <h2>Side-by-side format comparison</h2>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>JPG</th>
+                <th>PNG</th>
+                <th>WebP</th>
+                <th>AVIF</th>
+                <th>SVG</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Type</td>
+                <td>Raster</td>
+                <td>Raster</td>
+                <td>Raster</td>
+                <td>Raster</td>
+                <td>Vector</td>
+              </tr>
+              <tr>
+                <td>Compression</td>
+                <td>Lossy</td>
+                <td>Lossless</td>
+                <td>Both</td>
+                <td>Both</td>
+                <td>N/A</td>
+              </tr>
+              <tr>
+                <td>Transparency</td>
+                <td>No</td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Animation</td>
+                <td>No</td>
+                <td>No (APNG yes)</td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Yes (CSS/JS)</td>
+              </tr>
+              <tr>
+                <td>Photo quality per KB</td>
+                <td>Good</td>
+                <td>Best (but huge)</td>
+                <td>Better than JPG</td>
+                <td>Best</td>
+                <td>N/A</td>
+              </tr>
+              <tr>
+                <td>Typical photo size</td>
+                <td>Baseline</td>
+                <td>5-10x larger</td>
+                <td>25-35% smaller</td>
+                <td>50% smaller</td>
+                <td>N/A</td>
+              </tr>
+              <tr>
+                <td>Browser support</td>
+                <td>100%</td>
+                <td>100%</td>
+                <td>97%</td>
+                <td>93%</td>
+                <td>100%</td>
+              </tr>
+              <tr>
+                <td>Email support</td>
+                <td>Universal</td>
+                <td>Universal</td>
+                <td>Limited</td>
+                <td>Very limited</td>
+                <td>Limited</td>
+              </tr>
+              <tr>
+                <td>Best use case</td>
+                <td>Universal sharing</td>
+                <td>Screenshots, logos</td>
+                <td>Web photos</td>
+                <td>Max compression</td>
+                <td>Icons, logos</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="webp-vs-jpg">
+        <h2>WebP vs JPG: should you switch?</h2>
+        <p>
+          This is the most practical question for most website owners. Here's the honest
+          comparison:
+        </p>
+
+        <h3>File size: WebP wins by 25-35%</h3>
+        <p>
+          At the same visual quality, WebP files are consistently 25-35% smaller than JPG.
+          For a photo that's 100 KB as JPG, the WebP version is typically 65-75 KB — with
+          no visible quality difference to the human eye.
+        </p>
+        <p>
+          On an image-heavy page with 20 photos, switching from JPG to WebP saves
+          500 KB-1 MB of data. That translates to 0.5-2 seconds faster load time on mobile
+          networks.
+        </p>
+
+        <h3>Quality: identical at typical web settings</h3>
+        <p>
+          At quality 75-85 (the typical web range), WebP and JPG are visually
+          indistinguishable. WebP's compression algorithm is simply more efficient — it
+          achieves the same perceived quality with fewer bytes. At very low quality
+          settings (below 50), WebP handles degradation more gracefully than JPG.
+        </p>
+
+        <h3>Features: WebP does more</h3>
+        <p>
+          WebP supports transparency (alpha channel) and animation — two things JPG cannot
+          do. This means WebP can replace BOTH JPG and PNG in most situations, simplifying
+          your image pipeline.
+        </p>
+
+        <h3>Compatibility: JPG still has an edge</h3>
+        <p>
+          JPG works literally everywhere — every browser, every email client, every app,
+          every operating system, every printer. WebP support is 97%+ in browsers but
+          weaker in email clients, some desktop software, and older systems.
+        </p>
+
+        <h3>Verdict</h3>
+        <p>
+          <strong>For websites:</strong> Use WebP. The 25-35% size reduction directly
+          improves page speed and SEO scores. The 3% without support is negligible for
+          modern web audiences.
+        </p>
+        <p>
+          <strong>For sharing outside web:</strong> Use JPG. Email attachments, document
+          embedding, printing, and messaging apps all handle JPG better.
+        </p>
+        <p>
+          Need to convert? Our <a href="/image/webp-to-jpg/">WebP to JPG</a> converter
+          handles the conversion instantly in your browser.
+        </p>
+      </section>
+
+      <section id="avif-vs-webp">
+        <h2>AVIF vs WebP: is the upgrade worth it?</h2>
+        <p>
+          AVIF is newer and technically superior to WebP. But "technically superior"
+          doesn't always mean "better for your use case."
+        </p>
+
+        <h3>File size: AVIF wins by 20-30% over WebP</h3>
+        <p>
+          A photo that's 75 KB as WebP is typically 50-60 KB as AVIF. The savings compound
+          on image-heavy pages. For a site serving 1 million page views/month, AVIF vs
+          WebP can save terabytes of bandwidth.
+        </p>
+
+        <h3>Quality: AVIF handles low bitrates better</h3>
+        <p>
+          At very aggressive compression (tiny file sizes), AVIF maintains better detail
+          than WebP. This matters for thumbnails and heavily compressed images. At normal
+          quality levels, the difference is subtle.
+        </p>
+
+        <h3>Encoding speed: WebP is much faster</h3>
+        <p>
+          AVIF encoding takes 2-5x longer than WebP. For a build pipeline processing
+          thousands of images, this adds significant time. For a single image conversion,
+          both are fast enough.
+        </p>
+
+        <h3>Browser support: WebP has a slight edge</h3>
+        <p>
+          WebP: 97%+ support. AVIF: 93%+ support. The 4% gap is mostly older Safari
+          versions and some mobile browsers. In practice, this gap narrows every month.
+        </p>
+
+        <h3>Verdict</h3>
+        <p>
+          <strong>If you want simplicity:</strong> WebP alone covers 97% of browsers and
+          is "good enough" compression for almost every use case.
+        </p>
+        <p>
+          <strong>If you want optimal performance:</strong> Use AVIF as primary with WebP
+          fallback. This serves the smallest possible file to 93% of users while still
+          covering the remaining 4% with WebP.
+        </p>
+        <p>
+          Convert AVIF images with our <a href="/image/avif-to-jpg/">AVIF to JPG</a>
+          converter.
+        </p>
+      </section>
+
+      <section id="png-vs-jpg">
+        <h2>PNG vs JPG: when transparency matters</h2>
+        <p>
+          This is the most misunderstood format choice. People use PNG for photos (wrong)
+          or JPG for screenshots (also wrong). Here's the clarity:
+        </p>
+
+        <h3>Use PNG for:</h3>
+        <ul>
+          <li><strong>Images with text:</strong> Screenshots, diagrams, infographics — PNG keeps text crisp. JPG blurs text at edges</li>
+          <li><strong>Transparency:</strong> Logo overlays, product cutouts, UI elements over colored backgrounds</li>
+          <li><strong>Line art:</strong> Illustrations, charts, technical drawings with clean edges</li>
+          <li><strong>Exact color reproduction:</strong> When pixel-perfect accuracy matters (design mockups, color swatches)</li>
+        </ul>
+
+        <h3>Use JPG for:</h3>
+        <ul>
+          <li><strong>Photographs:</strong> Nature, people, food, landscapes — any real-world imagery</li>
+          <li><strong>Complex textures:</strong> Wood, fabric, gradients — JPG handles smooth tonal transitions well</li>
+          <li><strong>Social media uploads:</strong> Platforms recompress anyway, so starting with JPG is efficient</li>
+          <li><strong>Anywhere file size matters more than perfect quality:</strong> Email, messaging, storage</li>
+        </ul>
+
+        <h3>The size difference is dramatic</h3>
+        <p>
+          A typical photograph: JPG at 150 KB vs PNG at 1.5 MB. That's <strong>10x
+          larger</strong> for no visible quality improvement. This is why using PNG for
+          web photos is a performance disaster.
+        </p>
+        <p>
+          Compress your images with our
+          <a href="/image/image-compressor/">Image Compressor</a> or resize them with our
+          <a href="/image/image-resizer/">Image Resizer</a> for optimal web performance.
+        </p>
+      </section>
+
+      <section id="heic">
+        <h2>What about HEIC? (iPhone photos)</h2>
+        <p>
+          If you use an iPhone, your photos are stored as HEIC (High Efficiency Image
+          Container). HEIC uses the HEVC codec for excellent compression — roughly 50%
+          smaller than JPG at the same quality (similar to AVIF).
+        </p>
+
+        <h3>Why HEIC doesn't work on the web</h3>
+        <p>
+          Despite excellent compression, HEIC is NOT supported by web browsers. You cannot
+          use HEIC images on websites. It's also poorly supported on Windows and Android.
+          HEIC is an Apple-ecosystem format — great for iPhone storage, bad for sharing.
+        </p>
+
+        <h3>What to do with HEIC photos</h3>
+        <ul>
+          <li><strong>For websites:</strong> Convert to WebP (<a href="/image/heic-to-jpg/">HEIC to JPG</a>, then JPG to WebP)</li>
+          <li><strong>For sharing with non-Apple users:</strong> Convert to JPG (<a href="/image/heic-to-jpg/">free converter</a>)</li>
+          <li><strong>For storage on iPhone:</strong> Keep as HEIC — it saves space</li>
+        </ul>
+        <p>
+          We have detailed guides on HEIC:
+          <a href="/blog/open-heic-windows-11/">How to Open HEIC on Windows 11</a> and
+          <a href="/blog/heic-vs-jpg/">HEIC vs JPG: Complete Comparison</a>.
+        </p>
+      </section>
+
+      <section id="svg">
+        <h2>SVG: the format most people underuse</h2>
+        <p>
+          SVG (Scalable Vector Graphics) is fundamentally different from every other format
+          on this list. Where JPG, PNG, WebP, and AVIF store images as grids of pixels,
+          SVG stores images as mathematical shapes and paths.
+        </p>
+
+        <h3>Why SVG matters</h3>
+        <ul>
+          <li><strong>Infinite scalability:</strong> SVGs look sharp at any size — 16px icon to billboard. No pixelation, ever</li>
+          <li><strong>Tiny file size:</strong> A logo SVG might be 2-5 KB. The same logo as PNG at multiple sizes (16px, 32px, 64px, 128px, 256px) would total 50+ KB</li>
+          <li><strong>Editable with code:</strong> SVGs are XML text — you can change colors, sizes, and animations with CSS</li>
+          <li><strong>Perfect for accessibility:</strong> Screen readers can process SVG text elements</li>
+        </ul>
+
+        <h3>Use SVG for</h3>
+        <ul>
+          <li>Logos and brand marks</li>
+          <li>Icons (navigation, UI, social media)</li>
+          <li>Simple illustrations and diagrams</li>
+          <li>Charts and data visualizations</li>
+          <li>Animated web graphics (with CSS/JavaScript)</li>
+        </ul>
+
+        <h3>Don't use SVG for</h3>
+        <ul>
+          <li>Photographs (SVG can't efficiently represent photographic detail)</li>
+          <li>Complex illustrations with millions of paths (file becomes huge)</li>
+          <li>Situations where you need raster output (use our <a href="/image/svg-to-png/">SVG to PNG converter</a>)</li>
+        </ul>
+
+        <p>
+          Need to convert SVG for use in documents or apps that don't support it? Our
+          <a href="/image/svg-to-png/">SVG to PNG</a> converter outputs raster images
+          at any resolution.
+        </p>
+      </section>
+
+      <section id="strategy">
+        <h2>The optimal image strategy for 2026</h2>
+        <p>
+          Here's the practical image strategy I'd recommend for any website in 2026:
+        </p>
+
+        <h3>For website photos and hero images</h3>
+        <p>
+          <strong>Serve WebP as default.</strong> 97% of your visitors will get smaller,
+          faster-loading images. For the remaining 3%, serve a JPG fallback using the
+          HTML <code>&lt;picture&gt;</code> element.
+        </p>
+
+        <h3>For logos and icons</h3>
+        <p>
+          <strong>Use SVG exclusively.</strong> One file, every size, tiny payload. If a
+          platform doesn't support SVG, export PNG at the specific size needed.
+        </p>
+
+        <h3>For screenshots and documentation</h3>
+        <p>
+          <strong>Use PNG.</strong> Text clarity matters more than file size in documentation.
+          Compress the PNG afterward to remove unnecessary metadata using our
+          <a href="/image/image-compressor/">Image Compressor</a>.
+        </p>
+
+        <h3>For social media</h3>
+        <p>
+          <strong>Use JPG at 85% quality.</strong> Every platform recompresses uploads, so
+          starting with WebP or AVIF offers no advantage. JPG at 85% is the sweet spot —
+          small enough to upload quickly, high enough quality to survive platform
+          recompression.
+        </p>
+
+        <h3>For email</h3>
+        <p>
+          <strong>Use JPG always.</strong> Email client support for WebP and AVIF is
+          inconsistent. JPG works in every email client ever made.
+        </p>
+
+        <h3>For web performance perfectionists</h3>
+        <p>
+          Serve AVIF to browsers that support it, WebP to those that don't, and JPG as
+          final fallback. This requires proper <code>&lt;picture&gt;</code> element setup
+          but delivers the smallest possible payload to every visitor.
+        </p>
+
+        <h3>Resize before choosing format</h3>
+        <p>
+          The single biggest image optimization is <strong>sizing correctly</strong>. A
+          4000×3000px photo displayed at 800×600px on your website wastes 95% of its
+          pixels. Resize first using our <a href="/image/image-resizer/">Image Resizer</a>,
+          then choose format. This alone can reduce file size by 80-90%.
+        </p>
+      </section>
+
+      <section id="convert">
+        <h2>How to convert between image formats</h2>
+        <p>
+          Our image tools handle all common conversions in your browser — files never leave
+          your device:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Conversion</th>
+                <th>Tool</th>
+                <th>Common use case</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>HEIC → JPG</td>
+                <td><a href="/image/heic-to-jpg/">HEIC to JPG</a></td>
+                <td>Share iPhone photos with Windows/Android</td>
+              </tr>
+              <tr>
+                <td>WebP → JPG</td>
+                <td><a href="/image/webp-to-jpg/">WebP to JPG</a></td>
+                <td>Email or document embedding</td>
+              </tr>
+              <tr>
+                <td>AVIF → JPG</td>
+                <td><a href="/image/avif-to-jpg/">AVIF to JPG</a></td>
+                <td>Universal compatibility from next-gen format</td>
+              </tr>
+              <tr>
+                <td>SVG → PNG</td>
+                <td><a href="/image/svg-to-png/">SVG to PNG</a></td>
+                <td>Rasterize vectors for non-SVG platforms</td>
+              </tr>
+              <tr>
+                <td>Any → Compressed</td>
+                <td><a href="/image/image-compressor/">Image Compressor</a></td>
+                <td>Reduce file size while keeping format</td>
+              </tr>
+              <tr>
+                <td>Any → Resized</td>
+                <td><a href="/image/image-resizer/">Image Resizer</a></td>
+                <td>Correct dimensions for web or print</td>
+              </tr>
+              <tr>
+                <td>Any → Favicon</td>
+                <td><a href="/image/favicon-generator/">Favicon Generator</a></td>
+                <td>Create multi-size ICO for websites</td>
+              </tr>
+              <tr>
+                <td>Any → Base64</td>
+                <td><a href="/image/image-to-base64/">Image to Base64</a></td>
+                <td>Embed images directly in HTML/CSS</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+          <h3>What is the best image format for websites in 2026?</h3>
+          <p>
+            WebP is the best default choice. It offers 25-35% smaller files than JPG
+            with equal quality and 97%+ browser support. For maximum compression, AVIF
+            is even better (50% smaller than JPG) but has slightly lower support at 93%.
+            Use SVG for logos and icons. Use PNG only for screenshots and images requiring
+            transparency with sharp edges.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Is WebP better than JPG?</h3>
+          <p>
+            For web use, yes. WebP produces 25-35% smaller files at the same visual
+            quality, supports transparency and animation, and has 97% browser support.
+            JPG remains better for email, documents, and situations requiring universal
+            compatibility. Convert between them with our
+            <a href="/image/webp-to-jpg/">WebP to JPG</a> tool.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Should I convert all my website images to AVIF?</h3>
+          <p>
+            Not exclusively. AVIF has 93% browser support, so you'd need a fallback format
+            for the remaining 7%. The ideal setup is AVIF primary with WebP fallback using
+            the HTML picture element. If that's too complex, WebP alone covers 97% and is
+            simpler to implement.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Does image format affect SEO?</h3>
+          <p>
+            Indirectly, yes. Google uses page speed as a ranking factor. Smaller images
+            (WebP/AVIF vs JPG) mean faster pages, better Core Web Vitals scores, and
+            potentially higher rankings. Google also recommends WebP in their PageSpeed
+            Insights tool. Using modern formats signals a well-optimized site.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can I use WebP for printing?</h3>
+          <p>
+            Not recommended. Most print workflows expect JPG, PNG, or TIFF. WebP is
+            designed for screen display, not print. Convert to JPG or PNG before sending
+            to a print service.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What image format does Instagram use?</h3>
+          <p>
+            Instagram recompresses all uploads to JPG regardless of what you upload. Upload
+            JPG at 85%+ quality for best results. Uploading WebP or PNG doesn't help —
+            Instagram converts everything to JPG internally.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How do I make images load faster on my website?</h3>
+          <p>
+            Three steps: (1) Resize to the actual display dimensions — don't serve 4000px
+            images in 800px containers. Use our
+            <a href="/image/image-resizer/">Image Resizer</a>. (2) Choose the right format
+            (WebP for photos, SVG for icons). (3) Compress at 75-85% quality using our
+            <a href="/image/image-compressor/">Image Compressor</a>. These three steps
+            typically reduce total image weight by 70-90%.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What is a favicon and what format should it be?</h3>
+          <p>
+            A favicon is the small icon that appears in browser tabs, bookmarks, and search
+            results. Traditionally ICO format (multi-size container), modern sites also use
+            PNG or SVG. Our <a href="/image/favicon-generator/">Favicon Generator</a>
+            creates ICO files with multiple sizes from any image.
+          </p>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <h2>Convert and optimize your images now</h2>
+        <p>
+          All 8 image tools run in your browser. No uploads, no signups, no limits.
+        </p>
+        <div class="cta-buttons">
+          <a href="/image/" class="btn btn-lg">
+            → Browse All Image Tools
+          </a>
+          <a href="/image/image-compressor/" class="btn btn-lg btn-secondary">
+            → Compress Images
+          </a>
+        </div>
+      </section>
+
+      <section class="related">
+        <h2>Related Image Tools & Guides</h2>
+        <ul>
+          <li><a href="/image/heic-to-jpg/">HEIC to JPG Converter</a></li>
+          <li><a href="/image/webp-to-jpg/">WebP to JPG Converter</a></li>
+          <li><a href="/image/avif-to-jpg/">AVIF to JPG Converter</a></li>
+          <li><a href="/image/svg-to-png/">SVG to PNG Converter</a></li>
+          <li><a href="/image/image-compressor/">Image Compressor</a></li>
+          <li><a href="/image/image-resizer/">Image Resizer</a></li>
+          <li><a href="/image/favicon-generator/">Favicon Generator</a></li>
+          <li><a href="/image/image-to-base64/">Image to Base64 Encoder</a></li>
+          <li><a href="/blog/heic-vs-jpg/">HEIC vs JPG: Complete Comparison</a></li>
+          <li><a href="/blog/open-heic-windows-11/">How to Open HEIC on Windows 11</a></li>
+          <li><a href="/blog/convert-iphone-photos-to-jpg/">Convert iPhone Photos to JPG</a></li>
+        </ul>
+      </section>
+
+    </div>
+  </article>
+
+  <style>
+    .article { padding: 40px 0 60px; }
+    .article .container { max-width: 760px; }
+
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .article-header { margin-bottom: 32px; }
+    .article-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .article-meta .cat {
+      color: var(--blue);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      font-size: 11px;
+    }
+    .article h1 { font-size: 38px; line-height: 1.2; margin-bottom: 18px; }
+    .lede { font-size: 19px; color: var(--text-muted); line-height: 1.6; }
+
+    .toc {
+      padding: 20px 24px;
+      margin: 32px 0;
+    }
+    .toc strong { display: block; margin-bottom: 10px; }
+    .toc ul { list-style: none; padding: 0; }
+    .toc li { margin-bottom: 6px; font-size: 14px; }
+    .toc a { color: var(--blue); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    .article h2 {
+      font-size: 28px;
+      margin-top: 48px;
+      margin-bottom: 16px;
+    }
+    .article h3 {
+      font-size: 20px;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+    .article p, .article ul, .article ol {
+      font-size: 16px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .article ul, .article ol { padding-left: 24px; }
+    .article li { margin-bottom: 6px; }
+    .article a:not(.btn) { color: var(--blue); text-decoration: underline; }
+    .article strong { font-weight: 700; }
+
+    .callout {
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 15px;
+    }
+    [data-theme="dark"] .callout { background: rgba(0, 102, 255, .1); }
+
+    .table-wrap { overflow-x: auto; margin: 20px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td {
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--gray-100);
+      font-weight: 700;
+    }
+
+    code {
+      background: var(--gray-100);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    .faq-item {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item h3 { font-size: 17px; margin-bottom: 8px; }
+    .faq-item p { font-size: 15px; margin-bottom: 0; }
+
+    .cta-section {
+      background: linear-gradient(135deg, var(--blue-light), #fff);
+      border: 1px solid var(--blue-light);
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      margin: 48px 0;
+    }
+    [data-theme="dark"] .cta-section {
+      background: linear-gradient(135deg, rgba(0, 102, 255, .1), transparent);
+      border-color: rgba(0, 102, 255, .2);
+    }
+    .cta-section h2 { margin-top: 0; }
+    .cta-section p { margin-bottom: 24px; }
+    .cta-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--blue);
+      color: var(--blue);
+    }
+    .btn-secondary:hover {
+      background: var(--blue-light);
+    }
+
+    .related h2 { font-size: 22px; }
+    .related ul { list-style: none; padding: 0; }
+    .related li { margin-bottom: 10px; }
+  </style>
+</MainLayout>
