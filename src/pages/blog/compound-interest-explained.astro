@@ -1,0 +1,731 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const title = "Compound Interest Explained: Formula, Examples & Calculator (2026)";
+const description = "Understand compound interest with simple formulas, worked examples in Indian Rupees, and the magic of compounding. Includes daily, monthly, and annual compounding explained.";
+const publishDate = "2026-04-18";
+const lastUpdated = "2026-04-18";
+---
+
+<MainLayout
+  title={`${title} | DoItSwift`}
+  description={description}
+  keywords="compound interest, compound interest formula, compound interest calculator, simple vs compound interest, rule of 72, compounding, compound interest india, fd interest calculation"
+  canonical="https://doitswift.com/blog/compound-interest-explained/"
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": lastUpdated,
+    "author": { "@type": "Organization", "name": "DoItSwift" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "DoItSwift",
+      "logo": { "@type": "ImageObject", "url": "https://doitswift.com/og-default.svg" }
+    },
+    "mainEntityOfPage": "https://doitswift.com/blog/compound-interest-explained/"
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the formula for compound interest?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The compound interest formula is A = P × (1 + r/n)^(n×t), where A is the final amount, P is the principal, r is the annual interest rate (as a decimal), n is the number of times interest compounds per year, and t is the time in years. Compound Interest = A − P."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between simple and compound interest?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Simple interest is calculated only on the original principal. Compound interest is calculated on the principal plus all accumulated interest, so your money grows faster. Over long periods, compound interest produces dramatically larger returns than simple interest."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does compounding frequency affect returns?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The more frequently interest compounds, the higher the final amount. For ₹1,00,000 at 8% over 10 years: annual compounding gives ₹2,15,892; monthly gives ₹2,21,964; daily gives ₹2,22,535. The difference grows with longer time periods and higher rates."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the Rule of 72?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Rule of 72 is a quick mental shortcut: divide 72 by the annual interest rate to estimate how many years it takes for money to double. At 8% interest, money doubles in about 72÷8 = 9 years. At 12%, it doubles in about 6 years. The rule works best for rates between 6-10%."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why is compound interest called the eighth wonder of the world?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The phrase is widely attributed to Albert Einstein and refers to how compound interest creates exponential growth over time. Small amounts invested early can grow into substantial wealth because interest earns interest, and that interest earns more interest — a snowball effect that becomes powerful over decades."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is FD interest in India compounded?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Most bank Fixed Deposits in India compound interest quarterly (every 3 months). Some banks offer monthly or annual compounding options. The interest is reinvested into the FD, increasing the effective yield slightly above the stated rate."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does compound interest apply to mutual funds and SIPs?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Mutual funds don't pay traditional compound interest, but they benefit from a similar effect through compounding returns. When fund returns are reinvested (especially in growth-option funds), gains generate further gains, producing exponential wealth growth — the same mathematical principle as compound interest."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much will ₹10,000 grow in 20 years at 10% interest?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "At 10% annual compounding, ₹10,000 grows to ₹67,275 in 20 years — over 6.7 times your initial investment. This demonstrates the power of long-term compounding: time matters more than the amount you start with."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What investments offer compound interest in India?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Fixed Deposits (FDs), Recurring Deposits (RDs), Public Provident Fund (PPF), National Pension System (NPS), Employees' Provident Fund (EPF), and Sukanya Samriddhi Yojana all offer compound interest. Equity mutual funds and stocks compound through reinvested returns rather than fixed interest."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I calculate compound interest quickly?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The fastest way is to use a compound interest calculator. Enter your principal, interest rate, time period, and compounding frequency to get the final amount and total interest earned. DoItSwift's free compound interest calculator handles all common compounding intervals instantly."
+        }
+      }
+    ]
+  })} />
+
+  <article class="article">
+    <div class="container">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> › <a href="/blog/">Blog</a> › <span>Compound Interest Explained</span>
+      </nav>
+
+      <header class="article-header">
+        <div class="article-meta">
+          <span class="cat">Finance</span>
+          <time>Updated April 18, 2026</time>
+          <span>· 10 min read</span>
+        </div>
+        <h1>Compound Interest Explained: Formula, Examples & Calculator</h1>
+        <p class="lede">
+          Albert Einstein reportedly called compound interest the "eighth wonder of the world." Whether or not he actually said it, the math is real: small amounts invested early can become extraordinary sums over time. This guide explains exactly how compound interest works — the formula, the difference from simple interest, how compounding frequency matters, and how to use it to plan your wealth in Indian Rupees.
+        </p>
+      </header>
+
+      <div class="toc card">
+        <strong>In this guide:</strong>
+        <ul>
+          <li><a href="#what-is-compound-interest">What Is Compound Interest?</a></li>
+          <li><a href="#formula">The Compound Interest Formula</a></li>
+          <li><a href="#simple-vs-compound">Simple vs Compound Interest</a></li>
+          <li><a href="#compounding-frequency">Compounding Frequency: Annual vs Monthly vs Daily</a></li>
+          <li><a href="#worked-examples">Worked Examples in Indian Rupees</a></li>
+          <li><a href="#rule-of-72">The Rule of 72: A Mental Shortcut</a></li>
+          <li><a href="#real-investments">Compound Interest in Real Indian Investments</a></li>
+          <li><a href="#start-early">Why Starting Early Is Everything</a></li>
+          <li><a href="#mistakes">Common Mistakes to Avoid</a></li>
+          <li><a href="#faq">Frequently Asked Questions</a></li>
+        </ul>
+      </div>
+
+      <div class="callout">
+        <strong>🎯 Calculate compound interest in seconds:</strong>
+        See exactly how your money grows with daily, monthly, or annual compounding. <a href="/calculator/compound-interest/">Open Compound Interest Calculator</a>.
+      </div>
+
+      <section id="what-is-compound-interest">
+        <h2>What Is Compound Interest?</h2>
+        <p>
+          Compound interest is interest that earns more interest. Unlike simple interest — which is calculated only on your original deposit — compound interest is calculated on the original deposit <em>plus</em> all the interest it has already earned.
+        </p>
+        <p>
+          Think of it like a snowball rolling downhill. As it rolls, it picks up more snow. The bigger it gets, the more snow it picks up with each rotation. Compound interest works the same way with your money: every interest payment becomes part of the principal that earns the next interest payment.
+        </p>
+        <p>
+          This is why a ₹1 lakh investment growing at 10% per year doesn't simply double to ₹2 lakh in 10 years — it actually grows to about <strong>₹2.59 lakh</strong>. That extra ₹59,000 is the magic of compounding.
+        </p>
+      </section>
+
+      <section id="formula">
+        <h2>The Compound Interest Formula</h2>
+        <p>The standard formula for compound interest is:</p>
+
+        <div class="callout formula-callout">
+          <p><strong>A = P × (1 + r/n)<sup>n×t</sup></strong></p>
+          <p><strong>Compound Interest = A − P</strong></p>
+        </div>
+
+        <p>Where:</p>
+        <ul>
+          <li><strong>A</strong> = Final amount (principal + interest)</li>
+          <li><strong>P</strong> = Principal (initial investment)</li>
+          <li><strong>r</strong> = Annual interest rate (as a decimal — so 8% = 0.08)</li>
+          <li><strong>n</strong> = Number of times interest compounds per year</li>
+          <li><strong>t</strong> = Time in years</li>
+        </ul>
+
+        <h3>Common Values for "n"</h3>
+        <ul>
+          <li>Annually: n = 1</li>
+          <li>Half-yearly: n = 2</li>
+          <li>Quarterly: n = 4 (most Indian FDs use this)</li>
+          <li>Monthly: n = 12</li>
+          <li>Daily: n = 365</li>
+        </ul>
+
+        <p>
+          Don't worry if the formula looks intimidating — our <a href="/calculator/compound-interest/">free compound interest calculator</a> handles all the math instantly.
+        </p>
+      </section>
+
+      <section id="simple-vs-compound">
+        <h2>Simple vs Compound Interest: The Difference</h2>
+        <p>
+          Both interest types use the same inputs (principal, rate, time), but the math diverges sharply over the long term.
+        </p>
+
+        <h3>Simple Interest Formula</h3>
+        <div class="callout formula-callout">
+          <p><strong>SI = P × r × t</strong></p>
+          <p>(Interest is only on the original principal, every year.)</p>
+        </div>
+
+        <h3>Side-by-Side Comparison</h3>
+        <p>
+          Imagine investing <strong>₹1,00,000 at 10% annual rate for 20 years</strong>. Here's how the two methods compare:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Years</th>
+                <th>Simple Interest Total</th>
+                <th>Compound Interest Total</th>
+                <th>Difference</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>5 years</td>
+                <td>₹1,50,000</td>
+                <td>₹1,61,051</td>
+                <td>₹11,051</td>
+              </tr>
+              <tr>
+                <td>10 years</td>
+                <td>₹2,00,000</td>
+                <td>₹2,59,374</td>
+                <td>₹59,374</td>
+              </tr>
+              <tr>
+                <td>15 years</td>
+                <td>₹2,50,000</td>
+                <td>₹4,17,725</td>
+                <td>₹1,67,725</td>
+              </tr>
+              <tr>
+                <td>20 years</td>
+                <td>₹3,00,000</td>
+                <td>₹6,72,750</td>
+                <td>₹3,72,750</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          After 20 years, compound interest delivers more than <strong>twice</strong> as much as simple interest. This is why long-term investors care so much about compounding — the gap widens dramatically with time.
+        </p>
+      </section>
+
+      <section id="compounding-frequency">
+        <h2>Compounding Frequency: Why It Matters</h2>
+        <p>
+          The more often interest compounds, the more you earn. Here's the same ₹1,00,000 investment at 8% for 10 years, with different compounding frequencies:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Compounding Frequency</th>
+                <th>Final Amount</th>
+                <th>Interest Earned</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Annually (n=1)</td>
+                <td>₹2,15,892</td>
+                <td>₹1,15,892</td>
+              </tr>
+              <tr>
+                <td>Half-yearly (n=2)</td>
+                <td>₹2,19,112</td>
+                <td>₹1,19,112</td>
+              </tr>
+              <tr>
+                <td>Quarterly (n=4)</td>
+                <td>₹2,20,804</td>
+                <td>₹1,20,804</td>
+              </tr>
+              <tr>
+                <td>Monthly (n=12)</td>
+                <td>₹2,21,964</td>
+                <td>₹1,21,964</td>
+              </tr>
+              <tr>
+                <td>Daily (n=365)</td>
+                <td>₹2,22,535</td>
+                <td>₹1,22,535</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Notice how the difference between monthly and daily is small (~₹571), but the difference between annual and daily is meaningful (₹6,643). This matters when comparing investment products: an FD that compounds quarterly will yield slightly more than one that compounds annually at the same nominal rate.
+        </p>
+
+        <p>
+          Always check the <strong>effective annual yield</strong> (sometimes called effective rate or APY), not just the headline rate.
+        </p>
+      </section>
+
+      <section id="worked-examples">
+        <h2>Worked Examples in Indian Rupees</h2>
+
+        <h3>Example 1: PPF Investment</h3>
+        <p>
+          You invest <strong>₹1,50,000 per year</strong> in PPF (currently ~7.1% annual compounding) for the full 15-year lock-in period. Using the compound formula on each year's contribution and summing:
+        </p>
+        <ul>
+          <li>Total contributed: ₹22,50,000</li>
+          <li>Maturity value: approximately <strong>₹40,68,000</strong></li>
+          <li>Interest earned: about ₹18,18,000 — almost as much as you put in</li>
+        </ul>
+
+        <h3>Example 2: FD vs RD</h3>
+        <p>You compare two options for ₹1,20,000 over 5 years at 7% interest:</p>
+        <ul>
+          <li><strong>Lumpsum FD</strong> (₹1,20,000 once, quarterly compounding): grows to ₹1,69,830</li>
+          <li><strong>RD</strong> (₹2,000/month for 60 months, quarterly compounding): grows to about ₹1,43,500</li>
+        </ul>
+        <p>
+          The lumpsum wins because every rupee compounds for the full 5 years. In the RD, your last installment compounds for only 1 month.
+        </p>
+
+        <h3>Example 3: The 30-Year Investor</h3>
+        <p>
+          Two friends invest in equity mutual funds expected to return 12% annually:
+        </p>
+        <ul>
+          <li><strong>Priya</strong> invests ₹5,000/month from age 25 to age 35 (10 years), then stops</li>
+          <li><strong>Rohan</strong> waits, then invests ₹5,000/month from age 35 to age 60 (25 years)</li>
+        </ul>
+        <p>By age 60:</p>
+        <ul>
+          <li>Priya invested ₹6,00,000 total → corpus grows to about <strong>₹1,02,00,000</strong></li>
+          <li>Rohan invested ₹15,00,000 total → corpus grows to about <strong>₹95,00,000</strong></li>
+        </ul>
+        <p>
+          Priya invested less than half as much as Rohan, but ends up with more — because her early investments had 35 years to compound. <strong>Time matters more than amount.</strong>
+        </p>
+
+        <div class="callout">
+          <strong>🎯 Run your own scenarios:</strong>
+          Plug in your numbers with our <a href="/calculator/compound-interest/">compound interest calculator</a> — see how compounding multiplies your wealth.
+        </div>
+      </section>
+
+      <section id="rule-of-72">
+        <h2>The Rule of 72: A Mental Shortcut</h2>
+        <p>
+          The Rule of 72 is a back-of-the-envelope trick to estimate how long it takes your money to <strong>double</strong> at a given annual return:
+        </p>
+
+        <div class="callout formula-callout">
+          <p><strong>Years to double = 72 ÷ Annual interest rate (%)</strong></p>
+        </div>
+
+        <h3>Quick Examples</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Annual Return</th>
+                <th>Years to Double</th>
+                <th>Typical Investment</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>4%</td>
+                <td>18 years</td>
+                <td>Savings account</td>
+              </tr>
+              <tr>
+                <td>6%</td>
+                <td>12 years</td>
+                <td>Conservative debt fund</td>
+              </tr>
+              <tr>
+                <td>8%</td>
+                <td>9 years</td>
+                <td>FD / PPF / hybrid fund</td>
+              </tr>
+              <tr>
+                <td>10%</td>
+                <td>7.2 years</td>
+                <td>Balanced equity fund</td>
+              </tr>
+              <tr>
+                <td>12%</td>
+                <td>6 years</td>
+                <td>Equity mutual fund (long-term avg)</td>
+              </tr>
+              <tr>
+                <td>15%</td>
+                <td>4.8 years</td>
+                <td>Aggressive equity (best case)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          At 12% returns, ₹1 lakh becomes ₹2 lakh in 6 years, ₹4 lakh in 12 years, ₹8 lakh in 18 years, and ₹16 lakh in 24 years. This is why equity SIPs over 20-25 years can produce life-changing wealth.
+        </p>
+      </section>
+
+      <section id="real-investments">
+        <h2>Compound Interest in Real Indian Investments</h2>
+        <p>Most popular Indian investment products use compound interest in some form:</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Investment</th>
+                <th>Compounding</th>
+                <th>Typical Returns</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Bank FD</td>
+                <td>Quarterly</td>
+                <td>6-7.5%</td>
+              </tr>
+              <tr>
+                <td>Recurring Deposit (RD)</td>
+                <td>Quarterly</td>
+                <td>6-7.5%</td>
+              </tr>
+              <tr>
+                <td>PPF</td>
+                <td>Annually</td>
+                <td>~7.1%</td>
+              </tr>
+              <tr>
+                <td>NSC</td>
+                <td>Annually (paid at maturity)</td>
+                <td>~7.7%</td>
+              </tr>
+              <tr>
+                <td>EPF</td>
+                <td>Annually</td>
+                <td>~8.25%</td>
+              </tr>
+              <tr>
+                <td>Sukanya Samriddhi Yojana</td>
+                <td>Annually</td>
+                <td>~8.2%</td>
+              </tr>
+              <tr>
+                <td>Equity mutual funds</td>
+                <td>Daily NAV growth (compounding effect)</td>
+                <td>10-14% (long-term avg)</td>
+              </tr>
+              <tr>
+                <td>NPS (equity portion)</td>
+                <td>Daily NAV (compounding effect)</td>
+                <td>9-12%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p><em>Returns are indicative and can change. Check current rates before investing.</em></p>
+
+        <p>
+          Mutual funds don't pay traditional "interest," but their returns compound the same way: gains generate further gains, especially in growth-option funds where dividends are reinvested instead of paid out.
+        </p>
+      </section>
+
+      <section id="start-early">
+        <h2>Why Starting Early Is Everything</h2>
+        <p>
+          Every financial advisor will tell you the same thing: <strong>the earlier you start, the less you need to invest.</strong> Here's why:
+        </p>
+
+        <p>
+          Goal: ₹1 crore by age 60, assuming 12% annual returns from equity SIPs.
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Start Age</th>
+                <th>Years Until 60</th>
+                <th>Required Monthly SIP</th>
+                <th>Total Invested</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>25</td>
+                <td>35</td>
+                <td>₹1,550</td>
+                <td>₹6,51,000</td>
+              </tr>
+              <tr>
+                <td>30</td>
+                <td>30</td>
+                <td>₹2,860</td>
+                <td>₹10,30,000</td>
+              </tr>
+              <tr>
+                <td>35</td>
+                <td>25</td>
+                <td>₹5,300</td>
+                <td>₹15,90,000</td>
+              </tr>
+              <tr>
+                <td>40</td>
+                <td>20</td>
+                <td>₹10,000</td>
+                <td>₹24,00,000</td>
+              </tr>
+              <tr>
+                <td>45</td>
+                <td>15</td>
+                <td>₹19,800</td>
+                <td>₹35,64,000</td>
+              </tr>
+              <tr>
+                <td>50</td>
+                <td>10</td>
+                <td>₹43,000</td>
+                <td>₹51,60,000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Starting at 25 vs. 50: you need just <strong>1/27th</strong> the monthly amount, and contribute about <strong>1/8th</strong> as much in total. The other 7/8ths comes from compounding doing its work over the extra 25 years.
+        </p>
+
+        <p>
+          This is why financial planners universally recommend: start an SIP today, even a tiny one. Even ₹500/month compounding for 35 years at 12% becomes about <strong>₹32 lakh</strong>.
+        </p>
+      </section>
+
+      <section id="mistakes">
+        <h2>Common Mistakes to Avoid</h2>
+
+        <h3>1. Confusing Nominal Rate with Effective Yield</h3>
+        <p>
+          A 7% FD compounding quarterly has an <em>effective</em> yield of about 7.19%. Always compare the effective rate, not just the headline.
+        </p>
+
+        <h3>2. Ignoring Inflation</h3>
+        <p>
+          If your investment returns 7% but inflation is 6%, your <strong>real</strong> return is only 1%. Compound interest works against you here too — inflation compounds and silently erodes purchasing power.
+        </p>
+
+        <h3>3. Withdrawing Early</h3>
+        <p>
+          Compounding's magic is concentrated in the <em>final</em> years. Pulling money out early — say, breaking a 15-year PPF after 8 years — kills the steepest part of the growth curve.
+        </p>
+
+        <h3>4. Forgetting Taxes</h3>
+        <p>
+          FD interest is fully taxable per your slab. PPF and EPF are tax-free. Equity LTCG is taxed at 12.5% above ₹1.25 lakh per year. Post-tax returns are what really compound for you.
+        </p>
+
+        <h3>5. Chasing Higher Returns Without Understanding Risk</h3>
+        <p>
+          A 15% return scheme that fails wipes out years of compounding. Stick to proven instruments — diversified equity funds, PPF, EPF — and let time do the heavy lifting.
+        </p>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+          <h3>What is the formula for compound interest?</h3>
+          <p>The formula is <strong>A = P × (1 + r/n)<sup>n×t</sup></strong>, where A is the final amount, P is principal, r is the annual rate (as a decimal), n is compounding frequency per year, and t is years. Compound interest = A − P. Use our <a href="/calculator/compound-interest/">calculator</a> to skip the math.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What is the difference between simple and compound interest?</h3>
+          <p>Simple interest is calculated only on the original principal each year. Compound interest is calculated on the principal plus all previously earned interest, so it grows exponentially. Over 20+ years, compound interest can yield 2-3× more than simple interest.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How does compounding frequency affect returns?</h3>
+          <p>More frequent compounding means more interest. ₹1 lakh at 8% for 10 years grows to ₹2,15,892 with annual compounding but ₹2,22,535 with daily compounding. The difference is small for short periods but meaningful over decades.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What is the Rule of 72?</h3>
+          <p>The Rule of 72 estimates how long money takes to double: divide 72 by the interest rate. At 8%, money doubles in 9 years. At 12%, in 6 years. It's a quick mental shortcut — accurate for rates between 6-10%.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Why is compound interest called the eighth wonder of the world?</h3>
+          <p>The phrase, attributed (probably apocryphally) to Albert Einstein, refers to compounding's exponential growth. Small early investments can become massive sums because interest earns interest, and that interest earns more interest — a snowball that becomes unstoppable over decades.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Is FD interest in India compounded?</h3>
+          <p>Yes. Most Indian bank FDs compound quarterly. Some banks offer monthly or annual compounding. Quarterly compounding gives a slightly higher effective yield than the headline rate (e.g., 7% nominal becomes ~7.19% effective).</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Does compound interest apply to mutual funds and SIPs?</h3>
+          <p>Mutual funds don't pay traditional interest, but they compound through reinvested returns. In growth-option funds, gains are added to the NAV and generate further gains — mathematically identical to compound interest over long periods.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How much will ₹10,000 grow in 20 years at 10% interest?</h3>
+          <p>With annual compounding, ₹10,000 at 10% becomes <strong>₹67,275</strong> in 20 years — a 6.7× growth. This shows the power of long-term compounding even on small amounts.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What investments offer compound interest in India?</h3>
+          <p>Fixed Deposits, Recurring Deposits, PPF, NPS, EPF, Sukanya Samriddhi Yojana, and NSC all offer compound interest. Equity mutual funds and stocks compound through reinvested returns.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How do I calculate compound interest quickly?</h3>
+          <p>Use our <a href="/calculator/compound-interest/">free compound interest calculator</a>. Enter principal, rate, time, and compounding frequency to instantly see the final amount and total interest. No formulas required.</p>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <h2>See Compounding in Action</h2>
+        <p>Try different amounts, rates, and time periods — and watch your wealth grow.</p>
+        <div class="cta-buttons">
+          <a href="/calculator/compound-interest/" class="btn btn-lg">→ Open Compound Interest Calculator</a>
+          <a href="/calculator/sip/" class="btn btn-lg btn-secondary">→ SIP Calculator</a>
+        </div>
+      </section>
+
+      <section class="related">
+        <h2>Related Guides & Calculators</h2>
+        <ul>
+          <li><a href="/calculator/compound-interest/">Compound Interest Calculator — Final amount and interest earned</a></li>
+          <li><a href="/calculator/sip/">SIP Calculator — Monthly investment growth</a></li>
+          <li><a href="/calculator/fd/">FD Calculator — Fixed deposit maturity</a></li>
+          <li><a href="/calculator/lumpsum/">Lumpsum Calculator — One-time investment growth</a></li>
+          <li><a href="/calculator/ppf/">PPF Calculator — Public Provident Fund</a></li>
+          <li><a href="/calculator/rd/">RD Calculator — Recurring deposit</a></li>
+          <li><a href="/calculator/retirement/">Retirement Calculator — Corpus planning</a></li>
+          <li><a href="/calculator/swp/">SWP Calculator — Systematic withdrawal</a></li>
+          <li><a href="/blog/sip-vs-lumpsum/">SIP vs Lumpsum Investment</a></li>
+          <li><a href="/blog/how-much-to-retire-india/">How Much to Retire in India</a></li>
+          <li><a href="/blog/buy-vs-rent-india/">Buy vs Rent in India 2026</a></li>
+          <li><a href="/blog/old-vs-new-tax-regime/">Old vs New Tax Regime FY 2025-26</a></li>
+          <li><a href="/blog/ctc-vs-in-hand-salary/">CTC vs In-Hand Salary Explained</a></li>
+          <li><a href="/blog/how-to-calculate-percentage/">How to Calculate Percentage</a></li>
+        </ul>
+      </section>
+
+    </div>
+  </article>
+
+  <style>
+    .article { padding: 40px 0 60px; }
+    .article .container { max-width: 760px; }
+
+    .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .article-header { margin-bottom: 32px; }
+    .article-meta { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .article-meta .cat { color: var(--blue); font-weight: 700; text-transform: uppercase; letter-spacing: .5px; font-size: 11px; }
+    .article h1 { font-size: 38px; line-height: 1.2; margin-bottom: 18px; }
+    .lede { font-size: 19px; color: var(--text-muted); line-height: 1.6; }
+
+    .toc { padding: 20px 24px; margin: 32px 0; }
+    .toc strong { display: block; margin-bottom: 10px; }
+    .toc ul { list-style: none; padding: 0; }
+    .toc li { margin-bottom: 6px; font-size: 14px; }
+    .toc a { color: var(--blue); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    .article h2 { font-size: 28px; margin-top: 48px; margin-bottom: 16px; }
+    .article h3 { font-size: 20px; margin-top: 24px; margin-bottom: 10px; }
+    .article p, .article ul, .article ol { font-size: 16px; line-height: 1.7; margin-bottom: 16px; color: var(--text); }
+    .article ul, .article ol { padding-left: 24px; }
+    .article li { margin-bottom: 6px; }
+    .article a:not(.btn) { color: var(--blue); text-decoration: underline; }
+    .article strong { font-weight: 700; }
+
+    .callout { background: var(--blue-light); border-left: 4px solid var(--blue); padding: 16px 20px; border-radius: 8px; margin: 20px 0; font-size: 15px; }
+    [data-theme="dark"] .callout { background: rgba(0, 102, 255, .1); }
+
+    .formula-callout { background: #f0fdf4; border-left-color: #16a34a; font-family: 'Courier New', monospace; }
+    [data-theme="dark"] .formula-callout { background: rgba(22, 163, 74, .1); }
+
+    .table-wrap { overflow-x: auto; margin: 20px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+    th { background: var(--gray-100); font-weight: 700; }
+
+    .faq-item { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item h3 { font-size: 17px; margin-bottom: 8px; }
+    .faq-item p { font-size: 15px; margin-bottom: 0; }
+
+    .cta-section { background: linear-gradient(135deg, var(--blue-light), #fff); border: 1px solid var(--blue-light); border-radius: 16px; padding: 40px; text-align: center; margin: 48px 0; }
+    [data-theme="dark"] .cta-section { background: linear-gradient(135deg, rgba(0, 102, 255, .1), transparent); border-color: rgba(0, 102, 255, .2); }
+    .cta-section h2 { margin-top: 0; }
+    .cta-section p { margin-bottom: 24px; }
+    .cta-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-secondary { background: transparent; border: 1px solid var(--blue); color: var(--blue); }
+    .btn-secondary:hover { background: var(--blue-light); }
+
+    .related h2 { font-size: 22px; }
+    .related ul { list-style: none; padding: 0; }
+    .related li { margin-bottom: 10px; }
+  </style>
+</MainLayout>

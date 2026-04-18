@@ -1,0 +1,635 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const title = "GST Calculator: How to Calculate GST on Any Amount (2025-26)";
+const description = "Learn how to calculate GST on any amount instantly. Includes GST formula, tax slab breakdown, HSN codes, CGST vs SGST vs IGST explained, and a free GST calculator for India.";
+const publishDate = "2026-04-18";
+const lastUpdated = "2026-04-18";
+---
+
+<MainLayout
+  title={`${title} | DoItSwift`}
+  description={description}
+  keywords="gst calculator, how to calculate gst, gst formula, gst slabs india, cgst sgst igst, gst rate, gst calculator india, add gst, remove gst"
+  canonical="https://doitswift.com/blog/how-to-calculate-gst/"
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": lastUpdated,
+    "author": { "@type": "Organization", "name": "DoItSwift" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "DoItSwift",
+      "logo": { "@type": "ImageObject", "url": "https://doitswift.com/og-default.svg" }
+    },
+    "mainEntityOfPage": "https://doitswift.com/blog/how-to-calculate-gst/"
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I calculate GST on an amount?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "To add GST: GST Amount = Original Price × GST Rate / 100. Total Price = Original Price + GST Amount. For example, if price is ₹1,000 and GST rate is 18%, then GST = ₹180, and total = ₹1,180."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I remove GST from a GST-inclusive price?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "To extract GST from a GST-inclusive price: Original Price = Total Price × 100 / (100 + GST Rate). GST Amount = Total Price − Original Price. For example, if GST-inclusive price is ₹1,180 at 18% GST, then Original = ₹1,000 and GST = ₹180."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are the GST slabs in India?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "India has four main GST tax slabs: 5% (essential goods like edible oil, sugar, spices, transport), 12% (processed foods, smartphones, business class air travel), 18% (most services, electronics, restaurants), and 28% (luxury goods, automobiles, tobacco, cement). Essential items like fresh food, milk, and eggs are exempt (0%)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between CGST, SGST, and IGST?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "CGST (Central GST) and SGST (State GST) are levied on intra-state transactions, each at half the applicable GST rate. For example, 18% GST becomes 9% CGST + 9% SGST. IGST (Integrated GST) is levied on inter-state transactions at the full GST rate. Importers also pay IGST."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is GST calculated on MRP or selling price?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "GST is generally calculated on the transaction value (selling price or invoice value), not MRP. For most products, the MRP you see on a label is already GST-inclusive, meaning the seller has already factored in the GST."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What items are exempt from GST in India?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Items exempt from GST include fresh fruits and vegetables, milk, eggs, bread, salt, unbranded flour (atta), educational services, healthcare services, and financial services like banking and insurance."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is input tax credit (ITC) in GST?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Input Tax Credit (ITC) allows GST-registered businesses to claim credit for GST paid on purchases used in their business. This prevents the cascading effect of tax-on-tax. Businesses subtract ITC from the GST collected from customers to determine their net GST payable."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Who needs to register for GST?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Businesses with annual turnover exceeding ₹40 lakh (for goods) or ₹20 lakh (for services) must register for GST. In special category states (Northeast, Himachal Pradesh, Jammu & Kashmir, Uttarakhand), the threshold is ₹20 lakh for goods and ₹10 lakh for services. E-commerce sellers must register regardless of turnover."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How is GST different from the old tax system?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Before GST (introduced July 2017), India had multiple taxes: VAT, service tax, excise duty, CST, and more. Each state had different rates, creating complexity. GST replaced all these with a single unified tax system, eliminating cascading taxes, unifying the national market, and simplifying compliance."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use DoItSwift's GST calculator for free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. DoItSwift's GST Calculator is completely free to use. Just enter your amount and select the GST rate (5%, 12%, 18%, or 28%) to instantly get the GST amount and total price — or reverse-calculate the pre-GST price from a GST-inclusive amount."
+        }
+      }
+    ]
+  })} />
+
+  <article class="article">
+    <div class="container">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> › <a href="/blog/">Blog</a> › <span>How to Calculate GST</span>
+      </nav>
+
+      <header class="article-header">
+        <div class="article-meta">
+          <span class="cat">Finance</span>
+          <time>Updated April 18, 2026</time>
+          <span>· 9 min read</span>
+        </div>
+        <h1>GST Calculator: How to Calculate GST on Any Amount (2025-26)</h1>
+        <p class="lede">
+          Whether you're a business owner raising an invoice, a consumer checking your bill, or a student learning about Indian taxation — knowing how to calculate GST is an essential skill. This guide explains the GST formula, all four tax slabs, CGST vs SGST vs IGST, and how to reverse-calculate GST from an inclusive price. Use our free GST calculator to get instant results.
+        </p>
+      </header>
+
+      <div class="toc card">
+        <strong>In this guide:</strong>
+        <ul>
+          <li><a href="#what-is-gst">What Is GST?</a></li>
+          <li><a href="#gst-formula">The GST Formula (Add & Remove GST)</a></li>
+          <li><a href="#gst-slabs">GST Tax Slabs in India (2025-26)</a></li>
+          <li><a href="#cgst-sgst-igst">CGST vs SGST vs IGST Explained</a></li>
+          <li><a href="#gst-examples">Worked Examples</a></li>
+          <li><a href="#exempt-items">GST-Exempt Items</a></li>
+          <li><a href="#itc">Input Tax Credit (ITC)</a></li>
+          <li><a href="#registration">Who Must Register for GST?</a></li>
+          <li><a href="#gst-vs-old">GST vs Old Tax System</a></li>
+          <li><a href="#faq">Frequently Asked Questions</a></li>
+        </ul>
+      </div>
+
+      <div class="callout">
+        <strong>🎯 Calculate GST instantly — free:</strong>
+        Add or remove GST for any amount and rate in seconds. <a href="/calculator/gst/">Open GST Calculator</a>.
+      </div>
+
+      <section id="what-is-gst">
+        <h2>What Is GST?</h2>
+        <p>
+          GST stands for <strong>Goods and Services Tax</strong>. It is a comprehensive, multi-stage, destination-based tax that was introduced in India on <strong>July 1, 2017</strong>, replacing a complex web of central and state taxes including VAT, service tax, excise duty, CST, and others.
+        </p>
+        <p>
+          GST is collected at every stage of the supply chain — from manufacturer to distributor to retailer — but the final tax burden falls on the end consumer. Businesses can claim a refund of GST paid on their purchases (called Input Tax Credit), ensuring that GST is effectively paid only on the value added at each stage.
+        </p>
+        <p>
+          India follows a <strong>dual GST model</strong>: the Centre and State governments both levy tax on goods and services. This is why you see CGST + SGST on most invoices.
+        </p>
+      </section>
+
+      <section id="gst-formula">
+        <h2>The GST Formula: How to Add or Remove GST</h2>
+
+        <h3>Formula 1: Adding GST to a Price (Exclusive → Inclusive)</h3>
+        <p>Use this when you know the base price and want to find the GST amount and total payable:</p>
+
+        <div class="callout formula-callout">
+          <p><strong>GST Amount</strong> = Original Price × GST Rate ÷ 100</p>
+          <p><strong>Total (GST-inclusive) Price</strong> = Original Price + GST Amount</p>
+        </div>
+
+        <h3>Formula 2: Removing GST from a Price (Inclusive → Exclusive)</h3>
+        <p>Use this when the price you see already includes GST and you want to find the original base price:</p>
+
+        <div class="callout formula-callout">
+          <p><strong>Original Price</strong> = GST-inclusive Price × 100 ÷ (100 + GST Rate)</p>
+          <p><strong>GST Amount</strong> = GST-inclusive Price − Original Price</p>
+        </div>
+
+        <p>
+          This reverse calculation is especially useful when reading product MRPs or restaurant bills — in most cases the price shown is GST-inclusive.
+        </p>
+
+        <p>
+          Doing this manually is straightforward for round numbers, but for irregular amounts it's far easier to use our <a href="/calculator/gst/">free GST calculator</a> which handles both directions instantly.
+        </p>
+      </section>
+
+      <section id="gst-slabs">
+        <h2>GST Tax Slabs in India (2025-26)</h2>
+        <p>
+          India has four primary GST tax slabs, plus a zero-rate (exempt) category. Here's what falls under each:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>GST Rate</th>
+                <th>Category</th>
+                <th>Examples</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>0% (Exempt)</strong></td>
+                <td>Essential items, basic necessities</td>
+                <td>Fresh vegetables, milk, eggs, bread, salt, unbranded atta, healthcare services, education</td>
+              </tr>
+              <tr>
+                <td><strong>5%</strong></td>
+                <td>Essential goods & basic services</td>
+                <td>Edible oil, sugar, spices, tea, coffee, economy air/train travel, life-saving drugs</td>
+              </tr>
+              <tr>
+                <td><strong>12%</strong></td>
+                <td>Standard goods & services</td>
+                <td>Processed food, butter, ghee, smartphones, business class air travel, non-AC hotels</td>
+              </tr>
+              <tr>
+                <td><strong>18%</strong></td>
+                <td>Most services & mid-range goods</td>
+                <td>Restaurants (AC), IT services, telecom, electronics, financial services, construction</td>
+              </tr>
+              <tr>
+                <td><strong>28%</strong></td>
+                <td>Luxury & sin goods</td>
+                <td>Automobiles, large ACs, dishwashers, tobacco, cement, casinos, luxury hotels</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          In addition to the 28% GST, some luxury and demerit goods also attract a <strong>Compensation Cess</strong> — for example, cigarettes and large cars carry an additional cess on top of 28% GST.
+        </p>
+
+        <p>
+          If you're unsure which GST rate applies to a specific product or service, you can look it up by its <strong>HSN code</strong> (Harmonized System of Nomenclature for goods) or <strong>SAC code</strong> (Services Accounting Code) on the GST portal.
+        </p>
+      </section>
+
+      <section id="cgst-sgst-igst">
+        <h2>CGST vs SGST vs IGST: What's the Difference?</h2>
+        <p>
+          Because India uses a dual GST structure, the tax is split differently depending on whether the transaction is within a state or across states.
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Tax Type</th>
+                <th>Full Form</th>
+                <th>When Applied</th>
+                <th>Who Gets Revenue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>CGST</strong></td>
+                <td>Central Goods & Services Tax</td>
+                <td>Intra-state transactions (buyer & seller in same state)</td>
+                <td>Central Government</td>
+              </tr>
+              <tr>
+                <td><strong>SGST</strong></td>
+                <td>State Goods & Services Tax</td>
+                <td>Intra-state transactions (buyer & seller in same state)</td>
+                <td>State Government</td>
+              </tr>
+              <tr>
+                <td><strong>IGST</strong></td>
+                <td>Integrated Goods & Services Tax</td>
+                <td>Inter-state transactions; imports</td>
+                <td>Central Govt (then distributed)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>How the Split Works in Practice</h3>
+        <p>
+          For any given GST rate, CGST and SGST are each exactly half:
+        </p>
+        <ul>
+          <li><strong>5% GST</strong> intra-state = 2.5% CGST + 2.5% SGST</li>
+          <li><strong>12% GST</strong> intra-state = 6% CGST + 6% SGST</li>
+          <li><strong>18% GST</strong> intra-state = 9% CGST + 9% SGST</li>
+          <li><strong>28% GST</strong> intra-state = 14% CGST + 14% SGST</li>
+        </ul>
+        <p>
+          For inter-state transactions, only IGST applies at the full rate (e.g., 18% IGST). This is why invoices from sellers in another state show IGST instead of CGST + SGST.
+        </p>
+
+        <p>
+          When filing returns, businesses reconcile ITC from IGST against CGST or SGST liabilities, and vice versa, according to prescribed rules.
+        </p>
+      </section>
+
+      <section id="gst-examples">
+        <h2>Worked Examples: GST Calculations</h2>
+
+        <h3>Example 1: Adding 18% GST to a service invoice</h3>
+        <p>A freelance developer charges ₹50,000 for a web project. The applicable GST rate is 18%.</p>
+        <ul>
+          <li>GST Amount = ₹50,000 × 18 ÷ 100 = <strong>₹9,000</strong></li>
+          <li>Total Invoice = ₹50,000 + ₹9,000 = <strong>₹59,000</strong></li>
+          <li>If intra-state: CGST = ₹4,500 + SGST = ₹4,500</li>
+        </ul>
+
+        <h3>Example 2: Removing 12% GST from a product MRP</h3>
+        <p>A smartphone is priced at ₹22,400 (inclusive of 12% GST). What's the base price and GST?</p>
+        <ul>
+          <li>Original Price = ₹22,400 × 100 ÷ (100 + 12) = ₹22,400 ÷ 1.12 = <strong>₹20,000</strong></li>
+          <li>GST Amount = ₹22,400 − ₹20,000 = <strong>₹2,400</strong></li>
+        </ul>
+
+        <h3>Example 3: Restaurant bill with 5% GST</h3>
+        <p>Your total restaurant bill before tax is ₹1,800. The restaurant charges 5% GST (non-AC, no ITC).</p>
+        <ul>
+          <li>GST Amount = ₹1,800 × 5 ÷ 100 = <strong>₹90</strong></li>
+          <li>Total Payable = ₹1,800 + ₹90 = <strong>₹1,890</strong></li>
+        </ul>
+
+        <h3>Example 4: Car with 28% GST + Cess</h3>
+        <p>A mid-size SUV is priced at ₹12,00,000 (ex-showroom). GST is 28% + 17% cess = 45% effective.</p>
+        <ul>
+          <li>GST = ₹12,00,000 × 28 ÷ 100 = ₹3,36,000</li>
+          <li>Cess = ₹12,00,000 × 17 ÷ 100 = ₹2,04,000</li>
+          <li>Total Tax = <strong>₹5,40,000</strong></li>
+          <li>On-road base = ₹17,40,000 (before RTO, insurance, etc.)</li>
+        </ul>
+
+        <div class="callout">
+          <strong>🎯 Skip the manual math:</strong>
+          Use our <a href="/calculator/gst/">GST calculator</a> — it handles add, remove, and all four slabs.
+        </div>
+      </section>
+
+      <section id="exempt-items">
+        <h2>What Items Are Exempt from GST in India?</h2>
+        <p>
+          Several essential goods and services are fully exempt from GST (zero-rated or nil-rated). These include:
+        </p>
+        <ul>
+          <li><strong>Food staples:</strong> Fresh fruits, vegetables, milk, curd, lassi, eggs, bread, unbranded atta, salt, natural honey</li>
+          <li><strong>Healthcare:</strong> Medical services, hospitals, diagnostic services, life-saving drugs on the government's essential medicines list</li>
+          <li><strong>Education:</strong> School and university education, mid-day meal services</li>
+          <li><strong>Agricultural inputs:</strong> Seeds, fertilisers (many categories), agricultural equipment</li>
+          <li><strong>Financial services:</strong> Most banking and insurance services (though some are taxable)</li>
+          <li><strong>Religious services:</strong> Services by religious institutions</li>
+          <li><strong>Public transport:</strong> Metro rail, local train travel</li>
+        </ul>
+        <p>
+          Note that <em>packaged or branded</em> versions of the above (e.g., branded atta or packaged curd above a certain weight) may attract GST, even if the unbranded or loose version is exempt.
+        </p>
+      </section>
+
+      <section id="itc">
+        <h2>Input Tax Credit (ITC): What It Is and Why It Matters</h2>
+        <p>
+          One of the most powerful features of GST is the <strong>Input Tax Credit (ITC)</strong> mechanism. It allows registered businesses to deduct the GST they've paid on their purchases (inputs) from the GST they collect on their sales (output).
+        </p>
+
+        <h3>How ITC Works</h3>
+        <p>
+          Say you run a furniture business. You purchase raw wood for ₹1,00,000 and pay 12% GST = ₹12,000. You then sell the finished furniture for ₹2,00,000 and collect 12% GST = ₹24,000.
+        </p>
+        <p>
+          Without ITC, you'd pay ₹24,000 as GST. With ITC, you deduct the ₹12,000 already paid and remit only ₹12,000 to the government.
+        </p>
+
+        <h3>Why ITC Matters</h3>
+        <ul>
+          <li>Eliminates the cascading "tax on tax" effect that existed pre-GST</li>
+          <li>Lowers the effective cost of doing business for GST-registered entities</li>
+          <li>Incentivises businesses to transact with registered vendors (to claim ITC)</li>
+          <li>Consumers ultimately pay GST only on the final value-add, not on each stage's tax</li>
+        </ul>
+
+        <p>
+          ITC can only be claimed if the supplier has filed their GST returns and the purchase is used for business purposes. Certain items like personal use expenses, food for employees, and motor vehicles (in most cases) are not eligible for ITC.
+        </p>
+      </section>
+
+      <section id="registration">
+        <h2>Who Must Register for GST?</h2>
+        <p>
+          GST registration is mandatory if your annual turnover exceeds the threshold limits below:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>General States</th>
+                <th>Special Category States*</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Goods (supply)</td>
+                <td>₹40 lakh/year</td>
+                <td>₹20 lakh/year</td>
+              </tr>
+              <tr>
+                <td>Services</td>
+                <td>₹20 lakh/year</td>
+                <td>₹10 lakh/year</td>
+              </tr>
+              <tr>
+                <td>E-commerce sellers</td>
+                <td colspan="2">Mandatory regardless of turnover</td>
+              </tr>
+              <tr>
+                <td>Inter-state suppliers</td>
+                <td colspan="2">Mandatory regardless of turnover</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p><em>*Special category states: Manipur, Mizoram, Nagaland, Tripura, Arunachal Pradesh, Meghalaya, Sikkim, Himachal Pradesh, Uttarakhand, Jammu & Kashmir</em></p>
+
+        <p>
+          Even if your turnover is below the threshold, voluntary GST registration can be beneficial — it allows you to claim ITC and issue tax invoices, which many B2B clients require.
+        </p>
+      </section>
+
+      <section id="gst-vs-old">
+        <h2>GST vs Old Tax System: What Changed?</h2>
+        <p>
+          Before July 2017, India had a fragmented indirect tax system with multiple overlapping levies:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Aspect</th>
+                <th>Pre-GST (Before 2017)</th>
+                <th>Post-GST (After 2017)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Number of taxes</td>
+                <td>15+ central & state taxes (VAT, service tax, excise, CST…)</td>
+                <td>One unified GST (CGST + SGST/IGST)</td>
+              </tr>
+              <tr>
+                <td>Tax on tax (cascading)</td>
+                <td>Yes — taxes were levied on taxes</td>
+                <td>No — ITC eliminates cascading</td>
+              </tr>
+              <tr>
+                <td>Across-state trade</td>
+                <td>Complex, different rates per state</td>
+                <td>Unified IGST, seamless credit</td>
+              </tr>
+              <tr>
+                <td>Compliance</td>
+                <td>Multiple registrations, filings</td>
+                <td>Single registration, GSTN portal</td>
+              </tr>
+              <tr>
+                <td>Transparency</td>
+                <td>Low — hidden taxes in prices</td>
+                <td>High — tax shown separately on invoices</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          GST significantly simplified compliance for most businesses, particularly those operating across multiple states. While implementation had initial challenges, the system has matured considerably and GST collections now regularly cross ₹1.7 lakh crore per month.
+        </p>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+          <h3>How do I calculate GST on an amount?</h3>
+          <p>To add GST: multiply the original price by the GST rate and divide by 100. Add the result to the original price. For example, ₹1,000 at 18% GST = ₹1,000 × 18/100 = ₹180 GST → total ₹1,180. Use our <a href="/calculator/gst/">GST calculator</a> to do this instantly.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How do I remove GST from a GST-inclusive price?</h3>
+          <p>Divide the GST-inclusive price by (1 + GST rate/100). For example, ₹1,180 at 18% GST → ₹1,180 ÷ 1.18 = ₹1,000 original price; GST = ₹180.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What are the GST slabs in India?</h3>
+          <p>India has four main GST slabs: 5% (essential goods), 12% (processed foods, smartphones), 18% (most services, electronics, restaurants), and 28% (luxury goods, automobiles). Many essential items are exempt at 0%.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What is the difference between CGST, SGST, and IGST?</h3>
+          <p>CGST and SGST are levied on intra-state transactions — each at half the total GST rate (e.g., 9% CGST + 9% SGST for 18% GST). IGST is levied on inter-state transactions at the full GST rate.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Is GST calculated on MRP or selling price?</h3>
+          <p>GST is calculated on the transaction value (selling price). For most retail products, the MRP displayed on packaging is already GST-inclusive — the seller has factored in GST when printing the MRP.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What items are exempt from GST in India?</h3>
+          <p>Exempt items include fresh produce (vegetables, fruits, milk, eggs), bread, salt, unbranded flour, education services, hospital and healthcare services, and most banking services.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What is Input Tax Credit (ITC) in GST?</h3>
+          <p>ITC lets GST-registered businesses deduct the GST they paid on their purchases from the GST they collected on sales. This prevents tax-on-tax cascading and lowers the effective tax burden for businesses.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Who needs to register for GST?</h3>
+          <p>Businesses with annual turnover above ₹40 lakh (goods) or ₹20 lakh (services) in general states must register for GST. E-commerce sellers and inter-state suppliers must register regardless of turnover.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How is GST different from the old tax system?</h3>
+          <p>GST replaced 15+ central and state taxes (VAT, service tax, excise, CST, etc.) with a single unified tax. It eliminated cascading taxes, unified state markets, and simplified multi-state compliance significantly.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can I use DoItSwift's GST calculator for free?</h3>
+          <p>Yes — our <a href="/calculator/gst/">GST calculator</a> is completely free. Enter an amount and select a GST rate to instantly calculate GST payable or reverse-calculate the original price from a GST-inclusive amount.</p>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <h2>Calculate GST in Seconds</h2>
+        <p>No sign-up. No ads. No data sent to servers. Just fast, accurate GST calculations.</p>
+        <div class="cta-buttons">
+          <a href="/calculator/gst/" class="btn btn-lg">→ Open GST Calculator</a>
+          <a href="/calculator/income-tax/" class="btn btn-lg btn-secondary">→ Income Tax Calculator</a>
+        </div>
+      </section>
+
+      <section class="related">
+        <h2>Related Guides & Calculators</h2>
+        <ul>
+          <li><a href="/calculator/gst/">GST Calculator — Add or remove GST for any amount</a></li>
+          <li><a href="/calculator/income-tax/">Income Tax Calculator — Estimate tax under old vs new regime</a></li>
+          <li><a href="/calculator/salary/">Salary Calculator — In-hand pay from CTC</a></li>
+          <li><a href="/calculator/emi/">EMI Calculator — Loan EMI and amortization</a></li>
+          <li><a href="/calculator/markup-margin/">Markup & Margin Calculator — Pricing and profit</a></li>
+          <li><a href="/calculator/discount/">Discount Calculator — Sale price and savings</a></li>
+          <li><a href="/calculator/percentage/">Percentage Calculator — Every percentage formula</a></li>
+          <li><a href="/calculator/compound-interest/">Compound Interest Calculator — Growth over time</a></li>
+          <li><a href="/blog/old-vs-new-tax-regime/">Old vs New Tax Regime FY 2025-26 — Which saves more?</a></li>
+          <li><a href="/blog/ctc-vs-in-hand-salary/">CTC vs In-Hand Salary Explained</a></li>
+          <li><a href="/blog/buy-vs-rent-india/">Buy vs Rent in India 2026</a></li>
+          <li><a href="/blog/how-to-calculate-percentage/">How to Calculate Percentage</a></li>
+          <li><a href="/blog/sip-vs-lumpsum/">SIP vs Lumpsum Investment</a></li>
+          <li><a href="/blog/how-much-to-retire-india/">How Much Do You Need to Retire in India?</a></li>
+        </ul>
+      </section>
+
+    </div>
+  </article>
+
+  <style>
+    .article { padding: 40px 0 60px; }
+    .article .container { max-width: 760px; }
+
+    .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .article-header { margin-bottom: 32px; }
+    .article-meta { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .article-meta .cat { color: var(--blue); font-weight: 700; text-transform: uppercase; letter-spacing: .5px; font-size: 11px; }
+    .article h1 { font-size: 38px; line-height: 1.2; margin-bottom: 18px; }
+    .lede { font-size: 19px; color: var(--text-muted); line-height: 1.6; }
+
+    .toc { padding: 20px 24px; margin: 32px 0; }
+    .toc strong { display: block; margin-bottom: 10px; }
+    .toc ul { list-style: none; padding: 0; }
+    .toc li { margin-bottom: 6px; font-size: 14px; }
+    .toc a { color: var(--blue); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    .article h2 { font-size: 28px; margin-top: 48px; margin-bottom: 16px; }
+    .article h3 { font-size: 20px; margin-top: 24px; margin-bottom: 10px; }
+    .article p, .article ul, .article ol { font-size: 16px; line-height: 1.7; margin-bottom: 16px; color: var(--text); }
+    .article ul, .article ol { padding-left: 24px; }
+    .article li { margin-bottom: 6px; }
+    .article a:not(.btn) { color: var(--blue); text-decoration: underline; }
+    .article strong { font-weight: 700; }
+
+    .callout { background: var(--blue-light); border-left: 4px solid var(--blue); padding: 16px 20px; border-radius: 8px; margin: 20px 0; font-size: 15px; }
+    [data-theme="dark"] .callout { background: rgba(0, 102, 255, .1); }
+
+    .formula-callout { background: #f0fdf4; border-left-color: #16a34a; font-family: 'Courier New', monospace; }
+    [data-theme="dark"] .formula-callout { background: rgba(22, 163, 74, .1); }
+
+    .table-wrap { overflow-x: auto; margin: 20px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+    th { background: var(--gray-100); font-weight: 700; }
+
+    .faq-item { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item h3 { font-size: 17px; margin-bottom: 8px; }
+    .faq-item p { font-size: 15px; margin-bottom: 0; }
+
+    .cta-section { background: linear-gradient(135deg, var(--blue-light), #fff); border: 1px solid var(--blue-light); border-radius: 16px; padding: 40px; text-align: center; margin: 48px 0; }
+    [data-theme="dark"] .cta-section { background: linear-gradient(135deg, rgba(0, 102, 255, .1), transparent); border-color: rgba(0, 102, 255, .2); }
+    .cta-section h2 { margin-top: 0; }
+    .cta-section p { margin-bottom: 24px; }
+    .cta-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-secondary { background: transparent; border: 1px solid var(--blue); color: var(--blue); }
+    .btn-secondary:hover { background: var(--blue-light); }
+
+    .related h2 { font-size: 22px; }
+    .related ul { list-style: none; padding: 0; }
+    .related li { margin-bottom: 10px; }
+  </style>
+</MainLayout>
