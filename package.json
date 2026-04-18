@@ -19,7 +19,8 @@
     "normalize:hrefs": "node scripts/normalize-href-trailing-slash.mjs",
     "smoke:preview": "node scripts/smoke-preview.mjs",
     "check:prod-sitemap": "node scripts/check-prod-sitemap.mjs",
-    "verify:deploy": "npm run test:indexing && npm run smoke:preview && npm run check:prod-sitemap"
+    "verify:deploy": "npm run test:indexing && npm run smoke:preview && npm run check:prod-sitemap",
+    "regression": "npm run build && npm run check:links && node scripts/seo-audit.mjs && node scripts/test-calculators.mjs && node scripts/regression-preview.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.2",

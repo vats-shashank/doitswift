@@ -6,6 +6,8 @@ const title = 'How to Open HEIC Files on Windows 11 in 2026 (3 Free Methods)';
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 const description =
   'Three free ways to view and convert HEIC photos from your iPhone on a Windows 11 PC — including a browser option with no install.';
+const publishDate = '2026-04-12';
+const lastUpdated = '2026-04-12';
 ---
 
 <MainLayout
@@ -14,6 +16,32 @@ const description =
   keywords="heic windows 11, open heic, convert heic to jpg, iphone photos pc"
   canonical={canonical}
 >
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": lastUpdated,
+    "author": { "@type": "Organization", "name": "DoItSwift" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "DoItSwift",
+      "logo": { "@type": "ImageObject", "url": "https://doitswift.com/images/doitswift-logo.png" }
+    },
+    "mainEntityOfPage": "https://doitswift.com/blog/open-heic-windows-11/"
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://doitswift.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://doitswift.com/blog/" },
+      { "@type": "ListItem", "position": 3, "name": title, "item": "https://doitswift.com/blog/open-heic-windows-11/" }
+    ]
+  })} />
+
   <article class="content-page blog-post">
     <div class="container">
       <p class="blog-post-breadcrumb">

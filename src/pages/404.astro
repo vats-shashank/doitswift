@@ -6,17 +6,21 @@ import MainLayout from '../layouts/MainLayout.astro';
   title="Page not found — DoItSwift"
   description="The page you requested does not exist or has moved. Return to DoItSwift home or browse our tools."
   keywords="404, page not found, doitswift"
+  noindex
 >
   <section class="not-found">
     <div class="container">
       <p class="not-found-code">404</p>
       <h1>Page not found</h1>
       <p class="not-found-lead">
-        That link may be outdated, or the page was removed. Try the home page or pick a tool below.
+        That link may be outdated, or the page was removed. Try the home page or pick a destination below.
       </p>
       <div class="not-found-actions">
         <a href="/" class="btn btn-lg">← Back to home</a>
         <a href="/image/" class="btn btn-secondary btn-lg">Image tools</a>
+        <a href="/pdf/" class="btn btn-secondary btn-lg">PDF tools</a>
+        <a href="/calculator/" class="btn btn-secondary btn-lg">Calculators</a>
+        <a href="/blog/" class="btn btn-secondary btn-lg">Blog</a>
       </div>
     </div>
   </section>
@@ -51,7 +55,9 @@ import MainLayout from '../layouts/MainLayout.astro';
   .not-found-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px;
     justify-content: center;
+    max-width: 560px;
+    margin: 0 auto;
   }
 </style>

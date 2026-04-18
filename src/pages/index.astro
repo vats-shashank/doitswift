@@ -2,6 +2,30 @@
 // Homepage — DoItSwift
 import MainLayout from '../layouts/MainLayout.astro';
 
+const siteOrigin = Astro.site?.origin ?? 'https://doitswift.com';
+const homeJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${siteOrigin}/#website`,
+      url: `${siteOrigin}/`,
+      name: 'DoItSwift',
+      description:
+        'Free online utility tools in your browser — image and PDF converters, calculators. Privacy-first: file processing stays on your device when tools run locally.',
+      publisher: { '@id': `${siteOrigin}/#organization` },
+      inLanguage: 'en',
+    },
+    {
+      '@type': 'Organization',
+      '@id': `${siteOrigin}/#organization`,
+      name: 'DoItSwift',
+      url: `${siteOrigin}/`,
+      logo: { '@type': 'ImageObject', url: `${siteOrigin}/og-default.svg` },
+    },
+  ],
+};
+
 const categories = [
   {
     emoji: '🖼️',
@@ -27,35 +51,35 @@ const categories = [
   {
     emoji: '📝',
     title: 'Text Tools',
-    href: '#',
+    href: '/pro/',
     live: false,
     desc: 'Word count, case convert, JSON format, Lorem ipsum.',
   },
   {
     emoji: '🎨',
     title: 'Generators',
-    href: '#',
+    href: '/pro/',
     live: false,
     desc: 'QR codes, barcodes, passwords, UUIDs, invoices.',
   },
   {
     emoji: '🔊',
     title: 'Audio Tools',
-    href: '#',
+    href: '/pro/',
     live: false,
     desc: 'Convert audio, trim, extract from video.',
   },
   {
     emoji: '🎬',
     title: 'Video Tools',
-    href: '#',
+    href: '/pro/',
     live: false,
     desc: 'Compress, convert, extract GIFs from video.',
   },
   {
     emoji: '✨',
     title: 'AI Tools',
-    href: '#',
+    href: '/pro/',
     live: false,
     desc: 'Background remove, upscale, text rewrite.',
   },
@@ -82,14 +106,16 @@ const tools = [
   keywords="doitswift, free online tools, browser utilities, image converter, privacy tools, file converter"
   canonical={new URL(Astro.url.pathname, Astro.site).toString()}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(homeJsonLd)} />
   <!-- HERO -->
   <section class="hero">
     <div class="container">
       <div class="badge">🔒 Private by design — your files stay on your device</div>
       <h1>Free online tools. Zero friction.</h1>
       <p class="subtitle">
-        Convert files, compress images, generate codes, and more — all in your browser. No uploads, no signup, no
-        tracking.
+        Convert files, compress images, generate codes, and more — all in your browser. No uploads, no signup. We use
+        aggregated, privacy-friendly analytics (anonymized IPs, no ad trackers); your files are never uploaded for local
+        tools.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> 100% browser-based</span>
@@ -137,7 +163,7 @@ const tools = [
               </div>
             </a>
           ) : (
-            <div class="category-card soon">
+            <a href={cat.href} class="category-card soon">
               <span class="category-icon">{cat.emoji}</span>
               <div class="category-body">
                 <h3>
@@ -146,7 +172,7 @@ const tools = [
                 </h3>
                 <p>{cat.desc}</p>
               </div>
-            </div>
+            </a>
           )
         )}
       </div>
@@ -271,17 +297,17 @@ const tools = [
       let dest = null;
 
       if (name.endsWith('.pdf') || type === 'application/pdf') {
-        dest = '/pdf/compress-pdf';
+        dest = '/pdf/compress-pdf/';
       } else if (name.endsWith('.heic') || name.endsWith('.heif') || type.includes('heic') || type.includes('heif')) {
-        dest = '/image/heic-to-jpg';
+        dest = '/image/heic-to-jpg/';
       } else if (name.endsWith('.webp') || type.includes('webp')) {
-        dest = '/image/webp-to-jpg';
+        dest = '/image/webp-to-jpg/';
       } else if (name.endsWith('.avif') || type.includes('avif')) {
-        dest = '/image/avif-to-jpg';
+        dest = '/image/avif-to-jpg/';
       } else if (name.endsWith('.svg') || type.includes('svg')) {
-        dest = '/image/svg-to-png';
+        dest = '/image/svg-to-png/';
       } else if (type.startsWith('image/')) {
-        dest = '/image/image-compressor';
+        dest = '/image/image-compressor/';
       }
 
       if (dest) {
@@ -419,8 +445,15 @@ const tools = [
     }
     .category-card.soon {
       opacity: 0.6;
-      cursor: not-allowed;
-      pointer-events: auto;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+    .category-card.soon:hover {
+      border-color: rgba(0, 102, 255, 0.35);
+      opacity: 0.88;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
     }
     .category-icon {
       font-size: 42px;

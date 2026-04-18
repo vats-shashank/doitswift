@@ -5,7 +5,7 @@ import MainLayout from '../../layouts/MainLayout.astro';
 const posts = [
   {
     title: 'How to Track Your Period Cycle: A Complete Guide to Understanding Your Menstrual Cycle',
-    href: '/blog/how-to-track-period-cycle',
+    href: '/blog/how-to-track-period-cycle/',
     categoryKey: 'health',
     date: 'April 18, 2026',
     dateIso: '2026-04-18',
@@ -14,7 +14,7 @@ const posts = [
   },
   {
     title: 'How to Convert PDF to JPG: Free Methods That Keep Your Files Private',
-    href: '/blog/how-to-convert-pdf-to-jpg',
+    href: '/blog/how-to-convert-pdf-to-jpg/',
     categoryKey: 'pdf',
     date: 'April 18, 2026',
     dateIso: '2026-04-18',
@@ -23,7 +23,7 @@ const posts = [
   },
   {
     title: 'Best Image Format for Websites in 2026: WebP vs AVIF vs JPG vs PNG (Complete Guide)',
-    href: '/blog/best-image-format-for-web',
+    href: '/blog/best-image-format-for-web/',
     categoryKey: 'image',
     date: 'April 18, 2026',
     dateIso: '2026-04-18',
@@ -32,7 +32,7 @@ const posts = [
   },
   {
     title: 'How to Split a PDF: Extract Pages, Remove Pages, or Break Into Parts (Free)',
-    href: '/blog/how-to-split-pdf',
+    href: '/blog/how-to-split-pdf/',
     categoryKey: 'pdf',
     date: 'April 18, 2026',
     dateIso: '2026-04-18',
@@ -41,7 +41,7 @@ const posts = [
   },
   {
     title: 'How to Merge PDF Files into One: Free Guide (No Upload, No Signup)',
-    href: '/blog/how-to-merge-pdf',
+    href: '/blog/how-to-merge-pdf/',
     categoryKey: 'pdf',
     date: 'April 18, 2026',
     dateIso: '2026-04-18',
@@ -50,7 +50,7 @@ const posts = [
   },
   {
     title: 'How to Compress a PDF Without Losing Quality (Free, No Upload)',
-    href: '/blog/how-to-compress-pdf',
+    href: '/blog/how-to-compress-pdf/',
     categoryKey: 'pdf',
     date: 'April 17, 2026',
     dateIso: '2026-04-17',
@@ -164,40 +164,39 @@ const countBy = (key: CategoryKey | 'all') =>
 
 <MainLayout
   title="Blog — DoItSwift"
-  description="Guides and practical tips on image formats, privacy, and getting the most out of DoItSwift tools."
-  keywords="doitswift blog, image converter tips, heic webp guides"
+  description="Guides on PDF tools, image formats, Indian finance, health calculators, and privacy-first workflows — plus how to get the most from DoItSwift."
+  keywords="doitswift blog, pdf merge split compress, heic webp avif, income tax india, sip retirement, bmi calories health"
   canonical={new URL(Astro.url.pathname, Astro.site).toString()}
 >
   <section class="content-page blog-index">
     <div class="container">
       <h1>Blog</h1>
       <p class="lead">
-        Practical guides on image formats, compression, and privacy-minded workflows. New posts appear here first — no
-        newsletter required.
+        Practical guides on PDFs, images, money, and health — always with a privacy-minded angle. New posts appear here
+        first — no newsletter required.
       </p>
 
       <h2 class="blog-list-heading">Latest posts</h2>
 
-      <div class="blog-filters" role="tablist" aria-label="Filter posts by category">
+      <div class="blog-filters" role="group" aria-label="Filter posts by category">
         <button
           type="button"
           class="blog-filter-btn active"
           data-category="all"
-          role="tab"
-          aria-selected="true"
+          aria-pressed="true"
         >
           All ({countBy('all')})
         </button>
-        <button type="button" class="blog-filter-btn" data-category="finance" role="tab" aria-selected="false">
+        <button type="button" class="blog-filter-btn" data-category="finance" aria-pressed="false">
           Finance ({countBy('finance')})
         </button>
-        <button type="button" class="blog-filter-btn" data-category="health" role="tab" aria-selected="false">
+        <button type="button" class="blog-filter-btn" data-category="health" aria-pressed="false">
           Health ({countBy('health')})
         </button>
-        <button type="button" class="blog-filter-btn" data-category="image" role="tab" aria-selected="false">
+        <button type="button" class="blog-filter-btn" data-category="image" aria-pressed="false">
           Image ({countBy('image')})
         </button>
-        <button type="button" class="blog-filter-btn" data-category="pdf" role="tab" aria-selected="false">
+        <button type="button" class="blog-filter-btn" data-category="pdf" aria-pressed="false">
           PDF ({countBy('pdf')})
         </button>
       </div>
@@ -293,10 +292,10 @@ const countBy = (key: CategoryKey | 'all') =>
           currentPage = 1;
           buttons.forEach((b) => {
             b.classList.remove('active');
-            b.setAttribute('aria-selected', 'false');
+            b.setAttribute('aria-pressed', 'false');
           });
           btn.classList.add('active');
-          btn.setAttribute('aria-selected', 'true');
+          btn.setAttribute('aria-pressed', 'true');
           render();
         });
       });

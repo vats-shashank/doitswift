@@ -11,6 +11,8 @@ export interface Props {
   canonical?: string;
   /** Absolute URL, or site-root path (e.g. `/og-default.svg`) for Open Graph / Twitter image. */
   ogImage?: string;
+  /** Set on error pages so they are not indexed. */
+  noindex?: boolean;
 }
 
 const {
@@ -19,9 +21,18 @@ const {
   keywords = "doitswift, free online tools, browser utilities, privacy tools, file converter",
   canonical: canonicalOverride,
   ogImage: ogImageProp,
+  noindex = false,
 } = Astro.props;
 
 const site = Astro.site;
+const pathname = Astro.url.pathname;
+/** Smart upload handoff: home stores; image tools + compress PDF consume. */
+const needsPendingTransfer =
+  pathname === '/' ||
+  (pathname.startsWith('/image/') && pathname !== '/image/') ||
+  pathname.startsWith('/pdf/compress-pdf');
+/** Batch file UI helpers — only image converter/resizer tool pages. */
+const needsFileResultsUI = pathname.startsWith('/image/') && pathname !== '/image/';
 /** Match `trailingSlash: 'always'` so canonical/og:url never omit the final slash. */
 function canonicalPath(pathname) {
   if (!pathname || pathname === '/') return '/';
@@ -49,6 +60,7 @@ const ogImageUrl =
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />
     <meta name="google-site-verification" content="DDpsnvcRpXDogWCo46v_orLn42QJ_2Xlw3_mopO1LmA" />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     {canonical && <link rel="canonical" href={canonical} />}
     {canonical && <meta property="og:url" content={canonical} />}
     <meta property="og:title" content={title} />
@@ -65,15 +77,9 @@ const ogImageUrl =
       </>
     )}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
     <link rel="stylesheet" href="/styles/global.css" />
-    <script src="/pending-transfer.js" defer></script>
-    <script src="/js/file-results-ui.js" defer></script>
+    {needsPendingTransfer && <script src="/pending-transfer.js" defer />}
+    {needsFileResultsUI && <script src="/js/file-results-ui.js" defer />}
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-HFRCW0V7Y1"></script>
     <script is:inline>
@@ -87,6 +93,7 @@ const ogImageUrl =
     </script>
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <!-- NAV -->
     <nav class="nav">
       <div class="nav-inner container">
@@ -122,7 +129,7 @@ const ogImageUrl =
       </div>
     </nav>
 
-    <main>
+    <main id="main-content" tabindex="-1">
       <slot />
     </main>
 
