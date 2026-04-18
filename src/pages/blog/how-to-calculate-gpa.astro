@@ -1,0 +1,1053 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const title = "How to Calculate GPA and CGPA: Formulas, Conversion Charts, and Calculator";
+const description = "Calculate GPA and CGPA from marks or grades. Covers 4.0 scale, 10-point CGPA, CGPA to percentage conversion, semester GPA, and grading systems used by Indian universities.";
+const publishDate = "2026-04-18";
+const lastUpdated = "2026-04-18";
+---
+
+<MainLayout
+  title={`${title} | DoItSwift`}
+  description={description}
+  keywords="how to calculate gpa, cgpa calculator, gpa calculator, cgpa to percentage, how to calculate cgpa, gpa formula, cgpa formula, sgpa to cgpa, 10 point cgpa, 4.0 gpa scale, university gpa calculator"
+  canonical="https://doitswift.com/blog/how-to-calculate-gpa/"
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": lastUpdated,
+    "author": { "@type": "Organization", "name": "DoItSwift" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "DoItSwift",
+      "logo": { "@type": "ImageObject", "url": "https://doitswift.com/og-default.svg" }
+    },
+    "mainEntityOfPage": "https://doitswift.com/blog/how-to-calculate-gpa/"
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I calculate my CGPA?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "CGPA = Sum of (Grade points × Credits for each subject) ÷ Total credits. For example, if you scored grade points of 8, 9, 7, 8 in subjects with credits 4, 3, 4, 3, your CGPA = (8×4 + 9×3 + 7×4 + 8×3) ÷ (4+3+4+3) = 111 ÷ 14 = 7.93."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How to convert CGPA to percentage?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The most common formula used by CBSE and many Indian universities is: Percentage = CGPA × 9.5. A CGPA of 8.2 = 77.9%. However, different universities use different multipliers — some use 10, others have custom conversion tables. Always check your specific university's formula."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between GPA and CGPA?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "GPA (Grade Point Average) typically refers to grades from a single semester or term. CGPA (Cumulative Grade Point Average) is the average across ALL semesters combined. SGPA (Semester GPA) is another term for single-semester GPA. In the US, GPA usually means cumulative; in India, CGPA is the standard term for cumulative average."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a good CGPA in Indian universities?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "On a 10-point scale: 9.0-10.0 is outstanding, 8.0-8.9 is excellent, 7.0-7.9 is very good, 6.0-6.9 is good, 5.0-5.9 is average. For competitive placements at top companies, a CGPA of 7.0+ is typically the minimum cutoff, with top firms preferring 8.0+."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How to convert Indian CGPA to US 4.0 GPA?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "There's no universal conversion, but commonly used approximations: 10-point CGPA × 0.4 gives a rough 4.0 scale equivalent (e.g., 8.0 CGPA ≈ 3.2 GPA). WES (World Education Services) uses its own evaluation for official purposes. For US university applications, have your transcripts evaluated by WES or ECE for an official conversion."
+        }
+      }
+    ]
+  })} />
+
+  <article class="article">
+    <div class="container">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> › <a href="/blog/">Blog</a> › <span>How to Calculate GPA & CGPA</span>
+      </nav>
+
+      <header class="article-header">
+        <div class="article-meta">
+          <span class="cat">Math</span>
+          <time>Updated April 18, 2026</time>
+          <span>· 13 min read</span>
+        </div>
+        <h1>How to Calculate GPA and CGPA: Complete Guide with Conversion Charts</h1>
+        <p class="lede">
+          "What's your CGPA?" It's the first question in every placement interview, the
+          first filter on every job portal, and the number your parents ask about before
+          anything else. Whether you're calculating your semester GPA, cumulative CGPA,
+          converting CGPA to percentage for a job application, or translating your Indian
+          grades to a US 4.0 scale for a master's application — this guide covers every
+          calculation with worked examples and <strong>India-specific grading systems</strong>.
+        </p>
+      </header>
+
+      <div class="toc card">
+        <strong>In this guide:</strong>
+        <ul>
+          <li><a href="#calculator">Calculate your GPA now (free tool)</a></li>
+          <li><a href="#gpa-vs-cgpa">GPA vs CGPA vs SGPA: what's the difference?</a></li>
+          <li><a href="#calculate-sgpa">How to calculate SGPA (semester GPA)</a></li>
+          <li><a href="#calculate-cgpa">How to calculate CGPA (cumulative)</a></li>
+          <li><a href="#cgpa-percentage">CGPA to percentage conversion</a></li>
+          <li><a href="#percentage-cgpa">Percentage to CGPA conversion</a></li>
+          <li><a href="#us-gpa">Indian CGPA to US 4.0 GPA scale</a></li>
+          <li><a href="#grading-systems">Indian university grading systems compared</a></li>
+          <li><a href="#good-cgpa">What is a good CGPA? (placement cutoffs)</a></li>
+          <li><a href="#improve">How to improve your CGPA</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+
+      <section id="calculator">
+        <h2>Calculate your GPA instantly</h2>
+        <div class="callout">
+          <strong>🎯 Skip the math:</strong>
+          Our <a href="/calculator/gpa/">GPA Calculator</a> computes your SGPA and CGPA
+          automatically. Enter subjects, credits, and grades — get your GPA instantly.
+          Supports 10-point, 4.0, and custom scales. No signup needed.
+        </div>
+      </section>
+
+      <section id="gpa-vs-cgpa">
+        <h2>GPA vs CGPA vs SGPA: what's the difference?</h2>
+
+        <h3>SGPA (Semester Grade Point Average)</h3>
+        <p>
+          Your grade point average for a <strong>single semester</strong>. Calculated
+          at the end of each semester using only that semester's subjects and credits.
+          SGPA tells you how well you performed in one specific term.
+        </p>
+
+        <h3>CGPA (Cumulative Grade Point Average)</h3>
+        <p>
+          Your grade point average across <strong>all semesters combined</strong>. This
+          is the number on your final transcript, the number placement companies see, and
+          the number that matters for graduate school applications. CGPA is recalculated
+          after every semester to include all subjects from all terms.
+        </p>
+
+        <h3>GPA (Grade Point Average)</h3>
+        <p>
+          In India, GPA usually refers to CGPA. In the US, GPA typically means the cumulative
+          average on a 4.0 scale. The term is context-dependent — always clarify whether
+          someone means semester or cumulative.
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Term</th>
+                <th>Scope</th>
+                <th>Used in</th>
+                <th>What it tells you</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>SGPA</td>
+                <td>One semester</td>
+                <td>India (universities)</td>
+                <td>This semester's performance</td>
+              </tr>
+              <tr>
+                <td>CGPA</td>
+                <td>All semesters</td>
+                <td>India (CBSE, universities)</td>
+                <td>Overall academic performance</td>
+              </tr>
+              <tr>
+                <td>GPA (4.0)</td>
+                <td>All semesters</td>
+                <td>US, UK, Canada</td>
+                <td>Overall performance on 4.0 scale</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="calculate-sgpa">
+        <h2>How to calculate SGPA (semester GPA)</h2>
+        <p>
+          SGPA is the weighted average of grade points earned in one semester, weighted by
+          credit hours.
+        </p>
+
+        <h3>The formula</h3>
+        <div class="callout formula-callout">
+          <strong>SGPA = Σ(Grade Point × Credits) ÷ Σ(Credits)</strong>
+          <br><br>
+          Or in plain English: multiply each subject's grade point by its credits, add
+          them all up, then divide by total credits.
+        </div>
+
+        <h3>Step-by-step example</h3>
+        <p>
+          Semester 3 results:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Subject</th>
+                <th>Credits</th>
+                <th>Grade</th>
+                <th>Grade point</th>
+                <th>Credits × Grade point</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Data Structures</td>
+                <td>4</td>
+                <td>A</td>
+                <td>9</td>
+                <td>36</td>
+              </tr>
+              <tr>
+                <td>Mathematics III</td>
+                <td>4</td>
+                <td>B+</td>
+                <td>8</td>
+                <td>32</td>
+              </tr>
+              <tr>
+                <td>Digital Electronics</td>
+                <td>3</td>
+                <td>A+</td>
+                <td>10</td>
+                <td>30</td>
+              </tr>
+              <tr>
+                <td>Communication Skills</td>
+                <td>2</td>
+                <td>B</td>
+                <td>7</td>
+                <td>14</td>
+              </tr>
+              <tr>
+                <td>Lab: Data Structures</td>
+                <td>2</td>
+                <td>A</td>
+                <td>9</td>
+                <td>18</td>
+              </tr>
+              <tr>
+                <td>Lab: Digital Electronics</td>
+                <td>2</td>
+                <td>A</td>
+                <td>9</td>
+                <td>18</td>
+              </tr>
+              <tr>
+                <td><strong>Total</strong></td>
+                <td><strong>17</strong></td>
+                <td></td>
+                <td></td>
+                <td><strong>148</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          <strong>SGPA = 148 ÷ 17 = 8.71</strong>
+        </p>
+
+        <p>
+          Notice how credits matter: the A+ in Digital Electronics (3 credits) has less
+          impact than the B+ in Mathematics (4 credits) because Mathematics carries more
+          weight. High-credit subjects influence your GPA more — prioritize them.
+        </p>
+
+        <p>
+          Use our <a href="/calculator/gpa/">GPA Calculator</a> to compute this instantly
+          with any number of subjects.
+        </p>
+      </section>
+
+      <section id="calculate-cgpa">
+        <h2>How to calculate CGPA (cumulative)</h2>
+        <p>
+          CGPA combines all semesters. There are two methods:
+        </p>
+
+        <h3>Method 1: From all individual subjects</h3>
+        <div class="callout formula-callout">
+          <strong>CGPA = Σ(All subjects: Grade Point × Credits) ÷ Σ(All Credits)</strong>
+        </div>
+        <p>
+          This is the most accurate method. Add up grade point × credits for every subject
+          from every semester, then divide by total credits across all semesters. This is
+          what your university transcript calculates.
+        </p>
+
+        <h3>Method 2: From semester SGPAs (approximate)</h3>
+        <div class="callout formula-callout">
+          <strong>CGPA ≈ Σ(SGPA × Semester Credits) ÷ Σ(All Semester Credits)</strong>
+        </div>
+        <p>
+          If semesters have different total credits, weight each SGPA by its semester's
+          credit total. If all semesters have equal credits, CGPA is simply the average
+          of all SGPAs.
+        </p>
+
+        <h3>Worked example: CGPA from 4 semesters</h3>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Semester</th>
+                <th>SGPA</th>
+                <th>Credits</th>
+                <th>SGPA × Credits</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Semester 1</td>
+                <td>7.80</td>
+                <td>22</td>
+                <td>171.6</td>
+              </tr>
+              <tr>
+                <td>Semester 2</td>
+                <td>8.20</td>
+                <td>22</td>
+                <td>180.4</td>
+              </tr>
+              <tr>
+                <td>Semester 3</td>
+                <td>8.71</td>
+                <td>17</td>
+                <td>148.1</td>
+              </tr>
+              <tr>
+                <td>Semester 4</td>
+                <td>8.50</td>
+                <td>20</td>
+                <td>170.0</td>
+              </tr>
+              <tr>
+                <td><strong>Total</strong></td>
+                <td></td>
+                <td><strong>81</strong></td>
+                <td><strong>670.1</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          <strong>CGPA = 670.1 ÷ 81 = 8.27</strong>
+        </p>
+
+        <h3>Equal credit shortcut</h3>
+        <p>
+          If all semesters have the same number of credits (common in many programs), CGPA
+          is simply:
+        </p>
+        <div class="callout formula-callout">
+          <strong>CGPA = (SGPA1 + SGPA2 + ... + SGPAn) ÷ n</strong>
+        </div>
+        <p>
+          <strong>Example:</strong> SGPAs of 7.8, 8.2, 8.7, 8.5 (all semesters 22 credits):<br>
+          (7.8 + 8.2 + 8.7 + 8.5) ÷ 4 = 33.2 ÷ 4 = <strong>8.30 CGPA</strong>
+        </p>
+      </section>
+
+      <section id="cgpa-percentage">
+        <h2>CGPA to percentage conversion</h2>
+        <p>
+          This is the most-searched CGPA question in India. Job applications, competitive
+          exams, and graduate admissions often ask for percentage when your transcript
+          shows CGPA.
+        </p>
+
+        <h3>The CBSE formula (most widely used)</h3>
+        <div class="callout formula-callout">
+          <strong>Percentage = CGPA × 9.5</strong>
+        </div>
+        <p>
+          This is the official CBSE conversion formula and is used by many Indian
+          universities, boards, and employers as a standard approximation.
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>CGPA</th>
+                <th>Percentage (×9.5)</th>
+                <th>Interpretation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>10.0</td>
+                <td>95%</td>
+                <td>Outstanding</td>
+              </tr>
+              <tr>
+                <td>9.5</td>
+                <td>90.25%</td>
+                <td>Excellent</td>
+              </tr>
+              <tr>
+                <td>9.0</td>
+                <td>85.5%</td>
+                <td>Excellent</td>
+              </tr>
+              <tr>
+                <td>8.5</td>
+                <td>80.75%</td>
+                <td>Very good</td>
+              </tr>
+              <tr>
+                <td>8.0</td>
+                <td>76%</td>
+                <td>Very good</td>
+              </tr>
+              <tr>
+                <td>7.5</td>
+                <td>71.25%</td>
+                <td>Good</td>
+              </tr>
+              <tr>
+                <td>7.0</td>
+                <td>66.5%</td>
+                <td>Good (first division)</td>
+              </tr>
+              <tr>
+                <td>6.5</td>
+                <td>61.75%</td>
+                <td>Above average</td>
+              </tr>
+              <tr>
+                <td>6.0</td>
+                <td>57%</td>
+                <td>Average (second division)</td>
+              </tr>
+              <tr>
+                <td>5.5</td>
+                <td>52.25%</td>
+                <td>Below average</td>
+              </tr>
+              <tr>
+                <td>5.0</td>
+                <td>47.5%</td>
+                <td>Pass</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>University-specific formulas</h3>
+        <p>
+          <strong>Warning:</strong> Not all universities use the ×9.5 formula. Some common
+          variations:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>University / Board</th>
+                <th>Conversion formula</th>
+                <th>Example: CGPA 8.0</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>CBSE (standard)</td>
+                <td>CGPA × 9.5</td>
+                <td>76%</td>
+              </tr>
+              <tr>
+                <td>Anna University</td>
+                <td>Custom table (not linear)</td>
+                <td>~75-80%</td>
+              </tr>
+              <tr>
+                <td>Mumbai University</td>
+                <td>CGPA × 10 (approximate)</td>
+                <td>80%</td>
+              </tr>
+              <tr>
+                <td>VTU (Karnataka)</td>
+                <td>Custom conversion table</td>
+                <td>~72-76%</td>
+              </tr>
+              <tr>
+                <td>MAKAUT (West Bengal)</td>
+                <td>CGPA × 10 - 5</td>
+                <td>75%</td>
+              </tr>
+              <tr>
+                <td>GTU (Gujarat)</td>
+                <td>Custom table per program</td>
+                <td>Varies</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          <strong>Always check your specific university's official conversion formula.</strong>
+          Using the wrong formula on job applications or graduate admissions can create
+          problems. When in doubt, provide your CGPA directly and mention the scale
+          (e.g., "8.0 on a 10-point scale").
+        </p>
+
+        <p>
+          Calculate your conversion with our
+          <a href="/calculator/gpa/">GPA Calculator</a>, or check exam percentages with
+          our <a href="/calculator/percentage/">Percentage Calculator</a>.
+        </p>
+      </section>
+
+      <section id="percentage-cgpa">
+        <h2>Percentage to CGPA conversion</h2>
+        <p>
+          Some universities give percentages but you need CGPA for applications.
+        </p>
+
+        <h3>Using the CBSE formula (reverse)</h3>
+        <div class="callout formula-callout">
+          <strong>CGPA = Percentage ÷ 9.5</strong>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Percentage</th>
+                <th>CGPA (÷9.5)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>90%</td><td>9.47</td></tr>
+              <tr><td>85%</td><td>8.95</td></tr>
+              <tr><td>80%</td><td>8.42</td></tr>
+              <tr><td>75%</td><td>7.89</td></tr>
+              <tr><td>70%</td><td>7.37</td></tr>
+              <tr><td>65%</td><td>6.84</td></tr>
+              <tr><td>60%</td><td>6.32</td></tr>
+              <tr><td>55%</td><td>5.79</td></tr>
+              <tr><td>50%</td><td>5.26</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Again, this is an approximation. Different universities may use different
+          conversion factors.
+        </p>
+      </section>
+
+      <section id="us-gpa">
+        <h2>Indian CGPA to US 4.0 GPA scale</h2>
+        <p>
+          Applying for a US master's program? You'll need to translate your Indian CGPA
+          to the 4.0 scale. This is where it gets complicated.
+        </p>
+
+        <h3>The rough approximation</h3>
+        <div class="callout formula-callout">
+          <strong>US GPA ≈ Indian CGPA (10-point) × 0.4</strong>
+        </div>
+        <p>
+          8.0 CGPA ≈ 3.2 GPA. 9.0 CGPA ≈ 3.6 GPA. This is a rough guide only.
+        </p>
+
+        <h3>More accurate conversion table</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Indian CGPA (10-point)</th>
+                <th>Indian Percentage</th>
+                <th>US GPA (4.0)</th>
+                <th>US Letter Grade</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>9.5-10.0</td>
+                <td>90-100%</td>
+                <td>3.9-4.0</td>
+                <td>A / A+</td>
+              </tr>
+              <tr>
+                <td>8.5-9.4</td>
+                <td>80-89%</td>
+                <td>3.5-3.8</td>
+                <td>A- / A</td>
+              </tr>
+              <tr>
+                <td>7.5-8.4</td>
+                <td>71-79%</td>
+                <td>3.0-3.4</td>
+                <td>B / B+</td>
+              </tr>
+              <tr>
+                <td>6.5-7.4</td>
+                <td>62-70%</td>
+                <td>2.5-2.9</td>
+                <td>B- / C+</td>
+              </tr>
+              <tr>
+                <td>5.5-6.4</td>
+                <td>52-61%</td>
+                <td>2.0-2.4</td>
+                <td>C / C+</td>
+              </tr>
+              <tr>
+                <td>5.0-5.4</td>
+                <td>47-51%</td>
+                <td>1.5-1.9</td>
+                <td>C- / D</td>
+              </tr>
+              <tr>
+                <td>Below 5.0</td>
+                <td>Below 47%</td>
+                <td>Below 1.5</td>
+                <td>F</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>For official purposes: use WES or ECE</h3>
+        <p>
+          US universities don't accept self-calculated GPA conversions. You need an
+          official credential evaluation from:
+        </p>
+        <ul>
+          <li><strong>WES (World Education Services):</strong> The most widely accepted evaluation service. They review your transcripts and provide an official US-equivalent GPA. Cost: ~$200-250</li>
+          <li><strong>ECE (Educational Credential Evaluators):</strong> Another widely accepted service. Similar process and cost</li>
+          <li><strong>SpanTran:</strong> Some universities accept SpanTran evaluations. Often less expensive</li>
+        </ul>
+        <p>
+          <strong>Important:</strong> WES and ECE may evaluate your GPA differently than
+          the rough formulas above. They consider your university's specific grading system,
+          Indian grading norms, and subject-level analysis. Your WES-evaluated GPA might be
+          higher or lower than self-calculated estimates.
+        </p>
+      </section>
+
+      <section id="grading-systems">
+        <h2>Indian university grading systems compared</h2>
+        <p>
+          Indian universities don't use a uniform grading system. Here are the most common
+          ones:
+        </p>
+
+        <h3>10-point absolute grading (most common)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Grade</th>
+                <th>Grade point</th>
+                <th>Percentage range</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>O (Outstanding)</td><td>10</td><td>90-100%</td><td>Exceptional</td></tr>
+              <tr><td>A+ (Excellent)</td><td>9</td><td>80-89%</td><td>Excellent</td></tr>
+              <tr><td>A (Very Good)</td><td>8</td><td>70-79%</td><td>Very good</td></tr>
+              <tr><td>B+ (Good)</td><td>7</td><td>60-69%</td><td>Good</td></tr>
+              <tr><td>B (Above Average)</td><td>6</td><td>55-59%</td><td>Above average</td></tr>
+              <tr><td>C (Average)</td><td>5</td><td>50-54%</td><td>Average</td></tr>
+              <tr><td>P (Pass)</td><td>4</td><td>40-49%</td><td>Minimum pass</td></tr>
+              <tr><td>F (Fail)</td><td>0</td><td>Below 40%</td><td>Fail</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Used by: Most IITs, NITs, many state universities following UGC guidelines.
+        </p>
+
+        <h3>Relative grading</h3>
+        <p>
+          Some premier institutions (IITs, IIMs) use relative grading where grades are
+          assigned based on class performance distribution rather than fixed percentage
+          thresholds. In this system, your grade depends not on your absolute marks but on
+          how you performed relative to classmates. The top 10-15% get A+/A, the next
+          20-25% get B+/B, and so on.
+        </p>
+        <p>
+          Relative grading makes CGPA comparison across institutions tricky — an 8.0 from
+          an IIT (relative) isn't directly comparable to an 8.0 from a state university
+          (absolute).
+        </p>
+
+        <h3>CBSE 10-point CGPA (Class 10)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Marks range</th>
+                <th>Grade</th>
+                <th>Grade point</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>91-100</td><td>A1</td><td>10</td></tr>
+              <tr><td>81-90</td><td>A2</td><td>9</td></tr>
+              <tr><td>71-80</td><td>B1</td><td>8</td></tr>
+              <tr><td>61-70</td><td>B2</td><td>7</td></tr>
+              <tr><td>51-60</td><td>C1</td><td>6</td></tr>
+              <tr><td>41-50</td><td>C2</td><td>5</td></tr>
+              <tr><td>33-40</td><td>D</td><td>4</td></tr>
+              <tr><td>Below 33</td><td>E (Fail)</td><td>0</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          CBSE CGPA to percentage: CGPA × 9.5. This is the official CBSE formula.
+        </p>
+      </section>
+
+      <section id="good-cgpa">
+        <h2>What is a good CGPA? (with placement context)</h2>
+        <p>
+          "Good" depends on context — what you're applying for and where you studied.
+        </p>
+
+        <h3>For campus placements</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>CGPA range</th>
+                <th>Placement prospects</th>
+                <th>Typical companies</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>9.0+</td>
+                <td>Excellent — shortlisted by top firms</td>
+                <td>Google, Microsoft, Goldman Sachs, McKinsey</td>
+              </tr>
+              <tr>
+                <td>8.0-8.9</td>
+                <td>Very good — clears most company cutoffs</td>
+                <td>Amazon, Adobe, Deloitte, top startups</td>
+              </tr>
+              <tr>
+                <td>7.0-7.9</td>
+                <td>Good — eligible for most mass recruiters</td>
+                <td>TCS, Infosys, Wipro, Cognizant, Accenture</td>
+              </tr>
+              <tr>
+                <td>6.0-6.9</td>
+                <td>Average — some companies have 6.0 cutoff</td>
+                <td>Select IT services, smaller firms</td>
+              </tr>
+              <tr>
+                <td>Below 6.0</td>
+                <td>Limited — many cutoffs exclude this range</td>
+                <td>Off-campus applications recommended</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          <strong>Reality check:</strong> CGPA is a filter, not a selection criterion.
+          Companies use CGPA to shortlist candidates (reduce 500 applicants to 100), then
+          select based on skills, interviews, and projects. A 7.5 CGPA candidate with
+          strong projects and interview skills will beat a 9.0 CGPA candidate who can't
+          communicate or code under pressure.
+        </p>
+
+        <h3>For MS/MBA abroad</h3>
+        <ul>
+          <li><strong>Top 20 US universities (MIT, Stanford, CMU):</strong> CGPA 8.5+ (or equivalent 3.5+ on 4.0) strongly preferred</li>
+          <li><strong>Top 50 US universities:</strong> CGPA 7.5+ (or 3.0+ on 4.0) is competitive</li>
+          <li><strong>Top 100 US universities:</strong> CGPA 7.0+ usually sufficient with good GRE/GMAT and strong SOP</li>
+          <li><strong>European universities:</strong> Generally less CGPA-focused, more project and research-focused</li>
+        </ul>
+
+        <h3>For competitive exams (GATE, CAT, UPSC)</h3>
+        <p>
+          CGPA matters less for competitive exams — the exam score is the primary selection
+          criterion. However, some GATE-based PSU recruitment and IIM admission use CGPA
+          as a component in the final score composite.
+        </p>
+      </section>
+
+      <section id="improve">
+        <h2>How to improve your CGPA</h2>
+        <p>
+          CGPA is cumulative — early semesters are hard to undo. But here are realistic
+          strategies:
+        </p>
+
+        <h3>1. Prioritize high-credit subjects</h3>
+        <p>
+          A 4-credit subject impacts your CGPA twice as much as a 2-credit subject. Put
+          more effort into high-credit core subjects even if you find them harder. Getting
+          an A in a 4-credit subject is worth more than an A+ in a 2-credit elective.
+        </p>
+
+        <h3>2. Never fail a subject</h3>
+        <p>
+          A fail (0 grade points) on even a 2-credit subject devastates your CGPA. The
+          difference between a C (5 points) and an F (0 points) is enormous. Pass every
+          subject, even if just barely — then focus extra energy on subjects where you can
+          excel.
+        </p>
+
+        <h3>3. Improve consistently, not dramatically</h3>
+        <p>
+          Going from 7.0 to 7.5 CGPA over 4 semesters is more achievable than jumping
+          from 7.0 to 8.5. Each semester's improvement compounds. If your SGPA is
+          consistently 0.5-1.0 above your current CGPA, the cumulative average will
+          gradually rise.
+        </p>
+
+        <h3>4. Choose electives strategically</h3>
+        <p>
+          If your university allows elective selection, choose subjects that play to your
+          strengths. An "easy A" elective boosts CGPA while giving you time to focus on
+          harder core subjects. This isn't gaming the system — it's smart allocation of
+          your limited study time.
+        </p>
+
+        <h3>5. Retake if allowed</h3>
+        <p>
+          Some universities allow retaking courses to improve grades. If you failed or
+          got a very low grade in a high-credit course, retaking it can significantly
+          boost your CGPA. Check your university's re-examination and grade improvement
+          policies.
+        </p>
+
+        <h3>How much can CGPA change?</h3>
+        <p>
+          The more semesters completed, the harder it is to change CGPA. Here's a rough
+          sense:
+        </p>
+        <ul>
+          <li><strong>After 2 semesters:</strong> CGPA is very flexible. One strong semester can shift it by 0.5-1.0</li>
+          <li><strong>After 4 semesters:</strong> CGPA has momentum. Each semester shifts it by 0.2-0.5</li>
+          <li><strong>After 6 semesters:</strong> CGPA is mostly set. Each semester shifts it by 0.1-0.3</li>
+          <li><strong>After 8 semesters:</strong> Nearly fixed. Even a perfect 10.0 SGPA shifts cumulative by 0.1-0.2</li>
+        </ul>
+
+        <p>
+          Use our <a href="/calculator/gpa/">GPA Calculator</a> to simulate: enter your
+          current CGPA, total credits completed, then add a hypothetical semester to see
+          how your CGPA would change.
+        </p>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+          <h3>How do I calculate my CGPA?</h3>
+          <p>
+            Multiply each subject's grade point by its credits, sum all products, divide by
+            total credits. For a quick calculation, use our
+            <a href="/calculator/gpa/">GPA Calculator</a>. If all semesters have equal
+            credits, CGPA is simply the average of all SGPAs.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How to convert CGPA to percentage?</h3>
+          <p>
+            The CBSE standard formula is Percentage = CGPA × 9.5. A CGPA of 8.2 equals
+            77.9%. However, many universities use different multipliers — check your
+            institution's specific formula. When in doubt, report your CGPA directly on
+            the 10-point scale.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What is the difference between SGPA and CGPA?</h3>
+          <p>
+            SGPA (Semester GPA) is your grade average for one semester only. CGPA
+            (Cumulative GPA) is your average across all semesters. CGPA is the number that
+            appears on your final transcript and is used by employers and graduate schools.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How to convert Indian CGPA to US 4.0 GPA?</h3>
+          <p>
+            Rough approximation: Indian CGPA × 0.4 ≈ US GPA (8.0 CGPA ≈ 3.2 GPA). For
+            official purposes (US university admissions), get your credentials evaluated by
+            WES or ECE — self-calculated conversions are not accepted by most universities.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Is 7.5 CGPA good?</h3>
+          <p>
+            Yes — 7.5 CGPA (71.25% equivalent) is considered good. It clears cutoffs for
+            most campus placement companies, is competitive for top 50-100 US universities,
+            and represents solid academic performance. For top-tier companies or top-20 US
+            schools, 8.0+ is preferred.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Does CGPA matter for jobs after a few years?</h3>
+          <p>
+            Mostly no. CGPA matters for your first job (campus placement or first
+            off-campus application). After 2-3 years of work experience, employers focus on
+            skills, projects, and job performance rather than academic grades. Very few
+            companies check CGPA for experienced hire positions.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How to calculate CGPA from marks?</h3>
+          <p>
+            First convert marks to grade points using your university's grade table (e.g.,
+            90-100% = 10, 80-89% = 9, etc.). Then apply the CGPA formula: Sum of
+            (Grade point × Credits) ÷ Total credits. Use our
+            <a href="/calculator/gpa/">GPA Calculator</a> or
+            <a href="/calculator/percentage/">Percentage Calculator</a> for the conversion.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can I calculate CGPA without credits?</h3>
+          <p>
+            If all subjects have equal credits (which is unusual but happens in some
+            programs), CGPA is simply the average of all grade points. Otherwise, credits
+            are essential — subjects with more credits should count more toward your
+            average. Check your transcript for credit information.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What CGPA do I need for GATE/CAT/UPSC?</h3>
+          <p>
+            GATE: No minimum CGPA to appear, but IITs may require 6.5+ for admission based
+            on GATE score. CAT/IIM: CGPA is one component of the composite score — higher
+            CGPA strengthens your profile but CAT score matters most. UPSC: No CGPA
+            requirement — only graduation is needed. Focus on exam preparation rather than
+            undergraduate CGPA for all competitive exams.
+          </p>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <h2>Calculate your GPA and CGPA now</h2>
+        <p>
+          Enter subjects, credits, and grades. Get SGPA and CGPA instantly.
+          Supports 10-point, 4.0, and custom scales. Free, no signup.
+        </p>
+        <div class="cta-buttons">
+          <a href="/calculator/gpa/" class="btn btn-lg">
+            → Calculate My GPA
+          </a>
+          <a href="/calculator/percentage/" class="btn btn-lg btn-secondary">
+            → Calculate Percentage
+          </a>
+        </div>
+      </section>
+
+      <section class="related">
+        <h2>Related Calculators & Guides</h2>
+        <ul>
+          <li><a href="/calculator/gpa/">GPA Calculator — SGPA and CGPA</a></li>
+          <li><a href="/calculator/percentage/">Percentage Calculator</a></li>
+          <li><a href="/calculator/scientific/">Scientific Calculator</a></li>
+          <li><a href="/blog/how-to-calculate-percentage/">How to Calculate Percentage (Complete Guide)</a></li>
+          <li><a href="/blog/ctc-vs-in-hand-salary/">CTC vs In-Hand Salary (for after graduation)</a></li>
+          <li><a href="/blog/old-vs-new-tax-regime/">Old vs New Tax Regime (for your first job)</a></li>
+        </ul>
+      </section>
+
+    </div>
+  </article>
+
+  <style>
+    .article { padding: 40px 0 60px; }
+    .article .container { max-width: 760px; }
+
+    .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .article-header { margin-bottom: 32px; }
+    .article-meta { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .article-meta .cat { color: var(--blue); font-weight: 700; text-transform: uppercase; letter-spacing: .5px; font-size: 11px; }
+    .article h1 { font-size: 38px; line-height: 1.2; margin-bottom: 18px; }
+    .lede { font-size: 19px; color: var(--text-muted); line-height: 1.6; }
+
+    .toc { padding: 20px 24px; margin: 32px 0; }
+    .toc strong { display: block; margin-bottom: 10px; }
+    .toc ul { list-style: none; padding: 0; }
+    .toc li { margin-bottom: 6px; font-size: 14px; }
+    .toc a { color: var(--blue); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    .article h2 { font-size: 28px; margin-top: 48px; margin-bottom: 16px; }
+    .article h3 { font-size: 20px; margin-top: 24px; margin-bottom: 10px; }
+    .article p, .article ul, .article ol { font-size: 16px; line-height: 1.7; margin-bottom: 16px; color: var(--text); }
+    .article ul, .article ol { padding-left: 24px; }
+    .article li { margin-bottom: 6px; }
+    .article a:not(.btn) { color: var(--blue); text-decoration: underline; }
+    .article strong { font-weight: 700; }
+
+    .callout { background: var(--blue-light); border-left: 4px solid var(--blue); padding: 16px 20px; border-radius: 8px; margin: 20px 0; font-size: 15px; }
+    [data-theme="dark"] .callout { background: rgba(0, 102, 255, .1); }
+
+    .formula-callout { background: #f0fdf4; border-left-color: #16a34a; font-family: 'Courier New', monospace; }
+    [data-theme="dark"] .formula-callout { background: rgba(22, 163, 74, .1); }
+
+    .table-wrap { overflow-x: auto; margin: 20px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+    th { background: var(--gray-100); font-weight: 700; }
+
+    .faq-item { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item h3 { font-size: 17px; margin-bottom: 8px; }
+    .faq-item p { font-size: 15px; margin-bottom: 0; }
+
+    .cta-section { background: linear-gradient(135deg, var(--blue-light), #fff); border: 1px solid var(--blue-light); border-radius: 16px; padding: 40px; text-align: center; margin: 48px 0; }
+    [data-theme="dark"] .cta-section { background: linear-gradient(135deg, rgba(0, 102, 255, .1), transparent); border-color: rgba(0, 102, 255, .2); }
+    .cta-section h2 { margin-top: 0; }
+    .cta-section p { margin-bottom: 24px; }
+    .cta-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-secondary { background: transparent; border: 1px solid var(--blue); color: var(--blue); }
+    .btn-secondary:hover { background: var(--blue-light); }
+
+    .related h2 { font-size: 22px; }
+    .related ul { list-style: none; padding: 0; }
+    .related li { margin-bottom: 10px; }
+  </style>
+</MainLayout>

@@ -1,8 +1,35 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 
-/** Newest first — add new entries at the top. `categoryKey` drives filters + badges (finance | health | image | pdf). */
+/** Newest first — add new entries at the top. `categoryKey` drives filters + badges (finance | health | image | pdf | math). */
 const posts = [
+  {
+    title: 'How to Calculate GPA and CGPA: Formulas, Conversion Charts, and Calculator',
+    href: '/blog/how-to-calculate-gpa/',
+    categoryKey: 'math',
+    date: 'April 18, 2026',
+    dateIso: '2026-04-18',
+    excerpt:
+      'Calculate GPA and CGPA from marks or grades. Covers 10-point CGPA, CGPA to percentage, Indian to US 4.0 conversion, university-specific formulas, and placement cutoffs.',
+  },
+  {
+    title: 'How to Calculate Percentage: Formulas, Examples, and Tricks (Complete Guide)',
+    href: '/blog/how-to-calculate-percentage/',
+    categoryKey: 'math',
+    date: 'April 18, 2026',
+    dateIso: '2026-04-18',
+    excerpt:
+      'Every percentage formula you\'ll need: percentage of a number, increase/decrease, marks percentage, discount, GST, salary hike. Mental math shortcuts included.',
+  },
+  {
+    title: 'How Much Water Should You Drink Per Day? (Calculator + Indian Climate Guide)',
+    href: '/blog/how-much-water-per-day/',
+    categoryKey: 'health',
+    date: 'April 18, 2026',
+    dateIso: '2026-04-18',
+    excerpt:
+      'Find your daily water intake based on weight, activity, and climate. Indian summer guide, traditional drinks chart, dehydration signs, and 7 myths debunked.',
+  },
   {
     title: 'How to Track Your Period Cycle: A Complete Guide to Understanding Your Menstrual Cycle',
     href: '/blog/how-to-track-period-cycle/',
@@ -149,13 +176,14 @@ const posts = [
   },
 ] as const;
 
-type CategoryKey = 'finance' | 'health' | 'image' | 'pdf';
+type CategoryKey = 'finance' | 'health' | 'image' | 'pdf' | 'math';
 
 const badgeLabel: Record<CategoryKey, string> = {
   finance: 'Finance',
   health: 'Health',
   image: 'Image',
   pdf: 'PDF',
+  math: 'Math',
 };
 
 const countBy = (key: CategoryKey | 'all') =>
@@ -198,6 +226,9 @@ const countBy = (key: CategoryKey | 'all') =>
         </button>
         <button type="button" class="blog-filter-btn" data-category="pdf" aria-pressed="false">
           PDF ({countBy('pdf')})
+        </button>
+        <button type="button" class="blog-filter-btn" data-category="math" aria-pressed="false">
+          Math ({countBy('math')})
         </button>
       </div>
 
@@ -432,6 +463,11 @@ const countBy = (key: CategoryKey | 'all') =>
       color: #be185d;
     }
 
+    .category-badge.math {
+      background: #ede9fe;
+      color: #6d28d9;
+    }
+
     :global([data-theme='dark']) .category-badge.finance {
       background: rgba(29, 78, 216, 0.2);
       color: #93bbfd;
@@ -450,6 +486,11 @@ const countBy = (key: CategoryKey | 'all') =>
     :global([data-theme='dark']) .category-badge.pdf {
       background: rgba(190, 24, 93, 0.2);
       color: #f9a8d4;
+    }
+
+    :global([data-theme='dark']) .category-badge.math {
+      background: rgba(109, 40, 217, 0.2);
+      color: #c4b5fd;
     }
 
     .blog-card-meta {

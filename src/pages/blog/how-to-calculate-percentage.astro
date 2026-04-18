@@ -1,0 +1,968 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const title = "How to Calculate Percentage: Formulas, Examples, and Tricks (Complete Guide)";
+const description = "Learn every percentage calculation: percentage of a number, percentage increase/decrease, percentage difference, marks percentage, discount percentage, and more. Free calculator included.";
+const publishDate = "2026-04-18";
+const lastUpdated = "2026-04-18";
+---
+
+<MainLayout
+  title={`${title} | DoItSwift`}
+  description={description}
+  keywords="how to calculate percentage, percentage formula, percentage calculator, how to find percentage, percentage of a number, percentage increase, percentage decrease, percentage difference, marks percentage, discount percentage"
+  canonical="https://doitswift.com/blog/how-to-calculate-percentage/"
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": lastUpdated,
+    "author": { "@type": "Organization", "name": "DoItSwift" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "DoItSwift",
+      "logo": { "@type": "ImageObject", "url": "https://doitswift.com/og-default.svg" }
+    },
+    "mainEntityOfPage": "https://doitswift.com/blog/how-to-calculate-percentage/"
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I calculate percentage of a number?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Multiply the number by the percentage and divide by 100. For example, 25% of 800 = (25 × 800) ÷ 100 = 200. Shortcut: move the decimal point of the percentage two places left, then multiply. 25% = 0.25, so 0.25 × 800 = 200."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I calculate percentage increase?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Percentage increase = ((New value - Old value) ÷ Old value) × 100. Example: salary went from ₹50,000 to ₹58,000. Increase = ((58,000 - 50,000) ÷ 50,000) × 100 = 16% increase."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I calculate my exam marks percentage?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Percentage = (Marks obtained ÷ Total marks) × 100. Example: you scored 420 out of 500. Percentage = (420 ÷ 500) × 100 = 84%. For multiple subjects, add all marks obtained and divide by total possible marks across all subjects."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I calculate discount percentage?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Discount percentage = ((Original price - Sale price) ÷ Original price) × 100. Example: a shirt was ₹1,200, now ₹840. Discount = ((1,200 - 840) ÷ 1,200) × 100 = 30% off."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the formula for percentage?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The basic percentage formula is: Percentage = (Part ÷ Whole) × 100. This can be rearranged: Part = (Percentage × Whole) ÷ 100, or Whole = (Part × 100) ÷ Percentage. These three forms cover every percentage calculation."
+        }
+      }
+    ]
+  })} />
+
+  <article class="article">
+    <div class="container">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> › <a href="/blog/">Blog</a> › <span>How to Calculate Percentage</span>
+      </nav>
+
+      <header class="article-header">
+        <div class="article-meta">
+          <span class="cat">Math</span>
+          <time>Updated April 18, 2026</time>
+          <span>· 14 min read</span>
+        </div>
+        <h1>How to Calculate Percentage: Every Formula You'll Ever Need</h1>
+        <p class="lede">
+          "What percentage is 420 out of 500?" "My salary went from ₹50,000 to ₹58,000 —
+          what's the hike?" "A shirt is ₹1,200 with 30% off — what's the final price?"
+          Percentages show up everywhere: exams, salaries, discounts, taxes, tips, interest
+          rates, body fat, battery levels. This guide covers <strong>every type of percentage
+          calculation</strong> with formulas, worked examples, mental math shortcuts, and a
+          free calculator.
+        </p>
+      </header>
+
+      <div class="toc card">
+        <strong>In this guide:</strong>
+        <ul>
+          <li><a href="#calculator">Calculate percentages now (free tool)</a></li>
+          <li><a href="#basic">The 3 basic percentage formulas</a></li>
+          <li><a href="#of-number">How to find percentage of a number</a></li>
+          <li><a href="#what-percent">What percentage is X of Y?</a></li>
+          <li><a href="#increase">How to calculate percentage increase</a></li>
+          <li><a href="#decrease">How to calculate percentage decrease</a></li>
+          <li><a href="#difference">Percentage difference between two numbers</a></li>
+          <li><a href="#marks">How to calculate marks percentage (exams)</a></li>
+          <li><a href="#discount">How to calculate discount percentage</a></li>
+          <li><a href="#gst">How to calculate GST percentage</a></li>
+          <li><a href="#salary">How to calculate salary hike percentage</a></li>
+          <li><a href="#shortcuts">Mental math shortcuts for percentages</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+
+      <section id="calculator">
+        <h2>Calculate percentages instantly</h2>
+        <div class="callout">
+          <strong>🎯 Skip the math:</strong>
+          Our <a href="/calculator/percentage/">Percentage Calculator</a> handles all
+          percentage calculations — percentage of a number, percentage change, what
+          percent X is of Y, and more. Instant results, no signup.
+        </div>
+      </section>
+
+      <section id="basic">
+        <h2>The 3 basic percentage formulas</h2>
+        <p>
+          Every percentage calculation in existence is a variation of three fundamental
+          formulas. Master these three and you can solve anything.
+        </p>
+
+        <h3>Formula 1: Find the percentage (what % is X of Y?)</h3>
+        <div class="callout formula-callout">
+          <strong>Percentage = (Part ÷ Whole) × 100</strong>
+        </div>
+        <p>
+          <strong>Example:</strong> You scored 420 out of 500. What's your percentage?<br>
+          (420 ÷ 500) × 100 = <strong>84%</strong>
+        </p>
+
+        <h3>Formula 2: Find the part (what is X% of Y?)</h3>
+        <div class="callout formula-callout">
+          <strong>Part = (Percentage × Whole) ÷ 100</strong>
+        </div>
+        <p>
+          <strong>Example:</strong> What is 18% of ₹12,500? (GST calculation)<br>
+          (18 × 12,500) ÷ 100 = <strong>₹2,250</strong>
+        </p>
+
+        <h3>Formula 3: Find the whole (X is Y% of what?)</h3>
+        <div class="callout formula-callout">
+          <strong>Whole = (Part × 100) ÷ Percentage</strong>
+        </div>
+        <p>
+          <strong>Example:</strong> ₹3,600 is 12% of the total bill. What's the total?<br>
+          (3,600 × 100) ÷ 12 = <strong>₹30,000</strong>
+        </p>
+
+        <p>
+          These three formulas are the same equation rearranged. If you know any two of
+          the three values (part, whole, percentage), you can always find the third. Our
+          <a href="/calculator/percentage/">Percentage Calculator</a> solves all three
+          variations.
+        </p>
+      </section>
+
+      <section id="of-number">
+        <h2>How to find percentage of a number</h2>
+        <p>
+          This is the most common percentage calculation — "What is X% of Y?"
+        </p>
+
+        <h3>The formula</h3>
+        <div class="callout formula-callout">
+          <strong>Result = (Percentage ÷ 100) × Number</strong>
+        </div>
+
+        <h3>Worked examples</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Question</th>
+                <th>Calculation</th>
+                <th>Answer</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>What is 10% of 850?</td>
+                <td>(10 ÷ 100) × 850 = 0.10 × 850</td>
+                <td>85</td>
+              </tr>
+              <tr>
+                <td>What is 25% of 1,200?</td>
+                <td>(25 ÷ 100) × 1,200 = 0.25 × 1,200</td>
+                <td>300</td>
+              </tr>
+              <tr>
+                <td>What is 18% of 5,000? (GST)</td>
+                <td>(18 ÷ 100) × 5,000 = 0.18 × 5,000</td>
+                <td>900</td>
+              </tr>
+              <tr>
+                <td>What is 8.5% of 40,00,000? (loan interest)</td>
+                <td>(8.5 ÷ 100) × 40,00,000 = 0.085 × 40,00,000</td>
+                <td>3,40,000</td>
+              </tr>
+              <tr>
+                <td>What is 3.5% of 75,000? (PF contribution)</td>
+                <td>(3.5 ÷ 100) × 75,000 = 0.035 × 75,000</td>
+                <td>2,625</td>
+              </tr>
+              <tr>
+                <td>What is 150% of 200?</td>
+                <td>(150 ÷ 100) × 200 = 1.50 × 200</td>
+                <td>300</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          <strong>The shortcut:</strong> Convert the percentage to a decimal by dividing by
+          100 (or moving the decimal point two places left), then multiply. 25% = 0.25.
+          18% = 0.18. 8.5% = 0.085. This eliminates the "÷ 100" step and makes mental
+          math easier.
+        </p>
+      </section>
+
+      <section id="what-percent">
+        <h2>What percentage is X of Y?</h2>
+        <p>
+          "I scored 380 out of 500 — what's my percentage?" This flips the first formula.
+        </p>
+
+        <h3>The formula</h3>
+        <div class="callout formula-callout">
+          <strong>Percentage = (X ÷ Y) × 100</strong>
+        </div>
+
+        <h3>Worked examples</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Question</th>
+                <th>Calculation</th>
+                <th>Answer</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>What % is 380 of 500?</td>
+                <td>(380 ÷ 500) × 100</td>
+                <td>76%</td>
+              </tr>
+              <tr>
+                <td>What % is 45 of 60?</td>
+                <td>(45 ÷ 60) × 100</td>
+                <td>75%</td>
+              </tr>
+              <tr>
+                <td>What % is 7,200 of 90,000?</td>
+                <td>(7,200 ÷ 90,000) × 100</td>
+                <td>8%</td>
+              </tr>
+              <tr>
+                <td>What % is 15 of 12? (can exceed 100%)</td>
+                <td>(15 ÷ 12) × 100</td>
+                <td>125%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Yes, percentages can exceed 100%. "Sales are 150% of target" means sales are
+          1.5× the target. Our <a href="/calculator/percentage/">Percentage Calculator</a>
+          handles all ranges.
+        </p>
+      </section>
+
+      <section id="increase">
+        <h2>How to calculate percentage increase</h2>
+        <p>
+          Used for: salary hikes, price increases, population growth, investment returns,
+          inflation rates.
+        </p>
+
+        <h3>The formula</h3>
+        <div class="callout formula-callout">
+          <strong>% Increase = ((New Value - Old Value) ÷ Old Value) × 100</strong>
+        </div>
+
+        <h3>Worked examples</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Scenario</th>
+                <th>Old</th>
+                <th>New</th>
+                <th>Calculation</th>
+                <th>% Increase</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Salary hike</td>
+                <td>₹50,000</td>
+                <td>₹58,000</td>
+                <td>((58K-50K) ÷ 50K) × 100</td>
+                <td>16%</td>
+              </tr>
+              <tr>
+                <td>Rent increase</td>
+                <td>₹18,000</td>
+                <td>₹20,000</td>
+                <td>((20K-18K) ÷ 18K) × 100</td>
+                <td>11.1%</td>
+              </tr>
+              <tr>
+                <td>SIP returns</td>
+                <td>₹5,00,000</td>
+                <td>₹7,50,000</td>
+                <td>((7.5L-5L) ÷ 5L) × 100</td>
+                <td>50%</td>
+              </tr>
+              <tr>
+                <td>Petrol price</td>
+                <td>₹96</td>
+                <td>₹103</td>
+                <td>((103-96) ÷ 96) × 100</td>
+                <td>7.3%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          <strong>Key:</strong> Always divide by the OLD value, not the new one. This is
+          the most common mistake in percentage increase calculations. Our
+          <a href="/calculator/percentage/">Percentage Calculator</a> handles this
+          automatically.
+        </p>
+
+        <p>
+          Tracking your salary hike percentage? See how it affects your take-home with our
+          <a href="/calculator/salary/">Salary Calculator</a>. Planning investments based
+          on expected returns? Use our <a href="/calculator/sip/">SIP Calculator</a>.
+        </p>
+      </section>
+
+      <section id="decrease">
+        <h2>How to calculate percentage decrease</h2>
+        <p>
+          Same formula as increase, but the result is negative (or you take the absolute
+          value and call it a "decrease").
+        </p>
+
+        <h3>The formula</h3>
+        <div class="callout formula-callout">
+          <strong>% Decrease = ((Old Value - New Value) ÷ Old Value) × 100</strong>
+        </div>
+
+        <h3>Worked examples</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Scenario</th>
+                <th>Old</th>
+                <th>New</th>
+                <th>% Decrease</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Stock price drop</td>
+                <td>₹500</td>
+                <td>₹425</td>
+                <td>15% decrease</td>
+              </tr>
+              <tr>
+                <td>Weight loss</td>
+                <td>85 kg</td>
+                <td>78 kg</td>
+                <td>8.2% decrease</td>
+              </tr>
+              <tr>
+                <td>File compression</td>
+                <td>10 MB</td>
+                <td>3 MB</td>
+                <td>70% decrease</td>
+              </tr>
+              <tr>
+                <td>Amazon sale price</td>
+                <td>₹2,499</td>
+                <td>₹1,749</td>
+                <td>30% off</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          <strong>Important asymmetry:</strong> A 50% decrease followed by a 50% increase
+          does NOT return to the original. ₹100 → 50% decrease → ₹50 → 50% increase →
+          ₹75. You need a 100% increase to recover from a 50% decrease. This is why stock
+          market crashes hurt more than equivalent rallies help.
+        </p>
+      </section>
+
+      <section id="difference">
+        <h2>Percentage difference between two numbers</h2>
+        <p>
+          When there's no clear "old" and "new" — just two values you're comparing —
+          use percentage difference.
+        </p>
+
+        <h3>The formula</h3>
+        <div class="callout formula-callout">
+          <strong>% Difference = (|Value1 - Value2| ÷ ((Value1 + Value2) ÷ 2)) × 100</strong>
+        </div>
+        <p>
+          The denominator uses the <strong>average</strong> of both values, making the
+          comparison symmetric — the result is the same regardless of which number you
+          call Value1 or Value2.
+        </p>
+
+        <h3>Example</h3>
+        <p>
+          Company A has 450 employees. Company B has 380 employees. What's the percentage
+          difference?
+        </p>
+        <ul>
+          <li>Difference: |450 - 380| = 70</li>
+          <li>Average: (450 + 380) ÷ 2 = 415</li>
+          <li>% Difference: (70 ÷ 415) × 100 = <strong>16.9%</strong></li>
+        </ul>
+
+        <h3>When to use difference vs increase/decrease</h3>
+        <ul>
+          <li><strong>Percentage increase/decrease:</strong> When one value is clearly the "before" and the other is "after" (salary before and after hike, price before and after discount)</li>
+          <li><strong>Percentage difference:</strong> When comparing two independent values with no time relationship (two companies, two products, two cities)</li>
+        </ul>
+      </section>
+
+      <section id="marks">
+        <h2>How to calculate marks percentage (exams)</h2>
+        <p>
+          This is the percentage calculation that every Indian student needs multiple times
+          a year — board exams, entrance tests, semester results, competitive exams.
+        </p>
+
+        <h3>Single subject</h3>
+        <div class="callout formula-callout">
+          <strong>Percentage = (Marks obtained ÷ Total marks) × 100</strong>
+        </div>
+        <p>
+          <strong>Example:</strong> Scored 78 out of 100 in Mathematics.<br>
+          (78 ÷ 100) × 100 = <strong>78%</strong>
+        </p>
+
+        <h3>Multiple subjects (aggregate percentage)</h3>
+        <div class="callout formula-callout">
+          <strong>Aggregate % = (Sum of all marks obtained ÷ Sum of all total marks) × 100</strong>
+        </div>
+
+        <h3>Worked example: CBSE Board Results</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Subject</th>
+                <th>Marks obtained</th>
+                <th>Total marks</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>English</td>
+                <td>82</td>
+                <td>100</td>
+              </tr>
+              <tr>
+                <td>Hindi</td>
+                <td>75</td>
+                <td>100</td>
+              </tr>
+              <tr>
+                <td>Mathematics</td>
+                <td>91</td>
+                <td>100</td>
+              </tr>
+              <tr>
+                <td>Science</td>
+                <td>88</td>
+                <td>100</td>
+              </tr>
+              <tr>
+                <td>Social Studies</td>
+                <td>79</td>
+                <td>100</td>
+              </tr>
+              <tr>
+                <td><strong>Total</strong></td>
+                <td><strong>415</strong></td>
+                <td><strong>500</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Aggregate percentage = (415 ÷ 500) × 100 = <strong>83%</strong>
+        </p>
+
+        <h3>When subjects have different total marks</h3>
+        <p>
+          Some exams have subjects with different totals (e.g., one subject out of 50,
+          another out of 100). The formula still works — just add all obtained marks and
+          divide by all total marks.
+        </p>
+        <p>
+          <strong>Example:</strong> Physics 42/50, Chemistry 38/50, Biology 72/100.<br>
+          Total obtained: 42 + 38 + 72 = 152<br>
+          Total possible: 50 + 50 + 100 = 200<br>
+          Percentage: (152 ÷ 200) × 100 = <strong>76%</strong>
+        </p>
+
+        <p>
+          Need to convert your percentage to GPA? Use our
+          <a href="/calculator/gpa/">GPA Calculator</a>.
+        </p>
+      </section>
+
+      <section id="discount">
+        <h2>How to calculate discount percentage</h2>
+        <p>
+          Essential for shopping — every Amazon sale, Flipkart Big Billion Days, and local
+          store promotion uses percentage discounts.
+        </p>
+
+        <h3>Finding the discount percentage</h3>
+        <div class="callout formula-callout">
+          <strong>Discount % = ((Original price - Sale price) ÷ Original price) × 100</strong>
+        </div>
+        <p>
+          <strong>Example:</strong> Shirt was ₹1,499, now ₹1,049.<br>
+          ((1,499 - 1,049) ÷ 1,499) × 100 = (450 ÷ 1,499) × 100 = <strong>30% off</strong>
+        </p>
+
+        <h3>Finding the sale price from a discount</h3>
+        <div class="callout formula-callout">
+          <strong>Sale price = Original price × (1 - Discount% ÷ 100)</strong>
+        </div>
+        <p>
+          <strong>Example:</strong> ₹2,000 item with 35% discount.<br>
+          ₹2,000 × (1 - 0.35) = ₹2,000 × 0.65 = <strong>₹1,300</strong>
+        </p>
+
+        <h3>Stacked discounts (additional % off)</h3>
+        <p>
+          "40% off + additional 20% off" does NOT equal 60% off. The second discount
+          applies to the already-discounted price:
+        </p>
+        <ul>
+          <li>₹1,000 item, 40% off = ₹600</li>
+          <li>Additional 20% off ₹600 = ₹480</li>
+          <li>Total effective discount = 52%, not 60%</li>
+        </ul>
+        <p>
+          <strong>Formula for stacked discounts:</strong><br>
+          Effective discount = 1 - ((1 - D1/100) × (1 - D2/100))<br>
+          = 1 - (0.60 × 0.80) = 1 - 0.48 = 0.52 = 52%
+        </p>
+
+        <p>
+          Use our <a href="/calculator/discount/">Discount Calculator</a> to quickly
+          find the final price after any single or stacked discount.
+        </p>
+      </section>
+
+      <section id="gst">
+        <h2>How to calculate GST percentage</h2>
+        <p>
+          GST is the most common tax percentage calculation in India. Here are the essential
+          formulas:
+        </p>
+
+        <h3>Adding GST to a price</h3>
+        <div class="callout formula-callout">
+          <strong>Price with GST = Base price × (1 + GST rate ÷ 100)</strong>
+        </div>
+        <p>
+          <strong>Example:</strong> ₹5,000 item with 18% GST.<br>
+          ₹5,000 × (1 + 0.18) = ₹5,000 × 1.18 = <strong>₹5,900</strong>
+        </p>
+
+        <h3>Finding the base price from a GST-inclusive price</h3>
+        <div class="callout formula-callout">
+          <strong>Base price = GST-inclusive price ÷ (1 + GST rate ÷ 100)</strong>
+        </div>
+        <p>
+          <strong>Example:</strong> Bill shows ₹11,800 (18% GST inclusive). What's the base price?<br>
+          ₹11,800 ÷ 1.18 = <strong>₹10,000</strong><br>
+          GST amount = ₹11,800 - ₹10,000 = ₹1,800
+        </p>
+
+        <h3>Common Indian GST rates</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>GST rate</th>
+                <th>Common items</th>
+                <th>Quick multiplier</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>5%</td>
+                <td>Packaged food, economy hotel rooms, transport</td>
+                <td>× 1.05</td>
+              </tr>
+              <tr>
+                <td>12%</td>
+                <td>Processed food, business class flights, work contracts</td>
+                <td>× 1.12</td>
+              </tr>
+              <tr>
+                <td>18%</td>
+                <td>Most services, restaurants, electronics, software</td>
+                <td>× 1.18</td>
+              </tr>
+              <tr>
+                <td>28%</td>
+                <td>Luxury items, cars, tobacco, AC restaurants</td>
+                <td>× 1.28</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Use our <a href="/calculator/gst/">GST Calculator</a> for instant calculations
+          — enter the base price and GST rate, see the GST amount and total price.
+        </p>
+      </section>
+
+      <section id="salary">
+        <h2>How to calculate salary hike percentage</h2>
+        <p>
+          Appraisal season in India (April-June) means everyone's calculating their
+          salary hike. Here's how:
+        </p>
+
+        <h3>The formula</h3>
+        <div class="callout formula-callout">
+          <strong>Hike % = ((New CTC - Old CTC) ÷ Old CTC) × 100</strong>
+        </div>
+
+        <h3>Worked examples</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Old CTC</th>
+                <th>New CTC</th>
+                <th>Hike %</th>
+                <th>Verdict</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>₹6 LPA</td>
+                <td>₹6.6 LPA</td>
+                <td>10%</td>
+                <td>Average (covers inflation)</td>
+              </tr>
+              <tr>
+                <td>₹10 LPA</td>
+                <td>₹11.5 LPA</td>
+                <td>15%</td>
+                <td>Good</td>
+              </tr>
+              <tr>
+                <td>₹15 LPA</td>
+                <td>₹18 LPA</td>
+                <td>20%</td>
+                <td>Strong (promotion-level)</td>
+              </tr>
+              <tr>
+                <td>₹12 LPA</td>
+                <td>₹18 LPA</td>
+                <td>50%</td>
+                <td>Exceptional (likely job switch)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Hike on CTC vs hike on in-hand</h3>
+        <p>
+          <strong>Critical distinction:</strong> A 15% hike on CTC does NOT mean 15% more
+          in your bank account. Higher CTC means higher PF contribution and potentially
+          higher tax bracket. A 15% CTC hike might translate to only 10-12% increase in
+          in-hand salary.
+        </p>
+        <p>
+          Calculate the actual in-hand impact with our
+          <a href="/calculator/salary/">Salary Calculator</a>. Enter both your old and new
+          CTC to see the real difference in monthly take-home. Read our detailed guide:
+          <a href="/blog/ctc-vs-in-hand-salary/">CTC vs In-Hand Salary Explained</a>.
+        </p>
+      </section>
+
+      <section id="shortcuts">
+        <h2>Mental math shortcuts for percentages</h2>
+        <p>
+          You don't always need a calculator. These tricks let you estimate percentages
+          in your head:
+        </p>
+
+        <h3>The anchor method</h3>
+        <p>
+          Start with easy percentages and work from there:
+        </p>
+        <ul>
+          <li><strong>10% of anything:</strong> Move the decimal one place left. 10% of 8,500 = 850</li>
+          <li><strong>5% of anything:</strong> Half of 10%. 5% of 8,500 = 425</li>
+          <li><strong>1% of anything:</strong> Move the decimal two places left. 1% of 8,500 = 85</li>
+          <li><strong>25% of anything:</strong> Divide by 4. 25% of 8,500 = 2,125</li>
+          <li><strong>50% of anything:</strong> Divide by 2. 50% of 8,500 = 4,250</li>
+          <li><strong>20% of anything:</strong> Divide by 5. 20% of 8,500 = 1,700</li>
+        </ul>
+
+        <h3>Building complex percentages from simple ones</h3>
+        <p>
+          <strong>15% = 10% + 5%:</strong> 15% of 8,500 = 850 + 425 = 1,275<br>
+          <strong>12% = 10% + 1% + 1%:</strong> 12% of 8,500 = 850 + 85 + 85 = 1,020<br>
+          <strong>18% = 20% - 2%:</strong> 18% of 5,000 = 1,000 - 100 = 900<br>
+          <strong>30% = 3 × 10%:</strong> 30% of 8,500 = 3 × 850 = 2,550<br>
+          <strong>75% = 50% + 25%:</strong> 75% of 8,500 = 4,250 + 2,125 = 6,375
+        </p>
+
+        <h3>The reverse trick</h3>
+        <p>
+          X% of Y = Y% of X. Always.
+        </p>
+        <p>
+          <strong>Example:</strong> 8% of 50 is hard to calculate mentally. But 50% of 8
+          = 4. Same answer! So 8% of 50 = 4.
+        </p>
+        <p>
+          This works because (8/100 × 50) = (50/100 × 8). Use whichever direction is
+          easier to compute.
+        </p>
+
+        <h3>The "double and halve" trick for shopping discounts</h3>
+        <p>
+          30% off ₹1,200: Hard.<br>
+          30% off ₹1,000 = ₹300. 30% off ₹200 = ₹60. Total: ₹360 off.<br>
+          Sale price: ₹1,200 - ₹360 = ₹840.
+        </p>
+        <p>
+          Break numbers into round components for easier mental math. Our
+          <a href="/calculator/discount/">Discount Calculator</a> does the hard work for
+          complex discounts.
+        </p>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+          <h3>What is the easiest way to calculate percentage?</h3>
+          <p>
+            Convert the percentage to a decimal (divide by 100), then multiply. 25% of 800
+            = 0.25 × 800 = 200. For instant answers, use our
+            <a href="/calculator/percentage/">Percentage Calculator</a>. For mental math,
+            start with 10% (move decimal point) and build from there.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How do I find what percentage one number is of another?</h3>
+          <p>
+            Divide the first number by the second, then multiply by 100. What percentage
+            is 350 of 500? (350 ÷ 500) × 100 = 70%. The formula is
+            Percentage = (Part ÷ Whole) × 100.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How to calculate percentage increase between two numbers?</h3>
+          <p>
+            Subtract the old value from the new value, divide by the old value, multiply
+            by 100. Example: ₹50,000 to ₹58,000 = ((58,000 - 50,000) ÷ 50,000) × 100
+            = 16% increase. Always divide by the OLD (original) value.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How to calculate CGPA from percentage?</h3>
+          <p>
+            Different universities use different conversion formulas. A common approximation:
+            CGPA = Percentage ÷ 9.5. So 76% ≈ 8.0 CGPA. For reverse: Percentage = CGPA ×
+            9.5. Note: this varies by institution — check your university's specific
+            conversion formula. Our <a href="/calculator/gpa/">GPA Calculator</a> handles
+            multiple grading systems.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What is the percentage formula for marks?</h3>
+          <p>
+            Percentage = (Marks obtained ÷ Total marks) × 100. For multiple subjects, add
+            all marks obtained and divide by total possible marks. Example: 415 out of 500
+            = (415 ÷ 500) × 100 = 83%.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How to calculate GST amount from total price?</h3>
+          <p>
+            If the total is GST-inclusive: Base price = Total ÷ (1 + GST rate/100). GST
+            amount = Total - Base price. For 18% GST on ₹11,800 total: Base = ₹11,800 ÷
+            1.18 = ₹10,000. GST = ₹1,800. Use our
+            <a href="/calculator/gst/">GST Calculator</a> for instant results.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Is a 10% salary hike good?</h3>
+          <p>
+            A 10% hike roughly matches Indian inflation (6-8%) plus minor real growth.
+            It's standard for "meets expectations" performance. 15-20% is good (strong
+            performer). 25%+ typically requires a promotion or job switch. Remember:
+            CTC hike % doesn't equal in-hand hike % due to tax brackets and PF. Check
+            with our <a href="/calculator/salary/">Salary Calculator</a>.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How to calculate percentage on a calculator?</h3>
+          <p>
+            On a basic calculator: multiply the number by the percentage, press %, and the
+            answer appears. Example: 850 × 15 % = 127.5. On a phone calculator: multiply
+            the number by the percentage divided by 100. Example: 850 × 0.15 = 127.5. Or
+            use our online <a href="/calculator/percentage/">Percentage Calculator</a>
+            which shows the formula alongside the answer.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can a percentage be more than 100?</h3>
+          <p>
+            Yes. "Sales are 150% of target" means sales are 1.5× the target. "200%
+            increase" means the value tripled (original + 2× original). "She gave 110%
+            effort" is mathematically impossible but motivationally effective. Percentages
+            above 100% simply mean the part is larger than the reference whole.
+          </p>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <h2>Calculate any percentage instantly</h2>
+        <p>
+          Percentage of a number, percentage change, percentage difference — all in one
+          calculator. Free, instant, no signup.
+        </p>
+        <div class="cta-buttons">
+          <a href="/calculator/percentage/" class="btn btn-lg">
+            → Open Percentage Calculator
+          </a>
+          <a href="/calculator/discount/" class="btn btn-lg btn-secondary">
+            → Calculate Discounts
+          </a>
+        </div>
+      </section>
+
+      <section class="related">
+        <h2>Related Calculators & Guides</h2>
+        <ul>
+          <li><a href="/calculator/percentage/">Percentage Calculator</a></li>
+          <li><a href="/calculator/discount/">Discount Calculator</a></li>
+          <li><a href="/calculator/gst/">GST Calculator</a></li>
+          <li><a href="/calculator/gpa/">GPA Calculator</a></li>
+          <li><a href="/calculator/salary/">Salary Calculator — CTC to In-Hand</a></li>
+          <li><a href="/calculator/sip/">SIP Calculator — Investment Returns</a></li>
+          <li><a href="/calculator/compound-interest/">Compound Interest Calculator</a></li>
+          <li><a href="/calculator/markup-margin/">Markup & Margin Calculator</a></li>
+          <li><a href="/calculator/scientific/">Scientific Calculator</a></li>
+          <li><a href="/blog/ctc-vs-in-hand-salary/">CTC vs In-Hand Salary Explained</a></li>
+          <li><a href="/blog/old-vs-new-tax-regime/">Old vs New Tax Regime Comparison</a></li>
+        </ul>
+      </section>
+
+    </div>
+  </article>
+
+  <style>
+    .article { padding: 40px 0 60px; }
+    .article .container { max-width: 760px; }
+
+    .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .article-header { margin-bottom: 32px; }
+    .article-meta { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .article-meta .cat { color: var(--blue); font-weight: 700; text-transform: uppercase; letter-spacing: .5px; font-size: 11px; }
+    .article h1 { font-size: 38px; line-height: 1.2; margin-bottom: 18px; }
+    .lede { font-size: 19px; color: var(--text-muted); line-height: 1.6; }
+
+    .toc { padding: 20px 24px; margin: 32px 0; }
+    .toc strong { display: block; margin-bottom: 10px; }
+    .toc ul { list-style: none; padding: 0; }
+    .toc li { margin-bottom: 6px; font-size: 14px; }
+    .toc a { color: var(--blue); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    .article h2 { font-size: 28px; margin-top: 48px; margin-bottom: 16px; }
+    .article h3 { font-size: 20px; margin-top: 24px; margin-bottom: 10px; }
+    .article p, .article ul, .article ol { font-size: 16px; line-height: 1.7; margin-bottom: 16px; color: var(--text); }
+    .article ul, .article ol { padding-left: 24px; }
+    .article li { margin-bottom: 6px; }
+    .article a:not(.btn) { color: var(--blue); text-decoration: underline; }
+    .article strong { font-weight: 700; }
+
+    .callout { background: var(--blue-light); border-left: 4px solid var(--blue); padding: 16px 20px; border-radius: 8px; margin: 20px 0; font-size: 15px; }
+    [data-theme="dark"] .callout { background: rgba(0, 102, 255, .1); }
+
+    .formula-callout { background: #f0fdf4; border-left-color: #16a34a; font-family: 'Courier New', monospace; }
+    [data-theme="dark"] .formula-callout { background: rgba(22, 163, 74, .1); }
+
+    .table-wrap { overflow-x: auto; margin: 20px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+    th { background: var(--gray-100); font-weight: 700; }
+
+    .faq-item { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item h3 { font-size: 17px; margin-bottom: 8px; }
+    .faq-item p { font-size: 15px; margin-bottom: 0; }
+
+    .cta-section { background: linear-gradient(135deg, var(--blue-light), #fff); border: 1px solid var(--blue-light); border-radius: 16px; padding: 40px; text-align: center; margin: 48px 0; }
+    [data-theme="dark"] .cta-section { background: linear-gradient(135deg, rgba(0, 102, 255, .1), transparent); border-color: rgba(0, 102, 255, .2); }
+    .cta-section h2 { margin-top: 0; }
+    .cta-section p { margin-bottom: 24px; }
+    .cta-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-secondary { background: transparent; border: 1px solid var(--blue); color: var(--blue); }
+    .btn-secondary:hover { background: var(--blue-light); }
+
+    .related h2 { font-size: 22px; }
+    .related ul { list-style: none; padding: 0; }
+    .related li { margin-bottom: 10px; }
+  </style>
+</MainLayout>

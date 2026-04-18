@@ -1,0 +1,984 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const title = "How Much Water Should You Drink Per Day? (Calculator + Indian Climate Guide)";
+const description = "Find your daily water intake based on weight, activity, and climate. Includes water calculator, Indian summer hydration guide, signs of dehydration, and myths debunked.";
+const publishDate = "2026-04-18";
+const lastUpdated = "2026-04-18";
+---
+
+<MainLayout
+  title={`${title} | DoItSwift`}
+  description={description}
+  keywords="how much water to drink per day, daily water intake, water intake calculator, how many litres of water per day, water intake by weight, dehydration symptoms, water intake india summer, how much water should i drink"
+  canonical="https://doitswift.com/blog/how-much-water-per-day/"
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": lastUpdated,
+    "author": { "@type": "Organization", "name": "DoItSwift" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "DoItSwift",
+      "logo": { "@type": "ImageObject", "url": "https://doitswift.com/og-default.svg" }
+    },
+    "mainEntityOfPage": "https://doitswift.com/blog/how-much-water-per-day/"
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How much water should I drink per day?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The general recommendation is 2-3 litres (8-12 glasses) per day for adults, but your actual needs depend on body weight, activity level, climate, and diet. A practical formula is 30-35 ml per kg of body weight. A 70 kg person needs approximately 2.1-2.5 litres daily, more in hot weather or during exercise."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is 8 glasses of water a day enough?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "For a sedentary person in a cool climate, 8 glasses (about 2 litres) may be sufficient. But most Indians need more — especially during summer months when temperatures exceed 35°C. Active people, those in hot climates, pregnant women, and breastfeeding mothers need 2.5-4 litres daily. Use a water intake calculator based on your specific weight and activity."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I know if I'm drinking enough water?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The simplest indicator is urine color. Pale yellow (like straw) means you're well hydrated. Dark yellow or amber means you need more water. Other signs of adequate hydration: rarely feeling thirsty, urinating 4-8 times per day, skin that bounces back quickly when pinched, and consistent energy levels."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Should I drink more water in Indian summers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, significantly more. In Indian summers with temperatures of 35-45°C, the body loses 1-2 extra litres through sweat compared to cooler months. Increase intake by 500ml-1 litre above your normal amount. Traditional Indian drinks like nimbu pani, chaas (buttermilk), coconut water, and aam panna are excellent for hydration and electrolyte replacement."
+        }
+      }
+    ]
+  })} />
+
+  <article class="article">
+    <div class="container">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> › <a href="/blog/">Blog</a> › <span>How Much Water Per Day</span>
+      </nav>
+
+      <header class="article-header">
+        <div class="article-meta">
+          <span class="cat">Health</span>
+          <time>Updated April 18, 2026</time>
+          <span>· 13 min read</span>
+        </div>
+        <h1>How Much Water Should You Drink Per Day?</h1>
+        <p class="lede">
+          "Drink 8 glasses a day" is the most repeated health advice in history — and it's
+          incomplete. A 50 kg woman working from home in Shimla and a 90 kg construction
+          worker in Chennai have wildly different water needs. Your body weight, activity
+          level, climate, and diet all determine how much you actually need. This guide
+          gives you the real formula, includes an <strong>Indian climate adjustment</strong>
+          (because most hydration guides ignore the fact that 40°C summers exist), and
+          debunks the myths that waste your time.
+        </p>
+      </header>
+
+      <div class="toc card">
+        <strong>In this guide:</strong>
+        <ul>
+          <li><a href="#calculator">Calculate your water intake now</a></li>
+          <li><a href="#formula">The real formula for daily water intake</a></li>
+          <li><a href="#by-weight">Water intake chart by body weight</a></li>
+          <li><a href="#climate">Indian climate adjustment: summer vs winter</a></li>
+          <li><a href="#signs">How to tell if you're dehydrated</a></li>
+          <li><a href="#indian-drinks">Best Indian drinks for hydration</a></li>
+          <li><a href="#food-water">Water from food: how much counts?</a></li>
+          <li><a href="#exercise">Water intake during exercise</a></li>
+          <li><a href="#myths">7 water myths debunked</a></li>
+          <li><a href="#tips">Practical tips to drink more water</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+
+      <section id="calculator">
+        <h2>Calculate your daily water intake</h2>
+        <div class="callout">
+          <strong>🎯 Find your number:</strong>
+          Our <a href="/calculator/water-intake/">Water Intake Calculator</a> factors in
+          your weight, activity level, and climate to give you a personalized daily target
+          in litres and glasses. No signup, instant results.
+        </div>
+      </section>
+
+      <section id="formula">
+        <h2>The real formula for daily water intake</h2>
+        <p>
+          Forget "8 glasses." Here's what the science actually says:
+        </p>
+
+        <h3>The weight-based formula</h3>
+        <div class="callout formula-callout">
+          <strong>Daily water intake = Body weight (kg) × 30-35 ml</strong>
+        </div>
+        <p>
+          This gives you a baseline. A 60 kg person needs 1.8-2.1 litres. A 80 kg person
+          needs 2.4-2.8 litres. Simple, personalized, and more accurate than a fixed
+          number.
+        </p>
+
+        <h3>Then adjust for these factors:</h3>
+        <ul>
+          <li><strong>Hot climate (+500 ml to +1 litre):</strong> Temperatures above 30°C increase sweat loss significantly. Indian summers (35-45°C) require the upper end of this adjustment</li>
+          <li><strong>Exercise (+500 ml per 30 min of activity):</strong> You lose 500-1000 ml per hour of moderate exercise through sweat. More in heat and humidity</li>
+          <li><strong>Dry or air-conditioned environments (+300-500 ml):</strong> AC removes humidity from air, increasing insensible water loss through breathing and skin</li>
+          <li><strong>Altitude (+500 ml above 2,500 m):</strong> Higher altitude increases respiration rate and urine output</li>
+          <li><strong>Pregnancy (+300-500 ml):</strong> Blood volume increases, amniotic fluid needs water</li>
+          <li><strong>Breastfeeding (+500-700 ml):</strong> Milk production requires significant fluid</li>
+          <li><strong>Illness with fever, diarrhea, or vomiting (+1-2 litres):</strong> Fluid losses increase dramatically</li>
+        </ul>
+
+        <h3>Example calculations</h3>
+        <p>
+          <strong>Office worker in Bangalore (25°C, AC office):</strong><br>
+          65 kg × 33 ml = 2.15 litres + 300 ml (AC) = <strong>~2.5 litres/day</strong>
+        </p>
+        <p>
+          <strong>Same person during Bangalore summer (35°C):</strong><br>
+          65 kg × 33 ml = 2.15 litres + 700 ml (heat) = <strong>~2.85 litres/day</strong>
+        </p>
+        <p>
+          <strong>Active gym-goer in Delhi summer (42°C):</strong><br>
+          80 kg × 35 ml = 2.8 litres + 1 litre (extreme heat) + 500 ml (1 hour gym) = <strong>~4.3 litres/day</strong>
+        </p>
+        <p>
+          Get your exact number from our
+          <a href="/calculator/water-intake/">Water Intake Calculator</a>.
+        </p>
+      </section>
+
+      <section id="by-weight">
+        <h2>Water intake chart by body weight</h2>
+        <p>
+          Quick reference using the 33 ml/kg formula, with adjustments for activity:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Body weight</th>
+                <th>Sedentary (cool)</th>
+                <th>Sedentary (hot)</th>
+                <th>Active (cool)</th>
+                <th>Active (hot)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>45 kg</td>
+                <td>1.5 L</td>
+                <td>2.0 L</td>
+                <td>2.0 L</td>
+                <td>2.8 L</td>
+              </tr>
+              <tr>
+                <td>55 kg</td>
+                <td>1.8 L</td>
+                <td>2.3 L</td>
+                <td>2.3 L</td>
+                <td>3.2 L</td>
+              </tr>
+              <tr>
+                <td>65 kg</td>
+                <td>2.1 L</td>
+                <td>2.8 L</td>
+                <td>2.6 L</td>
+                <td>3.6 L</td>
+              </tr>
+              <tr>
+                <td>75 kg</td>
+                <td>2.5 L</td>
+                <td>3.2 L</td>
+                <td>3.0 L</td>
+                <td>4.0 L</td>
+              </tr>
+              <tr>
+                <td>85 kg</td>
+                <td>2.8 L</td>
+                <td>3.5 L</td>
+                <td>3.3 L</td>
+                <td>4.5 L</td>
+              </tr>
+              <tr>
+                <td>95 kg</td>
+                <td>3.1 L</td>
+                <td>3.8 L</td>
+                <td>3.6 L</td>
+                <td>4.8 L</td>
+              </tr>
+              <tr>
+                <td>105 kg</td>
+                <td>3.5 L</td>
+                <td>4.2 L</td>
+                <td>4.0 L</td>
+                <td>5.2 L</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          "Cool" = under 25°C. "Hot" = above 30°C. "Active" = at least 30 minutes of
+          exercise daily. These are baseline targets — your body's thirst signals and urine
+          color give real-time feedback. Use our
+          <a href="/calculator/water-intake/">Water Intake Calculator</a> with your exact
+          weight and activity level.
+        </p>
+      </section>
+
+      <section id="climate">
+        <h2>Indian climate adjustment: summer vs winter</h2>
+        <p>
+          Most hydration guides are written for temperate Western climates where summers
+          peak at 30°C. Indian summers routinely hit <strong>35-45°C</strong> across most
+          of the country. This matters enormously for water needs.
+        </p>
+
+        <h3>How heat increases water loss</h3>
+        <p>
+          In comfortable temperatures (20-25°C), your body loses approximately 2.5 litres
+          of water daily through breathing, sweating, urination, and other processes. In
+          Indian summer heat (35-45°C), sweat losses alone can reach 1-2 litres per hour
+          during outdoor activity. Even sitting indoors without AC, you lose 500 ml-1 litre
+          more than in winter.
+        </p>
+
+        <h3>Seasonal water intake targets for India</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Season</th>
+                <th>Typical temp</th>
+                <th>Target for 70 kg adult</th>
+                <th>Key risk</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Winter (Nov-Feb)</td>
+                <td>10-25°C</td>
+                <td>2.0-2.5 L</td>
+                <td>People forget to drink because they don't feel thirsty</td>
+              </tr>
+              <tr>
+                <td>Spring (Mar-Apr)</td>
+                <td>25-35°C</td>
+                <td>2.5-3.0 L</td>
+                <td>Transition period — habits from winter may under-hydrate</td>
+              </tr>
+              <tr>
+                <td>Summer (May-Jun)</td>
+                <td>35-45°C</td>
+                <td>3.0-4.0 L</td>
+                <td>Heat stroke, severe dehydration — highest risk period</td>
+              </tr>
+              <tr>
+                <td>Monsoon (Jul-Sep)</td>
+                <td>25-35°C, humid</td>
+                <td>2.5-3.5 L</td>
+                <td>Humidity reduces sweat evaporation — you overheat faster</td>
+              </tr>
+              <tr>
+                <td>Post-monsoon (Oct-Nov)</td>
+                <td>25-30°C</td>
+                <td>2.0-3.0 L</td>
+                <td>Transitioning back to lower intake</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>City-specific summer context</h3>
+        <p>
+          <strong>Delhi/NCR (April-June, 40-47°C):</strong> The most extreme heat in
+          major Indian cities. Add 1-1.5 litres above baseline. Carry water at all times.
+          Avoid outdoor activity between 12-4 PM.
+        </p>
+        <p>
+          <strong>Mumbai (April-June, 33-38°C + high humidity):</strong> Heat combined
+          with 80%+ humidity makes sweating less effective at cooling. You overheat faster
+          even though temperatures seem lower than Delhi. Add 1 litre and focus on
+          electrolytes.
+        </p>
+        <p>
+          <strong>Bangalore (April-May, 33-38°C):</strong> Traditionally cooler but
+          increasingly hot. Add 500 ml-1 litre during peak summer months.
+        </p>
+        <p>
+          <strong>Chennai (April-July, 35-42°C + coastal humidity):</strong> Sustained
+          heat with humidity. Similar to Mumbai — add 1 litre and prioritize electrolyte
+          drinks.
+        </p>
+      </section>
+
+      <section id="signs">
+        <h2>How to tell if you're dehydrated</h2>
+        <p>
+          Your body gives clear signals. Learn to read them:
+        </p>
+
+        <h3>The urine color test (most reliable)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Urine color</th>
+                <th>Hydration status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Clear / very pale</td>
+                <td>Well hydrated (possibly over-hydrated)</td>
+                <td>Maintain current intake</td>
+              </tr>
+              <tr>
+                <td>Pale yellow (straw)</td>
+                <td>Optimally hydrated</td>
+                <td>Perfect — this is the target</td>
+              </tr>
+              <tr>
+                <td>Yellow</td>
+                <td>Mildly dehydrated</td>
+                <td>Drink 1-2 glasses now</td>
+              </tr>
+              <tr>
+                <td>Dark yellow</td>
+                <td>Moderately dehydrated</td>
+                <td>Drink 2-3 glasses, increase daily intake</td>
+              </tr>
+              <tr>
+                <td>Amber / honey</td>
+                <td>Significantly dehydrated</td>
+                <td>Drink water immediately, rest in shade</td>
+              </tr>
+              <tr>
+                <td>Brown / dark</td>
+                <td>Severely dehydrated</td>
+                <td>Medical attention may be needed</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          <strong>Note:</strong> B vitamins (from supplements or energy drinks) can turn
+          urine bright yellow even when hydrated. Beets can turn it pink. If you're taking
+          these, use other signs alongside color.
+        </p>
+
+        <h3>Other dehydration signs</h3>
+        <ul>
+          <li><strong>Early signs:</strong> Thirst (obvious but often ignored), dry mouth, slight headache, fatigue, reduced urine frequency</li>
+          <li><strong>Moderate signs:</strong> Dizziness, dark urine, dry skin, muscle cramps, irritability, difficulty concentrating</li>
+          <li><strong>Severe signs:</strong> Rapid heartbeat, sunken eyes, confusion, very little or no urine, fainting — seek medical help</li>
+        </ul>
+
+        <div class="callout">
+          <strong>⚠️ The "thirst is too late" myth:</strong>
+          You may have heard that "if you're thirsty, you're already dehydrated." This is
+          an overstatement. Thirst is an effective early warning system in healthy adults.
+          Drinking when thirsty and with meals is sufficient for most people in normal
+          conditions. The exceptions: hot weather exercise, elderly adults (thirst
+          sensation weakens with age), and young children (may not communicate thirst).
+        </div>
+      </section>
+
+      <section id="indian-drinks">
+        <h2>Best Indian drinks for hydration</h2>
+        <p>
+          Water is the foundation, but traditional Indian beverages add variety, flavor,
+          and electrolytes. Here's how common Indian drinks contribute to hydration:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Drink</th>
+                <th>Hydration value</th>
+                <th>Extra benefits</th>
+                <th>Watch out for</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Coconut water (nariyal pani)</td>
+                <td>Excellent</td>
+                <td>Natural electrolytes (potassium, sodium, magnesium)</td>
+                <td>Calories add up if drinking multiple per day</td>
+              </tr>
+              <tr>
+                <td>Buttermilk (chaas / mattha)</td>
+                <td>Excellent</td>
+                <td>Probiotics, cools the body, easy to digest</td>
+                <td>Add salt for electrolytes, avoid excessive sugar</td>
+              </tr>
+              <tr>
+                <td>Nimbu pani (lemon water)</td>
+                <td>Excellent</td>
+                <td>Vitamin C, electrolytes with salt and sugar</td>
+                <td>Excessive sugar defeats the purpose</td>
+              </tr>
+              <tr>
+                <td>Aam panna (raw mango drink)</td>
+                <td>Very good</td>
+                <td>Traditional heat-stroke prevention, electrolytes</td>
+                <td>Seasonal (summer only), sugar content</td>
+              </tr>
+              <tr>
+                <td>Jaljeera</td>
+                <td>Very good</td>
+                <td>Digestive spices, refreshing, electrolytes</td>
+                <td>Sodium content — fine for summer, moderate otherwise</td>
+              </tr>
+              <tr>
+                <td>Sattu drink</td>
+                <td>Good</td>
+                <td>Protein, fiber, cooling properties, traditional Bihar drink</td>
+                <td>Calories — treat as a light snack, not just water</td>
+              </tr>
+              <tr>
+                <td>Lassi (sweet or salted)</td>
+                <td>Good</td>
+                <td>Probiotics, protein, calcium</td>
+                <td>High calories (200-300 per glass), sugar in sweet version</td>
+              </tr>
+              <tr>
+                <td>Chai (tea with milk)</td>
+                <td>Moderate</td>
+                <td>Caffeine for alertness, comfort drink</td>
+                <td>Mild diuretic effect at 4+ cups, sugar adds calories</td>
+              </tr>
+              <tr>
+                <td>Coffee</td>
+                <td>Moderate</td>
+                <td>Caffeine, antioxidants</td>
+                <td>Stronger diuretic than tea at high intake (4+ cups)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout">
+          <strong>🥥 Summer hydration tip:</strong>
+          Start your morning with a glass of plain water. Have coconut water or nimbu pani
+          mid-morning. Chaas with lunch. Plain water through afternoon. Jaljeera or nimbu
+          pani in evening. This pattern ensures varied hydration through the day without
+          relying solely on plain water, which many people find boring to drink enough of.
+        </div>
+      </section>
+
+      <section id="food-water">
+        <h2>Water from food: how much counts?</h2>
+        <p>
+          Approximately <strong>20-30% of your daily water</strong> comes from food,
+          depending on your diet. Water-rich foods contribute meaningfully to hydration:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Food</th>
+                <th>Water content</th>
+                <th>Common in Indian diet?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Cucumber (kheera)</td>
+                <td>96%</td>
+                <td>Yes — raita, salads, standalone snack</td>
+              </tr>
+              <tr>
+                <td>Watermelon (tarbooz)</td>
+                <td>92%</td>
+                <td>Yes — peak summer fruit</td>
+              </tr>
+              <tr>
+                <td>Tomatoes (tamatar)</td>
+                <td>94%</td>
+                <td>Yes — in almost every curry and salad</td>
+              </tr>
+              <tr>
+                <td>Spinach (palak)</td>
+                <td>91%</td>
+                <td>Yes — palak paneer, saag</td>
+              </tr>
+              <tr>
+                <td>Oranges (santra)</td>
+                <td>87%</td>
+                <td>Yes — winter/spring fruit</td>
+              </tr>
+              <tr>
+                <td>Curd / Yogurt (dahi)</td>
+                <td>85%</td>
+                <td>Yes — with every meal in many households</td>
+              </tr>
+              <tr>
+                <td>Dal (cooked lentils)</td>
+                <td>70-85%</td>
+                <td>Yes — daily staple</td>
+              </tr>
+              <tr>
+                <td>Rice (cooked)</td>
+                <td>70%</td>
+                <td>Yes — especially South and East India</td>
+              </tr>
+              <tr>
+                <td>Sambar / Rasam</td>
+                <td>85-90%</td>
+                <td>Yes — South Indian staple</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          A typical Indian meal of rice + dal + sabzi + curd contributes roughly 300-500 ml
+          of water. Three such meals add 900-1500 ml to your daily intake. This is why
+          Indian diets are naturally more hydrating than dry diets based on bread and meat.
+        </p>
+        <p>
+          Track your total intake (drinks + food water) with our
+          <a href="/calculator/water-intake/">Water Intake Calculator</a>.
+        </p>
+      </section>
+
+      <section id="exercise">
+        <h2>Water intake during exercise</h2>
+        <p>
+          Exercise increases water needs substantially. Here's the practical framework:
+        </p>
+
+        <h3>Before exercise</h3>
+        <p>
+          Drink 300-500 ml of water 2-3 hours before exercise. Another 200 ml about 20
+          minutes before starting. This ensures you begin hydrated without feeling
+          bloated.
+        </p>
+
+        <h3>During exercise</h3>
+        <p>
+          Drink 150-250 ml every 15-20 minutes during exercise. For sessions under 60
+          minutes, plain water is sufficient. For sessions over 60 minutes or in extreme
+          heat, add electrolytes (salt, coconut water, or a sports drink).
+        </p>
+
+        <h3>After exercise</h3>
+        <p>
+          For every kg of body weight lost during exercise (weigh before and after), drink
+          1.5 litres to fully rehydrate. Most people lose 0.5-1 kg per hour of moderate
+          exercise.
+        </p>
+
+        <h3>Indian gym and outdoor exercise context</h3>
+        <p>
+          If you're exercising outdoors in Indian summer (morning jog, cricket, football),
+          increase all the above numbers by 50%. Coconut water after outdoor exercise is
+          superior to plain water for electrolyte replacement. Avoid exercising outdoors
+          between 11 AM and 4 PM during April-June.
+        </p>
+
+        <p>
+          Planning your nutrition around exercise? Use our
+          <a href="/calculator/calorie/">Calorie Calculator</a> for energy needs and our
+          <a href="/calculator/macro/">Macro Calculator</a> for protein/carb/fat targets.
+        </p>
+      </section>
+
+      <section id="myths">
+        <h2>7 water myths debunked</h2>
+
+        <h3>Myth 1: "You need exactly 8 glasses per day"</h3>
+        <p>
+          <strong>Reality:</strong> The "8 glasses" advice has no scientific basis for a
+          specific number. It originated from a 1945 US Food and Nutrition Board
+          recommendation that was taken out of context. Your actual needs depend on body
+          weight, activity, and climate. Some people need 6 glasses, others need 15.
+        </p>
+
+        <h3>Myth 2: "Coffee and tea dehydrate you"</h3>
+        <p>
+          <strong>Reality:</strong> Caffeine has a mild diuretic effect, but the water in
+          coffee and tea more than compensates. A cup of chai contributes positively to
+          hydration. Only at very high intake (6+ cups daily) might the diuretic effect
+          become significant. Your 3 cups of chai per day are helping, not hurting.
+        </p>
+
+        <h3>Myth 3: "Drinking water during meals dilutes digestion"</h3>
+        <p>
+          <strong>Reality:</strong> This is one of the most persistent myths in Indian
+          health culture. Scientific evidence does not support this claim. Water aids
+          digestion by helping break down food and absorb nutrients. Drinking reasonable
+          amounts during meals is fine and even beneficial. Avoid gulping large quantities
+          immediately before eating, as this can cause fullness.
+        </p>
+
+        <h3>Myth 4: "Cold water is bad for you"</h3>
+        <p>
+          <strong>Reality:</strong> Another common belief in Indian households. Cold water
+          is perfectly safe and won't cause colds, throat infections, or digestive issues
+          in healthy people. Your body warms it to body temperature quickly. In hot weather,
+          cold water is more palatable and people tend to drink more of it. The only
+          exception: some people with sensitive teeth or esophageal conditions may prefer
+          room temperature water for comfort.
+        </p>
+
+        <h3>Myth 5: "You can't drink too much water"</h3>
+        <p>
+          <strong>Reality:</strong> You can. Hyponatremia (water intoxication) occurs when
+          you drink so much that blood sodium levels become dangerously diluted. This is
+          rare but has occurred in marathon runners and water-drinking contests. Symptoms
+          include nausea, headache, confusion, and in extreme cases, seizures. For most
+          people, drinking more than 1 litre per hour sustained over several hours is the
+          danger zone.
+        </p>
+
+        <h3>Myth 6: "Clear urine means perfect hydration"</h3>
+        <p>
+          <strong>Reality:</strong> Consistently clear urine may actually indicate
+          over-hydration. The target is pale yellow (straw-colored). Completely clear urine
+          means your kidneys are working hard to expel excess water. Pale yellow is the
+          sweet spot.
+        </p>
+
+        <h3>Myth 7: "Water flushes out toxins"</h3>
+        <p>
+          <strong>Reality:</strong> Your liver and kidneys flush out toxins. Water helps
+          them function, but drinking extra water doesn't "detox" your body. Adequate
+          hydration supports normal kidney function. Excessive water doesn't improve this
+          process — your organs have a fixed processing capacity regardless of how much
+          water you drink beyond adequate levels.
+        </p>
+      </section>
+
+      <section id="tips">
+        <h2>Practical tips to drink more water</h2>
+        <p>
+          Knowing how much to drink is easy. Actually doing it is harder. Here are
+          strategies that work:
+        </p>
+
+        <h3>1. Keep a bottle visible</h3>
+        <p>
+          A filled water bottle on your desk is a constant visual reminder. You'll
+          naturally sip from it throughout the day. Choose a 1-litre bottle — refilling
+          it 2-3 times gives you a clear count of daily intake.
+        </p>
+
+        <h3>2. Tie water to existing habits</h3>
+        <p>
+          Drink a glass when you wake up. A glass before each meal. A glass before your
+          chai. A glass before bed. These habit anchors make hydration automatic rather
+          than something you need to remember.
+        </p>
+
+        <h3>3. Eat water-rich foods</h3>
+        <p>
+          Cucumber, watermelon, oranges, tomatoes, curd, and dal all contribute water.
+          A diet rich in fruits, vegetables, and Indian staples like sambar and rasam
+          naturally boosts hydration without extra drinking.
+        </p>
+
+        <h3>4. Flavor your water if plain bores you</h3>
+        <p>
+          Add lime, mint, cucumber slices, or a few drops of rose water (gulab jal). Many
+          people don't drink enough because they find plain water boring. Even mild flavor
+          increases consumption. Avoid sugary additions — they add unnecessary calories.
+        </p>
+
+        <h3>5. Use the one-in-one-out rule</h3>
+        <p>
+          For every cup of chai or coffee, drink one glass of water. For every alcoholic
+          drink, drink one glass of water. This simple rule prevents caffeinated and
+          alcoholic drinks from reducing your net hydration.
+        </p>
+
+        <h3>6. Don't save it all for evening</h3>
+        <p>
+          Drinking 2 litres at dinner because you forgot during the day is uncomfortable
+          and may disrupt sleep with bathroom trips. Spread intake across the day: 500 ml
+          morning, 500 ml mid-morning, 500 ml afternoon, 500 ml evening.
+        </p>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+          <h3>How much water should I drink per day?</h3>
+          <p>
+            Multiply your body weight (kg) by 30-35 ml. A 70 kg person needs about 2.1-2.5
+            litres as a baseline. Add more for exercise, hot weather, and dry environments.
+            Use our <a href="/calculator/water-intake/">Water Intake Calculator</a> for
+            your personalized target.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Is 4 litres of water a day too much?</h3>
+          <p>
+            For most people in cool climates with moderate activity, 4 litres is more than
+            needed and not harmful. For a large, active person in Indian summer heat, 4
+            litres is appropriate. The only risk is drinking too much too quickly — spread
+            intake over the day and let thirst and urine color guide you.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Does chai count toward water intake?</h3>
+          <p>
+            Yes. Tea is 99% water. The caffeine has a mild diuretic effect, but the net
+            hydration is still positive. A cup of chai contributes roughly 150-180 ml of
+            water. Three cups of chai contribute about 450-540 ml toward your daily target.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How much water should I drink during Indian summers?</h3>
+          <p>
+            Add 500 ml to 1.5 litres above your cool-weather baseline. For a 70 kg person,
+            this means 3-4 litres during peak summer (May-June). Include electrolyte-rich
+            drinks like coconut water, nimbu pani, and chaas alongside plain water to
+            replace minerals lost through heavy sweating.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can drinking water help with weight loss?</h3>
+          <p>
+            Modestly, yes. Drinking water before meals can reduce appetite and calorie
+            intake by 75-100 calories per meal. Replacing sugary drinks with water
+            eliminates empty calories. Proper hydration also supports metabolism. But water
+            is not a magic weight loss solution — calorie balance matters most. Use our
+            <a href="/calculator/calorie/">Calorie Calculator</a> for weight loss planning.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Should I drink water even when not thirsty?</h3>
+          <p>
+            In normal conditions, drinking when thirsty is sufficient for healthy adults.
+            But during hot weather, intense exercise, or for elderly adults (whose thirst
+            mechanism weakens), proactive drinking is important. If your urine is
+            consistently dark yellow, you need more water regardless of thirst.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Is warm water better than cold water?</h3>
+          <p>
+            Neither is significantly better for health. Warm water may feel more soothing
+            and some people find it easier to drink in large quantities. Cold water is more
+            refreshing in heat and may encourage higher intake. Your body warms cold water
+            to body temperature quickly — the net hydration effect is identical. Drink
+            whichever temperature you prefer.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How do I track my water intake?</h3>
+          <p>
+            Simplest method: use a known-volume bottle (500 ml or 1 litre) and count
+            refills. If you use a 1 litre bottle and refill 3 times, you've had 3 litres.
+            For a more precise target based on your body, use our
+            <a href="/calculator/water-intake/">Water Intake Calculator</a> to set your
+            daily goal.
+          </p>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <h2>Find your daily water target</h2>
+        <p>
+          Enter your weight, activity level, and climate. Get a personalized hydration
+          target in litres and glasses. Free, instant, no signup.
+        </p>
+        <div class="cta-buttons">
+          <a href="/calculator/water-intake/" class="btn btn-lg">
+            → Calculate My Water Intake
+          </a>
+          <a href="/calculator/calorie/" class="btn btn-lg btn-secondary">
+            → Calculate Calories Too
+          </a>
+        </div>
+      </section>
+
+      <section class="related">
+        <h2>Related Health Calculators & Guides</h2>
+        <ul>
+          <li><a href="/calculator/water-intake/">Water Intake Calculator</a></li>
+          <li><a href="/calculator/calorie/">Calorie / TDEE Calculator</a></li>
+          <li><a href="/calculator/bmi/">BMI Calculator</a></li>
+          <li><a href="/calculator/macro/">Macro Calculator</a></li>
+          <li><a href="/calculator/ideal-weight/">Ideal Weight Calculator</a></li>
+          <li><a href="/blog/how-many-calories-per-day/">How Many Calories Per Day (Indian Food Guide)</a></li>
+          <li><a href="/blog/how-to-calculate-bmi/">How to Calculate BMI (Indian Ranges)</a></li>
+          <li><a href="/blog/how-to-track-period-cycle/">How to Track Your Period Cycle</a></li>
+        </ul>
+      </section>
+
+    </div>
+  </article>
+
+  <style>
+    .article { padding: 40px 0 60px; }
+    .article .container { max-width: 760px; }
+
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .article-header { margin-bottom: 32px; }
+    .article-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .article-meta .cat {
+      color: var(--blue);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      font-size: 11px;
+    }
+    .article h1 { font-size: 38px; line-height: 1.2; margin-bottom: 18px; }
+    .lede { font-size: 19px; color: var(--text-muted); line-height: 1.6; }
+
+    .toc {
+      padding: 20px 24px;
+      margin: 32px 0;
+    }
+    .toc strong { display: block; margin-bottom: 10px; }
+    .toc ul { list-style: none; padding: 0; }
+    .toc li { margin-bottom: 6px; font-size: 14px; }
+    .toc a { color: var(--blue); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    .article h2 {
+      font-size: 28px;
+      margin-top: 48px;
+      margin-bottom: 16px;
+    }
+    .article h3 {
+      font-size: 20px;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+    .article p, .article ul, .article ol {
+      font-size: 16px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .article ul, .article ol { padding-left: 24px; }
+    .article li { margin-bottom: 6px; }
+    .article a:not(.btn) { color: var(--blue); text-decoration: underline; }
+    .article strong { font-weight: 700; }
+
+    .callout {
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 15px;
+    }
+    [data-theme="dark"] .callout { background: rgba(0, 102, 255, .1); }
+
+    .formula-callout {
+      background: #f0fdf4;
+      border-left-color: #16a34a;
+      font-family: 'Courier New', monospace;
+    }
+    [data-theme="dark"] .formula-callout {
+      background: rgba(22, 163, 74, .1);
+    }
+
+    .table-wrap { overflow-x: auto; margin: 20px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td {
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--gray-100);
+      font-weight: 700;
+    }
+
+    .faq-item {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item h3 { font-size: 17px; margin-bottom: 8px; }
+    .faq-item p { font-size: 15px; margin-bottom: 0; }
+
+    .cta-section {
+      background: linear-gradient(135deg, var(--blue-light), #fff);
+      border: 1px solid var(--blue-light);
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      margin: 48px 0;
+    }
+    [data-theme="dark"] .cta-section {
+      background: linear-gradient(135deg, rgba(0, 102, 255, .1), transparent);
+      border-color: rgba(0, 102, 255, .2);
+    }
+    .cta-section h2 { margin-top: 0; }
+    .cta-section p { margin-bottom: 24px; }
+    .cta-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--blue);
+      color: var(--blue);
+    }
+    .btn-secondary:hover {
+      background: var(--blue-light);
+    }
+
+    .related h2 { font-size: 22px; }
+    .related ul { list-style: none; padding: 0; }
+    .related li { margin-bottom: 10px; }
+  </style>
+</MainLayout>
