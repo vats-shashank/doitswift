@@ -1,37 +1,140 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 
-const canonical = 'https://doitswift.com/pdf/merge-pdf/';
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+
+const pageDescription =
+  'Merge PDF files in your browser with pdf-lib — combine two or more documents, drag to reorder, see page counts per file, download merged.pdf. Private, unlimited, no upload. Works offline after load.';
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
     {
       '@type': 'WebApplication',
-      name: 'Merge PDF — DoItSwift',
+      name: 'DoItSwift Merge PDF',
       url: canonical,
       applicationCategory: 'UtilitiesApplication',
-      operatingSystem: 'Web',
+      operatingSystem: 'Web browser',
+      browserRequirements: 'Requires JavaScript and pdf-lib (loaded from CDN)',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-      description: 'Combine multiple PDF files into one document in your browser. Private, unlimited, no upload.',
+      description:
+        'Combine multiple PDF files into one document using pdf-lib in the browser. Reorder sources with drag and drop, copy all pages in sequence, save as merged.pdf. Processing is local — PDFs are not uploaded to DoItSwift.',
+      featureList: [
+        'Merge two or more PDFs into a single downloadable file',
+        'Drag-and-drop list to set merge order before combining',
+        'Shows page count per file in the merge queue',
+        'Copies every page from each source PDF in list order',
+        'Default download filename merged.pdf',
+        'Client-side merge with pdf-lib — no server upload',
+        'Merge button requires at least two PDFs',
+        'Password-protected or unreadable PDFs may fail; unlock or re-export first',
+      ],
     },
     {
       '@type': 'FAQPage',
       mainEntity: [
         {
           '@type': 'Question',
-          name: 'How do I merge PDFs for free without uploading?',
+          name: 'Is Merge PDF free and unlimited?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Use DoItSwift Merge PDF in your browser. Files are combined locally with pdf-lib; nothing is sent to our servers.',
+            text: 'Yes. Combine as many PDFs as your device can handle with no signup, watermarks, or usage quotas.',
           },
         },
         {
           '@type': 'Question',
-          name: 'Can I change the order of PDFs before merging?',
+          name: 'Are my PDFs uploaded to DoItSwift servers?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Yes. Drag and drop rows to reorder, then download the merged PDF.',
+            text: 'No. pdf-lib runs in your browser; merge happens locally and we never receive your files.',
           },
+        },
+        {
+          '@type': 'Question',
+          name: 'Why do I need at least two PDF files?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Merging combines multiple sources into one. For a single PDF, use split, compress, or other tools instead.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Does the order of files matter?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. The top of the list becomes the first pages of the merged PDF. Drag rows to change order before merging.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Will bookmarks, forms, and links be preserved?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'pdf-lib copies page content; complex interactive features may not transfer perfectly. Test important forms after merging.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Can I merge password-protected or encrypted PDFs?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Encrypted PDFs may fail to load. Unlock with the correct password using DoItSwift Unlock PDF, or re-export from the original app, then merge.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the download filename?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'The merged file downloads as merged.pdf by default; you can rename it after saving.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How many PDFs can I combine at once?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'There is no fixed count limit — practical limits are your device memory and browser performance for very large batches.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Does Merge PDF work on mobile?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes on modern phones; very large PDFs may be slow — use Wi-Fi and keep the tab active until the merge finishes.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is there a monthly limit or account required?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No accounts, no quotas, and no premium tier.',
+          },
+        },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: new URL('/', Astro.site).href,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'PDF Tools',
+          item: new URL('/pdf/', Astro.site).href,
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: 'Merge PDF',
+          item: canonical,
         },
       ],
     },
@@ -40,9 +143,9 @@ const jsonLd = {
 ---
 
 <MainLayout
-  title="Merge PDF — Free, Private & Unlimited | DoItSwift"
-  description="Merge PDF files online for free. Combine documents in your browser — no upload, no signup. Drag to reorder, then download merged.pdf."
-  keywords="merge pdf, combine pdf, join pdf files, merge pdf online free, pdf merger browser"
+  title="Merge PDF — Combine PDFs Online, Reorder Pages, merged.pdf | DoItSwift"
+  description={pageDescription}
+  keywords="merge pdf, combine pdf files, join pdf online, merge pdf free, pdf merger browser, combine multiple pdfs, reorder pdf merge, pdf-lib merge, private merge pdf, no upload merge pdf, unlimited merge pdf"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -57,7 +160,8 @@ const jsonLd = {
       <div class="badge">🔒 100% Private — Files Never Leave Your Device</div>
       <h1>Merge PDF</h1>
       <p class="subtitle">
-        Combine multiple PDFs into a single file. Reorder documents before merging — page counts shown for each file.
+        Combine two or more PDFs with pdf-lib in your browser — drag rows to set order, see page counts, download{' '}
+        <code class="hero-code">merged.pdf</code>. Nothing uploads to our servers.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> Unlimited files</span>
@@ -98,25 +202,62 @@ const jsonLd = {
 
   <!-- ShareButtons: place ShareButtons component before FAQ when enabling blog-style sharing -->
 
-  <section class="long-form">
+  <article class="merge-edu" aria-label="Guide: merging PDF files">
+    <div class="container merge-edu-inner">
+      <section class="merge-edu-block">
+        <h2 id="merge-workflows">How merging PDFs helps in real workflows</h2>
+        <p>
+          People merge PDFs every day: bundling invoices, combining legal exhibits, joining lecture notes, or assembling
+          signed forms. A <strong>browser-based</strong> merger keeps sensitive documents off random upload servers — you
+          stay in control from selection through download.
+        </p>
+        <p>
+          For step-by-step context and privacy tips, read{' '}
+          <a href="/blog/how-to-merge-pdf/">how to merge PDFs</a> on the DoItSwift blog.
+        </p>
+      </section>
+
+      <section class="merge-edu-block">
+        <h2 id="how-merge-works">How this tool merges your PDFs</h2>
+        <p>
+          The page uses <strong>pdf-lib</strong>: each chosen file is loaded in memory, then <strong>all pages are copied
+          in list order</strong> into one new document. You can <strong>drag rows</strong> to change which file comes first;
+          the banner shows <strong>page counts</strong> per file so you know what you are combining. Output downloads as{' '}
+          <code>merged.pdf</code> — rename after saving if you need a different name.
+        </p>
+        <p>
+          If a file is <strong>encrypted or corrupted</strong>, it may fail to load; use{' '}
+          <a href="/pdf/unlock-pdf/">Unlock PDF</a> when you have the password, or re-export from the original application.
+        </p>
+      </section>
+
+      <section class="merge-edu-block">
+        <h2 id="merge-vs-split">After merging: split or compress</h2>
+        <p>
+          Merged files can grow large. Use <a href="/pdf/compress-pdf/">Compress PDF</a> to shrink the download, or{' '}
+          <a href="/pdf/split-pdf/">Split PDF</a> if you later need separate documents again.
+        </p>
+      </section>
+    </div>
+  </article>
+
+  <section class="merge-related" aria-label="Related PDF tools and guides">
     <div class="container">
-      <h2 class="section-title">How merging PDFs helps in real workflows</h2>
-      <p>
-        Professionals merge PDFs every day: accountants bundle monthly invoices, lawyers combine exhibits, students merge
-        lecture notes, and HR teams join signed forms into one packet. A browser-based merger avoids emailing sensitive
-        documents to a third-party converter. You keep custody of the file from selection through download.
-      </p>
-      <p>
-        DoItSwift reads each PDF with pdf-lib, copies every page in list order into a new document, and saves a fresh
-        file named <code>merged.pdf</code>. Reordering happens entirely in the page — drag a row up or down before you
-        click merge. If one PDF is password-protected or corrupted, that file may fail; try unlocking or re-exporting it
-        from the original app first.
-      </p>
-      <p>
-        For archival, merging reduces clutter: instead of twelve separate “Statement_Jan.pdf” files, one “Statements_2026.pdf”
-        is easier to back up and share. Combine that with our split and compress tools when you need the opposite
-        operations later.
-      </p>
+      <h2 class="section-title">Related tools</h2>
+      <ul class="merge-related-grid">
+        <li><a href="/pdf/split-pdf/">Split PDF</a></li>
+        <li><a href="/pdf/compress-pdf/">Compress PDF</a></li>
+        <li><a href="/pdf/unlock-pdf/">Unlock PDF</a></li>
+        <li><a href="/pdf/image-to-pdf/">Image to PDF</a></li>
+        <li><a href="/pdf/pdf-to-jpg/">PDF to JPG</a></li>
+        <li><a href="/pdf/jpg-to-pdf/">JPG to PDF</a></li>
+      </ul>
+      <h2 class="section-title section-title-sub">Related guides</h2>
+      <ul class="merge-related-grid merge-related-guides">
+        <li><a href="/blog/how-to-merge-pdf/">How to merge PDFs</a></li>
+        <li><a href="/blog/how-to-split-pdf/">How to split a PDF</a></li>
+        <li><a href="/blog/how-to-compress-pdf/">How to compress a PDF</a></li>
+      </ul>
     </div>
   </section>
 
@@ -125,28 +266,56 @@ const jsonLd = {
       <h2 class="section-title">Frequently Asked Questions</h2>
       <div class="faq-list">
         <div class="faq-item">
-          <h4>Is merge PDF free?</h4>
-          <p>Yes — unlimited merges in your browser, no account.</p>
+          <h4>Is Merge PDF free and unlimited?</h4>
+          <p>Yes. Combine as many PDFs as your device can handle with no signup, watermarks, or usage quotas.</p>
         </div>
         <div class="faq-item">
-          <h4>Are files uploaded?</h4>
-          <p>No. Merging uses JavaScript on your device; we never see your PDFs.</p>
+          <h4>Are my PDFs uploaded to DoItSwift servers?</h4>
+          <p>No. pdf-lib runs in your browser; merge happens locally and we never receive your files.</p>
         </div>
         <div class="faq-item">
-          <h4>Why do I need at least two PDFs?</h4>
-          <p>Merging combines multiple sources. For a single file, use split or compress instead.</p>
+          <h4>Why do I need at least two PDF files?</h4>
+          <p>
+            Merging combines multiple sources into one. For a single PDF, use{' '}
+            <a href="/pdf/split-pdf/">Split PDF</a>, <a href="/pdf/compress-pdf/">Compress PDF</a>, or other tools instead.
+          </p>
         </div>
         <div class="faq-item">
-          <h4>Does order matter?</h4>
-          <p>Yes. Top of the list becomes the first pages of the merged PDF. Drag rows to fix order.</p>
+          <h4>Does the order of files matter?</h4>
+          <p>Yes. The top of the list becomes the first pages of the merged PDF. Drag rows to change order before merging.</p>
         </div>
         <div class="faq-item">
-          <h4>Will bookmarks and forms be preserved?</h4>
-          <p>pdf-lib copies page content; complex interactive features may not transfer perfectly. Test important forms after merge.</p>
+          <h4>Will bookmarks, forms, and links be preserved?</h4>
+          <p>
+            pdf-lib copies page content; complex interactive features may not transfer perfectly. Test important forms after
+            merging.
+          </p>
         </div>
         <div class="faq-item">
-          <h4>Can I merge on mobile?</h4>
-          <p>Yes on modern phones; very large PDFs may be slow — use Wi-Fi and patience.</p>
+          <h4>Can I merge password-protected or encrypted PDFs?</h4>
+          <p>
+            Encrypted PDFs may fail to load. Unlock with the correct password using{' '}
+            <a href="/pdf/unlock-pdf/">Unlock PDF</a>, or re-export from the original app, then merge.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>What is the download filename?</h4>
+          <p>The merged file downloads as <code>merged.pdf</code> by default; you can rename it after saving.</p>
+        </div>
+        <div class="faq-item">
+          <h4>How many PDFs can I combine at once?</h4>
+          <p>
+            There is no fixed count limit — practical limits are your device memory and browser performance for very large
+            batches.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Does Merge PDF work on mobile?</h4>
+          <p>Yes on modern phones; very large PDFs may be slow — use Wi-Fi and keep the tab active until the merge finishes.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Is there a monthly limit or account required?</h4>
+          <p>No accounts, no quotas, and no premium tier.</p>
         </div>
       </div>
     </div>
@@ -356,8 +525,19 @@ const jsonLd = {
     .subtitle {
       font-size: 19px;
       color: var(--text-muted);
-      max-width: 620px;
+      max-width: 640px;
       margin: 0 auto 28px;
+    }
+    .hero-code {
+      font-family: ui-monospace, 'Cascadia Code', 'Courier New', monospace;
+      font-size: 0.88em;
+      padding: 0.12em 0.35em;
+      background: var(--gray-100);
+      border-radius: 4px;
+      color: var(--text);
+    }
+    [data-theme='dark'] .hero-code {
+      background: rgba(255, 255, 255, 0.1);
     }
     .converter-section {
       padding: 30px 0;
@@ -493,33 +673,109 @@ const jsonLd = {
       gap: 12px;
       margin-top: 16px;
     }
-    .long-form {
-      padding: 40px 0;
-    }
-    .long-form .container {
-      max-width: 760px;
-    }
-    .long-form p {
-      font-size: 15px;
-      line-height: 1.75;
-      color: var(--text-muted);
-      margin-bottom: 14px;
-    }
-    .long-form code {
-      font-size: 0.9em;
-      padding: 2px 6px;
-      background: var(--gray-100);
-      border-radius: 4px;
-    }
-    .faq {
-      padding: 40px 0 60px;
-    }
-    .faq .container {
-      max-width: 820px;
-    }
     .section-title {
       text-align: center;
       margin-bottom: 24px;
+    }
+
+    .merge-edu {
+      padding: 40px 0 16px;
+    }
+    .merge-edu-inner {
+      max-width: 760px;
+    }
+    .merge-edu-block {
+      margin-bottom: 2.5rem;
+    }
+    .merge-edu-block:last-child {
+      margin-bottom: 0;
+    }
+    .merge-edu h2 {
+      font-size: clamp(1.35rem, 2.5vw, 1.55rem);
+      line-height: 1.3;
+      margin: 0 0 1rem;
+      color: var(--text);
+    }
+    .merge-edu p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--text);
+      margin: 0 0 1rem;
+    }
+    .merge-edu a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .merge-edu a:hover {
+      color: var(--blue-dark);
+    }
+    .merge-edu code {
+      font-family: ui-monospace, 'Cascadia Code', 'Courier New', monospace;
+      font-size: 0.9em;
+      padding: 0.1em 0.35em;
+      background: var(--gray-100);
+      border-radius: 4px;
+    }
+    [data-theme='dark'] .merge-edu code {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .merge-related {
+      padding: 8px 0 48px;
+    }
+    .merge-related .container {
+      max-width: 820px;
+    }
+    .section-title-sub {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    .merge-related-grid {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+    @media (min-width: 520px) {
+      .merge-related-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (min-width: 720px) {
+      .merge-related-grid:not(.merge-related-guides) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .merge-related-grid a {
+      display: block;
+      padding: 14px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--blue);
+      font-weight: 600;
+      font-size: 15px;
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .merge-related-grid a:hover {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+    [data-theme='dark'] .merge-related-grid a:hover {
+      background: rgba(0, 102, 255, 0.12);
+    }
+
+    .faq {
+      padding: 8px 0 60px;
+    }
+    .faq .container {
+      max-width: 820px;
     }
     .faq-item {
       background: var(--card);
@@ -527,7 +783,7 @@ const jsonLd = {
       border-radius: var(--radius);
       padding: 20px 24px;
       margin-bottom: 12px;
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow-sm);
     }
     .faq-item h4 {
       font-size: 16px;
@@ -536,6 +792,26 @@ const jsonLd = {
     .faq-item p {
       font-size: 14px;
       color: var(--text-muted);
+      margin: 0;
+      line-height: 1.55;
+    }
+    .faq-item a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .faq-item a:hover {
+      color: var(--blue-dark);
+    }
+    .faq-item code {
+      font-size: 0.92em;
+      padding: 2px 6px;
+      background: var(--gray-100);
+      border-radius: 4px;
+    }
+    [data-theme='dark'] .faq-item code {
+      background: rgba(255, 255, 255, 0.08);
     }
   </style>
 </MainLayout>

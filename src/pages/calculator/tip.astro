@@ -1,50 +1,72 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const site = Astro.site?.href ?? 'https://doitswift.com';
-const canonical = `${site}calculator/tip/`;
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Tip Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'UtilityApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Restaurant tip and bill split with multiple currencies, presets, and service quality shortcuts.',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'Is service charge the same as tip?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'In India, some bills include a service charge; tipping on top is optional and culturally lighter than in the US.',
-          },
-        },
-      ],
-    },
-    {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: site },
-        { '@type': 'ListItem', position: 2, name: 'Calculators', item: `${site}calculator/` },
-        { '@type': 'ListItem', position: 3, name: 'Tip Calculator', item: canonical },
-      ],
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Tip and bill-split calculator: enter bill amount, tip percent or presets, party size, and currency. Optional round-up and service-quality shortcuts. Works for India, US, or travel—tipping norms vary; the math is neutral. Currency formats display only.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'Is service charge the same as a tip?',
+    answer:
+      'Often not. In India many restaurants add a service charge to the bill; anything extra is voluntary. In the US gratuity expectations are usually higher—this tool only splits numbers you enter.',
+  },
+  {
+    question: 'Should I tip on pre-tax or post-tax amount?',
+    answer:
+      'Customs differ. US guides often use pre-tax subtotal; this calculator tips whatever base amount you type into the bill field.',
+  },
+  {
+    question: 'How does bill splitting work?',
+    answer:
+      'We divide the grand total (bill plus tip after any rounding options you choose) by the number of people.',
+  },
+  {
+    question: 'Does changing currency change the tip percentage?',
+    answer:
+      'No. Currency only changes symbols and grouping—the same numeric percent applies.',
+  },
+  {
+    question: 'Can I use this for non-restaurant sharing?',
+    answer:
+      'Yes—any subtotal you treat as the bill can be split the same way.',
+  },
+  {
+    question: 'Is data uploaded?',
+    answer:
+      'No. Calculations stay in your browser.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Tip Calculator',
+  breadcrumbName: 'Tip Calculator',
+  applicationCategory: 'UtilitiesApplication',
+  browserRequirements: 'Requires JavaScript for live tip totals, split amounts, and currency formatting',
+  webAppDescription:
+    'Pick a display currency, enter the bill, choose a tip percent with quick presets or service-quality buttons, set headcount, and optionally round the total or per-person share. Shows tip amount, grand total, and each diner’s share. Cultural expectations are left to you—the page is a neutral arithmetic helper for restaurants, deliveries, and shared tabs.',
+  featureList: [
+    'Bill amount and party size',
+    'Tip percent with preset buttons',
+    'Service-quality shortcut buttons',
+    'Currency display dropdown',
+    'Optional round-up controls where shown in UI',
+    'Tip amount, grand total, and per-person lines',
+    'Educational note on service charge vs gratuity',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Tip Calculator — Calculate Tips & Split Bills | DoItSwift"
-  description="Compute tip amount, grand total, and per-person split in your chosen currency. Preset percentages, service-quality shortcuts, and optional round-up."
-  keywords="tip calculator, bill split calculator, restaurant tip calculator, gratuity calculator"
+  title="Tip Calculator — Gratuity, Total & Split per Person | DoItSwift"
+  description={pageDescription}
+  keywords="tip calculator online, restaurant tip calculator India US, bill split calculator, gratuity percentage calculator, round up tip calculator, multi currency tip"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -158,9 +180,14 @@ const jsonLd = {
 
   <section class="faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item"><h4>Pre-tax or post-tax?</h4><p>US guides often tip on pre-tax subtotal; this tool uses whatever amount you enter.</p></div>
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>

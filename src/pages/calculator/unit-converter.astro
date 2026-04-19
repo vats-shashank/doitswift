@@ -1,28 +1,82 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/unit-converter/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Unit Converter — DoItSwift',
-      url: canonical,
-      applicationCategory: 'UtilityApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description:
-        'Convert length, mass, temperature, volume, area, speed, time, energy, power, pressure, data, frequency, fuel economy, and angle — bidirectional, offline.',
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Free unit converter with fourteen categories—length, mass, temperature, volume, area, speed, time, energy, power, pressure, digital storage, frequency, fuel economy, and angle. Pick units, type a value, see the converted result and formula line. Works offline after load; no currency exchange.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'Why are the conversions so precise?',
+    answer:
+      'Definitions such as the inch being exactly 2.54 cm and fixed SI constants mean many factors are exact. We show enough digits for practical use and round only for display.',
+  },
+  {
+    question: "What's the difference between US gallon and Imperial gallon?",
+    answer:
+      'They are different historical measures. A US liquid gallon is about 3.785 litres; an Imperial gallon is about 4.546 litres. Mixing them breaks recipes and fuel calculations—always check which system a number uses.',
+  },
+  {
+    question: 'Why does megabyte show 1024 KB instead of 1000?',
+    answer:
+      'Software often uses binary prefixes where each step is 1024. Drive makers sometimes advertise decimal gigabytes, which is why capacity labels can disagree with operating systems.',
+  },
+  {
+    question: 'Can I add custom units?',
+    answer:
+      'Not on this page—only listed units are supported. For one-off ratios, divide by the factor shown in the formula line or use a spreadsheet.',
+  },
+  {
+    question: 'Why is temperature conversion different from other units?',
+    answer:
+      'Absolute temperature values need offsets between Celsius, Fahrenheit, and Kelvin-style scales, not just a single multiplier. The tool routes through consistent internal bases.',
+  },
+  {
+    question: 'Does this work offline?',
+    answer:
+      'Yes. After the page loads once, conversions run locally in JavaScript without sending your numbers to our servers.',
+  },
+  {
+    question: 'What about currency conversion?',
+    answer:
+      'Live FX needs a maintained rate feed, so currency is intentionally excluded—use your bank or a finance site.',
+  },
+  {
+    question: 'How accurate is the speed of light reference?',
+    answer:
+      '299,792,458 m/s is the defined speed of light in vacuum under current SI definitions; the converter uses it as a fixed reference where relevant.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Unit Converter',
+  breadcrumbName: 'Unit Converter',
+  applicationCategory: 'UtilitiesApplication',
+  browserRequirements: 'Requires JavaScript for category tabs, unit selectors, live conversion, and formula display',
+  webAppDescription:
+    'Convert between hundreds of paired units across fourteen physical and engineering dimensions with bidirectional typing: change either side and the other updates. Temperature uses offset-aware formulas; data storage steps use 1024-based kilo multipliers like common OS labels. Fuel economy, pressure, and angle modes help students and travellers without installing native apps. Currency is omitted by design.',
+  featureList: [
+    'Fourteen dimension categories with rich unit dropdowns',
+    'Bidirectional input on from/to fields',
+    'Live conversion as you type',
+    'Formula or factor explanation line',
+    'Copy-friendly precision for homework and cooking',
+    'Offline-capable after initial page load',
+    'Long-form guidance on gallons, MB, and temperature',
+    'No currency or FX maintenance burden',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Unit Converter — Length, Weight, Temperature & More | DoItSwift"
-  description="Free unit converter with 14 categories: metric and imperial length, mass, temperature, volume, area, speed, time, energy, power, pressure, digital storage, frequency, fuel economy, and angle. Works offline."
-  keywords="unit converter, km to miles, kg to lbs, celsius to fahrenheit, gallons to litres, hectares to acres, GB to MB"
+  title="Unit Converter — Metric & Imperial Length, Weight, Temp & More | DoItSwift"
+  description={pageDescription}
+  keywords="unit converter online, km to miles converter, kg to lbs calculator, celsius to fahrenheit, US vs imperial gallon, MB to GB 1024, pressure unit converter, fuel economy converter, angle degrees radians"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -149,56 +203,14 @@ const jsonLd = {
 
   <section class="faq uc-faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item">
-          <h4>Why are the conversions so precise?</h4>
-          <p>
-            Definitions such as the inch (exactly 2.54 cm) and fixed physical constants allow exact factors. We show enough digits for practical use; rounding happens only for display.
-          </p>
-        </div>
-        <div class="faq-item">
-          <h4>What’s the difference between US gallon and Imperial gallon?</h4>
-          <p>
-            They are different historical measures. A <strong>US liquid gallon</strong> is about 3.785 litres; an <strong>Imperial gallon</strong> is about 4.546 litres. Mixing them breaks recipes and fuel calculations — always check which system a number uses.
-          </p>
-        </div>
-        <div class="faq-item">
-          <h4>Why does megabyte show 1024 KB instead of 1000?</h4>
-          <p>
-            Software often uses <strong>binary</strong> prefixes (1024 = 2¹⁰). Drive makers sometimes advertise decimal GB (1000³ bytes), which is why a “1 TB” disk can show a lower capacity in Windows. This converter uses <strong>1024-based</strong> steps between KB, MB, GB, as on most OS labels.
-          </p>
-        </div>
-        <div class="faq-item">
-          <h4>Can I add custom units?</h4>
-          <p>
-            Not on this page — only listed units are supported. For one-off ratios, use a spreadsheet or divide by the conversion factor shown in the formula line.
-          </p>
-        </div>
-        <div class="faq-item">
-          <h4>Why is temperature conversion different from other units?</h4>
-          <p>
-            Temperature intervals can scale linearly, but <strong>absolute values</strong> require offsets between Celsius, Fahrenheit, and Kelvin-style scales. This tool converts via a consistent internal path (usually through Celsius or Kelvin) so combinations stay correct.
-          </p>
-        </div>
-        <div class="faq-item">
-          <h4>Does this work offline?</h4>
-          <p>
-            Yes. After the page loads once, calculations run locally in JavaScript with no server round-trip for your numbers.
-          </p>
-        </div>
-        <div class="faq-item">
-          <h4>What about currency conversion?</h4>
-          <p>
-            Live exchange rates need a trusted API and ongoing maintenance, so <strong>currency is not included</strong> here. Use your bank or a dedicated finance site for up-to-date rates.
-          </p>
-        </div>
-        <div class="faq-item">
-          <h4>How accurate is the speed of light reference?</h4>
-          <p>
-            The value <strong>299,792,458 m/s</strong> is the defined speed of light in vacuum in SI units. It is exact under current definitions; this tool uses it as a fixed conversion reference for speed mode.
-          </p>
-        </div>
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>

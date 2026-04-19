@@ -1,40 +1,71 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/age/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Age Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'UtilitiesApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Calculate exact age in years, months, days, and fun approximations from date of birth.',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'How is age calculated?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'We compare calendar years, months, and days between your birth date and the chosen “as of” date using local calendar arithmetic.',
-          },
-        },
-      ],
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Free age calculator: exact years, months, and days between your date of birth and any as-of date. Shows total days lived, approximate hours, next birthday, and fun illustrative estimates. Calendar-based math in your browser—not for legal age rules without checking your jurisdiction.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'How is age calculated on this page?',
+    answer:
+      'We use calendar arithmetic: subtract years, then months, then days, borrowing from larger units when the as-of day is before your birth day in the month—similar to how people state age in conversation. Total days counts midnight-to-midnight boundaries between the two dates.',
+  },
+  {
+    question: "Why doesn't my age match another website?",
+    answer:
+      'Sites differ in rounding, time zones, or using instant timestamps versus date-only fields. We prioritize local date inputs and calendar years, months, and days.',
+  },
+  {
+    question: 'Are the heartbeat and breath estimates accurate?',
+    answer:
+      'No. Fun estimates use rough averages (for example near 70 bpm) for illustration only—they are not medical measurements.',
+  },
+  {
+    question: 'Can the as-of date be before my date of birth?',
+    answer:
+      'We show an error because negative age is not meaningful for this tool.',
+  },
+  {
+    question: 'Does daylight saving time change the day count?',
+    answer:
+      'We work from date fields only, so DST does not affect the total days between two calendar dates.',
+  },
+  {
+    question: 'Is my date of birth sent to your servers?',
+    answer:
+      'No. The calculator runs entirely in your browser with no signup required.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Age Calculator',
+  breadcrumbName: 'Age Calculator',
+  applicationCategory: 'UtilitiesApplication',
+  browserRequirements: 'Requires JavaScript to compute and display age, next birthday, and fun estimates',
+  webAppDescription:
+    'Compute exact chronological age in years, months, and days from a date of birth to any as-of date. See total days lived, a rough hour count, next birthday messaging, and optional playful estimates. Uses calendar-based logic suitable for everyday questions—not a substitute for legal age verification where jurisdiction-specific rules apply.',
+  featureList: [
+    'Date of birth and flexible as-of date pickers',
+    'Age in years, months, and days',
+    'Total days lived and approximate hours',
+    'Next birthday summary line',
+    'Fun estimates panel (illustrative only)',
+    'Educational notes on calendar math',
+    'Runs locally in the browser without signup',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Age Calculator — Free Online Calculator | DoItSwift"
-  description="Find your exact age in years, months, and days from your date of birth. Set any “as of” date, see total days and hours, next birthday, and playful estimates."
-  keywords="age calculator, date of birth calculator, how old am I, next birthday countdown"
+  title="Age Calculator — Years, Months, Days from DOB | DoItSwift"
+  description={pageDescription}
+  keywords="age calculator, how old am I calculator, date of birth age calculator, exact age in years months days, next birthday calculator India, chronological age online, free age calculator"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -111,20 +142,14 @@ const jsonLd = {
 
   <section class="faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item">
-          <h4>Why doesn’t my age match another website?</h4>
-          <p>Different sites round differently or use UTC-only math. We prioritize calendar years/months/days in local date fields.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Are heartbeats accurate?</h4>
-          <p>No — we assume an average resting rate near 70 bpm for illustration only.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Can “as of” be before birth?</h4>
-          <p>We show an error — negative ages are not meaningful here.</p>
-        </div>
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>

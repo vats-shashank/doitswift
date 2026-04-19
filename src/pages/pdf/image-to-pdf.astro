@@ -1,34 +1,141 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 
-const canonical = 'https://doitswift.com/pdf/image-to-pdf/';
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+
+const pageDescription =
+  'Merge JPG, PNG, WebP, HEIC, GIF, and BMP into one PDF in your browser — drag to reorder pages, choose A4, Letter, or Legal. Built with pdf-lib and local HEIC decode (heic2any). No upload, unlimited, default download images-combined.pdf.';
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
     {
       '@type': 'WebApplication',
-      name: 'Image to PDF Converter — DoItSwift',
+      name: 'DoItSwift Image to PDF',
       url: canonical,
       applicationCategory: 'UtilitiesApplication',
-      operatingSystem: 'Web',
+      operatingSystem: 'Web browser',
+      browserRequirements: 'Requires JavaScript, pdf-lib, Canvas API, and heic2any for HEIC (loaded from CDN)',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-      description: 'Convert JPG, PNG, WEBP, or HEIC images to PDF in your browser. Combine and reorder pages locally.',
+      description:
+        'Combine raster images into a single PDF using pdf-lib in the browser. Reorder thumbnails with drag and drop, select page size A4 Letter or Legal, per-page orientation from image dimensions. HEIC converts to JPEG locally; WebP GIF BMP rasterize to JPEG for embedding. No server upload.',
+      featureList: [
+        'Combine JPG, PNG, WebP, HEIC/HEIF, GIF, and BMP in one merged PDF',
+        'Drag-and-drop thumbnail list to set page order before export',
+        'Page size: A4, US Letter, or US Legal; each page orientation follows image width vs height',
+        'Images scale to fit the page while preserving aspect ratio',
+        'HEIC decoded to JPEG in-browser with heic2any before embedding',
+        'PNG embedded directly; transparency composited on white; WebP/GIF/BMP converted via canvas to JPEG',
+        'Animated GIFs: first frame only',
+        'Output download filename images-combined.pdf by default',
+        '100% client-side processing — image bytes are not uploaded to DoItSwift',
+      ],
     },
     {
       '@type': 'FAQPage',
       mainEntity: [
         {
           '@type': 'Question',
-          name: 'Does Image to PDF support PNG and HEIC?',
+          name: 'Is Image to PDF free and unlimited?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Yes. PNG and JPG embed directly; HEIC from iPhone is converted to JPEG in your browser before building the PDF.',
+            text: 'Yes. Build as many PDFs as you need locally with no signup, watermarks, or usage quotas.',
           },
         },
         {
           '@type': 'Question',
-          name: 'Can I mix JPG and PNG in one PDF?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Yes. Add images in any order, reorder with drag and drop, then export one combined PDF.' },
+          name: 'Are my images uploaded to DoItSwift servers?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No. pdf-lib and image decoding run in your browser tab only; files never leave your device.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How does PNG transparency work in the PDF?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'PNG files embed in the PDF with transparency flattened onto a white background because PDF pages are opaque rectangles.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Can I mix JPG, PNG, WebP, and HEIC in one PDF?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. Add any supported types in one batch, reorder thumbnails, then create a single combined PDF.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How are HEIC or HEIF photos from an iPhone handled?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'HEIC is converted to JPEG in your browser using heic2any, then embedded — same privacy model as other HEIC tools, with no server upload.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How is WebP handled?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'WebP is decoded to pixels and saved as a JPEG representation inside the PDF for compatibility.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Can portrait and landscape pages appear in the same PDF?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. Each page orientation follows that image\'s dimensions — wider images use a landscape page, taller images use portrait, within your chosen paper size.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Which page sizes can I choose?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Select A4, US Letter, or US Legal before building the PDF. Images scale to fit within the page while keeping aspect ratio.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What about GIF, BMP, or animated GIFs?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'GIF and BMP are rasterized to JPEG for embedding. Animated GIFs use the first frame only.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is there a monthly limit or account required?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No accounts, no quotas, and no premium tier.',
+          },
+        },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: new URL('/', Astro.site).href,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'PDF Tools',
+          item: new URL('/pdf/', Astro.site).href,
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: 'Image to PDF',
+          item: canonical,
         },
       ],
     },
@@ -37,9 +144,9 @@ const jsonLd = {
 ---
 
 <MainLayout
-  title="Image to PDF Converter — Free, Private & Unlimited | DoItSwift"
-  description="Convert JPG, PNG, WEBP, or HEIC images to PDF in your browser. Reorder pages, pick A4/Letter/Legal — no upload, unlimited."
-  keywords="image to pdf, jpg to pdf, png to pdf, photo to pdf, multiple images to pdf, heic to pdf, webp to pdf"
+  title="Image to PDF — Merge JPG, PNG, WebP, HEIC, Reorder Pages, A4/Letter | DoItSwift"
+  description={pageDescription}
+  keywords="image to pdf, jpg to pdf, png to pdf, multiple images to one pdf, photo to pdf, heic to pdf, webp to pdf, combine images pdf, reorder pages pdf, a4 letter pdf, browser image to pdf, private image to pdf, pdf-lib, merge photos pdf free"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -55,7 +162,9 @@ const jsonLd = {
       <div class="badge">🔒 100% Private — Files Never Leave Your Device</div>
       <h1>Image to PDF Converter</h1>
       <p class="subtitle">
-        Combine JPG, PNG, WebP, HEIC, GIF, or BMP images into a single PDF. Drag thumbnails to reorder. Page size A4, Letter, or Legal — orientation follows each image.
+        Combine JPG, PNG, WebP, HEIC, GIF, or BMP into one PDF with pdf-lib — drag thumbnails to reorder, pick A4, Letter,
+        or Legal, per-page portrait or landscape. Download as <code class="hero-code">images-combined.pdf</code>. Local only;
+        no upload.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> Unlimited images</span>
@@ -109,22 +218,88 @@ const jsonLd = {
     </div>
   </section>
 
-  <section class="long-form">
+  <article class="i2pdf-edu" aria-label="Guide: combining images into a PDF">
+    <div class="container i2pdf-edu-inner">
+      <section class="i2pdf-edu-block">
+        <h2 id="when-image-to-pdf">When to combine images into a PDF</h2>
+        <p>
+          Sharing many separate photos by email is noisy; one PDF keeps the sequence and opens on any device. Freelancers
+          merge receipts; teachers bundle worksheet scans. The important part is <strong>order</strong>: our thumbnail list
+          is drag-sortable so page 1 in the PDF is exactly the order you set before clicking <strong>Create PDF</strong>.
+        </p>
+        <p>
+          Default download is <code>images-combined.pdf</code>. You can rename the file after saving. For the reverse
+          workflow — extracting pages as images — use{' '}
+          <a href="/pdf/pdf-to-jpg/">PDF to JPG</a>.
+        </p>
+      </section>
+
+      <section class="i2pdf-edu-block">
+        <h2 id="formats-handling">How each image format is handled</h2>
+        <div class="i2pdf-table-wrap">
+          <table class="i2pdf-compare-table">
+            <caption class="sr-only">Image formats and how Image to PDF processes them</caption>
+            <thead>
+              <tr>
+                <th scope="col">Format</th>
+                <th scope="col">In the PDF</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>JPG / JPEG</td>
+                <td>Embedded directly as JPEG</td>
+              </tr>
+              <tr>
+                <td>PNG</td>
+                <td>Embedded as PNG; transparency flattened on white</td>
+              </tr>
+              <tr>
+                <td>HEIC / HEIF</td>
+                <td>Converted to JPEG in-browser (heic2any), then embedded</td>
+              </tr>
+              <tr>
+                <td>WebP, GIF, BMP</td>
+                <td>Decoded to pixels, written as JPEG inside the PDF; animated GIF uses first frame only</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Wide panoramas <strong>scale to fit</strong> the selected paper size (A4, Letter, or Legal) while keeping aspect
+          ratio — the page orientation (portrait vs landscape) follows whether each image is wider or taller than tall.
+        </p>
+      </section>
+
+      <section class="i2pdf-edu-block">
+        <h2 id="privacy-offline">Privacy and offline use</h2>
+        <p>
+          Processing uses <strong>pdf-lib</strong> and your browser’s canvas — nothing is sent to DoItSwift. After the page
+          loads, you can disconnect from the internet and still build PDFs from local images. For more on keeping PDF work
+          private, read{' '}
+          <a href="/blog/how-to-compress-pdf/">how to compress a PDF</a> (browser-based tools vs upload sites).
+        </p>
+      </section>
+    </div>
+  </article>
+
+  <section class="i2pdf-related" aria-label="Related PDF and image tools">
     <div class="container">
-      <h2 class="section-title">When to combine images into a PDF</h2>
-      <p>
-        Sharing twenty separate vacation photos by email is noisy; one PDF keeps the story in order and opens anywhere.
-        Freelancers combine receipts into a single expense PDF. Teachers bundle worksheet scans. iPhone users often have
-        <strong>HEIC</strong> stills — we decode those to JPEG in the browser (via heic2any) before embedding, so you can
-        mix HEIC with PNG exports from Photoshop in one document. The key is <strong>order control</strong>: our thumbnail
-        list is drag-sortable so page 1 in the PDF matches the sequence you intend.
-      </p>
-      <p>
-        <strong>JPG and PNG</strong> embed directly. <strong>WebP, GIF, and BMP</strong> are rasterized to pixels then
-        saved as JPEG frames inside the PDF (animated GIFs use the first frame). PNG transparency is flattened onto white
-        (PDF pages are opaque rectangles). Very wide panoramas scale to fit A4, Letter, or Legal while preserving aspect
-        ratio.
-      </p>
+      <h2 class="section-title">Related tools</h2>
+      <ul class="i2pdf-related-grid">
+        <li><a href="/pdf/pdf-to-jpg/">PDF to JPG</a></li>
+        <li><a href="/pdf/jpg-to-pdf/">JPG to PDF</a></li>
+        <li><a href="/pdf/compress-pdf/">Compress PDF</a></li>
+        <li><a href="/pdf/merge-pdf/">Merge PDF</a></li>
+        <li><a href="/pdf/split-pdf/">Split PDF</a></li>
+        <li><a href="/image/heic-to-jpg/">HEIC to JPG</a></li>
+      </ul>
+      <h2 class="section-title section-title-sub">Related guides</h2>
+      <ul class="i2pdf-related-grid i2pdf-related-guides">
+        <li><a href="/blog/how-to-merge-pdf/">How to merge PDFs</a></li>
+        <li><a href="/blog/how-to-compress-pdf/">How to compress a PDF</a></li>
+        <li><a href="/blog/how-to-convert-pdf-to-jpg/">How to convert PDF to JPG</a></li>
+      </ul>
     </div>
   </section>
 
@@ -132,15 +307,63 @@ const jsonLd = {
     <div class="container">
       <h2 class="section-title">Frequently Asked Questions</h2>
       <div class="faq-list">
-        <div class="faq-item"><h4>Is Image to PDF free?</h4><p>Yes — build as many PDFs as you need locally.</p></div>
-        <div class="faq-item"><h4>Are images uploaded?</h4><p>No — conversion runs in your tab only.</p></div>
-        <div class="faq-item"><h4>Does this support PNG?</h4><p>Yes. PNG files embed with transparency flattened to a white background on each page.</p></div>
-        <div class="faq-item"><h4>Can I mix JPG and PNG?</h4><p>Yes — add any supported types in one batch, reorder thumbnails, then create one PDF.</p></div>
-        <div class="faq-item"><h4>What about HEIC from iPhone?</h4><p>HEIC/HEIF is converted to JPEG in your browser first (heic2any), then embedded — same as our HEIC tools, with no server upload.</p></div>
-        <div class="faq-item"><h4>Does WebP work?</h4><p>Yes. We decode WebP to pixels, then embed in the PDF.</p></div>
-        <div class="faq-item"><h4>Can I mix portrait and landscape?</h4><p>Each page uses its own orientation from the image dimensions.</p></div>
-        <div class="faq-item"><h4>What filename is used?</h4><p>Default download name is images-combined.pdf.</p></div>
+        <div class="faq-item">
+          <h4>Is Image to PDF free and unlimited?</h4>
+          <p>Yes. Build as many PDFs as you need locally with no signup, watermarks, or usage quotas.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Are my images uploaded to DoItSwift servers?</h4>
+          <p>No. pdf-lib and image decoding run in your browser tab only; files never leave your device.</p>
+        </div>
+        <div class="faq-item">
+          <h4>How does PNG transparency work in the PDF?</h4>
+          <p>
+            PNG files embed in the PDF with transparency flattened onto a white background because PDF pages are opaque
+            rectangles.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Can I mix JPG, PNG, WebP, and HEIC in one PDF?</h4>
+          <p>Yes. Add any supported types in one batch, reorder thumbnails, then create a single combined PDF.</p>
+        </div>
+        <div class="faq-item">
+          <h4>How are HEIC or HEIF photos from an iPhone handled?</h4>
+          <p>
+            HEIC is converted to JPEG in your browser using heic2any, then embedded — same privacy as our{' '}
+            <a href="/image/heic-to-jpg/">HEIC to JPG</a> tool, with no server upload.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>How is WebP handled?</h4>
+          <p>WebP is decoded to pixels and saved as a JPEG representation inside the PDF for compatibility.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Can portrait and landscape pages appear in the same PDF?</h4>
+          <p>
+            Yes. Each page orientation follows that image&apos;s dimensions — wider images use a landscape page, taller
+            images use portrait, within your chosen paper size.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Which page sizes can I choose?</h4>
+          <p>
+            Select A4, US Letter, or US Legal before building the PDF. Images scale to fit within the page while keeping
+            aspect ratio.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>What about GIF, BMP, or animated GIFs?</h4>
+          <p>GIF and BMP are rasterized to JPEG for embedding. Animated GIFs use the first frame only.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Is there a monthly limit or account required?</h4>
+          <p>No accounts, no quotas, and no premium tier.</p>
+        </div>
       </div>
+      <p class="faq-filename-note">
+        <strong>Download name:</strong> the default file is <code>images-combined.pdf</code> — rename after saving if you
+        need a different name.
+      </p>
     </div>
   </section>
 
@@ -414,8 +637,19 @@ const jsonLd = {
     .subtitle {
       font-size: 19px;
       color: var(--text-muted);
-      max-width: 620px;
+      max-width: 640px;
       margin: 0 auto 28px;
+    }
+    .hero-code {
+      font-family: ui-monospace, 'Cascadia Code', 'Courier New', monospace;
+      font-size: 0.88em;
+      padding: 0.12em 0.35em;
+      background: var(--gray-100);
+      border-radius: 4px;
+      color: var(--text);
+    }
+    [data-theme='dark'] .hero-code {
+      background: rgba(255, 255, 255, 0.1);
     }
     .converter-section {
       padding: 30px 0;
@@ -565,24 +799,146 @@ const jsonLd = {
     .actions {
       margin-top: 12px;
     }
-    .long-form {
-      padding: 40px 0;
-    }
-    .long-form .container {
-      max-width: 760px;
-    }
-    .long-form p {
-      font-size: 15px;
-      line-height: 1.75;
-      color: var(--text-muted);
-      margin-bottom: 14px;
-    }
     .section-title {
       text-align: center;
       margin-bottom: 20px;
     }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .i2pdf-edu {
+      padding: 40px 0 16px;
+    }
+    .i2pdf-edu-inner {
+      max-width: 760px;
+    }
+    .i2pdf-edu-block {
+      margin-bottom: 2.5rem;
+    }
+    .i2pdf-edu-block:last-child {
+      margin-bottom: 0;
+    }
+    .i2pdf-edu h2 {
+      font-size: clamp(1.35rem, 2.5vw, 1.55rem);
+      line-height: 1.3;
+      margin: 0 0 1rem;
+      color: var(--text);
+    }
+    .i2pdf-edu p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--text);
+      margin: 0 0 1rem;
+    }
+    .i2pdf-edu a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .i2pdf-edu a:hover {
+      color: var(--blue-dark);
+    }
+    .i2pdf-edu code {
+      font-family: ui-monospace, 'Cascadia Code', 'Courier New', monospace;
+      font-size: 0.9em;
+      padding: 0.1em 0.35em;
+      background: var(--gray-100);
+      border-radius: 4px;
+    }
+    [data-theme='dark'] .i2pdf-edu code {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .i2pdf-table-wrap {
+      overflow-x: auto;
+      margin: 1rem 0 1.25rem;
+      -webkit-overflow-scrolling: touch;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+    .i2pdf-compare-table {
+      width: 100%;
+      min-width: 520px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .i2pdf-compare-table th,
+    .i2pdf-compare-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+    .i2pdf-compare-table thead th {
+      background: var(--card);
+      font-weight: 700;
+      color: var(--text);
+    }
+    .i2pdf-compare-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .i2pdf-related {
+      padding: 8px 0 48px;
+    }
+    .i2pdf-related .container {
+      max-width: 820px;
+    }
+    .section-title-sub {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    .i2pdf-related-grid {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+    @media (min-width: 520px) {
+      .i2pdf-related-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (min-width: 720px) {
+      .i2pdf-related-grid:not(.i2pdf-related-guides) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .i2pdf-related-grid a {
+      display: block;
+      padding: 14px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--blue);
+      font-weight: 600;
+      font-size: 15px;
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .i2pdf-related-grid a:hover {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+    [data-theme='dark'] .i2pdf-related-grid a:hover {
+      background: rgba(0, 102, 255, 0.12);
+    }
+
     .faq {
-      padding: 40px 0 60px;
+      padding: 8px 0 60px;
     }
     .faq .container {
       max-width: 820px;
@@ -593,6 +949,7 @@ const jsonLd = {
       border-radius: var(--radius);
       padding: 20px 24px;
       margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
     }
     .faq-item h4 {
       font-size: 16px;
@@ -601,6 +958,36 @@ const jsonLd = {
     .faq-item p {
       font-size: 14px;
       color: var(--text-muted);
+      margin: 0;
+      line-height: 1.55;
+    }
+    .faq-item a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .faq-item a:hover {
+      color: var(--blue-dark);
+    }
+    .faq-filename-note {
+      margin-top: 1.5rem;
+      padding: 16px 18px;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--text-muted);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    .faq-filename-note code {
+      font-size: 0.92em;
+      padding: 2px 6px;
+      background: var(--gray-100);
+      border-radius: 4px;
+    }
+    [data-theme='dark'] .faq-filename-note code {
+      background: rgba(255, 255, 255, 0.08);
     }
   </style>
 </MainLayout>

@@ -1,28 +1,66 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
+import { buildCalculatorJsonLd, calculatorCanonical } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/compound-interest/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Free compound interest calculator: principal, nominal annual %, time in years + months, compounding (annual to daily or continuous), optional monthly contributions. See final amount, interest earned, effective annual rate (EAR), principal vs interest bars, and year-by-year table. Currency formats display only.';
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Compound Interest Calculator',
+  breadcrumbName: 'Compound Interest',
+  applicationCategory: 'FinanceApplication',
+  browserRequirements: 'Requires JavaScript for compounding, EAR, charts, and year-by-year table',
+  webAppDescription:
+    'Compute compound growth using discrete compounding A = P(1+r/n)^(nt), continuous compounding, or level monthly contributions with monthly accrual. Shows final balance, interest earned, effective annual rate (EAR), comparison bars, and year-by-year balances. Display currency is cosmetic. Educational tool — not investment advice.',
+  featureList: [
+    'Principal, nominal annual rate, and duration in years plus extra months',
+    'Compounding: annual, semi-annual, quarterly, monthly, daily, or continuous',
+    'Optional fixed contribution each month',
+    'Final amount, interest earned, and EAR',
+    'Principal versus interest visualization',
+    'Year-by-year balance and cumulative interest table',
+    'Multi-currency formatting without FX conversion',
+    'Runs locally in the browser',
+  ],
+  faqs: [
     {
-      '@type': 'WebApplication',
-      name: 'Compound Interest Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'FinanceApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Compound growth with multiple frequencies, EAR, optional monthly contributions, and year-by-year table.',
+      question: 'What is compound interest?',
+      answer:
+        'Interest earned on both principal and previously credited interest, so growth accelerates over time compared with simple interest.',
+    },
+    {
+      question: 'What is effective annual rate (EAR)?',
+      answer:
+        'EAR expresses the annualized return after compounding within the year — higher compounding frequency raises EAR for the same nominal rate.',
+    },
+    {
+      question: 'Does the currency dropdown convert money between countries?',
+      answer:
+        'No. It only changes number formatting; the math is unchanged.',
+    },
+    {
+      question: 'Can I add monthly savings to the principal?',
+      answer:
+        'Yes — enter an optional monthly contribution to model regular deposits with monthly interest accrual.',
+    },
+    {
+      question: 'Is this compound interest calculator free and private?',
+      answer:
+        'Yes. It is free with no signup and runs in your browser without uploading your inputs.',
     },
   ],
-};
+});
 ---
 
 <MainLayout
-  title="Compound Interest Calculator — Daily, Monthly, Yearly | DoItSwift"
-  description="Calculate compound amount, interest earned, effective annual rate (EAR), and growth with optional monthly contributions — pick a display currency."
-  keywords="compound interest calculator, compounding calculator, compound interest formula calculator"
+  title="Compound Interest Calculator — EAR, Daily/Monthly/Continuous | DoItSwift"
+  description={pageDescription}
+  keywords="compound interest calculator, compounding calculator, EAR calculator, effective annual rate, continuous compounding calculator, monthly contribution compound interest"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -111,6 +149,7 @@ const jsonLd = {
           <summary>Year-by-year balance</summary>
           <div class="table-wrap">
             <table>
+              <caption class="sr-only">Year-by-year compound balance and interest earned</caption>
               <thead><tr><th>Year</th><th>Balance</th><th>Interest so far</th></tr></thead>
               <tbody id="ciTable"></tbody>
             </table>
@@ -135,6 +174,34 @@ const jsonLd = {
       <p>
         This page is <strong>currency-agnostic</strong> — pick a display currency; math is the same. Fees, tax, and inflation are not modeled.
       </p>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently asked questions</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <h4>What is compound interest?</h4>
+          <p>Interest on your principal and on interest already added — growth speeds up versus simple interest.</p>
+        </div>
+        <div class="faq-item">
+          <h4>What is EAR?</h4>
+          <p>Effective annual rate: the yearly equivalent after compounding. More compounding within the year → higher EAR for the same nominal rate.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Does currency change the math?</h4>
+          <p>No — only display formatting.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Can I model monthly deposits?</h4>
+          <p>Yes — use the optional monthly contribution field.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Is my data uploaded?</h4>
+          <p>No — calculations run locally in your browser.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -271,6 +338,11 @@ const jsonLd = {
     .breadcrumb a { color: var(--blue); text-decoration: none; }
     .hero { padding: 36px 0 16px; text-align: center; }
     .subtitle { font-size: 16px; color: var(--text-muted); max-width: 700px; margin: 0 auto 22px; line-height: 1.55; }
+    .subtitle strong { color: var(--text); font-weight: 700; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
     .calc-section { padding: 24px 0 40px; }
     .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 960px; align-items: start; }
     @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
@@ -302,6 +374,17 @@ const jsonLd = {
     .edu .container { max-width: 760px; }
     .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
     .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .faq { padding: 8px 0 28px; }
+    .faq .container { max-width: 760px; }
+    .faq-list { display: flex; flex-direction: column; gap: 10px; }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .faq-item h4 { font-size: 15px; margin-bottom: 4px; }
+    .faq-item p { font-size: 14px; color: var(--text-muted); margin: 0; }
     .affiliate { padding: 28px 0; }
     .affiliate .container { max-width: 900px; }
     .affiliate-inner { background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #93c5fd; border-radius: var(--radius-lg); padding: 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }

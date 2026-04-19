@@ -1,40 +1,71 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/body-fat/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Body Fat Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'HealthApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'US Navy body fat percentage from neck, waist, hip, and height with metric or imperial inputs.',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'How accurate is the US Navy method?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'It correlates with body composition for many adults but can misclassify very muscular or lean individuals — use as a screening estimate, not a medical diagnosis.',
-          },
-        },
-      ],
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'US Navy body fat estimator from neck, waist, height, and hip (women) measurements with metric or imperial toggles. Shows body fat percent and category-style interpretation. Tape technique matters—this is a screening estimate, not DEXA or clinical diagnosis.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'How accurate is the US Navy tape method?',
+    answer:
+      'It correlates reasonably with densitometry for many service-age adults but can misclassify very muscular people, those with unusual fat distribution, or sloppy measurements.',
+  },
+  {
+    question: 'Why might my result look unrealistic?',
+    answer:
+      'Wrong units, loose tape, measuring over clothing, or confusing minimum vs maximum tension on the tape can skew circumferences by centimetres—double-check inch versus cm toggles.',
+  },
+  {
+    question: 'Is this calculator for teenagers?',
+    answer:
+      'The Navy regression targets adult populations; teens should use growth-chart guidance from clinicians.',
+  },
+  {
+    question: 'Why do women enter hip circumference?',
+    answer:
+      'The published female equation includes hip to better capture gluteal fat patterning relative to waist and neck.',
+  },
+  {
+    question: 'Should I dehydrate before measuring?',
+    answer:
+      'No. Skewing hydration to game the tape is unhealthy and defeats the purpose of tracking trends.',
+  },
+  {
+    question: 'Are measurements uploaded?',
+    answer:
+      'No. Calculations stay on your device.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Body Fat Calculator',
+  breadcrumbName: 'Body Fat Calculator',
+  applicationCategory: 'HealthApplication',
+  browserRequirements: 'Requires JavaScript for sex-specific equations, unit conversion, and live body fat percent',
+  webAppDescription:
+    'Collect standard tape measurements at the neck, waist, optional hip for women, plus height, then estimate body fat percentage using the US Navy regression with male and female branches. Unit switches keep measurements consistent when you move between metric and US customary numbers. Results are educational—bodybuilders, older adults, and postpartum users may still want DXA or professional assessment for decisions.',
+  featureList: [
+    'Male or female equation branch',
+    'Height in centimetres or feet and inches',
+    'Neck and waist tape inputs with unit sync',
+    'Hip measurement for female mode',
+    'Estimated body fat percent output',
+    'Category interpretation text where shown',
+    'Guidance on measurement posture',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Body Fat Percentage Calculator — US Navy Method | DoItSwift"
-  description="Estimate body fat percentage using the US Navy tape method. Toggle cm/ft-in, kg/lb, neck, waist, hip (women), and see category-style interpretation."
-  keywords="body fat calculator, body fat percentage calculator, us navy body fat calculator"
+  title="Body Fat Calculator — US Navy Tape Method (Neck, Waist, Hip) | DoItSwift"
+  description={pageDescription}
+  keywords="body fat percentage calculator, US Navy body fat formula, tape measure body fat men women, neck waist hip body fat, skinfold alternative screening"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -140,10 +171,14 @@ const jsonLd = {
 
   <section class="faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item"><h4>Why is my result unrealistic?</h4><p>Wrong units, loose tape, or measuring over clothes skew results. Double-check inches vs cm toggles.</p></div>
-        <div class="faq-item"><h4>Is this for teens?</h4><p>The Navy method targets adults; teens need different standards.</p></div>
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>

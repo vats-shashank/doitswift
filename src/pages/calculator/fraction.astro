@@ -1,43 +1,71 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/fraction/';
-const site = 'https://doitswift.com';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Fraction Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'EducationalApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Add, subtract, multiply, divide fractions; simplify; decimal to fraction with steps.',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        { '@type': 'Question', name: 'Why common denominators for addition?', acceptedAnswer: { '@type': 'Answer', text: 'You are combining same-sized parts; unlike denominators mean different part sizes until converted.' } },
-        { '@type': 'Question', name: 'How do you simplify a fraction?', acceptedAnswer: { '@type': 'Answer', text: 'Divide numerator and denominator by their greatest common divisor (GCD) until no common factors remain.' } },
-      ],
-    },
-    {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: site + '/' },
-        { '@type': 'ListItem', position: 2, name: 'Calculators', item: site + '/calculator/' },
-        { '@type': 'ListItem', position: 3, name: 'Fraction Calculator', item: canonical },
-      ],
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Fraction calculator with tabs for add/subtract/multiply/divide on fractions or mixed numbers, a simplify mode, and decimal-to-fraction conversion with GCD reduction. Shows helpful messages for division by zero. Built for students and quick checks—not symbolic computer algebra.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'Why do we need common denominators before adding fractions?',
+    answer:
+      'Addition combines same-sized pieces. Different denominators mean different part sizes, so we rewrite fractions with an equivalent common denominator first.',
+  },
+  {
+    question: 'How does simplifying a fraction work here?',
+    answer:
+      'We divide numerator and denominator by their greatest common divisor until no common integer factor remains, which yields the fully reduced form.',
+  },
+  {
+    question: 'Why does the calculator say division by zero?',
+    answer:
+      'A denominator of zero is undefined. The tool also guards against dividing by a fraction whose numerator is zero, which would imply division by zero.',
+  },
+  {
+    question: 'Can I enter only a whole number?',
+    answer:
+      'Yes—use the whole-number box or set the fractional part to zero over one.',
+  },
+  {
+    question: 'How accurate is decimal to fraction?',
+    answer:
+      'We use rational arithmetic suitable for homework-style decimals. Very long repeating decimals may not match an exact pencil-and-paper expansion because of floating-point limits.',
+  },
+  {
+    question: 'Are calculations private?',
+    answer:
+      'Yes. Everything runs locally in your browser.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Fraction Calculator',
+  breadcrumbName: 'Fraction Calculator',
+  applicationCategory: 'EducationalApplication',
+  browserRequirements: 'Requires JavaScript for tab switching, fraction arithmetic, simplification, and decimal conversion',
+  webAppDescription:
+    'Perform fraction arithmetic with optional mixed numbers, flip signs sensibly, and reduce outputs using GCD-based simplification. Separate tabs simplify a single fraction and convert terminating-style decimals into lowest terms. The page explains common student pitfalls such as adding numerators without aligning denominators. Designed for learning support, not certified measurement.',
+  featureList: [
+    'Calculate tab with two fractions or mixed numbers and operation selector',
+    'Simplify tab for reducing a single fraction',
+    'Decimal to fraction tab with reduction',
+    'Clear errors for invalid denominators',
+    'Educational article on GCD and real-world uses',
+    'Links to percentage and scientific calculators',
+    'Runs locally without signup',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Fraction Calculator — Add, Subtract, Multiply, Divide Fractions | DoItSwift"
-  description="Add, subtract, multiply, divide fractions and mixed numbers; simplify; convert decimals to fractions. Steps shown for learning."
-  keywords="fraction calculator, adding fractions calculator, dividing fractions calculator, mixed number calculator"
+  title="Fraction Calculator — Add, Subtract, Multiply, Divide & Simplify | DoItSwift"
+  description={pageDescription}
+  keywords="fraction calculator online, add fractions calculator, divide fractions calculator, mixed number calculator, simplify fractions GCD, decimal to fraction calculator"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -145,16 +173,14 @@ const jsonLd = {
 
   <section class="faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item">
-          <h4>Why does the calculator say division by zero?</h4>
-          <p>A denominator of zero is undefined — there is no fraction with zero as the bottom number. Check both fractions before dividing; dividing by a fraction whose numerator is zero also triggers that message.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Can I enter only a whole number?</h4>
-          <p>Yes — leave the fractional part as zero or use the whole-number box with numerator zero and denominator one.</p>
-        </div>
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>

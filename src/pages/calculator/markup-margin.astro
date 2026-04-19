@@ -1,47 +1,72 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/markup-margin/';
-const site = 'https://doitswift.com';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Markup & Margin Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'BusinessApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Convert between markup and margin; selling price from cost; margin from sale; bulk pricing with currency switch.',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'Is markup the same as margin?',
-          acceptedAnswer: { '@type': 'Answer', text: 'No. Markup is profit divided by cost; margin is profit divided by selling price. A 50% markup equals about 33.3% margin.' },
-        },
-      ],
-    },
-    {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: site + '/' },
-        { '@type': 'ListItem', position: 2, name: 'Calculators', item: site + '/calculator/' },
-        { '@type': 'ListItem', position: 3, name: 'Markup & Margin Calculator', item: canonical },
-      ],
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Markup and margin calculator with four tabs: selling price from cost and markup percent, margin from cost and sale, maximum cost from sale and target margin, and bulk pricing from cost per unit, markup, and quantity. Currency formats display only. Pre-tax retail math—add GST separately if needed.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'Is markup the same as margin?',
+    answer:
+      'No. Markup divides profit by cost; gross margin divides profit by selling price. Fifty percent markup is about thirty-three point three percent margin on price.',
+  },
+  {
+    question: 'How do I convert margin to markup?',
+    answer:
+      'Markup equals margin divided by (one hundred percent minus margin), expressed as decimals or rearranged with care—use the calculator modes to avoid algebra mistakes.',
+  },
+  {
+    question: 'Which tab should retailers use for shelf price?',
+    answer:
+      'Mode one (selling price from cost and markup) answers the classic landed-cost plus markup question.',
+  },
+  {
+    question: 'Does the currency dropdown change ratios?',
+    answer:
+      'No. It only formats currency output; enter amounts in the currency you are pricing.',
+  },
+  {
+    question: 'Are GST or VAT included?',
+    answer:
+      'No. Inputs and outputs are pre-tax unless you mentally adjust for inclusive pricing.',
+  },
+  {
+    question: 'Are numbers uploaded?',
+    answer:
+      'No. All tabs run locally in JavaScript.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Markup & Margin Calculator',
+  breadcrumbName: 'Markup & Margin Calculator',
+  applicationCategory: 'UtilitiesApplication',
+  browserRequirements: 'Requires JavaScript for tab panels, bar visualization, and currency formatting',
+  webAppDescription:
+    'Translate between markup-on-cost and margin-on-price, derive list price from cost and target markup, back into allowable cost from list and required margin, and scale per-unit economics for bulk orders. Each mode shows numeric outputs plus a simple margin bar for intuition. Designed for merchants and finance students—tax-inclusive retail tags still need your local GST or VAT rules applied separately.',
+  featureList: [
+    'Currency selector for formatted amounts',
+    'Selling price from cost and markup percent',
+    'Margin and markup from cost and sale price',
+    'Maximum cost from sale price and target margin',
+    'Bulk pricing from unit cost, markup, and quantity',
+    'Visual margin bar per mode',
+    'Long-form article on retail pricing pitfalls',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Markup & Margin Calculator — Calculate Profit & Selling Price | DoItSwift"
-  description="Find selling price from cost and markup, or margin from cost and sale, or max cost from target margin. Bulk mode with your choice of currency."
-  keywords="markup calculator, profit margin calculator, gross margin calculator, retail markup calculator"
+  title="Markup & Margin Calculator — Selling Price, Gross Margin, Bulk | DoItSwift"
+  description={pageDescription}
+  keywords="markup vs margin calculator, gross margin calculator retail, selling price from cost and markup, target margin cost calculator, bulk pricing calculator India"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -167,10 +192,14 @@ const jsonLd = {
 
   <section class="faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
-      <div class="faq-item">
-        <h4>How do I convert margin to markup?</h4>
-        <p>Markup = Margin ÷ (100% − Margin). Example: 25% margin → 25 ÷ 75 ≈ 33.3% markup.</p>
+      <h2 class="section-title">Frequently asked questions</h2>
+      <div class="faq-list">
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>
@@ -339,7 +368,10 @@ const jsonLd = {
     .section-title { text-align: center; margin-bottom: 16px; font-size: 1.5rem; }
     .faq { padding: 0 0 24px; }
     .faq .container { max-width: 760px; }
+    .faq-list { display: flex; flex-direction: column; gap: 12px; }
     .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+    .faq-item h4 { margin: 0 0 8px; font-size: 15px; }
+    .faq-item p { margin: 0; font-size: 14px; color: var(--text-muted); line-height: 1.55; }
     .related { text-align: center; padding-bottom: 48px; }
     .related-links a { color: var(--blue); font-weight: 600; }
   </style>

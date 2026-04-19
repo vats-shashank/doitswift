@@ -1,50 +1,72 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const site = Astro.site?.href ?? 'https://doitswift.com';
-const canonical = `${site}calculator/discount/`;
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Discount Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'UtilityApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Sale price, percent off, stacked discounts, and reverse original price calculator.',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'Do two 10% discounts equal 20% off?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'No — sequential discounts multiply: 10% then 10% leaves more than a single 20% off the original.',
-          },
-        },
-      ],
-    },
-    {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: site },
-        { '@type': 'ListItem', position: 2, name: 'Calculators', item: `${site}calculator/` },
-        { '@type': 'ListItem', position: 3, name: 'Discount Calculator', item: canonical },
-      ],
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Discount calculator with four modes: sale price from percent off, percent discount from original and sale prices, two sequential percentage discounts, and reverse original price from sale price and one markdown. Currency formats numbers only. Explains why stacked discounts multiply rather than add.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'Do two ten percent discounts equal twenty percent off?',
+    answer:
+      'No when they apply sequentially to the shrinking price. You pay ninety percent of the price, then ninety percent of that result—about nineteen percent total off, not twenty.',
+  },
+  {
+    question: 'Why is stacked total percent not d1 plus d2?',
+    answer:
+      'Each step applies to the amount left after the previous discount, so you multiply the survive fractions (one minus each rate) instead of adding the headline percentages.',
+  },
+  {
+    question: 'Does the currency dropdown change math?',
+    answer:
+      'No. It only affects how amounts are formatted on screen.',
+  },
+  {
+    question: 'Which mode should I use for a single coupon?',
+    answer:
+      'Use sale price from discount percent, or what percent off when you know both sticker and checkout prices.',
+  },
+  {
+    question: 'Can discounts exceed one hundred percent?',
+    answer:
+      'Inputs are clamped to sensible retail ranges; unrealistic values would make the price negative.',
+  },
+  {
+    question: 'Are prices uploaded?',
+    answer:
+      'No. Calculations run locally in JavaScript.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Discount Calculator',
+  breadcrumbName: 'Discount Calculator',
+  applicationCategory: 'UtilitiesApplication',
+  browserRequirements: 'Requires JavaScript to switch modes, format currency, and update sale math live',
+  webAppDescription:
+    'Answer common retail questions in one page: what you pay after a single percent markdown, what percent off a tag represents, how two sequential promotions combine, and what list price implies a given sale price and discount. Includes a visual savings bar and educational notes on Indian sale seasons and GST-inclusive pricing. Not a checkout integration—pure arithmetic.',
+  featureList: [
+    'Currency display selector',
+    'Mode dropdown for four discount workflows',
+    'Dynamic fields per mode (original, sale, two discounts, reverse)',
+    'Main result line with subtext and savings bar',
+    'Percent savings label where applicable',
+    'Article on compound discounts and e-commerce literacy',
+    'Links to percentage, tip, GST, and markup tools',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Discount Calculator — Calculate Sale Price & Savings | DoItSwift"
-  description="Four modes: sale price from % off, find percent off from prices, stack two sequential discounts, or recover original price from sale price and discount."
-  keywords="discount calculator, sale price calculator, percentage off calculator, shopping discount"
+  title="Discount Calculator — Sale Price, Stacked % Off, Reverse Price | DoItSwift"
+  description={pageDescription}
+  keywords="discount calculator online, sale price calculator, stacked discount calculator, sequential percent off, reverse original price from sale, shopping math India"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -152,9 +174,14 @@ const jsonLd = {
 
   <section class="faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item"><h4>Why is stacked total % not d1+d2?</h4><p>Sequential discounts apply to shrinking bases — multiply the survive fractions.</p></div>
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>

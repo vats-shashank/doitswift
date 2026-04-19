@@ -1,5 +1,6 @@
 // After `npm run build`, checks root-relative hrefs in src .astro files and README.md
 // against dist (pages) and public or dist (static assets).
+// Covers `href="/path/"` in markup and `href: '/path/'` in frontmatter / data arrays.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -41,11 +42,13 @@ const readme = path.join(root, 'README.md');
 if (fs.existsSync(readme)) files.push(readme);
 
 const hrefRe = /href=["'](\/[^"'#?]*)/g;
+const hrefColonRe = /href:\s*["'](\/[^"'#?]*)["']/g;
 const hrefs = new Set();
 for (const f of files) {
   const c = fs.readFileSync(f, 'utf8');
   let m;
   while ((m = hrefRe.exec(c))) hrefs.add(m[1]);
+  while ((m = hrefColonRe.exec(c))) hrefs.add(m[1]);
 }
 
 const missing = [];

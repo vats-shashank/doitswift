@@ -1,40 +1,72 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/salary/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Salary Calculator (India) — DoItSwift',
-      url: canonical,
-      applicationCategory: 'FinanceApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'CTC to in-hand salary estimate for India with PF, HRA, professional tax, and new vs old tax regime.',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'Why is CTC different from take-home?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'CTC includes employer costs and variable pay; take-home is what lands in your account after PF, tax, and other deductions.',
-          },
-        },
-      ],
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'India CTC to in-hand salary estimator: splits a simplified salary structure (basic, HRA, bonus), applies capped employee PF and illustrative professional tax, and compares FY 2026-27-style new vs old regime tax with standard deduction and your 80C / other inputs. Bonus shown separately. Not a payslip—verify with HR and a CA.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'Why is CTC different from take-home?',
+    answer:
+      'CTC bundles fixed pay, allowances, employer costs, and sometimes variable pay. Take-home is what reaches your bank after PF, professional tax, income tax, and other monthly deductions you model.',
+  },
+  {
+    question: 'Why is employee PF capped in this model?',
+    answer:
+      'Many Indian employers cap employee PF at twelve percent of a ₹15,000 wage ceiling (₹1,800 per month). Your employer may use a different base—adjust expectations accordingly.',
+  },
+  {
+    question: 'Will this match my payslip exactly?',
+    answer:
+      'Unlikely. LTA, NPS, perquisites, flexi allowances, surcharges, cess, and state professional tax slabs can all differ. Use the tool for direction, not payroll precision.',
+  },
+  {
+    question: 'How is HRA exemption handled for the old regime?',
+    answer:
+      'We apply the classic minimum-of-three formula using your entered rent, metro vs non-metro percentages of basic, and basic salary—simplified versus real rent receipts and metro definitions.',
+  },
+  {
+    question: 'What tax year do the slabs follow?',
+    answer:
+      'We align with the FY 2026-27-style slab logic used on our income tax calculator page, including standard deduction where applicable.',
+  },
+  {
+    question: 'Are salary numbers sent to your servers?',
+    answer:
+      'No. The calculator runs locally in JavaScript.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Salary Calculator (India)',
+  breadcrumbName: 'Salary Calculator (India)',
+  applicationCategory: 'FinanceApplication',
+  browserRequirements: 'Requires JavaScript to compute in-hand pay, tax comparison, and live breakdown list',
+  webAppDescription:
+    'Turn an annual CTC into side-by-side monthly in-hand estimates under new and old Indian income-tax regimes using a transparent simplified structure: basic as a fraction of fixed pay, metro or non-metro HRA component, capped EPF employee contribution, flat professional tax placeholder, and user-supplied 80C and other Chapter VI-A style amounts. Variable bonus is separated from monthly cash flow. Educational—not tax filing advice.',
+  featureList: [
+    'Annual CTC and bonus or variable percent of CTC',
+    'Metro vs non-metro HRA component selector',
+    'New vs old regime radio comparison',
+    'Monthly rent and old-regime 80C / other deduction fields',
+    'Other monthly deductions (insurance, etc.)',
+    'Monthly in-hand cards for each regime excluding bonus',
+    'Expandable annual breakdown list',
+    'Disclaimer banner matching on-page limits',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Salary Calculator India — CTC to In-Hand Take-Home | DoItSwift"
-  description="Estimate monthly in-hand salary from CTC in India: basic, HRA, PF, professional tax, and FY 2026-27 new vs old regime tax — illustrative only."
-  keywords="salary calculator india, ctc calculator, in hand salary calculator, take home salary calculator"
+  title="Salary Calculator India — CTC to In-Hand (New vs Old Regime) | DoItSwift"
+  description={pageDescription}
+  keywords="salary calculator India, CTC to in hand calculator, take home salary calculator 2026, new vs old tax regime salary, HRA exemption calculator salary, PF capped salary estimate, monthly in hand from CTC"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -163,10 +195,14 @@ const jsonLd = {
 
   <section class="faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item"><h4>Why is PF capped?</h4><p>Many employers cap employee PF at 12% of ₹15,000 wages (₹1,800/month). Your company may differ.</p></div>
-        <div class="faq-item"><h4>Does this match my payslip?</h4><p>Only approximately — LTA, NPS, perquisites, and surcharges can change tax.</p></div>
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>

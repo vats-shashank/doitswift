@@ -1,28 +1,73 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/emi-vs-rent/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Buy vs Rent Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'FinanceApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Compare home loan EMI path with renting and investing the difference at a chosen return.',
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Buy vs rent calculator: compare net home equity (value minus loan) after a chosen horizon against renting with rising rent and investing the down payment plus monthly surplus when EMI exceeds rent—using your appreciation and return assumptions. Ignores maintenance, taxes, and transaction costs. Educational scenario sketch only.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'What does the buy side of the model include?',
+    answer:
+      'Down payment as immediate equity, a fixed-rate reducing-balance loan for the remainder, EMI amortization, and home price growing at your appreciation rate. Net equity is roughly home value minus outstanding loan at the horizon.',
+  },
+  {
+    question: 'How does the rent plus invest path work?',
+    answer:
+      'Rent grows once per year. The down payment is invested immediately. Whenever rent is lower than EMI, the monthly difference is added to the portfolio at your stated return; if rent exceeds EMI, the model tries to draw from the portfolio.',
+  },
+  {
+    question: 'Why might the verdict differ from real life?',
+    answer:
+      'We omit maintenance, property tax, registration, moving costs, tax deductions on home loans, liquidity needs, and behavioral factors. Small assumption changes swing long horizons.',
+  },
+  {
+    question: 'Does the currency selector convert FX?',
+    answer:
+      'No. It formats numbers only—keep inputs in one consistent currency.',
+  },
+  {
+    question: 'Is this investment advice?',
+    answer:
+      'No. It is a simplified comparison for learning; consult licensed professionals for major decisions.',
+  },
+  {
+    question: 'Are inputs sent to servers?',
+    answer:
+      'No. The simulation runs locally in JavaScript.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Buy vs Rent Calculator',
+  breadcrumbName: 'Buy vs Rent',
+  applicationCategory: 'FinanceApplication',
+  browserRequirements: 'Requires JavaScript to simulate buy and rent paths, compare cards, and update the verdict',
+  webAppDescription:
+    'Set home price, down payment percent, loan rate and tenure, starting rent and rent growth, home appreciation, investment return, and a comparison horizon. The page estimates buy-path net equity versus a rent-plus-invest corpus built from the down payment and optional monthly surplus when EMI exceeds rent. Many real-world costs are excluded on purpose so you can stress-test assumptions—not a replacement for a full financial plan.',
+  featureList: [
+    'Currency display dropdown',
+    'Home price, down payment, loan rate, and tenure',
+    'Initial rent and annual rent growth',
+    'Home appreciation and portfolio return inputs',
+    'Comparison horizon in years',
+    'Buy net equity versus rent investment corpus cards',
+    'Verdict line summarizing which side is ahead in the model',
+    'Educational explanation of limitations',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Buy vs Rent Calculator — EMI vs Rent & Invest | DoItSwift"
-  description="Compare buying a home with a loan versus renting and investing: horizon, rent growth, home appreciation, and portfolio return — illustrative."
-  keywords="buy vs rent calculator, emi vs rent india, rent or buy home calculator"
+  title="Buy vs Rent Calculator — Home Loan EMI vs Rent & Invest | DoItSwift"
+  description={pageDescription}
+  keywords="buy vs rent calculator India, EMI vs rent comparison, rent or buy house calculator, home appreciation vs investment return, should I buy or rent calculator"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -138,6 +183,20 @@ const jsonLd = {
       <p>
         Real decisions involve liquidity, tax benefits on home loans, rent flexibility, maintenance, and emotional preference — use this as a structured sketch, not a prophecy.
       </p>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently asked questions</h2>
+      <div class="faq-list">
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -308,6 +367,17 @@ const jsonLd = {
     [data-theme='dark'] .affiliate-inner { background: rgba(59, 130, 246, 0.12); border-color: rgba(147, 197, 253, 0.4); }
     .affiliate-icon { font-size: 36px; }
     .affiliate-content { flex: 1; min-width: 200px; }
+    .faq { padding: 28px 0 24px; }
+    .faq .container { max-width: 760px; }
+    .faq-list { display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .faq-item h4 { margin: 0 0 8px; font-size: 15px; }
+    .faq-item p { margin: 0; font-size: 14px; color: var(--text-muted); line-height: 1.55; }
     .related { text-align: center; padding-bottom: 48px; }
     .related-links a { color: var(--blue); font-weight: 600; }
   </style>

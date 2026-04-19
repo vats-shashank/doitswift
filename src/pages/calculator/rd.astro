@@ -1,40 +1,64 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/rd/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Free recurring deposit (RD) calculator for India: monthly installment ₹100–₹1 lakh, annual rate ~1–15%, tenure 6 months–10 years (years or months). Quarterly (default), monthly, or annual compounding; maturity, total deposits, interest, and period breakdown. Estimate only — bank day-count rules may differ.';
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift RD Calculator',
+  breadcrumbName: 'RD Calculator',
+  applicationCategory: 'FinanceApplication',
+  browserRequirements: 'Requires JavaScript for RD maturity and breakdown table',
+  webAppDescription:
+    'Model Indian-style recurring deposits with fixed monthly installments, stated annual rate, and selectable compounding (quarterly default). Outputs maturity amount, total deposited, interest earned, and a period-by-period balance trail. Does not replicate every bank’s day-count or TDS rules.',
+  featureList: [
+    'Monthly deposit from ₹100 to ₹100,000',
+    'Annual interest rate approximately 1–15%',
+    'Tenure 6 to 120 months',
+    'Compounding: quarterly (typical), monthly, or annual',
+    'Maturity value, total deposits, and interest earned',
+    'Expandable period breakdown table',
+    'Runs locally in the browser',
+  ],
+  faqs: [
     {
-      '@type': 'WebApplication',
-      name: 'RD Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'FinanceApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Recurring deposit maturity, interest, and quarter-wise breakdown with quarterly compounding.',
+      question: 'How is RD interest compounded?',
+      answer:
+        'Many Indian banks compound RD interest quarterly. This tool credits monthly installments and applies interest each compounding period you select.',
     },
     {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'How is RD interest compounded?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Many Indian banks compound RD interest quarterly. This tool adds your monthly installment, then applies quarterly interest on the balance in line with common practice.',
-          },
-        },
-      ],
+      question: 'Will this match my bank passbook exactly?',
+      answer:
+        'Maybe not to the rupee — banks use day-count and cut-off rules. Use this for estimates.',
+    },
+    {
+      question: 'Why is quarterly the default compounding?',
+      answer:
+        'Many Indian RDs compound quarterly; you can switch frequency to see how sensitive maturity is.',
+    },
+    {
+      question: 'Does this RD calculator include TDS?',
+      answer:
+        'No. It shows gross interest before your specific TDS or Form 15G/15H situation.',
+    },
+    {
+      question: 'Is the RD calculator free and private?',
+      answer:
+        'Yes. It is free with no signup and runs in your browser.',
     },
   ],
-};
+});
 ---
 
 <MainLayout
-  title="RD Calculator — Recurring Deposit Maturity & Interest | DoItSwift"
-  description="Calculate recurring deposit maturity, total interest, and deposits for Indian RDs. Quarterly compounding, adjustable tenure and rate."
-  keywords="rd calculator, recurring deposit calculator, rd interest calculator, post office rd calculator"
+  title="RD Calculator India — Recurring Deposit Maturity, Interest & Breakdown | DoItSwift"
+  description={pageDescription}
+  keywords="RD calculator, recurring deposit calculator India, RD maturity calculator, RD interest calculator, post office RD calculator, quarterly compounding RD"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -111,6 +135,7 @@ const jsonLd = {
           <summary>Year / quarter breakdown</summary>
           <div class="table-wrap">
             <table>
+              <caption class="sr-only">RD cumulative deposits and balance by compounding period</caption>
               <thead><tr><th>Period</th><th>Deposits (cumulative)</th><th>Balance</th></tr></thead>
               <tbody id="rdTable"></tbody>
             </table>
@@ -146,10 +171,13 @@ const jsonLd = {
 
   <section class="faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
+        <div class="faq-item"><h4>How is RD interest compounded?</h4><p>Many banks compound quarterly; this tool follows your chosen frequency after each monthly deposit.</p></div>
         <div class="faq-item"><h4>Will this match my bank passbook exactly?</h4><p>Maybe not to the rupee — banks use day-count and cut-off rules. Use this for estimates.</p></div>
         <div class="faq-item"><h4>Why quarterly default?</h4><p>Many Indian RDs compound quarterly; you can switch frequency to explore sensitivity.</p></div>
+        <div class="faq-item"><h4>Does this include TDS on interest?</h4><p>No — it shows gross interest before your specific TDS situation.</p></div>
+        <div class="faq-item"><h4>Is this calculator free?</h4><p>Yes — no signup; math runs in your browser.</p></div>
       </div>
     </div>
   </section>
@@ -243,6 +271,10 @@ const jsonLd = {
     .breadcrumb a { color: var(--blue); text-decoration: none; }
     .hero { padding: 36px 0 16px; text-align: center; }
     .subtitle { font-size: 18px; color: var(--text-muted); max-width: 680px; margin: 0 auto 24px; line-height: 1.55; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
     .calc-section { padding: 24px 0 40px; }
     .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 960px; align-items: start; }
     @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }

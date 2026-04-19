@@ -1,27 +1,71 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/time/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Time Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'UtilityApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Add or subtract durations in days, hours, minutes, and seconds.',
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Free time-duration calculator: add or subtract two spans given as days, hours, minutes, and seconds. Shows the combined duration and total seconds—handy for shifts, travel, or study blocks. Runs locally; not intended for high-precision physics or leap-second accounting.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'How do addition and subtraction work?',
+    answer:
+      'Addition sums the two durations. Subtraction computes A minus B; if B is longer, we show the absolute span with a minus sign on the main line, matching the note in the help section.',
+  },
+  {
+    question: 'What does the total seconds line mean?',
+    answer:
+      'It is the same result expressed as a single integer of seconds for quick comparisons or copying into spreadsheets.',
+  },
+  {
+    question: 'Can I enter fractional seconds or minutes?',
+    answer:
+      'The inputs accept whole numbers in this UI; fractional time would need scaling (e.g. enter extra seconds) or use another tool.',
+  },
+  {
+    question: 'Is this the same as adding clock times on a calendar?',
+    answer:
+      'No—this tool only adds durations. For midnight-to-midnight spans between calendar dates, use the date difference calculator.',
+  },
+  {
+    question: 'Are negative results errors?',
+    answer:
+      'They mean duration B is longer than A when subtracting; we still display the magnitude so you can see how much longer.',
+  },
+  {
+    question: 'Is my data uploaded?',
+    answer:
+      'No. All math runs in your browser with no signup.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Time Calculator',
+  breadcrumbName: 'Time Calculator',
+  applicationCategory: 'UtilitiesApplication',
+  browserRequirements: 'Requires JavaScript to add or subtract durations and update the result live',
+  webAppDescription:
+    'Add or subtract two positive durations expressed as days, hours, minutes, and seconds in the browser. The tool normalizes overflows (for example 90 minutes becomes 1 hour 30 minutes) and shows both a human-readable breakdown and total seconds. Designed for everyday scheduling math, not scientific timing.',
+  featureList: [
+    'Choose add (A + B) or subtract (A − B)',
+    'Separate day, hour, minute, and second fields for duration A and B',
+    'Human-readable combined duration output',
+    'Total seconds display',
+    'Short educational note on negative subtraction results',
+    'Links to related date tools',
+    'Runs locally without signup',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Time Calculator — Add & Subtract Durations | DoItSwift"
-  description="Add or subtract two durations expressed as days, hours, minutes, and seconds — for scheduling and quick arithmetic."
-  keywords="time calculator, duration calculator, add time, subtract time"
+  title="Time Calculator — Add & Subtract Hours, Minutes, Seconds | DoItSwift"
+  description={pageDescription}
+  keywords="time calculator, add time calculator, subtract duration, hours minutes calculator, shift time math, duration sum online, free time arithmetic calculator"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -87,6 +131,20 @@ const jsonLd = {
     <div class="container">
       <h2 class="section-title">Notes</h2>
       <p>Negative totals from <strong>A − B</strong> mean B is longer than A — we still show the absolute span. For clock times on a calendar, combine with our <a href="/calculator/date-difference/">date difference</a> tool.</p>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently asked questions</h2>
+      <div class="faq-list">
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -176,6 +234,17 @@ const jsonLd = {
     .edu a { color: var(--blue); font-weight: 600; }
     .edu p { font-size: 15px; line-height: 1.7; color: var(--text-muted); }
     .section-title { text-align: center; margin-bottom: 16px; font-size: 1.5rem; }
+    .faq { padding: 28px 0 36px; }
+    .faq .container { max-width: 760px; }
+    .faq-list { display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .faq-item h4 { margin: 0 0 8px; font-size: 15px; }
+    .faq-item p { margin: 0; font-size: 14px; color: var(--text-muted); line-height: 1.55; }
     .related { text-align: center; padding-bottom: 48px; }
     .related-links a { color: var(--blue); font-weight: 600; }
   </style>

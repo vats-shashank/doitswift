@@ -1,43 +1,72 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/statistics/';
-const site = 'https://doitswift.com';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Statistics Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'EducationalApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Mean, median, mode, standard deviation, quartiles, histogram and box plot from pasted or typed numbers.',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        { '@type': 'Question', name: 'Sample vs population variance?', acceptedAnswer: { '@type': 'Answer', text: 'Sample variance divides by n−1 (Bessel correction); population variance divides by n when your list is the entire population.' } },
-        { '@type': 'Question', name: 'How many numbers can I enter?', acceptedAnswer: { '@type': 'Answer', text: 'Up to 10,000 numeric values; large pastes show a brief calculating state.' } },
-      ],
-    },
-    {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: site + '/' },
-        { '@type': 'ListItem', position: 2, name: 'Calculators', item: site + '/calculator/' },
-        { '@type': 'ListItem', position: 3, name: 'Statistics Calculator', item: canonical },
-      ],
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Free descriptive statistics calculator: paste or type up to 10,000 numbers, pick sample or population variance, and see mean, median, mode, quartiles, spread measures, geometric and harmonic means, plus a histogram and box plot. Runs locally in JavaScript—descriptive summaries only, not hypothesis tests.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'What is the difference between sample and population variance?',
+    answer:
+      'Sample variance divides by n−1 (Bessel’s correction) when your list is a sample from a larger population. Population variance divides by n when the list is the entire population you care about.',
+  },
+  {
+    question: 'How many numbers can I enter?',
+    answer:
+      'Up to 10,000 numeric values. Very large pastes may show a short Calculating state while the browser sorts and scans the list.',
+  },
+  {
+    question: 'Why do I see “Calculating…” when I paste a big list?',
+    answer:
+      'Sorting and scanning thousands of numbers briefly blocks the main thread; we defer work so the page can show the indicator instead of freezing silently.',
+  },
+  {
+    question: 'How are commas, spaces, and non-numeric tokens handled?',
+    answer:
+      'Commas, spaces, semicolons, tabs, and newlines split tokens; empty tokens are skipped. Invalid tokens are ignored, and you may see a warning if nothing usable remains.',
+  },
+  {
+    question: 'Does this calculator run hypothesis tests or p-values?',
+    answer:
+      'No. It is strictly descriptive—means, spreads, and charts—without inference.',
+  },
+  {
+    question: 'Are my numbers uploaded to DoItSwift?',
+    answer:
+      'No. Parsing and math happen in your browser.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Statistics Calculator',
+  breadcrumbName: 'Statistics Calculator',
+  applicationCategory: 'EducationalApplication',
+  browserRequirements: 'Requires JavaScript to parse lists, compute descriptive statistics, and render histogram and box plot',
+  webAppDescription:
+    'Paste comma-separated values or enter numbers line by line, optionally append single values with a button, and choose sample versus population variance. The tool reports a wide set of descriptive measures including quartiles and IQR, geometric and harmonic means where valid, and simple visual summaries. Large datasets are supported with a brief progress state; results are educational, not a substitute for audited analytics workflows.',
+  featureList: [
+    'Comma-separated and line-by-line inputs merged together',
+    'Single-value append control',
+    'Sample (n−1) or population (n) variance toggle',
+    'Count, sum, mean, median, mode, min, max, range',
+    'Variance, standard deviation, sum of squares',
+    'Quartiles Q1–Q3, IQR, geometric and harmonic means',
+    'Histogram and box plot visuals',
+    'Warnings for invalid or empty input',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Statistics Calculator — Mean, Median, Mode, Standard Deviation | DoItSwift"
-  description="Compute mean, median, mode, range, variance, standard deviation, quartiles, IQR, geometric & harmonic means. Paste CSV or one-per-line; histogram and box plot."
-  keywords="statistics calculator, mean median mode calculator, standard deviation calculator, average calculator"
+  title="Statistics Calculator — Mean, Median, SD, Quartiles, Charts | DoItSwift"
+  description={pageDescription}
+  keywords="statistics calculator online, mean median mode calculator, standard deviation calculator sample vs population, quartiles IQR calculator, histogram generator from data, box plot calculator, descriptive statistics free"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -161,16 +190,14 @@ const jsonLd = {
 
   <section class="faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item">
-          <h4>Why “Calculating…” on paste?</h4>
-          <p>Sorting and scanning thousands of numbers blocks the UI thread briefly; we defer work so the browser can show the indicator.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Non-numeric tokens?</h4>
-          <p>Commas, spaces, and newlines split tokens; empty tokens are skipped. Invalid tokens are ignored with a warning when nothing usable remains.</p>
-        </div>
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>

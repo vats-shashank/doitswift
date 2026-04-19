@@ -49,6 +49,34 @@ const ogImageUrl =
       ? ogImageProp
       : new URL(ogImageProp.startsWith('/') ? ogImageProp : `/${ogImageProp}`, site).href
     : new URL('/og-default.svg', site).href);
+
+const siteRootUrl = site ? new URL('/', site).href : null;
+const organizationWebSchema = site
+  ? {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'Organization',
+          '@id': `${siteRootUrl}#organization`,
+          name: 'DoItSwift',
+          url: siteRootUrl,
+          description: 'Free online calculators and browser-based tools for finance, health, images, and PDFs.',
+          logo: {
+            '@type': 'ImageObject',
+            url: new URL('/favicon.svg', site).href,
+          },
+        },
+        {
+          '@type': 'WebSite',
+          '@id': `${siteRootUrl}#website`,
+          name: 'DoItSwift',
+          url: siteRootUrl,
+          inLanguage: 'en',
+          publisher: { '@id': `${siteRootUrl}#organization` },
+        },
+      ],
+    }
+  : null;
 ---
 
 <!DOCTYPE html>
@@ -75,6 +103,9 @@ const ogImageUrl =
         <meta property="og:image:height" content="630" />
         <meta name="twitter:image" content={ogImageUrl} />
       </>
+    )}
+    {organizationWebSchema && (
+      <script type="application/ld+json" set:html={JSON.stringify(organizationWebSchema)} />
     )}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/styles/global.css" />

@@ -1,44 +1,78 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/personal-loan/';
-const site = 'https://doitswift.com';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Personal Loan EMI Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'FinanceApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Calculate personal loan EMI, processing fee impact, effective rate, and amortization in India.',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        { '@type': 'Question', name: 'What is personal loan EMI?', acceptedAnswer: { '@type': 'Answer', text: 'Fixed monthly payment covering principal and interest on a reducing balance, often with upfront processing fees.' } },
-        { '@type': 'Question', name: 'Why are personal loan rates higher than home loans?', acceptedAnswer: { '@type': 'Answer', text: 'Personal loans are usually unsecured, so lenders charge higher interest to cover risk.' } },
-      ],
-    },
-    {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: site + '/' },
-        { '@type': 'ListItem', position: 2, name: 'Calculators', item: site + '/calculator/' },
-        { '@type': 'ListItem', position: 3, name: 'Personal Loan EMI', item: canonical },
-      ],
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Personal loan EMI calculator for India-style unsecured loans: amount, rate, tenure (months to 7 years), optional processing fee, monthly EMI, total interest, simple effective rate, principal–interest–fee chart, and year-wise amortization. Currency dropdown formats display only. Illustrative—verify fees and APR with your lender.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'What is personal loan EMI?',
+    answer:
+      'EMI is the fixed monthly installment on a reducing-balance loan: early payments skew toward interest; later ones pay down principal faster.',
+  },
+  {
+    question: 'Why are personal loan rates often higher than home loans?',
+    answer:
+      'Most personal loans are unsecured, so lenders price higher default risk into the interest rate and may add processing fees.',
+  },
+  {
+    question: 'How does the processing fee affect results?',
+    answer:
+      'We treat the fee as an upfront cash cost added to your total outflow and show its share in the breakdown. It does not reduce principal in this model.',
+  },
+  {
+    question: 'What does the effective rate line mean?',
+    answer:
+      'It is a simplified annualized cost measure from total interest and fees versus principal and years—useful for comparing two quotes, not identical to every lender’s APR disclosure.',
+  },
+  {
+    question: 'Does the currency selector change EMI math?',
+    answer:
+      'No. It only changes number formatting; enter amounts consistent with the currency you are modeling.',
+  },
+  {
+    question: 'Can I model floating rates?',
+    answer:
+      'The calculator assumes one constant rate for the full tenure. Update the rate and rerun when your floating rate changes.',
+  },
+  {
+    question: 'Are my loan inputs uploaded?',
+    answer:
+      'No. Calculations run locally in JavaScript.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Personal Loan EMI Calculator',
+  breadcrumbName: 'Personal Loan EMI',
+  applicationCategory: 'FinanceApplication',
+  browserRequirements: 'Requires JavaScript for EMI, charts, amortization table, sliders, and currency formatting',
+  webAppDescription:
+    'Estimate EMI and total borrowing cost for unsecured personal loans using standard reducing-balance math. Optional processing fee as a percent of loan amount is folded into cash outflow and the three-way principal–interest–fee visualization. Includes an expandable year-wise amortization table and a plain-language effective rate hint for offer shopping—not a substitute for formal sanction terms.',
+  featureList: [
+    'Loan amount, annual interest rate, and tenure with synced sliders',
+    'Optional processing fee as percent of loan',
+    'Currency display dropdown (formatting only)',
+    'Monthly EMI, total interest, and total outflow including fee',
+    'Effective rate note for quick comparisons',
+    'Principal, interest, and fees conic chart with legend',
+    'Year-wise amortization table',
+    'Context article on unsecured loans in India',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Personal Loan EMI Calculator — Calculate Monthly Payment | DoItSwift"
-  description="Free personal loan EMI calculator for India: monthly payment, total interest, processing fee, effective rate, year-wise amortization, and principal vs interest vs fees chart."
-  keywords="personal loan emi calculator, personal loan calculator, loan emi calculator, instant loan calculator"
+  title="Personal Loan EMI Calculator India — Fees, Effective Rate, Amortization | DoItSwift"
+  description={pageDescription}
+  keywords="personal loan EMI calculator India, unsecured loan EMI, processing fee personal loan, effective interest rate calculator loan, personal loan amortization schedule, instant loan EMI estimate"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -118,6 +152,7 @@ const jsonLd = {
           <summary>Year-wise amortization</summary>
           <div class="table-wrap">
             <table>
+              <caption class="sr-only">Yearly principal paid, interest paid, and remaining balance for the personal loan amortization schedule.</caption>
               <thead><tr><th>Year</th><th>Principal</th><th>Interest</th><th>Balance</th></tr></thead>
               <tbody id="plTable"></tbody>
             </table>
@@ -145,6 +180,20 @@ const jsonLd = {
       <p>
         <strong>Tips for better rates:</strong> a strong <strong>credit score</strong>, stable income, lower <strong>debt-to-income</strong>, and an existing banking relationship can help. Read the sanction letter for <strong>prepayment</strong> charges, <strong>late fees</strong>, and whether insurance is bundled. Use our <a href="/calculator/emi/">EMI</a>, <a href="/calculator/home-loan/">Home Loan</a>, <a href="/calculator/salary/">Salary</a>, and <a href="/calculator/compound-interest/">Compound Interest</a> calculators alongside this page for a fuller picture.
       </p>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently asked questions</h2>
+      <div class="faq-list">
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -304,6 +353,18 @@ const jsonLd = {
     .edu .container { max-width: 760px; }
     .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
     .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
+    .faq { padding: 28px 0 32px; }
+    .faq .container { max-width: 760px; }
+    .faq-list { display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .faq-item h4 { margin: 0 0 8px; font-size: 15px; }
+    .faq-item p { margin: 0; font-size: 14px; color: var(--text-muted); line-height: 1.55; }
     .related { text-align: center; padding-bottom: 48px; }
     .related-links a { color: var(--blue); font-weight: 600; }
   </style>

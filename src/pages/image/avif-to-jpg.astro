@@ -3,20 +3,45 @@ import MainLayout from '../../layouts/MainLayout.astro';
 ---
 
 <MainLayout
-  title="AVIF to JPG Converter — Free, Private & Batch | DoItSwift"
-  description="Convert AVIF images to JPG with DoItSwift using your browser's native decoder. No uploads, unlimited batch, optional quality control."
-  keywords="avif to jpg, avif to jpeg, convert avif, avif converter, free avif converter, browser avif"
+  title="AVIF to JPG Converter Online — Free, Private & Batch | DoItSwift"
+  description="Convert AVIF to JPG in your browser — native AVIF decode, JPEG quality presets (100%, 85%, 70%), before/after sizes, batch ZIP. No uploads. For when you need JPEG compatibility from AVIF photos or graphics."
+  keywords="avif to jpg, avif to jpeg, convert avif to jpg, avif converter online, what is avif, avif vs jpg, avif format, save avif as jpg, free avif converter, batch avif to jpeg, browser avif decode"
   canonical={new URL(Astro.url.pathname, Astro.site).toString()}
 >
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "DoItSwift AVIF to JPG Converter",
+    "description": "Free client-side AVIF to JPEG converter. Uses the browser's built-in AVIF decoder (createImageBitmap or Image), exports JPEG with adjustable quality, batch ZIP download, no server upload.",
+    "url": "https://doitswift.com/image/avif-to-jpg/",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Web browser with AVIF support",
+    "browserRequirements": "Requires AVIF decode support (modern Chrome, Edge, Firefox, Safari)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "featureList": [
+      "Decode AVIF using native browser codecs",
+      "Export JPEG at maximum, balanced (85%), or small-file (70%) quality",
+      "White background compositing for transparent AVIF content",
+      "Batch conversion with ZIP download",
+      "Files processed locally — not uploaded",
+      "Shows original vs converted file size per file"
+    ]
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      { "@type": "Question", "name": "Is AVIF to JPG free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Unlimited conversions run locally with no signup." }},
-      { "@type": "Question", "name": "Are files uploaded?", "acceptedAnswer": { "@type": "Answer", "text": "No. Decoding uses browser APIs on your device only." }},
-      { "@type": "Question", "name": "Which browsers support AVIF?", "acceptedAnswer": { "@type": "Answer", "text": "Chrome, Edge, Firefox, and Safari (recent versions) decode AVIF. Older browsers may fail — update or try another device." }},
-      { "@type": "Question", "name": "What about transparency?", "acceptedAnswer": { "@type": "Answer", "text": "JPEG has no alpha channel; transparent areas are composited on white when exported." }},
-      { "@type": "Question", "name": "Batch conversion?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Select many AVIF files and download individually or as a ZIP archive." }}
+      { "@type": "Question", "name": "Is AVIF to JPG conversion free and unlimited?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. No signup, watermarks, or usage caps. Conversion runs entirely in your browser." }},
+      { "@type": "Question", "name": "Are my AVIF files uploaded to a server?", "acceptedAnswer": { "@type": "Answer", "text": "No. Files stay on your device. Decoding uses the browser's native AVIF support; JPEG is produced with the Canvas API locally." }},
+      { "@type": "Question", "name": "What is AVIF and why convert it to JPG?", "acceptedAnswer": { "@type": "Answer", "text": "AVIF is a modern image format based on AV1 compression — often smaller than JPEG at similar quality. You convert to JPG when a workflow requires universal compatibility: email, older software, print, or upload forms that only accept JPEG." }},
+      { "@type": "Question", "name": "Which browsers can convert AVIF here?", "acceptedAnswer": { "@type": "Answer", "text": "Your browser must decode AVIF natively. Current Chrome, Edge, Firefox, and recent Safari generally work. If conversion fails, update the browser or try another device — the tool cannot decode AVIF without OS/browser codec support." }},
+      { "@type": "Question", "name": "What happens to AVIF transparency?", "acceptedAnswer": { "@type": "Answer", "text": "JPEG does not support alpha transparency. Transparent areas are composited on a white background before export, which is standard for AVIF to JPG conversion." }},
+      { "@type": "Question", "name": "Will the JPG file be larger than the AVIF?", "acceptedAnswer": { "@type": "Answer", "text": "Often yes. AVIF is highly efficient; JPEG is chosen here for compatibility. At maximum quality, the JPG can be several times larger than the original AVIF — that is expected." }},
+      { "@type": "Question", "name": "What JPEG quality should I use?", "acceptedAnswer": { "@type": "Answer", "text": "Default is 100% for closest visual match. Use 85% for smaller files with minimal visible loss, or 70% when file size is the priority." }},
+      { "@type": "Question", "name": "Can I batch convert many AVIF files?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Select or drag multiple .avif files, then download each JPG or all files in one ZIP archive." }},
+      { "@type": "Question", "name": "Does it work on mobile?", "acceptedAnswer": { "@type": "Answer", "text": "Yes on mobile browsers that support AVIF decoding and Canvas — typically current iOS Safari and Chrome on Android. Very large files may be slower." }},
+      { "@type": "Question", "name": "Is there a monthly conversion limit?", "acceptedAnswer": { "@type": "Answer", "text": "No accounts, no quotas, and no premium tier. Use the converter as often as you need." }}
     ]
   })} />
 
@@ -27,7 +52,7 @@ import MainLayout from '../../layouts/MainLayout.astro';
       <div class="badge">🔒 100% Private — Files Never Leave Your Device</div>
       <h1>AVIF to JPG Converter</h1>
       <p class="subtitle">
-        Decode AVIF with the browser, draw to canvas, export JPEG. No server, no limits.
+        Turn AVIF files into JPEG using your browser’s native decoder — quality presets, batch ZIP, before/after sizes. Nothing is uploaded; AVIF support required.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> Unlimited files</span>
@@ -95,16 +120,123 @@ import MainLayout from '../../layouts/MainLayout.astro';
     </div>
   </section>
 
+  <!-- Educational content (SEO) -->
+  <article class="avif-edu" aria-label="Guide: AVIF format and converting to JPG">
+    <div class="container avif-edu-inner">
+      <section class="avif-edu-block">
+        <h2 id="what-is-avif">What is AVIF?</h2>
+        <p>
+          <strong>AVIF</strong> (AV1 Image File Format) is a modern image codec built on <strong>AV1</strong> video compression. It often produces <strong>smaller files than JPEG or WebP</strong> at similar visual quality, supports <strong>HDR</strong> and <strong>transparency</strong>, and is widely used for performance-minded websites. You will see <code>.avif</code> files from CDNs, modern export presets, and some phone or camera workflows.
+        </p>
+        <p>
+          <strong>Why convert AVIF to JPG?</strong> Many desktop apps, email clients, print services, and legacy upload forms still expect <strong>JPEG</strong>. Converting gives you a universally accepted file — at the cost of larger size versus AVIF, which is normal.
+        </p>
+      </section>
+
+      <section class="avif-edu-block">
+        <h2 id="how-avif-to-jpg-works">How this converter works</h2>
+        <p>
+          Your browser must <strong>decode AVIF natively</strong>. The tool uses <strong>createImageBitmap</strong> when available, otherwise an <strong>Image</strong> element, then draws pixels to a <strong>canvas</strong> and calls <strong>toBlob('image/jpeg')</strong> at your selected quality. No WASM decoder and <strong>no upload</strong> — if the browser cannot decode AVIF, conversion cannot proceed on that device.
+        </p>
+        <ol class="avif-steps">
+          <li><strong>Add AVIF files.</strong> Drop or browse; batch many at once.</li>
+          <li><strong>Choose JPEG quality.</strong> Open Advanced options: Maximum (100%), Balanced (85%), or Small file (70%).</li>
+          <li><strong>Download.</strong> Individual JPGs or <strong>Download All as ZIP</strong>.</li>
+        </ol>
+        <p>
+          For other next-gen formats, see <a href="/image/webp-to-jpg/">WebP to JPG</a>. For Apple HEIC photos, use <a href="/image/heic-to-jpg/">HEIC to JPG</a>.
+        </p>
+      </section>
+
+      <section class="avif-edu-block">
+        <h2 id="avif-vs-jpg">AVIF vs JPG</h2>
+        <div class="avif-table-wrap">
+          <table class="avif-compare-table">
+            <caption class="sr-only">Comparison of AVIF and JPG</caption>
+            <thead>
+              <tr>
+                <th scope="col">Aspect</th>
+                <th scope="col">AVIF</th>
+                <th scope="col">JPG</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Typical file size</td><td>Often smallest for photos</td><td>Larger at equal quality</td></tr>
+              <tr><td>Compatibility</td><td>Strong in modern browsers; weaker in some desktop apps</td><td>Universal</td></tr>
+              <tr><td>Transparency</td><td>Yes</td><td>No</td></tr>
+              <tr><td>Best for</td><td>Web delivery, Core Web Vitals</td><td>Sharing, email, print, legacy tools</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          For a full comparison including WebP, see <a href="/blog/best-image-format-for-web/">best image format for websites</a>.
+        </p>
+      </section>
+
+      <section class="avif-edu-block">
+        <h2 id="transparency-jpg">Transparency and white background</h2>
+        <p>
+          <strong>JPEG</strong> has no alpha channel. This tool fills the canvas with <strong>white</strong> before drawing the decoded AVIF, so transparent regions appear on white in the output — the same approach as our <a href="/image/webp-to-jpg/">WebP to JPG</a> tool.
+        </p>
+      </section>
+
+      <section class="avif-edu-block">
+        <h2 id="who-converts-avif">Who converts AVIF to JPEG?</h2>
+        <ul class="avif-audience-list">
+          <li><strong>Developers and designers</strong> handing assets to clients who only accept JPG.</li>
+          <li><strong>Content creators</strong> submitting images to platforms without AVIF upload.</li>
+          <li><strong>Anyone</strong> who received or downloaded AVIF and needs a familiar .jpg file.</li>
+        </ul>
+      </section>
+
+      <section class="avif-edu-block">
+        <h2 id="troubleshooting-avif">Troubleshooting</h2>
+        <p>
+          <strong>“AVIF not supported in this browser”:</strong> Update Chrome, Edge, Firefox, or Safari, or try another device. This page does not bundle a separate AVIF decoder.
+        </p>
+        <p>
+          <strong>Huge JPG vs tiny AVIF:</strong> Expected — JPEG is less efficient; use a lower quality preset only if you accept more compression artifacts.
+        </p>
+        <p>
+          <strong>Need smaller JPG without changing format first:</strong> After export, use our <a href="/image/image-compressor/">image compressor</a> on the JPG if your pipeline allows another step.
+        </p>
+      </section>
+    </div>
+  </article>
+
   <section class="faq">
     <div class="container">
       <h2 class="section-title">Frequently Asked Questions</h2>
       <div class="faq-list">
-        <div class="faq-item"><h4>Is this tool free?</h4><p>Yes. No accounts, watermarks, or upload quotas — your browser does the work.</p></div>
-        <div class="faq-item"><h4>How does native decoding work?</h4><p>We use createImageBitmap or an Image element so the browser's built-in AVIF codec decodes pixels, then we export JPEG from a canvas.</p></div>
-        <div class="faq-item"><h4>Conversion failed — why?</h4><p>Your browser may not support AVIF yet. Try Chrome, Firefox, Safari 16+, or Edge current channel.</p></div>
-        <div class="faq-item"><h4>Will JPG be larger than AVIF?</h4><p>Often yes. AVIF is very efficient; JPG is chosen for maximum compatibility, not smallest size.</p></div>
-        <div class="faq-item"><h4>Can I batch convert?</h4><p>Yes. Drop many AVIFs and use Download All as ZIP.</p></div>
+        <div class="faq-item"><h4>Is AVIF to JPG conversion free and unlimited?</h4><p>Yes. No signup, watermarks, or usage caps. Conversion runs entirely in your browser.</p></div>
+        <div class="faq-item"><h4>Are my AVIF files uploaded to a server?</h4><p>No. Files stay on your device. Decoding uses the browser's native AVIF support; JPEG is produced with the Canvas API locally.</p></div>
+        <div class="faq-item"><h4>What is AVIF and why convert it to JPG?</h4><p>AVIF is a modern image format based on AV1 compression — often smaller than JPEG at similar quality. You convert to JPG when a workflow requires universal compatibility: email, older software, print, or upload forms that only accept JPEG.</p></div>
+        <div class="faq-item"><h4>Which browsers can convert AVIF here?</h4><p>Your browser must decode AVIF natively. Current Chrome, Edge, Firefox, and recent Safari generally work. If conversion fails, update the browser or try another device — the tool cannot decode AVIF without OS/browser codec support.</p></div>
+        <div class="faq-item"><h4>What happens to AVIF transparency?</h4><p>JPEG does not support alpha transparency. Transparent areas are composited on a white background before export, which is standard for AVIF to JPG conversion.</p></div>
+        <div class="faq-item"><h4>Will the JPG file be larger than the AVIF?</h4><p>Often yes. AVIF is highly efficient; JPEG is chosen here for compatibility. At maximum quality, the JPG can be several times larger than the original AVIF — that is expected.</p></div>
+        <div class="faq-item"><h4>What JPEG quality should I use?</h4><p>Default is 100% for closest visual match. Use 85% for smaller files with minimal visible loss, or 70% when file size is the priority.</p></div>
+        <div class="faq-item"><h4>Can I batch convert many AVIF files?</h4><p>Yes. Select or drag multiple .avif files, then download each JPG or all files in one ZIP archive.</p></div>
+        <div class="faq-item"><h4>Does it work on mobile?</h4><p>Yes on mobile browsers that support AVIF decoding and Canvas — typically current iOS Safari and Chrome on Android. Very large files may be slower.</p></div>
+        <div class="faq-item"><h4>Is there a monthly conversion limit?</h4><p>No accounts, no quotas, and no premium tier. Use the converter as often as you need.</p></div>
       </div>
+    </div>
+  </section>
+
+  <section class="avif-related" aria-label="Related tools and guides">
+    <div class="container">
+      <h2 class="section-title">Related tools</h2>
+      <ul class="avif-related-grid">
+        <li><a href="/image/webp-to-jpg/">WebP to JPG Converter</a></li>
+        <li><a href="/image/heic-to-jpg/">HEIC to JPG Converter</a></li>
+        <li><a href="/image/image-compressor/">Image Compressor</a></li>
+        <li><a href="/image/image-resizer/">Image Resizer</a></li>
+      </ul>
+      <h2 class="section-title section-title-sub">Related guides</h2>
+      <ul class="avif-related-grid avif-related-guides">
+        <li><a href="/blog/best-image-format-for-web/">Best Image Format for Websites (AVIF vs WebP vs JPG)</a></li>
+        <li><a href="/blog/heic-vs-jpg/">HEIC vs JPG: Complete Comparison</a></li>
+        <li><a href="/blog/convert-iphone-photos-to-jpg/">Convert iPhone Photos to JPG</a></li>
+      </ul>
     </div>
   </section>
 
@@ -532,5 +664,159 @@ import MainLayout from '../../layouts/MainLayout.astro';
     }
     .faq-item h4 { font-size: 16px; margin-bottom: 6px; }
     .faq-item p { font-size: 14px; color: var(--text-muted); }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .avif-edu {
+      padding: 20px 0 8px;
+    }
+    .avif-edu-inner {
+      max-width: 820px;
+    }
+    .avif-edu-block {
+      margin-bottom: 2.75rem;
+    }
+    .avif-edu-block:last-child {
+      margin-bottom: 0;
+    }
+    .avif-edu h2 {
+      font-size: clamp(1.35rem, 2.5vw, 1.6rem);
+      line-height: 1.3;
+      margin: 0 0 1rem;
+      color: var(--text);
+    }
+    .avif-edu p {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text);
+      margin: 0 0 1rem;
+    }
+    .avif-edu a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .avif-edu a:hover {
+      color: var(--blue-dark);
+    }
+    .avif-edu code {
+      font-family: ui-monospace, 'Cascadia Code', 'Courier New', monospace;
+      font-size: 0.92em;
+      padding: 0.1em 0.35em;
+      background: var(--gray-100);
+      border-radius: 4px;
+    }
+    [data-theme='dark'] .avif-edu code {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .avif-steps {
+      margin: 0 0 0.5rem;
+      padding-left: 1.35rem;
+    }
+    .avif-steps li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--text);
+      margin-bottom: 0.9rem;
+    }
+    .avif-steps li:last-child {
+      margin-bottom: 0;
+    }
+    .avif-table-wrap {
+      overflow-x: auto;
+      margin: 1rem 0 1.25rem;
+      -webkit-overflow-scrolling: touch;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+    .avif-compare-table {
+      width: 100%;
+      min-width: 520px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .avif-compare-table th,
+    .avif-compare-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+    .avif-compare-table thead th {
+      background: var(--card);
+      font-weight: 700;
+      color: var(--text);
+    }
+    .avif-compare-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .avif-audience-list {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+    .avif-audience-list li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--text);
+      margin-bottom: 0.85rem;
+    }
+    .avif-audience-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    .avif-related {
+      padding: 24px 0 56px;
+    }
+    .avif-related .container {
+      max-width: 820px;
+    }
+    .section-title-sub {
+      margin-top: 2.25rem;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    .avif-related-grid {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+    @media (min-width: 520px) {
+      .avif-related-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .avif-related-grid a {
+      display: block;
+      padding: 14px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--blue);
+      font-weight: 600;
+      font-size: 15px;
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .avif-related-grid a:hover {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+    [data-theme='dark'] .avif-related-grid a:hover {
+      background: rgba(0, 102, 255, 0.12);
+    }
   </style>
 </MainLayout>

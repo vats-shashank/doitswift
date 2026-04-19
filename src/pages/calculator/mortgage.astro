@@ -1,43 +1,79 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/mortgage/';
-const site = 'https://doitswift.com';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Mortgage Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'FinanceApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-      description: 'US-style mortgage payment calculator with PITI, PMI, HOA, amortization, and total cost.',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        { '@type': 'Question', name: 'What is PITI?', acceptedAnswer: { '@type': 'Answer', text: 'Principal, Interest, Taxes, and Insurance — the main components of a typical monthly housing payment.' } },
-      ],
-    },
-    {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: site + '/' },
-        { '@type': 'ListItem', position: 2, name: 'Calculators', item: site + '/calculator/' },
-        { '@type': 'ListItem', position: 3, name: 'Mortgage Calculator', item: canonical },
-      ],
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'US-style mortgage calculator: principal and interest, property tax as percent of value, annual homeowners insurance, PMI when down payment is under 20%, optional HOA, and a yearly P&I amortization table. Currency selector formats numbers only. Illustrative—confirm taxes, insurance, and PMI rules with your lender and state.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'What is PITI?',
+    answer:
+      'PITI is Principal and Interest on the loan, property Taxes, and homeowners Insurance—the core pieces of many US monthly housing payments before HOA or PMI.',
+  },
+  {
+    question: 'When does PMI apply in this calculator?',
+    answer:
+      'We apply the PMI rate you enter when the down payment is below 20% of the home price and the loan amount is positive. Otherwise PMI is treated as zero in the estimate.',
+  },
+  {
+    question: 'Does the currency dropdown change loan math?',
+    answer:
+      'No. It only changes how amounts are formatted on screen. Enter numbers consistent with the currency you are modeling.',
+  },
+  {
+    question: 'Is this tax, insurance, or legal advice?',
+    answer:
+      'No. Tax deductibility, escrow rules, and exact PMI cancellation timelines vary by loan program and law—verify with a licensed professional.',
+  },
+  {
+    question: 'How should I use the 15-year versus 30-year term selector?',
+    answer:
+      'It changes the amortization length and monthly P&I. Compare scenarios side by side by switching the control and noting total interest in the summary.',
+  },
+  {
+    question: 'Where can I model Indian home loans or prepayment?',
+    answer:
+      'Use the Home Loan calculator on DoItSwift for India-style schedules and prepayment options; this page focuses on common US PITI components.',
+  },
+  {
+    question: 'Are my inputs uploaded?',
+    answer:
+      'No. Calculations run locally in your browser with no signup.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Mortgage Calculator',
+  breadcrumbName: 'Mortgage Calculator',
+  applicationCategory: 'FinanceApplication',
+  priceCurrency: 'USD',
+  browserRequirements: 'Requires JavaScript for payment breakdown, stacked bar chart, and amortization table',
+  webAppDescription:
+    'Estimate a US-style monthly housing payment including loan principal and interest, property taxes as a percent of home value, annual insurance converted to monthly, PMI when equity is below a typical 20% threshold, and optional HOA dues. An expandable table summarizes principal and interest by year. Actual escrow, tax caps, and loan programs differ by lender—treat output as educational.',
+  featureList: [
+    'Home price and down payment as percent or fixed amount',
+    '15- or 30-year term and annual interest rate',
+    'Property tax, insurance, PMI rate, and HOA inputs',
+    'Principal and interest payment plus full PITI+PMI+HOA total',
+    'Total interest and total P&I paid over the term',
+    'Stacked bar visualization of payment components',
+    'Yearly principal and interest amortization table',
+    'Multi-currency display formatting without FX conversion',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Mortgage Calculator — Calculate Monthly Payment & Total Cost | DoItSwift"
-  description="Mortgage calculator with principal & interest, property tax, insurance, PMI, and HOA. US-focused defaults; amortization and cost breakdown."
-  keywords="mortgage calculator, home mortgage calculator, mortgage payment calculator, monthly mortgage calculator"
+  title="Mortgage Calculator (US) — PITI, PMI, HOA & Amortization | DoItSwift"
+  description={pageDescription}
+  keywords="mortgage calculator US, PITI calculator, PMI calculator monthly payment, 30 year mortgage amortization, property tax and insurance estimate, HOA mortgage payment, free mortgage calculator online"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -141,7 +177,12 @@ const jsonLd = {
         <ul class="bar-legend" id="mgLeg"></ul>
         <details class="calc-details">
           <summary>Yearly amortization (principal &amp; interest)</summary>
-          <div class="table-wrap"><table><thead><tr><th>Year</th><th>Principal</th><th>Interest</th><th>Balance</th></tr></thead><tbody id="mgTable"></tbody></table></div>
+          <div class="table-wrap">
+            <table>
+              <caption class="sr-only">Yearly principal paid, interest paid, and remaining loan balance for the amortization schedule.</caption>
+              <thead><tr><th>Year</th><th>Principal</th><th>Interest</th><th>Balance</th></tr></thead><tbody id="mgTable"></tbody>
+            </table>
+          </div>
         </details>
       </div>
     </div>
@@ -162,6 +203,20 @@ const jsonLd = {
       <p>
         Compare with our <a href="/calculator/emi/">EMI</a> and <a href="/calculator/home-loan/">Home Loan</a> calculators for India-style schedules, and <a href="/calculator/compound-interest/">Compound Interest</a> for wealth growth alongside debt decisions.
       </p>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently asked questions</h2>
+      <div class="faq-list">
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -335,6 +390,18 @@ const jsonLd = {
     .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
     .edu a { color: var(--blue); font-weight: 600; }
     .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
+    .faq { padding: 28px 0 32px; }
+    .faq .container { max-width: 760px; }
+    .faq-list { display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .faq-item h4 { margin: 0 0 8px; font-size: 15px; }
+    .faq-item p { margin: 0; font-size: 14px; color: var(--text-muted); line-height: 1.55; }
     .related { text-align: center; padding-bottom: 48px; }
     .related-links a { color: var(--blue); font-weight: 600; }
   </style>

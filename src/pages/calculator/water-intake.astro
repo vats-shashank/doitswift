@@ -1,27 +1,71 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/water-intake/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Water Intake Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'HealthApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Daily hydration estimate from weight, activity, climate, and optional adjustments.',
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Daily water intake estimator from weight, activity level, climate, pregnancy or breastfeeding toggles, and optional caffeine or alcohol adjustments. Shows liters, cups, and a simple glass visualization. Starting range only—thirst, urine colour, and medical conditions matter; not a prescription.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'Is the “eight glasses” rule universal?',
+    answer:
+      'No. Needs scale with body size, sweat loss, heat, illness, and diet fluid. This calculator uses a weight-based baseline then bumps for the factors you select.',
+  },
+  {
+    question: 'Do pregnancy or breastfeeding increase needs?',
+    answer:
+      'Often yes. The page adds optional increments when those modes are selected—still confirm with your clinician.',
+  },
+  {
+    question: 'Why adjust for caffeine or alcohol?',
+    answer:
+      'They can influence short-term fluid balance; the toggles add a small illustrative buffer, not a precise pharmacology model.',
+  },
+  {
+    question: 'Can I drink too much water?',
+    answer:
+      'Rarely, excessive fluid without medical indication can dilute electrolytes. Use common sense and professional advice if you have kidney or heart conditions.',
+  },
+  {
+    question: 'Does this page track bottles for me?',
+    answer:
+      'It suggests totals and a simple hourly pattern list where shown, but logging is up to you.',
+  },
+  {
+    question: 'Are my weight and settings uploaded?',
+    answer:
+      'No. Math runs locally in JavaScript.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Water Intake Calculator',
+  breadcrumbName: 'Water Intake',
+  applicationCategory: 'LifestyleApplication',
+  browserRequirements: 'Requires JavaScript to combine inputs and update liters, cups, and schedule hints',
+  webAppDescription:
+    'Start from body weight with a millilitre-per-kilogram style baseline, then adjust for self-reported activity, hot climate, pregnancy or lactation, and optional caffeine or alcohol modifiers. Outputs include total fluid, cup equivalents, and a light visual hint block. Safe water handling and chronic disease fluid limits are outside scope—ask a doctor when in doubt.',
+  featureList: [
+    'Weight in kilograms or pounds',
+    'Activity and climate selectors',
+    'Pregnancy and breastfeeding bump toggles',
+    'Optional caffeine or alcohol adjustment checkboxes',
+    'Total daily fluid and cup translation',
+    'Glass-style visualization row',
+    'Sample hourly reminder list when present in UI',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Water Intake Calculator — Daily Water Needs by Weight & Activity | DoItSwift"
-  description="Estimate daily water needs (liters and cups) from body weight, activity, climate, pregnancy or breastfeeding, and optional caffeine or alcohol adjustments."
-  keywords="water intake calculator, daily water calculator, how much water should i drink, hydration calculator"
+  title="Water Intake Calculator — Daily Hydration from Weight & Activity | DoItSwift"
+  description={pageDescription}
+  keywords="water intake calculator daily, how much water to drink by weight kg, hydration calculator activity climate, pregnancy water intake estimate, cups of water per day calculator"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -111,6 +155,20 @@ const jsonLd = {
       <p>
         Thirst, urine colour, and activity matter. <strong>“8 glasses”</strong> is not universal — needs scale with size, sweat, and environment. In India, <strong>safe drinking water</strong> (boiling, RO maintenance, storage hygiene) matters as much as volume.
       </p>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently asked questions</h2>
+      <div class="faq-list">
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -223,6 +281,17 @@ const jsonLd = {
     .edu .container { max-width: 760px; }
     .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); }
     .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .faq { padding: 28px 0 32px; }
+    .faq .container { max-width: 760px; }
+    .faq-list { display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .faq-item h4 { margin: 0 0 8px; font-size: 15px; }
+    .faq-item p { margin: 0; font-size: 14px; color: var(--text-muted); line-height: 1.55; }
     .related { text-align: center; padding-bottom: 48px; }
     .related-links a { color: var(--blue); font-weight: 600; }
   </style>

@@ -1,27 +1,71 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/macro/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Macro Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'HealthApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Protein, carbs, and fat grams from calorie target and goal preset with per-meal split.',
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Macro calculator: enter a daily calorie target, pick a goal preset, and see protein, carbohydrate, and fat grams with a per-meal split and pie-style visualization. Presets are templates—athletes, diabetes care, and keto plans need individualized macros from professionals.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'Where should my calorie target come from?',
+    answer:
+      'Use our TDEE calculator, a dietitian plan, or another trusted source. Garbage in, garbage out applies to macro splits too.',
+  },
+  {
+    question: 'Are goal presets medically tuned?',
+    answer:
+      'No. They are simplified ratios for planning and learning—adjust protein or carbs with professional guidance if you have special needs.',
+  },
+  {
+    question: 'How are grams calculated from calories?',
+    answer:
+      'We apply the usual energy densities—about four calories per gram of protein and carbohydrate and nine for fat—based on the preset percentages shown in the UI.',
+  },
+  {
+    question: 'What does the per-meal split do?',
+    answer:
+      'It divides the daily gram targets across four meals for plating convenience; you can rebalance meals as long as the daily total fits your plan.',
+  },
+  {
+    question: 'Does the pie chart replace food logging?',
+    answer:
+      'No. It is a quick visual of the macro mix, not a diary.',
+  },
+  {
+    question: 'Is data uploaded?',
+    answer:
+      'No. Everything runs locally in your browser.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Macro Calculator',
+  breadcrumbName: 'Macro Calculator',
+  applicationCategory: 'LifestyleApplication',
+  browserRequirements: 'Requires JavaScript to apply presets, compute grams, update meal rows, and draw the macro chart',
+  webAppDescription:
+    'Translate a calorie budget into macronutrient grams using selectable goal presets that shift protein, carbohydrate, and fat shares, then view approximate grams per meal when the page offers a four-way split. A simple macro pie communicates the mix at a glance. Pair with our calorie page for the energy target; this tool does not validate micronutrients, fibre, or medical diets.',
+  featureList: [
+    'Daily calorie target input',
+    'Goal preset selector adjusting macro ratios',
+    'Protein, carbohydrate, and fat grams output',
+    'Per-meal gram breakdown when shown',
+    'Macro distribution visualization',
+    'Link to calorie calculator for TDEE context',
+    'Disclaimer that presets are educational',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Macro Calculator — Protein, Carbs, Fat for Your Goals | DoItSwift"
-  description="Turn a daily calorie target into protein, carbohydrate, and fat grams using goal presets — with per-meal split and a simple macro pie visual."
-  keywords="macro calculator, macronutrient calculator, protein carbs fat calculator, iifym calculator"
+  title="Macro Calculator — Protein, Carbs & Fat Grams from Calories | DoItSwift"
+  description={pageDescription}
+  keywords="macro calculator online, protein carbs fat grams from calories, IIFYM style calculator, meal split macro planner, macro pie chart calculator"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -101,6 +145,20 @@ const jsonLd = {
       <p>
         <strong>Protein</strong> supports muscle repair; <strong>carbs</strong> fuel hard training; <strong>fats</strong> carry vitamins and hormones. Indian staples vary widely — <strong>dal</strong>, <strong>rice</strong>, <strong>roti</strong>, and <strong>paneer</strong> can be mixed to hit similar targets; read labels for your brands.
       </p>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently asked questions</h2>
+      <div class="faq-list">
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -210,6 +268,17 @@ const jsonLd = {
     .edu .container { max-width: 760px; }
     .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); }
     .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .faq { padding: 28px 0 32px; }
+    .faq .container { max-width: 760px; }
+    .faq-list { display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .faq-item h4 { margin: 0 0 8px; font-size: 15px; }
+    .faq-item p { margin: 0; font-size: 14px; color: var(--text-muted); line-height: 1.55; }
     .related { text-align: center; padding-bottom: 48px; }
     .related-links a { color: var(--blue); font-weight: 600; }
   </style>

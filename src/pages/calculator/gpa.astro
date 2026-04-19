@@ -1,27 +1,71 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/gpa/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'GPA Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'UtilityApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Grade point average from credits and grades — Indian 10-point or US 4.0 scale.',
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Free GPA calculator: weighted grade point average from course credits and grades. Switch between India-style numeric grades on a 10-point scale and US letter grades mapped to a 4.0 scale. Shows combined GPA and total credits used—illustrative only; your registrar’s rounding and repeat policies may differ.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'How is weighted GPA calculated here?',
+    answer:
+      'We multiply each course grade by its credits, sum those products, and divide by the sum of credits for rows with credits greater than zero.',
+  },
+  {
+    question: 'What is the difference between India 10-point and US 4.0 mode?',
+    answer:
+      'India mode expects numeric grades roughly 0–10 per course. US mode uses a fixed letter-to-4.0 mapping in the dropdown. Only one grade column is active at a time.',
+  },
+  {
+    question: 'Does this match my university transcript?',
+    answer:
+      'Maybe not exactly. Institutions differ on drops, retakes, pass/fail exclusions, and rounding. Use this tool for estimates and homework checks, not as an official GPA.',
+  },
+  {
+    question: 'Can I leave course names blank?',
+    answer:
+      'Yes—names are optional labels. Only credits and grades affect the math.',
+  },
+  {
+    question: 'What if all credits are zero?',
+    answer:
+      'We show a dash for GPA until at least one row has credits greater than zero.',
+  },
+  {
+    question: 'Are grades sent to DoItSwift?',
+    answer:
+      'No. Everything runs in your browser with JavaScript.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift GPA Calculator',
+  breadcrumbName: 'GPA Calculator',
+  applicationCategory: 'EducationalApplication',
+  browserRequirements: 'Requires JavaScript to toggle scales, sum weighted grades, and update GPA live',
+  webAppDescription:
+    'Compute a credit-weighted GPA or CGPA from a simple course table. Toggle between a 10-point style scale common in Indian reporting and a US-style 4.0 letter mapping. The page explains that official policies on repeats, withdrawals, and rounding can change your transcript GPA—treat results as educational, not certified.',
+  featureList: [
+    'Six editable course rows with optional names',
+    'Credits and grade inputs per row',
+    'India (10-point) numeric grades or US 4.0 letter mapping',
+    'Weighted GPA with scale label in the result',
+    'Credit total shown in the hint line',
+    'Instant recalculation on input',
+    'Short note on institutional differences',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="GPA Calculator — Indian CGPA & US 4.0 Grade Point | DoItSwift"
-  description="Compute weighted GPA or CGPA from course credits and grades — switch between a 10-point (India-style) input or US 4.0 letter mapping."
-  keywords="gpa calculator, cgpa calculator, grade point average calculator india, gpa calculator 4.0 scale"
+  title="GPA Calculator — Weighted CGPA (10) & US 4.0 GPA | DoItSwift"
+  description={pageDescription}
+  keywords="GPA calculator, CGPA calculator India, weighted GPA calculator, 10 point GPA to percentage planning, US 4.0 GPA calculator, semester GPA online, credits and grades calculator"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -57,6 +101,7 @@ const jsonLd = {
 
       <div class="table-wrap">
         <table class="gpa-table">
+          <caption class="sr-only">Courses, credits, and grades used to compute weighted GPA or CGPA.</caption>
           <thead>
             <tr>
               <th>Course (optional)</th>
@@ -104,6 +149,20 @@ const jsonLd = {
       <p>
         Indian universities often report <strong>CGPA on 10</strong>; US schools use a <strong>4.0 scale</strong> with letter bands. This tool only does the weighted average — your institution’s official rules for drops, repeats, and rounding may differ.
       </p>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently asked questions</h2>
+      <div class="faq-list">
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -179,6 +238,18 @@ const jsonLd = {
     .edu .container { max-width: 760px; }
     .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); }
     .section-title { text-align: center; margin-bottom: 16px; font-size: 1.5rem; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
+    .faq { padding: 28px 0 32px; }
+    .faq .container { max-width: 760px; }
+    .faq-list { display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .faq-item h4 { margin: 0 0 8px; font-size: 15px; }
+    .faq-item p { margin: 0; font-size: 14px; color: var(--text-muted); line-height: 1.55; }
     .related { text-align: center; padding-bottom: 48px; }
     .related-links a { color: var(--blue); font-weight: 600; }
   </style>

@@ -1,49 +1,71 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const site = Astro.site?.href ?? 'https://doitswift.com';
-const canonical = `${site}calculator/ideal-weight/`;
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Ideal Weight Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'HealthApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Ideal body weight from Devine, Robinson, Miller, Hamwi formulas plus BMI healthy range.',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'Why do formulas disagree?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Each formula was built from different populations and eras; averaging them shows spread, not truth.',
-          },
-        },
-      ],
-    },
-    {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: site },
-        { '@type': 'ListItem', position: 2, name: 'Calculators', item: `${site}calculator/` },
-        { '@type': 'ListItem', position: 3, name: 'Ideal Weight Calculator', item: canonical },
-      ],
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Ideal weight calculator comparing classic Devine, Robinson, Miller, and Hamwi formulas for adults, a BMI healthy band for your height, optional frame-size adjustment, and blended guidance. Switch kg, lb, or stone display. Educational ranges—not a prescription for athletes, pregnancy, or clinical care.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'Why do the classic formulas disagree?',
+    answer:
+      'Each equation was derived from different populations and decades, so they spread around a central band. Showing all four highlights uncertainty rather than a single true number.',
+  },
+  {
+    question: 'Can I see pounds or stone?',
+    answer:
+      'Use the unit tabs above the results—kilograms, pounds, or stone plus pounds. Your choice can be remembered on this device where the page implements storage.',
+  },
+  {
+    question: 'What about children and teens?',
+    answer:
+      'Pediatric growth uses percentile charts, not these adult regression formulas—this page targets adults.',
+  },
+  {
+    question: 'Is ideal weight the same as healthy weight?',
+    answer:
+      'Not always. Muscle mass, bone structure, and health conditions matter beyond a formula. Use BMI bands and these estimates as context, not diagnosis.',
+  },
+  {
+    question: 'Does frame size change the recommendation?',
+    answer:
+      'Optional frame adjustment nudges the band when you select small, medium, or large frame based on wrist measurement guidance on the page.',
+  },
+  {
+    question: 'Are measurements uploaded?',
+    answer:
+      'No. Math runs locally in your browser.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Ideal Weight Calculator',
+  breadcrumbName: 'Ideal Weight Calculator',
+  applicationCategory: 'HealthApplication',
+  browserRequirements: 'Requires JavaScript to convert units, compute formulas, and update blended results',
+  webAppDescription:
+    'Enter adult height with centimetres or feet and inches, optionally adjust for perceived body frame, and compare four published ideal-weight heuristics alongside the BMI normal band for that height. Outputs can be viewed in metric or imperial mass units. These equations do not replace clinical assessment—especially for eating disorders, pregnancy, or sport-specific body-composition goals.',
+  featureList: [
+    'Height in centimetres or feet and inches',
+    'Frame size selector with wrist guidance',
+    'Four classic ideal-weight formulas side by side',
+    'BMI healthy weight span for the height',
+    'Blended recommendation line',
+    'Kg, lb, or stone plus pound display tabs',
+    'Educational copy on formula history',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Ideal Weight Calculator — Your Healthy Weight Range | DoItSwift"
-  description="Compare Devine, Robinson, Miller, and Hamwi ideal-weight formulas, BMI-based healthy range, and a blended recommendation with optional body frame adjustment."
-  keywords="ideal weight calculator, healthy weight range, ideal body weight, weight for height calculator"
+  title="Ideal Weight Calculator — Devine, Miller, Hamwi & BMI Band | DoItSwift"
+  description={pageDescription}
+  keywords="ideal weight calculator, Devine formula ideal weight, Robinson Miller Hamwi calculator, healthy weight range by height, BMI normal weight band, frame size ideal weight adjustment"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -151,10 +173,14 @@ const jsonLd = {
 
   <section class="faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item"><h4>Can I see pounds or stone?</h4><p>Use the unit tabs above the results — kg, lb, or stone + lb (UK). Your choice is remembered on this device.</p></div>
-        <div class="faq-item"><h4>What about kids?</h4><p>Pediatric growth charts differ — this page targets adults.</p></div>
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>

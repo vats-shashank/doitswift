@@ -1,40 +1,72 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/nps/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'NPS Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'FinanceApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'National Pension Scheme corpus estimate, lump sum vs annuity split, and illustrative pension.',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'What is the minimum annuity under NPS?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'At exit, a minimum portion of the corpus must be used to purchase a life annuity; the remainder can be taken as lump sum subject to rules — this tool lets you model the split.',
-          },
-        },
-      ],
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'NPS (National Pension System) calculator: project Tier I corpus from monthly contributions and expected return, split corpus between annuity purchase and lump sum, and see an illustrative monthly pension from the annuity slice. Year-by-year invested vs corpus table. PFRDA rules change—verify exit and annuity minimums officially.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'What is the minimum annuity portion under NPS?',
+    answer:
+      'Regulators require part of the accumulated corpus to be annuitized at exit, with the rest potentially available as lump sum within limits. Exact percentages depend on exit type and current PFRDA rules—this page lets you slide an annuity purchase percentage for what-if analysis.',
+  },
+  {
+    question: 'Is the illustrated monthly pension guaranteed?',
+    answer:
+      'No. Annuity quotes, mortality charges, and market returns change over decades. The pension line uses your annuity corpus and assumed payout rate as a simple illustration only.',
+  },
+  {
+    question: "Why doesn't lump sum always show sixty percent?",
+    answer:
+      'Lump sum depends on how much corpus you allocate to annuity purchase. If you set forty percent to annuity, the complementary lump share in a simple two-bucket view is about sixty percent before taxes and charges.',
+  },
+  {
+    question: 'Does this include employer matching or tax deductions?',
+    answer:
+      'We focus on contribution growth and exit split. Detailed tax treatment under 80CCD and employer contributions should be confirmed with a chartered accountant.',
+  },
+  {
+    question: 'Can I change expected return mid-life?',
+    answer:
+      'Yes—rerun scenarios when you update your assumed return to reflect asset mix or market outlook.',
+  },
+  {
+    question: 'Are contribution amounts uploaded?',
+    answer:
+      'No. Projections run entirely in your browser.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift NPS Calculator',
+  breadcrumbName: 'NPS Calculator',
+  applicationCategory: 'FinanceApplication',
+  browserRequirements: 'Requires JavaScript for corpus projection, charts, annuity math, and year-by-year table',
+  webAppDescription:
+    'Model National Pension System Tier I accumulation with monthly contributions between current age and retirement age, a user-chosen expected return, and a regulatory-style slider for how much of the final corpus funds an annuity purchase. Outputs include total contributed, estimated corpus, lump sum, annuity purchase amount, and a simplified pension estimate plus a year-by-year invested-versus-corpus table. Market-linked products carry uncertainty—outputs are educational, not PFRDA-certified projections.',
+  featureList: [
+    'Current age, retirement age, and monthly contribution',
+    'Expected annual return slider and numeric input',
+    'Corpus percent allocated to annuity purchase',
+    'Annuity payout assumption for illustrative pension',
+    'Estimated corpus, contributions, lump sum, and annuity purchase',
+    'Contributed versus growth bar visualization',
+    'Year-by-year cumulative invested and corpus table',
+    'Disclaimer referencing changing NPS norms',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="NPS Calculator 2026 — National Pension Scheme Returns | DoItSwift"
-  description="Estimate NPS maturity corpus, lump sum vs annuity split, illustrative monthly pension, and year-by-year growth — educational model only."
-  keywords="nps calculator, national pension scheme calculator, nps maturity calculator, nps pension calculator"
+  title="NPS Calculator India — Corpus, Annuity vs Lump Sum, Pension Estimate | DoItSwift"
+  description={pageDescription}
+  keywords="NPS calculator India, National Pension System maturity calculator, NPS annuity vs lump sum, Tier I NPS projection, NPS monthly pension estimate, NPS corpus table"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -119,6 +151,7 @@ const jsonLd = {
           <summary>Year-by-year corpus (illustrative)</summary>
           <div class="table-wrap">
             <table>
+              <caption class="sr-only">Year, cumulative NPS contributions, and estimated corpus for each projection year.</caption>
               <thead><tr><th>Year</th><th>Cumulative invested</th><th>Est. corpus</th></tr></thead>
               <tbody id="npsTable"></tbody>
             </table>
@@ -161,10 +194,14 @@ const jsonLd = {
 
   <section class="faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item"><h4>Is the pension guaranteed?</h4><p>No — annuity rates and market returns vary; the “pension” line is a simplified illustration.</p></div>
-        <div class="faq-item"><h4>Why doesn’t lump sum show 60%?</h4><p>You control the annuity %; if it is 40%, lump sum is roughly 60% of corpus in a simple split model.</p></div>
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>
@@ -314,9 +351,13 @@ const jsonLd = {
     [data-theme='dark'] .affiliate-inner { background: rgba(16, 185, 129, 0.12); border-color: rgba(52, 211, 153, 0.4); }
     .affiliate-icon { font-size: 36px; }
     .affiliate-content { flex: 1; min-width: 200px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
     .faq { padding: 28px 0 48px; }
     .faq .container { max-width: 760px; }
-    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 10px; }
+    .faq-list { display: flex; flex-direction: column; gap: 12px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+    .faq-item h4 { margin: 0 0 8px; font-size: 15px; }
+    .faq-item p { margin: 0; font-size: 14px; color: var(--text-muted); line-height: 1.55; }
     .related { text-align: center; padding-bottom: 48px; }
     .related-links a { color: var(--blue); font-weight: 600; }
   </style>

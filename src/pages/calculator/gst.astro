@@ -1,20 +1,63 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/gst/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    { '@type': 'WebApplication', name: 'GST Calculator — DoItSwift', url: canonical, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' }, description: 'Add or remove GST; CGST, SGST, and IGST breakdown for India.' },
-    { '@type': 'FAQPage', mainEntity: [{ '@type': 'Question', name: 'What is GST?', acceptedAnswer: { '@type': 'Answer', text: 'Goods and Services Tax — indirect tax with CGST/SGST for intra-state and IGST for inter-state supplies.' } }] },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Free GST calculator for India: add GST to a base amount or remove GST from an inclusive total. Preset rates 5%, 12%, 18%, 28% or custom %; intra-state CGST+SGST split or inter-state IGST. Shows taxable value, GST amount, and totals — arithmetic aid only, not GST return filing.';
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift GST Calculator',
+  breadcrumbName: 'GST Calculator',
+  applicationCategory: 'FinanceApplication',
+  browserRequirements: 'Requires JavaScript for GST add/remove and CGST/SGST/IGST breakdown',
+  webAppDescription:
+    'Quick Goods and Services Tax (GST) math for India: add GST to a taxable amount or derive taxable value and GST from a GST-inclusive figure. Optional intra-state (half CGST, half SGST) or inter-state (IGST) display. Preset slabs plus custom rate. Educational calculator only — not connected to the GST portal and not tax advice.',
+  featureList: [
+    'Add GST to a base amount or remove GST from an inclusive amount',
+    'GST rates: 5%, 12%, 18%, 28%, or custom percentage',
+    'Intra-state: CGST and SGST (typically half of total GST each)',
+    'Inter-state: IGST as full GST component',
+    'Shows GST amount, taxable value, and totals in ₹',
+    'Runs locally in the browser',
   ],
-};
+  faqs: [
+    {
+      question: 'What is GST?',
+      answer:
+        'Goods and Services Tax is an indirect tax on supply. Intra-state often uses CGST and SGST; inter-state uses IGST.',
+    },
+    {
+      question: 'Is this official GST filing?',
+      answer:
+        'No. It is a calculator only and is not connected to the GST portal.',
+    },
+    {
+      question: 'How do I add or remove GST?',
+      answer:
+        'To add GST: GST = amount × rate/100. To remove GST from an inclusive total: taxable value = inclusive ÷ (1 + rate/100).',
+    },
+    {
+      question: 'What is the difference between CGST/SGST and IGST?',
+      answer:
+        'Intra-state shows CGST and SGST (typically half of total GST each). Inter-state shows IGST as the full GST line.',
+    },
+    {
+      question: 'Is my data uploaded?',
+      answer:
+        'No. Calculations run in your browser and amounts are not sent to DoItSwift servers.',
+    },
+  ],
+});
 ---
 
 <MainLayout
-  title="GST Calculator — Free Online Calculator | DoItSwift"
-  description="Add GST to a price or extract GST from an inclusive amount. CGST/SGST split, IGST mode, and custom GST rates."
-  keywords="GST calculator India, CGST SGST calculator, GST inclusive exclusive, remove GST from amount"
+  title="GST Calculator India — Add/Remove GST, CGST, SGST & IGST | DoItSwift"
+  description={pageDescription}
+  keywords="GST calculator India, GST inclusive exclusive calculator, remove GST from amount, CGST SGST calculator, IGST calculator, 18% GST calculator, GST back calculation"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -25,7 +68,9 @@ const jsonLd = {
     <div class="container">
       <div class="badge">🧮 Free Calculator</div>
       <h1>GST Calculator</h1>
-      <p class="subtitle">Add GST to a base price or back out tax from a GST-inclusive total. View CGST/SGST (half each) or full IGST for inter-state.</p>
+      <p class="subtitle">
+        Add GST to a <strong>base price</strong> or back out tax from a <strong>GST-inclusive total</strong>. View <strong>CGST/SGST</strong> (half each) or <strong>IGST</strong> for inter-state — quick math only, not filing.
+      </p>
       <div class="trust"><span><span class="check">✓</span> No signup</span><span><span class="check">✓</span> Instant results</span><span><span class="check">✓</span> Works offline</span></div>
     </div>
   </section>
@@ -84,7 +129,18 @@ const jsonLd = {
     </div>
   </section>
 
-  <section class="faq"><div class="container"><h2 class="section-title">FAQ</h2><div class="faq-item"><h4>Is this official GST filing?</h4><p>No — it is a calculator only, not connected to the GST portal.</p></div></div></section>
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently asked questions</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>What is GST?</h4><p>Goods and Services Tax — an indirect tax on supply; intra-state often uses CGST+SGST, inter-state uses IGST.</p></div>
+        <div class="faq-item"><h4>Is this official GST filing?</h4><p>No — it is a calculator only, not connected to the GST portal.</p></div>
+        <div class="faq-item"><h4>How do I add or remove GST?</h4><p>Add: GST = amount × rate/100. Remove: taxable = inclusive ÷ (1 + rate/100). See the section below for CGST/SGST vs IGST display.</p></div>
+        <div class="faq-item"><h4>CGST/SGST vs IGST?</h4><p>Intra-state shows CGST and SGST (typically half of total GST each). Inter-state shows IGST as the full GST line.</p></div>
+        <div class="faq-item"><h4>Is my data uploaded?</h4><p>No — calculations run in your browser.</p></div>
+      </div>
+    </div>
+  </section>
   <section class="related"><div class="container"><p class="related-links"><a href="/calculator/fd/">FD</a> · <a href="/calculator/percentage/">Percentage</a> · <a href="/calculator/income-tax/">Income tax</a> · <a href="/calculator/markup-margin/">Markup &amp; margin</a></p></div></section>
 
   <script is:inline>
@@ -139,7 +195,8 @@ const jsonLd = {
     .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
     .breadcrumb a { color: var(--blue); }
     .hero { padding: 36px 0 16px; text-align: center; }
-    .subtitle { font-size: 18px; color: var(--text-muted); max-width: 680px; margin: 0 auto 24px; }
+    .subtitle { font-size: 18px; color: var(--text-muted); max-width: 680px; margin: 0 auto 24px; line-height: 1.55; }
+    .subtitle strong { color: var(--text); font-weight: 700; }
     .calc-section { padding: 24px 0 40px; }
     .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 960px; align-items: start; }
     @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
@@ -157,7 +214,12 @@ const jsonLd = {
     .edu .container { max-width: 760px; }
     .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 12px; }
     .section-title { text-align: center; font-size: 1.5rem; margin-bottom: 16px; }
-    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; max-width: 760px; margin: 0 auto; }
+    .faq { padding: 8px 0 32px; }
+    .faq .container { max-width: 760px; }
+    .faq-list { display: flex; flex-direction: column; gap: 10px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
+    .faq-item h4 { font-size: 15px; margin-bottom: 4px; }
+    .faq-item p { font-size: 14px; color: var(--text-muted); margin: 0; }
     .related { text-align: center; padding: 24px 0 48px; }
     .related-links a { color: var(--blue); font-weight: 600; }
   </style>

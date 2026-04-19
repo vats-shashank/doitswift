@@ -1,28 +1,72 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/scientific/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Scientific Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'UtilityApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description:
-        'Free online scientific calculator with trigonometry, logarithms, powers, parentheses, and math.js evaluation.',
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Free online scientific calculator: trig, inverse trig, powers, roots, factorial, logarithms, parentheses, and memory keys. Expressions evaluate with math.js using correct order of operations. Degree/radian toggle for trig. Requires network once for the math.js script; not a certified engineering tool.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'What library evaluates expressions?',
+    answer:
+      'We load math.js from a CDN and use it to parse and evaluate your expression string with standard operator precedence.',
+  },
+  {
+    question: 'What is the difference between Deg and Rad?',
+    answer:
+      'Trigonometric functions use degrees in Deg mode and radians in Rad mode. Toggle with the mode button before evaluating sin, cos, or tan.',
+  },
+  {
+    question: 'Why does my expression show an error?',
+    answer:
+      'Unbalanced parentheses, invalid function names, division by zero, or domain errors (like log of a negative number) all surface as errors instead of silent wrong answers.',
+  },
+  {
+    question: 'How do memory keys work?',
+    answer:
+      'MC clears stored memory, MR recalls it, and M+ / M− add or subtract the current evaluated value. Some actions evaluate the visible line first.',
+  },
+  {
+    question: 'Does the calculator work fully offline?',
+    answer:
+      'After the math.js script has been cached by your browser it may work offline, but the first visit needs network access to load the library.',
+  },
+  {
+    question: 'Are calculations sent to DoItSwift servers?',
+    answer:
+      'No. Evaluation happens locally in your browser once math.js is available.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Scientific Calculator',
+  breadcrumbName: 'Scientific Calculator',
+  applicationCategory: 'EducationalApplication',
+  browserRequirements: 'Requires JavaScript and loading math.js (CDN) for expression evaluation and keypad actions',
+  webAppDescription:
+    'A browser scientific keypad with degree and radian modes, trigonometric and inverse functions, powers, square and cube roots, logarithms base 10 and natural, factorial, parentheses, constants, and simple memory. The display shows both the built expression and the evaluated result. Intended for homework, desk checks, and quick calculations rather than safety-critical or audited engineering workflows.',
+  featureList: [
+    'Expression and result display',
+    'Degree and radian mode toggle',
+    'Trig, inverse trig, powers, roots, and factorial',
+    'Base-10 and natural logarithms',
+    'Parentheses and multi-digit entry',
+    'Memory clear, recall, add, and subtract',
+    'Mobile-friendly keypad grid',
+    'Educational notes on math.js behavior',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Scientific Calculator — Online Free with Trig & Functions | DoItSwift"
-  description="Free scientific calculator powered by math.js: order of operations, trig, logs, powers, parentheses, memory, and mobile-friendly layout."
-  keywords="scientific calculator, scientific calculator online, free scientific calculator, online calculator with functions"
+  title="Scientific Calculator Online — Trig, Logs, Powers, Memory | DoItSwift"
+  description={pageDescription}
+  keywords="scientific calculator online free, trig calculator radians degrees, math.js calculator, logarithm calculator online, online calculator with parentheses, factorial calculator keypad"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -130,6 +174,20 @@ const jsonLd = {
       <p>
         <strong>log</strong> is base 10; <strong>ln</strong> is the natural logarithm. <strong>n!</strong> inserts a factorial (e.g. <code>5!</code>). Use <strong>MC / MR / M+ / M−</strong> for memory after you have a valid result (evaluate with <strong>=</strong> or use memory keys which evaluate the current line when needed).
       </p>
+    </div>
+  </section>
+
+  <section class="faq sci-faq">
+    <div class="container">
+      <h2 class="section-title">Frequently asked questions</h2>
+      <div class="faq-list">
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -740,6 +798,33 @@ const jsonLd = {
       text-align: center;
       margin-bottom: 18px;
       font-size: 1.5rem;
+    }
+    .sci-faq {
+      padding: 28px 0 32px;
+    }
+    .sci-faq .container {
+      max-width: 760px;
+    }
+    .sci-faq .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .sci-faq .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .sci-faq .faq-item h4 {
+      margin: 0 0 8px;
+      font-size: 15px;
+    }
+    .sci-faq .faq-item p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.55;
     }
     .related {
       text-align: center;

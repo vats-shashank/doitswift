@@ -1,5 +1,6 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
 const finance = [
   { href: '/calculator/sip/', icon: '📈', title: 'SIP Calculator', desc: 'Systematic investment plan maturity & returns' },
@@ -54,33 +55,100 @@ const everyday = [
 
 const allTools = [...finance, ...health, ...mathEducation, ...timeDate, ...everyday];
 
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Browse forty free DoItSwift calculators: India-focused finance (SIP, EMI, home loan prepay, income tax, FD, RD, GST, PPF, salary, NPS, SWP, personal loan, stock average), US mortgage PITI, retirement and buy-vs-rent, health (BMI, TDEE, ideal weight, Navy body fat, pregnancy EDD, water, macros, period and ovulation, heart-rate zones), math (percentage, scientific, GPA, fraction, statistics), time tools (age, date span, duration math), and everyday helpers (tip, discount, unit converter, markup and margin). All run in your browser with no signup.';
+
+const indexFaqs: CalculatorFaqItem[] = [
+  {
+    question: 'Do I need an account?',
+    answer:
+      'No. Open any calculator, enter your numbers, and see results immediately in your browser.',
+  },
+  {
+    question: 'Are my inputs stored on DoItSwift servers?',
+    answer:
+      'Calculations run locally in JavaScript. We do not receive your salary, loan, or health numbers unless a future feature explicitly says otherwise.',
+  },
+  {
+    question: 'What’s included in the 40 calculators?',
+    answer:
+      'Finance (SIP, EMI, home loan, personal loan, mortgage, stock average, income tax, FD, GST, PPF, lumpsum, HRA, retirement, RD, salary, NPS, compound interest, SWP), health (BMI, calorie/TDEE, ideal weight, body fat, pregnancy due date, water intake, macros, period and ovulation, heart rate zones), math and education (percentage, scientific, GPA, fraction, statistics), time and date (age, date difference, time math), and everyday tools (tip, discount, units, buy vs rent, markup and margin). Highlights include mortgage (PITI), period tracking estimates, and descriptive statistics with charts.',
+  },
+  {
+    question: 'Are tax and EMI numbers legally binding?',
+    answer:
+      'No—they are educational estimates. For tax filing or loan decisions, confirm with a chartered accountant or your bank.',
+  },
+  {
+    question: 'Do calculators work on mobile?',
+    answer:
+      'Yes. Use any modern phone browser; layouts stack for small screens.',
+  },
+];
+
+const siteRoot = Astro.site ? new URL('/', Astro.site).href : undefined;
+
 const collectionJsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'CollectionPage',
-  name: 'Free Online Calculators',
-  description:
-    'Forty free online calculators: finance (SIP, EMI, home loan, personal loan, mortgage, stock average, retirement, salary, tax, deposits, GST), health (BMI, calories, pregnancy, period, heart rate), math (fraction, statistics, GPA), time (age, date difference), and everyday tools (tip, discount, markup, buy vs rent).',
-  url: new URL(Astro.url.pathname, Astro.site).href,
-  isPartOf: { '@type': 'WebSite', name: 'DoItSwift', url: new URL('/', Astro.site).href },
-  mainEntity: {
-    '@type': 'ItemList',
-    numberOfItems: allTools.length,
-    itemListElement: allTools.map((t, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      name: t.title,
-      url: new URL(t.href, Astro.site).href,
-      description: t.desc,
-    })),
-  },
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      '@id': `${canonical}#webpage`,
+      url: canonical,
+      name: 'Free Online Calculators — 40 Tools for Finance, Health, Math & Daily Life | DoItSwift',
+      description: pageDescription,
+      about: { '@id': `${canonical}#collection` },
+      ...(siteRoot ? { isPartOf: { '@type': 'WebSite', name: 'DoItSwift', url: siteRoot } } : {}),
+    },
+    {
+      '@type': 'CollectionPage',
+      '@id': `${canonical}#collection`,
+      url: canonical,
+      name: 'Free Online Calculators',
+      description: pageDescription,
+      ...(siteRoot ? { isPartOf: { '@type': 'WebSite', name: 'DoItSwift', url: siteRoot } } : {}),
+      mainEntity: {
+        '@type': 'ItemList',
+        numberOfItems: allTools.length,
+        itemListElement: allTools.map((t, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: t.title,
+          url: Astro.site ? new URL(t.href, Astro.site).href : t.href,
+          description: t.desc,
+        })),
+      },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: indexFaqs.map((f) => ({
+        '@type': 'Question',
+        name: f.question,
+        acceptedAnswer: { '@type': 'Answer', text: f.answer },
+      })),
+    },
+    ...(Astro.site
+      ? [
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: siteRoot },
+              { '@type': 'ListItem', position: 2, name: 'Calculators', item: new URL('/calculator/', Astro.site).href },
+            ],
+          },
+        ]
+      : []),
+  ],
 };
 ---
 
 <MainLayout
-  title="Free Online Calculators — Finance, Health, Math | DoItSwift"
-  description="Forty free calculators: SIP, EMI, home loan, personal loan, mortgage, stock P&amp;L, retirement, salary, tax, FD, RD, GST, BMI, pregnancy, period & ovulation, heart rate, fraction, statistics, GPA, age, time math, tip, discount, markup & margin, buy vs rent, and more. Instant results, no signup."
-  keywords="online calculator, SIP calculator, EMI calculator, mortgage calculator, personal loan EMI, retirement calculator, statistics calculator, fraction calculator, salary calculator India, markup calculator"
-  canonical={new URL(Astro.url.pathname, Astro.site).toString()}
+  title="Free Online Calculators — 40 Tools for Finance, Health, Math & Daily Life | DoItSwift"
+  description={pageDescription}
+  keywords="free online calculators, SIP EMI income tax calculator India, mortgage PITI calculator US, BMI TDEE calculator, GPA fraction statistics calculator, period ovulation calculator, unit converter tip discount markup, buy vs rent calculator, browser calculators no signup"
+  canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(collectionJsonLd)} />
 
@@ -210,30 +278,14 @@ const collectionJsonLd = {
 
   <section id="faq" class="faq calc-anchor">
     <div class="container">
-      <h2 class="section-title">Calculator FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item">
-          <h4>Do I need an account?</h4>
-          <p>No. Open a calculator, type your numbers, and see results immediately in your browser.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Are my inputs stored on DoItSwift servers?</h4>
-          <p>Calculations run locally in JavaScript. We do not receive your salary, loan, or health numbers unless a future feature explicitly says otherwise.</p>
-        </div>
-        <div class="faq-item">
-          <h4>What’s included in the 40 calculators?</h4>
-          <p>
-            Finance (SIP, EMI, home loan, personal loan, mortgage, stock average, income tax, FD, GST, PPF, lumpsum, HRA, retirement, RD, salary, NPS, compound interest, SWP), health (BMI, calorie/TDEE, ideal weight, body fat, pregnancy due date, water intake, macros, period &amp; ovulation, heart rate zones), math &amp; education (percentage, scientific, GPA, fraction, statistics), time &amp; date (age, date difference, time math), and everyday tools (tip, discount, units, buy vs rent, markup &amp; margin). Highlights include <strong>mortgage (PITI)</strong>, <strong>period tracking estimates</strong>, and <strong>descriptive statistics</strong> with charts.
-          </p>
-        </div>
-        <div class="faq-item">
-          <h4>Are tax and EMI numbers legally binding?</h4>
-          <p>No — they are educational estimates. For tax filing or loan decisions, confirm with a chartered accountant or your bank.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Do calculators work on mobile?</h4>
-          <p>Yes. Use any modern phone browser; layouts stack for small screens.</p>
-        </div>
+        {indexFaqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>

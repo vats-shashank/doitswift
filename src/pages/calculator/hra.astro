@@ -1,49 +1,71 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const site = Astro.site?.href ?? 'https://doitswift.com';
-const canonical = `${site}calculator/hra/`;
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'HRA Calculator 2026 — DoItSwift',
-      url: canonical,
-      applicationCategory: 'FinanceApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'House Rent Allowance exemption calculator for India with metro and non-metro rules.',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'Is HRA available in the new tax regime?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Generally HRA exemption is claimed under the old tax regime with valid rent proofs; the new regime has different deduction structures — confirm with a tax advisor.',
-          },
-        },
-      ],
-    },
-    {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: site },
-        { '@type': 'ListItem', position: 2, name: 'Calculators', item: `${site}calculator/` },
-        { '@type': 'ListItem', position: 3, name: 'HRA Calculator', item: canonical },
-      ],
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'India HRA exemption calculator (old-regime style): enter monthly basic, HRA received, rent paid, and metro vs non-metro. Shows the three statutory components, monthly exempt HRA, taxable HRA, and annual exemption. Not tax filing advice—new regime rules differ; confirm with a CA and rent proofs.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'Is HRA exemption available in the new tax regime?',
+    answer:
+      'The classic HRA exemption path is tied to the old regime with documentation. The new concessional regime uses a different bundle of slabs and deductions—confirm what applies to you before claiming.',
+  },
+  {
+    question: 'Why can component three (rent minus ten percent of basic) be zero or negative?',
+    answer:
+      'If rent is less than ten percent of basic, that leg does not help; we clamp it at zero so the minimum-of-three rule still applies.',
+  },
+  {
+    question: 'Should I use basic salary or gross salary for HRA rules?',
+    answer:
+      'The textbook rule uses basic salary for the percentage and rent-minus-ten-percent tests. Your payslip labels may differ—follow your employer’s definition.',
+  },
+  {
+    question: 'What documents do employers usually ask for?',
+    answer:
+      'Rent receipts, agreements, and landlord PAN are commonly required when annual rent crosses ₹1,00,000—keep records that match actual payments.',
+  },
+  {
+    question: 'Can I claim HRA while living with parents?',
+    answer:
+      'Only if there is a genuine rental arrangement with documentation and the landlord includes taxable rent where required. Fabricated rent is risky.',
+  },
+  {
+    question: 'Are my salary numbers uploaded?',
+    answer:
+      'No. The tool runs locally in your browser.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift HRA Calculator',
+  breadcrumbName: 'HRA Calculator',
+  applicationCategory: 'FinanceApplication',
+  browserRequirements: 'Requires JavaScript to compute the minimum-of-three HRA exemption and taxable balance live',
+  webAppDescription:
+    'Estimate monthly House Rent Allowance exemption under the classic Indian minimum-of-three formula: actual HRA received, fifty or forty percent of basic for metro vs non-metro cities, and rent paid minus ten percent of basic. Displays each component, the exempt amount, taxable HRA, and an annualized exempt figure. Simplified versus real payroll splits, special zones, and regime choice—use alongside professional tax advice.',
+  featureList: [
+    'Monthly basic salary, HRA received, and rent paid inputs',
+    'Metro versus non-metro radio selector',
+    'Three-component breakdown with labels',
+    'Monthly exempt HRA and taxable HRA',
+    'Annual exemption total',
+    'Educational article on receipts and common mistakes',
+    'Link to income tax calculator for broader context',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="HRA Calculator 2026 — Calculate HRA Exemption Tax Saving | DoItSwift"
-  description="Compute monthly and annual HRA exemption as the minimum of actual HRA, 50%/40% of basic salary, and rent paid minus 10% of basic. Metro toggle for Delhi, Mumbai, Kolkata, Chennai."
-  keywords="hra calculator, hra exemption calculator, house rent allowance calculator, hra tax saving"
+  title="HRA Calculator India — Exemption (50%/40%, Rent −10% Basic) | DoItSwift"
+  description={pageDescription}
+  keywords="HRA calculator India, HRA exemption calculator, house rent allowance tax saving, metro HRA 50 percent, rent minus 10 percent basic, old regime HRA estimate"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -145,10 +167,14 @@ const jsonLd = {
 
   <section class="faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item"><h4>Why is component ③ negative?</h4><p>If rent is less than 10% of basic, that component clamps to zero — exemption may be limited by other components.</p></div>
-        <div class="faq-item"><h4>Do I use basic or gross?</h4><p>Rule uses basic salary; some payrolls split differently — follow your payslip definition.</p></div>
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>

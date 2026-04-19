@@ -1,41 +1,73 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/stock-average/';
-const site = 'https://doitswift.com';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Stock Average Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'FinanceApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Average buy price across multiple purchases, optional profit/loss with brokerage and charges.',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [{ '@type': 'Question', name: 'What is averaging down?', acceptedAnswer: { '@type': 'Answer', text: 'Buying more shares at a lower price to reduce your average cost per share — it can help or compound losses if the stock keeps falling.' } }],
-    },
-    {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: site + '/' },
-        { '@type': 'ListItem', position: 2, name: 'Calculators', item: site + '/calculator/' },
-        { '@type': 'ListItem', position: 3, name: 'Stock Average Calculator', item: canonical },
-      ],
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Stock average calculator: weighted average buy price across multiple lots, optional mark-to-market at a current price, or a profit/loss mode with simplified brokerage and charges on buy and sell. Currency formats display only. Arithmetic helper—not investment, tax, or exchange advice.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'What is averaging down?',
+    answer:
+      'Buying additional shares at a lower price than your earlier lots so the weighted average cost per share falls. It can improve breakeven math but increases capital at risk if the investment thesis is wrong.',
+  },
+  {
+    question: 'How is weighted average price calculated?',
+    answer:
+      'We sum total shares bought, sum total cash invested across purchases, and divide invested amount by total shares for a per-share average.',
+  },
+  {
+    question: 'How does profit or loss mode work?',
+    answer:
+      'You enter buy and sell details plus optional percentage charges on each leg. The tool estimates net proceeds versus cost including charges.',
+  },
+  {
+    question: 'Does the currency dropdown convert exchange rates?',
+    answer:
+      'No. It only formats numbers. Enter all legs in a consistent currency.',
+  },
+  {
+    question: 'Are brokerage and taxes modeled exactly?',
+    answer:
+      'We use simple percentage placeholders. Real slips include STT slabs, GST on brokerage, and other fees that can differ by broker.',
+  },
+  {
+    question: 'Is trade data sent to DoItSwift?',
+    answer:
+      'No. Calculations stay in your browser.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Stock Average Calculator',
+  breadcrumbName: 'Stock Average Calculator',
+  applicationCategory: 'FinanceApplication',
+  browserRequirements: 'Requires JavaScript for multi-row purchases, average price, profit mode, and currency formatting',
+  webAppDescription:
+    'Track weighted average purchase price from one or more buy rows with optional current price for a quick mark-to-market message, or switch to a profit and loss worksheet with symmetric percentage charge assumptions. Designed for India-focused investors comparing scenarios before consulting a SEBI-registered advisor—outputs are illustrative arithmetic only.',
+  featureList: [
+    'Stock averaging mode with dynamic purchase rows',
+    'Add-row control for multiple fills',
+    'Optional current price for MTM messaging',
+    'Profit/loss mode with buy and sell inputs',
+    'Percentage charge model on buy and sell notionals',
+    'Currency display selector without FX conversion',
+    'Disclaimer on non-advice use',
+    'Educational notes on averaging down and taxes',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Stock Average Calculator — Average Buy Price & Profit | DoItSwift"
-  description="Calculate weighted average stock price from multiple buys, or profit/loss after brokerage and STT. Choose display currency; educational only."
-  keywords="stock average calculator, share average calculator, stock profit calculator, averaging down calculator"
+  title="Stock Average Calculator — Weighted Buy Price & P&L | DoItSwift"
+  description={pageDescription}
+  keywords="stock average calculator India, weighted average share price, averaging down calculator, equity profit loss after brokerage, multi lot average price calculator"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -138,6 +170,20 @@ const jsonLd = {
       <p>
         For wealth accumulation scenarios, pair this with <a href="/calculator/sip/">SIP</a>, <a href="/calculator/lumpsum/">Lumpsum</a>, and <a href="/calculator/compound-interest/">Compound Interest</a> calculators.
       </p>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently asked questions</h2>
+      <div class="faq-list">
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -298,6 +344,17 @@ const jsonLd = {
     .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
     .edu a { color: var(--blue); font-weight: 600; }
     .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .faq { padding: 28px 0 32px; }
+    .faq .container { max-width: 760px; }
+    .faq-list { display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .faq-item h4 { margin: 0 0 8px; font-size: 15px; }
+    .faq-item p { margin: 0; font-size: 14px; color: var(--text-muted); line-height: 1.55; }
     .related { text-align: center; padding-bottom: 48px; }
     .related-links a { color: var(--blue); font-weight: 600; }
   </style>

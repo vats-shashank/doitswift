@@ -1,40 +1,70 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/heart-rate/';
-const site = 'https://doitswift.com';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Heart Rate Zone Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'HealthApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Maximum heart rate and five training zones using standard, Tanaka, or Karvonen methods.',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [{ '@type': 'Question', name: 'What is the fat-burning zone?', acceptedAnswer: { '@type': 'Answer', text: 'A moderate intensity range; total calories still matter more than zone labels for fat loss.' } }],
-    },
-    {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: site + '/' },
-        { '@type': 'ListItem', position: 2, name: 'Calculators', item: site + '/calculator/' },
-        { '@type': 'ListItem', position: 3, name: 'Heart Rate Zones', item: canonical },
-      ],
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Heart rate zone calculator: estimate max heart rate with 220 minus age, Tanaka, or Karvonen (needs resting HR), then list five training zones with BPM bands and a color bar. Estimates vary by fitness and genetics—use perceived exertion and medical advice alongside gadgets.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'What is the fat-burning zone?',
+    answer:
+      'It is a moderate-intensity band often marketed for weight control. Total energy burned and diet still drive fat loss more than the label on a zone.',
+  },
+  {
+    question: 'Which max heart rate formula should I use?',
+    answer:
+      '220 minus age is simple but imprecise. Tanaka is often better for older adults. Karvonen personalizes when you know resting heart rate—try multiple and compare how they feel.',
+  },
+  {
+    question: 'Are wrist optical heart rates accurate?',
+    answer:
+      'They can lag or spike during intervals. Chest straps are usually tighter for zone training, but comfort and consistency matter.',
+  },
+  {
+    question: 'Can I use zones if I take beta blockers?',
+    answer:
+      'Medications change heart rate response—ask your doctor before training by BPM alone.',
+  },
+  {
+    question: 'Do zones replace a cardiac stress test?',
+    answer:
+      'No. This page is for general fitness planning, not diagnosis.',
+  },
+  {
+    question: 'Is my age or HR data uploaded?',
+    answer:
+      'No. Calculations stay in your browser.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Heart Rate Zone Calculator',
+  breadcrumbName: 'Heart Rate Zones',
+  applicationCategory: 'HealthApplication',
+  browserRequirements: 'Requires JavaScript to switch max-HR methods, compute zones, and update the zone bar',
+  webAppDescription:
+    'Select age and optional resting heart rate, pick a max heart rate estimation method, and review five classic endurance zones with BPM ranges and a color gradient. Karvonen mode reserves heart rate reserve between resting and max. Consumer wearables disagree—treat numbers as training heuristics, not cardiology results.',
+  featureList: [
+    'Age and optional resting heart rate inputs',
+    'Standard, Tanaka, or Karvonen max HR selection',
+    'Five-zone BPM table with labels',
+    'Color bar visualization of zone bands',
+    'Educational notes on HRV and device accuracy',
+    'Links to calorie and body composition tools',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Heart Rate Zone Calculator — Maximum HR & Training Zones | DoItSwift"
-  description="Calculate max heart rate (220−age, Tanaka, or Karvonen) and five training zones with BPM ranges and color bar."
-  keywords="heart rate zone calculator, target heart rate calculator, max heart rate calculator, training zones calculator"
+  title="Heart Rate Zone Calculator — Max HR (220−Age, Tanaka, Karvonen) | DoItSwift"
+  description={pageDescription}
+  keywords="heart rate zones by age, Karvonen formula calculator, Tanaka max heart rate, fat burning zone BPM, training zones calculator running cycling"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -101,6 +131,20 @@ const jsonLd = {
       <p>
         Pair with <a href="/calculator/calorie/">Calorie / TDEE</a>, <a href="/calculator/bmi/">BMI</a>, and <a href="/calculator/body-fat/">Body Fat</a> for a broader fitness picture — not medical diagnosis.
       </p>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently asked questions</h2>
+      <div class="faq-list">
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -212,6 +256,17 @@ const jsonLd = {
     .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
     .edu a { color: var(--blue); font-weight: 600; }
     .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .faq { padding: 28px 0 32px; }
+    .faq .container { max-width: 760px; }
+    .faq-list { display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .faq-item h4 { margin: 0 0 8px; font-size: 15px; }
+    .faq-item p { margin: 0; font-size: 14px; color: var(--text-muted); line-height: 1.55; }
     .related { text-align: center; padding-bottom: 48px; }
     .related-links a { color: var(--blue); font-weight: 600; }
   </style>

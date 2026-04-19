@@ -4,18 +4,21 @@ import MainLayout from '../../layouts/MainLayout.astro';
 const tools = [
   { href: '/pdf/pdf-to-jpg/', icon: '🖼️', title: 'PDF to JPG', desc: 'Export every page as a JPEG image' },
   { href: '/pdf/image-to-pdf/', icon: '📑', title: 'Image to PDF', desc: 'Combine JPG, PNG, WebP, HEIC & more' },
+  { href: '/pdf/jpg-to-pdf/', icon: '📷', title: 'JPG to PDF', desc: 'Turn JPEG photos into a PDF' },
   { href: '/pdf/merge-pdf/', icon: '➕', title: 'Merge PDFs', desc: 'Join multiple PDFs in order' },
   { href: '/pdf/split-pdf/', icon: '✂️', title: 'Split PDF', desc: 'Extract pages or ranges' },
   { href: '/pdf/compress-pdf/', icon: '🗜️', title: 'Compress PDF', desc: 'Shrink file size in your browser' },
   { href: '/pdf/unlock-pdf/', icon: '🔓', title: 'Unlock PDF', desc: 'Remove password with the correct key' },
 ];
 
+const pageDescription =
+  'Free browser-based PDF tools: merge, split, compress, PDF to JPG, image to PDF, JPG to PDF, unlock with password. pdf-lib and PDF.js — all run locally. No upload, no signup, batch and ZIP where supported.';
+
 const collectionJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
   name: 'Free Online PDF Tools',
-  description:
-    'Free browser-based PDF tools. Merge PDFs, split, compress, convert images to PDF, extract pages, unlock with password. No upload, no signup, unlimited usage.',
+  description: pageDescription,
   url: new URL(Astro.url.pathname, Astro.site).href,
   isPartOf: {
     '@type': 'WebSite',
@@ -34,22 +37,120 @@ const collectionJsonLd = {
     })),
   },
 };
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Is there a file size limit for DoItSwift PDF tools?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'There is no fixed cap from DoItSwift — limits come from your device RAM and browser. PDFs above about 50 MB may take a noticeable time; very large files can fail on low-memory mobile browsers.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Are my PDFs uploaded to DoItSwift?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'No. Tools load libraries from CDNs, but your document bytes stay in the browser unless you download a result. You can verify by going offline after the page loads.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I process multiple PDFs in one session?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Yes — merge, compress, PDF to JPG, unlock, and related flows support batches where the tool allows. Split focuses on one document at a time for clear page numbering. Image to PDF and JPG to PDF accept many images with reordering before export.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Will PDF compression always make files smaller?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Usually, but not always. Light modes mostly re-save and strip metadata. Heavier modes may rasterize pages, trading smaller size against sharp text — pick the level that fits your document.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do DoItSwift PDF tools add watermarks?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. Output is whatever the conversion produces — no DoItSwift branding on your files.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Which browsers work best for PDF tools?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Latest Chrome, Edge, Firefox, or Safari on desktop. Mobile Safari and Chrome work for moderate file sizes.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Are these PDF tools free? Is there a monthly limit?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Yes, they are free to use with no signup. There are no monthly quotas, accounts, or premium tiers.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What if my PDF is password-protected?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Use Unlock PDF with the correct password first, then merge, split, compress, or convert as needed. DoItSwift does not crack forgotten passwords.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I export PDF pages as images?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Yes — use the PDF to JPG tool to export pages as JPEG images in your browser.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I create a PDF from photos or scans?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Yes. Image to PDF accepts many image formats with reorder; JPG to PDF is optimized for JPEG photo workflows.',
+      },
+    },
+  ],
+};
 ---
 
 <MainLayout
-  title="Free Online PDF Tools — Merge, Split, Compress PDFs | DoItSwift"
-  description="Free browser-based PDF tools. Merge PDFs, split, compress, image to PDF, extract pages, unlock PDFs. No upload, no signup, unlimited usage."
-  keywords="pdf tools, merge pdf, split pdf, compress pdf, pdf to jpg, image to pdf, unlock pdf, free pdf online"
+  title="Free Online PDF Tools — Merge, Split, Compress, PDF to JPG, Unlock | DoItSwift"
+  description={pageDescription}
+  keywords="free pdf tools online, merge pdf, split pdf, compress pdf, pdf to jpg, image to pdf, jpg to pdf, unlock pdf, browser pdf tools, private pdf no upload, batch pdf, pdf-lib, pdf.js, doitswift"
   canonical={new URL(Astro.url.pathname, Astro.site).toString()}
 >
   <script type="application/ld+json" set:html={JSON.stringify(collectionJsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
 
   <section class="hero">
     <div class="container">
       <div class="badge">📄 PDF Tools</div>
       <h1>Free Online PDF Tools</h1>
       <p class="subtitle">
-        Merge, split, compress, and convert PDFs entirely in your browser. Your files never upload to our servers.
+        Merge, split, compress, unlock, PDF to JPG, image or JPG to PDF — all in your tab with pdf-lib / PDF.js. Your files
+        never upload to our servers.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> 100% browser-based</span>
@@ -63,7 +164,7 @@ const collectionJsonLd = {
   <section class="tools-section">
     <div class="container">
       <h2 class="section-title">All PDF tools</h2>
-      <p class="section-sub">Six utilities — processing stays on your device. <strong>6 tools</strong> ready to use.</p>
+      <p class="section-sub">Seven utilities — processing stays on your device. <strong>7 tools</strong> ready to use.</p>
       <div class="grid">
         {tools.map((tool) => (
           <a href={tool.href} class="tool-card">
@@ -101,7 +202,37 @@ const collectionJsonLd = {
           working. Very large files (hundreds of pages or 50MB+) may take longer or stress older phones; close other tabs
           for best performance.
         </p>
+        <p class="formats-guide-hint">
+          New to shrinking files safely? Read{' '}
+          <a href="/blog/how-to-compress-pdf/">how to compress a PDF</a> — what actually changes, and why browser tools
+          protect privacy compared to upload sites.
+        </p>
       </div>
+    </div>
+  </section>
+
+  <section class="pdf-guides" aria-label="PDF guides">
+    <div class="container">
+      <h2 class="section-title">Guides</h2>
+      <p class="section-sub">Longer reads that pair well with these tools.</p>
+      <ul class="pdf-guides-grid">
+        <li>
+          <a href="/blog/how-to-compress-pdf/">How to compress a PDF</a>
+          <span class="pdf-guides-desc">Size, quality, and privacy — browser vs upload compressors.</span>
+        </li>
+        <li>
+          <a href="/blog/how-to-merge-pdf/">How to merge PDFs</a>
+          <span class="pdf-guides-desc">Combine documents in order without sending files to a server.</span>
+        </li>
+        <li>
+          <a href="/blog/how-to-split-pdf/">How to split a PDF</a>
+          <span class="pdf-guides-desc">Extract pages or ranges for email and sharing.</span>
+        </li>
+        <li>
+          <a href="/blog/how-to-convert-pdf-to-jpg/">How to convert PDF to JPG</a>
+          <span class="pdf-guides-desc">When to export pages as images and what to expect.</span>
+        </li>
+      </ul>
     </div>
   </section>
 
@@ -145,6 +276,32 @@ const collectionJsonLd = {
           <h4>Which browsers work best?</h4>
           <p>
             Latest Chrome, Edge, Firefox, or Safari on desktop. Mobile Safari and Chrome work for moderate file sizes.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Are these PDF tools free? Is there a monthly limit?</h4>
+          <p>
+            Yes — free to use with no signup. There are no monthly quotas, accounts, or premium tiers.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>What if my PDF is password-protected?</h4>
+          <p>
+            Use <a href="/pdf/unlock-pdf/">Unlock PDF</a> with the correct password first, then merge, split, compress, or
+            convert. DoItSwift does not recover forgotten passwords.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Can I export PDF pages as images?</h4>
+          <p>
+            Yes — <a href="/pdf/pdf-to-jpg/">PDF to JPG</a> exports pages as JPEG files in your browser.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Can I create a PDF from photos or scans?</h4>
+          <p>
+            Yes. <a href="/pdf/image-to-pdf/">Image to PDF</a> combines many image formats with reorder;{' '}
+            <a href="/pdf/jpg-to-pdf/">JPG to PDF</a> fits JPEG-heavy photo workflows.
           </p>
         </div>
       </div>
@@ -226,6 +383,68 @@ const collectionJsonLd = {
       color: var(--text-muted);
       margin-bottom: 16px;
     }
+    .formats-guide-hint {
+      text-align: center;
+      max-width: 640px;
+      margin: 28px auto 0;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+    .formats-guide-hint a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .formats-guide-hint a:hover {
+      color: var(--blue-dark);
+    }
+
+    .pdf-guides {
+      padding: 24px 0 56px;
+    }
+    .pdf-guides .container {
+      max-width: 900px;
+    }
+    .pdf-guides-grid {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 12px;
+    }
+    @media (min-width: 560px) {
+      .pdf-guides-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .pdf-guides-grid li {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 18px 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+    }
+    .pdf-guides-grid a {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--blue);
+      text-decoration: none;
+    }
+    .pdf-guides-grid a:hover {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .pdf-guides-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
     .faq {
       padding: 40px 0 60px;
     }
@@ -247,6 +466,15 @@ const collectionJsonLd = {
     .faq-item p {
       font-size: 14px;
       color: var(--text-muted);
+    }
+    .faq-item a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .faq-item a:hover {
+      color: var(--blue-dark);
     }
     .back-wrap {
       padding-bottom: 48px;

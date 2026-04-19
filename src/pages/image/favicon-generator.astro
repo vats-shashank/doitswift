@@ -3,20 +3,45 @@ import MainLayout from '../../layouts/MainLayout.astro';
 ---
 
 <MainLayout
-  title="Favicon Generator — ICO 16, 32, 48 | Free & Private | DoItSwift"
-  description="Build favicon.ico with 16×16, 32×32, and 48×48 PNG frames from any image — in your browser with DoItSwift. No upload, batch-friendly."
-  keywords="favicon generator, favicon ico, create favicon, ico generator, browser favicon, free favicon"
+  title="Favicon Generator — Create favicon.ico (16, 32, 48 px) Free & Private | DoItSwift"
+  description="Generate favicon.ico from any image in your browser — three PNG frames at 16×16, 32×32, and 48×48 inside one ICO file. Batch download as ZIP. No upload, unlimited, works offline. Perfect for websites and local HTML projects."
+  keywords="favicon generator, create favicon ico, favicon ico maker, multi size favicon, 16x16 32x32 favicon, browser tab icon, website favicon, free favicon generator, private favicon tool, batch favicon ico"
   canonical={new URL(Astro.url.pathname, Astro.site).toString()}
 >
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "DoItSwift Favicon Generator",
+    "description": "Free browser-based favicon.ico generator. Converts images to a standard ICO file containing 16×16, 32×32, and 48×48 PNG frames. Batch processing, ZIP download, no server upload.",
+    "url": "https://doitswift.com/image/favicon-generator/",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Web browser",
+    "browserRequirements": "Requires HTML5 Canvas and JavaScript",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "featureList": [
+      "Build favicon.ico with 16×16, 32×32, and 48×48 PNG-encoded frames",
+      "Accepts common image formats the browser can decode (JPG, PNG, WebP, GIF, etc.)",
+      "Scales source images to fit inside each square with a white background",
+      "Unlimited batch: one favicon.ico per image, optional ZIP of all files",
+      "100% client-side — images are not uploaded",
+      "Standard Windows ICO container format for broad compatibility"
+    ]
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      { "@type": "Question", "name": "Is the favicon generator free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Generate ICO files locally with no limits or signup." }},
-      { "@type": "Question", "name": "Are my images uploaded?", "acceptedAnswer": { "@type": "Answer", "text": "No. Resizing and ICO packing happen entirely on your device." }},
-      { "@type": "Question", "name": "What sizes are inside the ICO?", "acceptedAnswer": { "@type": "Answer", "text": "Each ICO includes 16×16, 32×32, and 48×48 PNG-encoded frames for broad browser and OS support." }},
-      { "@type": "Question", "name": "Can I use any source image?", "acceptedAnswer": { "@type": "Answer", "text": "JPG, PNG, WebP, GIF, and other formats your browser can decode work best. Very large files may be slow." }},
-      { "@type": "Question", "name": "Batch mode?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Each image produces its own favicon.ico; download all at once as a ZIP." }}
+      { "@type": "Question", "name": "Is this favicon generator free and unlimited?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Generate as many favicon.ico files as you need with no signup, watermarks, or usage caps. Everything runs in your browser." }},
+      { "@type": "Question", "name": "Are my images uploaded to your servers?", "acceptedAnswer": { "@type": "Answer", "text": "No. Your images are decoded and rendered locally. ICO packing happens on your device — we never receive your files." }},
+      { "@type": "Question", "name": "What is inside each favicon.ico file?", "acceptedAnswer": { "@type": "Answer", "text": "Each ICO contains three PNG-encoded bitmaps at 16×16, 32×32, and 48×48 pixels. Browsers and Windows pick the best size for tabs, bookmarks, and shortcuts." }},
+      { "@type": "Question", "name": "What source image formats work?", "acceptedAnswer": { "@type": "Answer", "text": "Any raster format your browser can open — typically JPG, PNG, WebP, GIF, and similar. Very large originals may take longer to process." }},
+      { "@type": "Question", "name": "My logo is not square — what happens?", "acceptedAnswer": { "@type": "Answer", "text": "The image is scaled to fit inside each square frame without cropping, centered, with a white background filling empty space — similar to letterboxing." }},
+      { "@type": "Question", "name": "Will the ICO work in modern browsers?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The file uses PNG data inside the ICO container (common since Windows Vista era). This is widely supported for typical website favicons. Ancient systems that only read legacy BMP icons are uncommon today." }},
+      { "@type": "Question", "name": "How do I add the favicon to my website?", "acceptedAnswer": { "@type": "Answer", "text": "Upload favicon.ico to your site root (often /favicon.ico) and/or reference it with a link element: link rel=\"icon\" href=\"/favicon.ico\" type=\"image/x-icon\". Your host or framework may have a specific folder for static assets." }},
+      { "@type": "Question", "name": "Can I create favicons for several projects at once?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Drop multiple images — each becomes its own favicon.ico. Download individually or use Download All as ZIP." }},
+      { "@type": "Question", "name": "Does it work on mobile or offline?", "acceptedAnswer": { "@type": "Answer", "text": "It works on modern mobile browsers that support Canvas. After the page loads, processing can run without a network connection." }},
+      { "@type": "Question", "name": "Is there a monthly limit or account required?", "acceptedAnswer": { "@type": "Answer", "text": "No accounts, no quotas, and no premium tier. Use the generator whenever you need." }}
     ]
   })} />
 
@@ -27,7 +52,7 @@ import MainLayout from '../../layouts/MainLayout.astro';
       <div class="badge">🔒 100% Private — Files Never Leave Your Device</div>
       <h1>Favicon Generator</h1>
       <p class="subtitle">
-        Turn any image into favicon.ico with 16×16, 32×32, and 48×48 sizes — packed as one download per file.
+        Create a standard favicon.ico from any image — three built-in sizes (16, 32, 48 px) in one file, batch ZIP, no upload. Ideal for browser tabs, bookmarks, and desktop shortcuts.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> Unlimited files</span>
@@ -82,16 +107,128 @@ import MainLayout from '../../layouts/MainLayout.astro';
     </div>
   </section>
 
+  <!-- Educational content (SEO) -->
+  <article class="favicon-edu" aria-label="Guide: favicons and creating favicon.ico">
+    <div class="container favicon-edu-inner">
+      <section class="favicon-edu-block">
+        <h2 id="what-is-favicon">What is a favicon — and why use an .ico file?</h2>
+        <p>
+          A <strong>favicon</strong> (favorites icon) is the small image browsers show in <strong>tabs</strong>, <strong>bookmarks</strong>, and sometimes in <strong>history</strong>. The classic file name is <code>favicon.ico</code> placed at your site root so browsers can discover it automatically.
+        </p>
+        <p>
+          An <strong>ICO</strong> file can hold <strong>multiple sizes</strong> in one package. This generator builds a single <code>favicon.ico</code> containing <strong>16×16</strong>, <strong>32×32</strong>, and <strong>48×48</strong> pixel frames (PNG-encoded), so the OS can choose a crisp icon for the tab bar, taskbar, or shortcuts without you maintaining three separate files by hand.
+        </p>
+      </section>
+
+      <section class="favicon-edu-block">
+        <h2 id="how-generator-works">How this favicon generator works</h2>
+        <p>
+          You provide any <strong>source image</strong> your browser can decode. For each file we:
+        </p>
+        <ol class="favicon-steps">
+          <li>Draw the image <strong>scaled to fit</strong> inside a square at 16, 32, and 48 pixels (centered, with a <strong>white</strong> background behind transparent or letterboxed areas).</li>
+          <li>Encode each square as <strong>PNG</strong> data and pack them into a standard <strong>Windows ICO</strong> binary.</li>
+          <li>Offer a download named from your original file (e.g. <code>logo.ico</code> or <code>favicon.ico</code>).</li>
+        </ol>
+        <p>
+          Starting from a <strong>vector logo</strong>? Export PNG or use our <a href="/image/svg-to-png/">SVG to PNG</a> first at a generous size, then generate the ICO here for best clarity at tiny dimensions.
+        </p>
+      </section>
+
+      <section class="favicon-edu-block">
+        <h2 id="sizes-in-ico">Why 16, 32, and 48 pixels?</h2>
+        <div class="favicon-table-wrap">
+          <table class="favicon-compare-table">
+            <caption class="sr-only">Typical use of favicon sizes in an ICO</caption>
+            <thead>
+              <tr>
+                <th scope="col">Size</th>
+                <th scope="col">Typical use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>16×16</td><td>Browser tab favicon on most desktop displays</td></tr>
+              <tr><td>32×32</td><td>Higher-DPI tab icons, some toolbar contexts</td></tr>
+              <tr><td>48×48</td><td>Windows site shortcuts, some bookmark UIs</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          This tool does not create <strong>Apple touch icons</strong> (180×180 PNG) or <strong>web app manifest</strong> icons — those are separate assets. For overall format strategy on a site, see <a href="/blog/best-image-format-for-web/">best image format for websites</a>.
+        </p>
+      </section>
+
+      <section class="favicon-edu-block">
+        <h2 id="add-favicon-site">How to add favicon.ico to your website</h2>
+        <p>
+          After downloading: upload <code>favicon.ico</code> to your production server (often the <strong>site root</strong> so it is available at <code>/favicon.ico</code>). Many stacks also let you declare it explicitly in your HTML <code>&lt;head&gt;</code>:
+        </p>
+        <p>
+          <code class="favicon-code-block">&lt;link rel="icon" href="/favicon.ico" type="image/x-icon" /&gt;</code>
+        </p>
+        <p>
+          Paths vary if you use a CDN or static folder — match your host’s documentation. Clear browser cache or hard-refresh when testing a replacement icon.
+        </p>
+      </section>
+
+      <section class="favicon-edu-block">
+        <h2 id="design-tips">Design tips for tiny icons</h2>
+        <ul class="favicon-audience-list">
+          <li><strong>Prefer simple shapes</strong> — fine lines disappear at 16×16.</li>
+          <li><strong>Use high-contrast colors</strong> so the mark reads on light and dark tab backgrounds.</li>
+          <li><strong>Square master artwork</strong> avoids letterboxing; wide logos get smaller in the frame.</li>
+          <li><strong>Need standalone PNGs at exact sizes?</strong> This tool outputs a multi-size <code>.ico</code> only. For one-off PNG exports from SVG, use <a href="/image/svg-to-png/">SVG to PNG</a> with custom dimensions.</li>
+        </ul>
+      </section>
+
+      <section class="favicon-edu-block">
+        <h2 id="troubleshooting-favicon">Troubleshooting</h2>
+        <p>
+          <strong>Icon looks fuzzy:</strong> Start from a larger, sharp source image or vector export before ICO generation.
+        </p>
+        <p>
+          <strong>Browser still shows old icon:</strong> Hard-refresh, clear site data for localhost, or rename the file temporarily to bust cache.
+        </p>
+        <p>
+          <strong>Error decoding image:</strong> Try PNG or JPG; ensure the file is not corrupt. Huge images may stress memory — resize first with our <a href="/image/image-resizer/">image resizer</a>.
+        </p>
+      </section>
+    </div>
+  </article>
+
   <section class="faq">
     <div class="container">
       <h2 class="section-title">Frequently Asked Questions</h2>
       <div class="faq-list">
-        <div class="faq-item"><h4>Is this free?</h4><p>Yes. Unlimited favicon.ico generation with no watermarks or accounts.</p></div>
-        <div class="faq-item"><h4>How is the ICO built?</h4><p>We render your image to three PNGs at 16, 32, and 48 pixels, then combine them into a standard multi-size .ico file.</p></div>
-        <div class="faq-item"><h4>Will it work in all browsers?</h4><p>Modern browsers and Windows read PNG-based ICOs well. Very old systems may prefer legacy BMP icons, but this format works for typical web use.</p></div>
-        <div class="faq-item"><h4>Non-square logos?</h4><p>Images are scaled to fit each square frame; extra space is filled with white unless your image already fills the canvas.</p></div>
-        <div class="faq-item"><h4>Multiple sites / icons?</h4><p>Drop several images — each gets its own favicon.ico, or grab everything in one ZIP.</p></div>
+        <div class="faq-item"><h4>Is this favicon generator free and unlimited?</h4><p>Yes. Generate as many favicon.ico files as you need with no signup, watermarks, or usage caps. Everything runs in your browser.</p></div>
+        <div class="faq-item"><h4>Are my images uploaded to your servers?</h4><p>No. Your images are decoded and rendered locally. ICO packing happens on your device — we never receive your files.</p></div>
+        <div class="faq-item"><h4>What is inside each favicon.ico file?</h4><p>Each ICO contains three PNG-encoded bitmaps at 16×16, 32×32, and 48×48 pixels. Browsers and Windows pick the best size for tabs, bookmarks, and shortcuts.</p></div>
+        <div class="faq-item"><h4>What source image formats work?</h4><p>Any raster format your browser can open — typically JPG, PNG, WebP, GIF, and similar. Very large originals may take longer to process.</p></div>
+        <div class="faq-item"><h4>My logo is not square — what happens?</h4><p>The image is scaled to fit inside each square frame without cropping, centered, with a white background filling empty space — similar to letterboxing.</p></div>
+        <div class="faq-item"><h4>Will the ICO work in modern browsers?</h4><p>Yes. The file uses PNG data inside the ICO container (common since Windows Vista era). This is widely supported for typical website favicons. Ancient systems that only read legacy BMP icons are uncommon today.</p></div>
+        <div class="faq-item"><h4>How do I add the favicon to my website?</h4><p>Upload favicon.ico to your site root (often /favicon.ico) and/or reference it with a link element: link rel="icon" href="/favicon.ico" type="image/x-icon". Your host or framework may have a specific folder for static assets.</p></div>
+        <div class="faq-item"><h4>Can I create favicons for several projects at once?</h4><p>Yes. Drop multiple images — each becomes its own favicon.ico. Download individually or use Download All as ZIP.</p></div>
+        <div class="faq-item"><h4>Does it work on mobile or offline?</h4><p>It works on modern mobile browsers that support Canvas. After the page loads, processing can run without a network connection.</p></div>
+        <div class="faq-item"><h4>Is there a monthly limit or account required?</h4><p>No accounts, no quotas, and no premium tier. Use the generator whenever you need.</p></div>
       </div>
+    </div>
+  </section>
+
+  <section class="favicon-related" aria-label="Related tools and guides">
+    <div class="container">
+      <h2 class="section-title">Related tools</h2>
+      <ul class="favicon-related-grid">
+        <li><a href="/image/svg-to-png/">SVG to PNG Converter</a></li>
+        <li><a href="/image/image-resizer/">Image Resizer</a></li>
+        <li><a href="/image/webp-to-jpg/">WebP to JPG Converter</a></li>
+        <li><a href="/image/image-compressor/">Image Compressor</a></li>
+      </ul>
+      <h2 class="section-title section-title-sub">Related guides</h2>
+      <ul class="favicon-related-grid favicon-related-guides">
+        <li><a href="/blog/best-image-format-for-web/">Best Image Format for Websites (icons, photos &amp; more)</a></li>
+        <li><a href="/blog/heic-vs-jpg/">HEIC vs JPG: Complete Comparison</a></li>
+        <li><a href="/blog/convert-iphone-photos-to-jpg/">Convert iPhone Photos to JPG</a></li>
+      </ul>
     </div>
   </section>
 
@@ -473,5 +610,170 @@ import MainLayout from '../../layouts/MainLayout.astro';
     }
     .faq-item h4 { font-size: 16px; margin-bottom: 6px; }
     .faq-item p { font-size: 14px; color: var(--text-muted); }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .favicon-edu {
+      padding: 20px 0 8px;
+    }
+    .favicon-edu-inner {
+      max-width: 820px;
+    }
+    .favicon-edu-block {
+      margin-bottom: 2.75rem;
+    }
+    .favicon-edu-block:last-child {
+      margin-bottom: 0;
+    }
+    .favicon-edu h2 {
+      font-size: clamp(1.35rem, 2.5vw, 1.6rem);
+      line-height: 1.3;
+      margin: 0 0 1rem;
+      color: var(--text);
+    }
+    .favicon-edu p {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text);
+      margin: 0 0 1rem;
+    }
+    .favicon-edu a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .favicon-edu a:hover {
+      color: var(--blue-dark);
+    }
+    .favicon-edu code {
+      font-family: ui-monospace, 'Cascadia Code', 'Courier New', monospace;
+      font-size: 0.92em;
+      padding: 0.1em 0.35em;
+      background: var(--gray-100);
+      border-radius: 4px;
+    }
+    [data-theme='dark'] .favicon-edu code {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .favicon-code-block {
+      display: block;
+      font-size: 13px;
+      line-height: 1.5;
+      padding: 12px 14px;
+      margin: 12px 0;
+      word-break: break-all;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--card);
+    }
+    .favicon-steps {
+      margin: 0 0 0.5rem;
+      padding-left: 1.35rem;
+    }
+    .favicon-steps li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--text);
+      margin-bottom: 0.9rem;
+    }
+    .favicon-steps li:last-child {
+      margin-bottom: 0;
+    }
+    .favicon-table-wrap {
+      overflow-x: auto;
+      margin: 1rem 0 1.25rem;
+      -webkit-overflow-scrolling: touch;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+    .favicon-compare-table {
+      width: 100%;
+      min-width: 420px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .favicon-compare-table th,
+    .favicon-compare-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+    .favicon-compare-table thead th {
+      background: var(--card);
+      font-weight: 700;
+      color: var(--text);
+    }
+    .favicon-compare-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .favicon-audience-list {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+    .favicon-audience-list li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--text);
+      margin-bottom: 0.85rem;
+    }
+    .favicon-audience-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    .favicon-related {
+      padding: 24px 0 56px;
+    }
+    .favicon-related .container {
+      max-width: 820px;
+    }
+    .section-title-sub {
+      margin-top: 2.25rem;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    .favicon-related-grid {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+    @media (min-width: 520px) {
+      .favicon-related-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .favicon-related-grid a {
+      display: block;
+      padding: 14px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--blue);
+      font-weight: 600;
+      font-size: 15px;
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .favicon-related-grid a:hover {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+    [data-theme='dark'] .favicon-related-grid a:hover {
+      background: rgba(0, 102, 255, 0.12);
+    }
   </style>
 </MainLayout>

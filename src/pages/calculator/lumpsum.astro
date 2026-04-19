@@ -1,47 +1,65 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
+import { buildCalculatorJsonLd, calculatorCanonical } from '../../lib/calculatorJsonLd';
 
-const site = Astro.site?.href ?? 'https://doitswift.com';
-const canonical = `${site}calculator/lumpsum/`;
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Free lumpsum investment calculator: one-time principal, assumed annual return %, 1–40 years. See maturity value, estimated profit, invested vs returns bars, and year-by-year balance. Currency formats display only. Compare with SIP; not financial advice. Runs in your browser.';
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Lumpsum Calculator',
+  breadcrumbName: 'Lumpsum Calculator',
+  applicationCategory: 'FinanceApplication',
+  browserRequirements: 'Requires JavaScript for live lumpsum growth and charts',
+  webAppDescription:
+    'Project wealth from a single upfront investment using annual compounding at an assumed rate. Adjustable principal, return, and horizon; optional currency formatting for display. Shows maturity, estimated returns, visualization, and year-by-year balance. Does not model tax, fees, or market volatility — educational illustration only.',
+  featureList: [
+    'One-time principal and expected annual return (illustrative)',
+    'Investment horizon from 1 to 40 years',
+    'Maturity value and estimated returns',
+    'Principal versus returns bar comparison',
+    'Year-by-year compounded balance table',
+    'Multi-currency number formatting (not FX conversion)',
+    'All calculations run locally in the browser',
+  ],
+  faqs: [
     {
-      '@type': 'WebApplication',
-      name: 'Lumpsum Investment Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'FinanceApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'One-time investment maturity with compound growth and yearly balance chart.',
+      question: 'What is a lumpsum investment?',
+      answer:
+        'A lumpsum is a single upfront investment instead of periodic SIPs; the full amount compounds from the start subject to market or rate assumptions.',
     },
     {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'What is a lumpsum investment?',
-          acceptedAnswer: { '@type': 'Answer', text: 'A single upfront investment compared with periodic SIP contributions; growth compounds on the full principal from day one.' },
-        },
-      ],
+      question: 'Is the return shown fixed or guaranteed?',
+      answer:
+        'No. The percentage you enter is an assumption. Actual mutual fund or portfolio returns vary.',
     },
     {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: site },
-        { '@type': 'ListItem', position: 2, name: 'Calculators', item: `${site}calculator/` },
-        { '@type': 'ListItem', position: 3, name: 'Lumpsum Calculator', item: canonical },
-      ],
+      question: 'Does this lumpsum calculator include tax?',
+      answer:
+        'No. It shows gross growth before capital gains tax and other charges.',
+    },
+    {
+      question: 'Does the currency dropdown convert exchange rates?',
+      answer:
+        'No. It only changes how numbers are formatted on screen.',
+    },
+    {
+      question: 'How does lumpsum compare to SIP?',
+      answer:
+        'A lumpsum deploys all principal immediately; SIP spreads purchases over time. Use our SIP calculator and the SIP vs lumpsum blog for scenarios.',
     },
   ],
-};
+});
 ---
 
 <MainLayout
-  title="Lumpsum Calculator — Calculate One-time Investment Returns | DoItSwift"
-  description="Project lumpsum mutual fund or portfolio growth: maturity value, estimated returns, and year-by-year compounded balance. Editable return and tenure."
-  keywords="lumpsum calculator, one time investment calculator, lumpsum return calculator, mutual fund lumpsum"
+  title="Lumpsum Calculator India — One-Time Investment Growth & Year-by-Year | DoItSwift"
+  description={pageDescription}
+  keywords="lumpsum calculator, one time investment calculator, mutual fund lumpsum calculator, lumpsum return calculator India, single investment compound calculator, SIP vs lumpsum"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -139,10 +157,13 @@ const jsonLd = {
 
   <section class="faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
+        <div class="faq-item"><h4>What is a lumpsum investment?</h4><p>A single upfront amount invested at once, compared with spreading investments via SIP.</p></div>
         <div class="faq-item"><h4>Is return fixed?</h4><p>No — the percentage is your assumption; markets fluctuate.</p></div>
         <div class="faq-item"><h4>Does this include tax?</h4><p>No — it shows gross growth before capital gains tax rules.</p></div>
+        <div class="faq-item"><h4>Does the currency setting convert FX?</h4><p>No — it only formats numbers; the same math applies.</p></div>
+        <div class="faq-item"><h4>Lumpsum vs SIP?</h4><p>See our <a href="/calculator/sip/">SIP calculator</a> and <a href="/blog/sip-vs-lumpsum/">SIP vs lumpsum</a> article.</p></div>
       </div>
     </div>
   </section>
@@ -395,6 +416,23 @@ const jsonLd = {
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 16px;
+    }
+    .faq-item h4 {
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .faq-item p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+    .faq-item a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .faq-item a:hover {
+      text-decoration: underline;
     }
     .related {
       text-align: center;

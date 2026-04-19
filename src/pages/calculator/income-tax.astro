@@ -1,37 +1,69 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/income-tax/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Free income tax calculator for India (FY 2026-27 illustrative): compare new vs old regime, standard deduction, Chapter VI-A (80C, 80D, etc.), HRA exemption input, age-based basic exemption in old regime, 4% health & education cess. Shows tax and effective rate — not filing software or legal advice.';
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Income Tax Calculator (India)',
+  breadcrumbName: 'Income Tax Calculator',
+  applicationCategory: 'FinanceApplication',
+  browserRequirements: 'Requires JavaScript for regime comparison and tax estimates',
+  webAppDescription:
+    'Estimate income tax for resident individuals under simplified new and old regime slab models for India. Inputs include gross income, age group, regime selection, standard deduction toggles, common deductions, and HRA exemption amount. Applies 4% health and education cess on tax; high-income surcharge not modeled. Illustrative educational tool — verify with the Income Tax Department and a qualified professional.',
+  featureList: [
+    'Gross annual income input',
+    'Age group for old regime basic exemption (below 60, 60–80, above 80)',
+    'Preview new regime, old regime, or side-by-side comparison',
+    'Standard deduction and simplified rebate logic (confirm eligibility)',
+    'Chapter VI-A style inputs: 80C, 80D, NPS 80CCD, other deductions, HRA exemption',
+    'Estimated tax, cess, and effective tax rate',
+    'Runs locally in the browser',
+  ],
+  faqs: [
     {
-      '@type': 'WebApplication',
-      name: 'Income Tax Calculator (India) — DoItSwift',
-      url: canonical,
-      applicationCategory: 'FinanceApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Estimate income tax under India new vs old regime for salaried individuals.',
+      question: 'Is this official tax filing?',
+      answer:
+        'No. This is an illustrative estimator only. Verify slabs, rebates, and deductions with a CA or the Income Tax Department for your case.',
     },
     {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'Is this official tax filing?',
-          acceptedAnswer: { '@type': 'Answer', text: 'No. This is an illustrative estimator only. Verify slabs, rebates, and deductions with a CA or the Income Tax Department for your case.' },
-        },
-      ],
+      question: 'Which regime should I choose?',
+      answer:
+        'Compare total tax under both regimes each year — the better choice depends on your deductions, rent, loans, and income mix. This calculator gives a directional comparison only.',
+    },
+    {
+      question: 'Why does my tax not match Form 16?',
+      answer:
+        'Employers apply TDS with payroll-specific proofs, perquisites, and timing. This tool does not model every salary component or filing rebate beyond simplified rules.',
+    },
+    {
+      question: 'Are cess and surcharge included?',
+      answer:
+        'We add 4% cess on computed tax. Surcharge for high income is not included — add that manually if applicable.',
+    },
+    {
+      question: 'Is HRA calculated automatically?',
+      answer:
+        'No. Enter the HRA exemption you are eligible for under rent and metro rules, or leave at zero.',
+    },
+    {
+      question: 'Can NRIs use this calculator?',
+      answer:
+        'Residential status changes exemptions and slab applicability. This tool assumes resident individual rules unless you adjust inputs yourself.',
     },
   ],
-};
+});
 ---
 
 <MainLayout
-  title="Income Tax Calculator (India) — Free Online Calculator | DoItSwift"
-  description="Estimate tax for FY 2026-27 under India’s new vs old regime: slabs, standard deduction, 80C/80D, HRA, and effective rate. Illustrative only."
-  keywords="income tax calculator India, new tax regime calculator, old vs new tax regime, FY 2026-27 tax estimate"
+  title="Income Tax Calculator India — New vs Old Regime (FY 2026-27) | DoItSwift"
+  description={pageDescription}
+  keywords="income tax calculator India, new tax regime calculator, old vs new tax regime calculator, FY 2026-27 tax calculator, 80C 80D tax calculator, HRA tax calculator India"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -151,8 +183,12 @@ const jsonLd = {
 
   <section class="faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
+        <div class="faq-item">
+          <h4>Is this official tax filing?</h4>
+          <p>No. This is an illustrative estimator only — verify with a CA or the Income Tax Department.</p>
+        </div>
         <div class="faq-item">
           <h4>Which regime should I choose?</h4>
           <p>

@@ -1,40 +1,66 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/pregnancy-due-date/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Pregnancy Due Date Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'HealthApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Estimate due date from last menstrual period using 280-day and Naegele rules.',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'Is the due date exact?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'No — it is an estimate. Only a small fraction of births occur exactly on the predicted day.',
-          },
-        },
-      ],
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Pregnancy due date (EDD) calculator from the first day of your last menstrual period: shows the 280-day estimate, Naegele-style date, and gestational age line. Irregular cycles and ultrasound dating change real EDD—this is educational, not a substitute for antenatal care.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'Is the due date exact?',
+    answer:
+      'No. It is a population estimate from LMP. Only a small fraction of births occur on the predicted calendar day; clinicians refine dating with ultrasound.',
+  },
+  {
+    question: 'Why do you show two similar dates?',
+    answer:
+      'The 280-day rule and Naegele calculation usually land close together; tiny differences come from month-length calendar adjustments in code.',
+  },
+  {
+    question: 'What if my menstrual cycles are long or irregular?',
+    answer:
+      'LMP-based EDD can be early compared to true conception. Your provider may adjust using early scan measurements.',
+  },
+  {
+    question: 'Should I stop other contraception based on this page?',
+    answer:
+      'No. Always follow medical guidance for fertility, contraception, and pregnancy confirmation.',
+  },
+  {
+    question: 'Is my LMP stored on your servers?',
+    answer:
+      'No. The tool runs locally in your browser.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Pregnancy Due Date Calculator',
+  breadcrumbName: 'Pregnancy Due Date',
+  applicationCategory: 'HealthApplication',
+  browserRequirements: 'Requires JavaScript to compute EDD lines and gestational age from the selected LMP',
+  webAppDescription:
+    'Pick the first day of the last menstrual period on a calendar control and see estimated delivery dates derived from standard obstetric counting (280 days from LMP) alongside a Naegele-style result when implemented in script. Also surfaces a simple gestational-age style readout for orientation. Does not replace dating scans, medical history, or clinician judgment.',
+  featureList: [
+    'LMP date picker',
+    'EDD from 280-day rule output',
+    'Naegele or parallel dating line where shown in UI',
+    'Gestational age summary text',
+    'Educational notes on cycle length and ultrasound',
+    'Links to period tracker and date tools',
+    'Runs locally without signup',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Pregnancy Due Date Calculator — EDD from LMP | DoItSwift"
-  description="Estimate your due date from the first day of your last menstrual period (LMP): 280-day rule and Naegele’s rule side by side."
-  keywords="pregnancy due date calculator, edd calculator, lmp due date, pregnancy calculator"
+  title="Pregnancy Due Date Calculator — EDD from LMP (280-Day Rule) | DoItSwift"
+  description={pageDescription}
+  keywords="pregnancy due date calculator, EDD from LMP, Naegele rule calculator, gestational age from last period, estimated delivery date India, free pregnancy calculator"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -112,10 +138,14 @@ const jsonLd = {
 
   <section class="faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item"><h4>Why two dates?</h4><p>280-day addition and Naegele usually align closely; small differences come from calendar math.</p></div>
-        <div class="faq-item"><h4>What if cycles are long?</h4><p>EDD from LMP alone may be early vs true conception — ultrasound is used to refine.</p></div>
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>

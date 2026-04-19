@@ -1,26 +1,140 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 
-const canonical = 'https://doitswift.com/pdf/split-pdf/';
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+
+const pageDescription =
+  'Split a PDF in your browser: extract every page as its own file, or export one PDF for a page range. PDF.js thumbnails, pdf-lib splitting, optional ZIP. Private — no upload. 50 MB warning on very large files.';
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
     {
       '@type': 'WebApplication',
-      name: 'Split PDF — DoItSwift',
+      name: 'DoItSwift Split PDF',
       url: canonical,
       applicationCategory: 'UtilitiesApplication',
-      operatingSystem: 'Web',
+      operatingSystem: 'Web browser',
+      browserRequirements: 'Requires JavaScript, pdf-lib, PDF.js for previews, and JSZip for batch ZIP (loaded from CDN)',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-      description: 'Split a PDF into separate files per page or extract a page range. Private browser processing.',
+      description:
+        'Split one PDF per session using pdf-lib in the browser. Choose to export each page as a separate PDF or a single PDF for a contiguous page range. Thumbnail previews via PDF.js. Optional ZIP of per-page PDFs. No server upload.',
+      featureList: [
+        'Single input PDF per session — page-focused splitting with clear numbering',
+        'Mode: every page as its own PDF, or one PDF for a start–end page range (inclusive)',
+        'Thumbnail strip previews up to 48 pages; all pages remain exportable when the document is longer',
+        'Page numbers are 1-based in the UI and range fields',
+        'Output names: Filename-page-N.pdf per page, or Filename-pages-X-Y.pdf for range; ZIP named Filename-split-pages.zip for per-page export',
+        'Optional confirmation when the source PDF exceeds about 50 MB',
+        'Client-side processing with pdf-lib — PDF bytes are not uploaded to DoItSwift',
+        'Password-protected PDFs may fail unless unlocked first',
+      ],
     },
     {
       '@type': 'FAQPage',
       mainEntity: [
         {
           '@type': 'Question',
-          name: 'Can I extract only certain pages?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Yes. Use range mode with start and end page numbers, or extract every page as its own PDF.' },
+          name: 'Is Split PDF free and unlimited?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. Split as many documents as you need with no signup, watermarks, or usage quotas. Each run uses one source PDF at a time.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Are my PDFs uploaded to DoItSwift servers?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No. PDF.js renders thumbnails and pdf-lib performs the split in your browser tab only.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Why can I only load one PDF at a time?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Splitting is page-focused; multiple sources would confuse numbering. Combine files first with Merge PDF if you need one document to split.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Are page numbers 1-based?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes — the first page is 1, matching the labels on thumbnails and the range inputs.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the difference between each page and range mode?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Each page mode creates one PDF per page and can download all as a ZIP. Range mode creates a single PDF containing only pages from the start through end numbers you enter, inclusive.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Do password-protected or encrypted PDFs work?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'They may fail to load. Unlock with the correct password using DoItSwift Unlock PDF, then split the unlocked file.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What about very large PDFs?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'The tool warns above about 50 MB. Huge files may take time or stress memory — close other tabs and wait for processing to finish.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Why do I only see 48 thumbnails?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Previews show the first 48 pages for performance. All pages can still be split or included in range export when the PDF has more than 48 pages.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What are the output filenames?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Per-page exports use the original name stem plus -page- and the page number. Range export uses the stem plus -pages- and the start and end numbers. Per-page mode can also download a ZIP named with the stem plus -split-pages.zip.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is there a monthly limit or account required?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No accounts, no quotas, and no premium tier.',
+          },
+        },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: new URL('/', Astro.site).href,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'PDF Tools',
+          item: new URL('/pdf/', Astro.site).href,
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: 'Split PDF',
+          item: canonical,
         },
       ],
     },
@@ -29,9 +143,9 @@ const jsonLd = {
 ---
 
 <MainLayout
-  title="Split PDF — Free, Private & Unlimited | DoItSwift"
-  description="Split PDF pages into separate files or extract a range. Preview thumbnails in your browser — no upload, free unlimited use."
-  keywords="split pdf, extract pdf pages, separate pdf pages, pdf page extractor, split pdf online free"
+  title="Split PDF — Extract Pages or Range, Thumbnails, ZIP | DoItSwift"
+  description={pageDescription}
+  keywords="split pdf, extract pdf pages, pdf page range, separate pdf pages, split pdf online free, browser split pdf, pdf.js split, extract pdf zip, one pdf per page, private split pdf, no upload split pdf"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -47,7 +161,8 @@ const jsonLd = {
       <div class="badge">🔒 100% Private — Files Never Leave Your Device</div>
       <h1>Split PDF</h1>
       <p class="subtitle">
-        Extract every page as its own PDF, or pull a contiguous range. Thumbnails help you confirm page numbers before export.
+        Split one PDF with pdf-lib — <strong>every page as its own file</strong> (ZIP optional) or <strong>one export for a
+        page range</strong>. PDF.js thumbnails (first 48 shown; all pages export). Local only; no upload.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> Unlimited</span>
@@ -95,19 +210,78 @@ const jsonLd = {
     </div>
   </section>
 
-  <section class="long-form">
+  <article class="split-edu" aria-label="Guide: splitting PDF files">
+    <div class="container split-edu-inner">
+      <section class="split-edu-block">
+        <h2 id="split-vs-merge">Split vs merge: when to use each</h2>
+        <p>
+          <strong>Split</strong> when you need one chapter, a single signed page, or smaller attachments. <strong>Merge</strong>{' '}
+          when several files should read as one. Both tools run locally: thumbnails use <strong>PDF.js</strong>; cutting
+          pages uses <strong>pdf-lib</strong>, so text stays selectable on born-digital PDFs (scanned pages behave like images
+          inside the file).
+        </p>
+        <p>
+          For a full guide, see <a href="/blog/how-to-split-pdf/">how to split a PDF</a> on the DoItSwift blog.
+        </p>
+      </section>
+
+      <section class="split-edu-block">
+        <h2 id="split-modes">Two ways to export</h2>
+        <div class="split-table-wrap">
+          <table class="split-compare-table">
+            <caption class="sr-only">Split PDF export modes</caption>
+            <thead>
+              <tr>
+                <th scope="col">Mode</th>
+                <th scope="col">You get</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Every page as its own PDF</td>
+                <td>One file per page; download individually or as a ZIP archive</td>
+              </tr>
+              <tr>
+                <td>Range of pages</td>
+                <td>One PDF containing pages from start through end (inclusive)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Need the opposite later? Use <a href="/pdf/merge-pdf/">Merge PDF</a> to recombine. To shrink files, use{' '}
+          <a href="/pdf/compress-pdf/">Compress PDF</a>.
+        </p>
+      </section>
+
+      <section class="split-edu-block">
+        <h2 id="filenames">Output filenames</h2>
+        <p>
+          Per-page files look like <code>MyDoc-page-1.pdf</code>. A range export looks like{' '}
+          <code>MyDoc-pages-3-10.pdf</code>. In per-page mode, <strong>Download all as ZIP</strong> uses{' '}
+          <code>MyDoc-split-pages.zip</code> (based on your file name stem).
+        </p>
+      </section>
+    </div>
+  </article>
+
+  <section class="split-related" aria-label="Related PDF tools and guides">
     <div class="container">
-      <h2 class="section-title">Splitting vs merging: when to use each</h2>
-      <p>
-        Split when you need to email one chapter, archive a single signed page, or remove an appendix. Merge when you have
-        many sources that should read as one document. DoItSwift keeps both flows local: thumbnails come from PDF.js
-        rendering, while pdf-lib cuts the actual PDF objects so text remains selectable when the source was a proper
-        digital PDF (scanned pages behave like images inside the file).
-      </p>
-      <p>
-        Range mode produces <strong>one</strong> PDF containing only pages <em>start</em> through <em>end</em> inclusive.
-        “Every page” mode zips multiple single-page PDFs — ideal for distributing slides as separate attachments.
-      </p>
+      <h2 class="section-title">Related tools</h2>
+      <ul class="split-related-grid">
+        <li><a href="/pdf/merge-pdf/">Merge PDF</a></li>
+        <li><a href="/pdf/compress-pdf/">Compress PDF</a></li>
+        <li><a href="/pdf/unlock-pdf/">Unlock PDF</a></li>
+        <li><a href="/pdf/pdf-to-jpg/">PDF to JPG</a></li>
+        <li><a href="/pdf/image-to-pdf/">Image to PDF</a></li>
+        <li><a href="/pdf/jpg-to-pdf/">JPG to PDF</a></li>
+      </ul>
+      <h2 class="section-title section-title-sub">Related guides</h2>
+      <ul class="split-related-grid split-related-guides">
+        <li><a href="/blog/how-to-split-pdf/">How to split a PDF</a></li>
+        <li><a href="/blog/how-to-merge-pdf/">How to merge PDFs</a></li>
+        <li><a href="/blog/how-to-compress-pdf/">How to compress a PDF</a></li>
+      </ul>
     </div>
   </section>
 
@@ -115,11 +289,62 @@ const jsonLd = {
     <div class="container">
       <h2 class="section-title">Frequently Asked Questions</h2>
       <div class="faq-list">
-        <div class="faq-item"><h4>Why only one PDF at a time?</h4><p>Splitting is page-focused; batching multiple source PDFs would confuse numbering. Use merge first if needed.</p></div>
-        <div class="faq-item"><h4>Are page numbers 1-based?</h4><p>Yes — first page is 1, matching what you see on thumbnails.</p></div>
-        <div class="faq-item"><h4>Is my PDF uploaded?</h4><p>No — processing stays in your browser tab.</p></div>
-        <div class="faq-item"><h4>Encrypted PDFs?</h4><p>Password-protected files may fail to load unless decrypted first.</p></div>
-        <div class="faq-item"><h4>Large PDFs over 50MB?</h4><p>May take time or stress memory — close other tabs and wait.</p></div>
+        <div class="faq-item">
+          <h4>Is Split PDF free and unlimited?</h4>
+          <p>Yes. Split as many documents as you need with no signup, watermarks, or usage quotas. Each run uses one source PDF.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Are my PDFs uploaded to DoItSwift servers?</h4>
+          <p>No. PDF.js renders thumbnails and pdf-lib performs the split in your browser tab only.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Why can I only load one PDF at a time?</h4>
+          <p>
+            Splitting is page-focused; multiple sources would confuse numbering. Combine files first with{' '}
+            <a href="/pdf/merge-pdf/">Merge PDF</a> if you need one document to split.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Are page numbers 1-based?</h4>
+          <p>Yes — the first page is 1, matching the labels on thumbnails and the range inputs.</p>
+        </div>
+        <div class="faq-item">
+          <h4>What is the difference between each page and range mode?</h4>
+          <p>
+            Each page mode creates one PDF per page and can download all as a ZIP. Range mode creates a single PDF containing
+            only pages from the start through end numbers you enter, inclusive.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Do password-protected or encrypted PDFs work?</h4>
+          <p>
+            They may fail to load. Unlock with the correct password using <a href="/pdf/unlock-pdf/">Unlock PDF</a>, then split
+            the unlocked file.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>What about very large PDFs?</h4>
+          <p>
+            The tool warns above about 50 MB. Huge files may take time or stress memory — close other tabs and wait for
+            processing to finish.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Why do I only see 48 thumbnails?</h4>
+          <p>Previews show the first 48 pages for performance. All pages can still be split or included in range export.</p>
+        </div>
+        <div class="faq-item">
+          <h4>What are the output filenames?</h4>
+          <p>
+            Per-page exports use the original name stem plus <code>-page-</code> and the page number. Range export uses the
+            stem plus <code>-pages-</code> and start–end. Per-page mode can also download a ZIP named with the stem plus{' '}
+            <code>-split-pages.zip</code>.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Is there a monthly limit or account required?</h4>
+          <p>No accounts, no quotas, and no premium tier.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -350,8 +575,12 @@ const jsonLd = {
     .subtitle {
       font-size: 19px;
       color: var(--text-muted);
-      max-width: 620px;
+      max-width: 680px;
       margin: 0 auto 28px;
+    }
+    .subtitle strong {
+      color: var(--text);
+      font-weight: 700;
     }
     .converter-section {
       padding: 30px 0;
@@ -493,24 +722,149 @@ const jsonLd = {
       gap: 10px;
       margin-top: 12px;
     }
-    .long-form {
-      padding: 40px 0;
-    }
-    .long-form .container {
-      max-width: 760px;
-    }
-    .long-form p {
-      font-size: 15px;
-      line-height: 1.75;
-      color: var(--text-muted);
-      margin-bottom: 14px;
-    }
     .section-title {
       text-align: center;
       margin-bottom: 20px;
     }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .split-edu {
+      padding: 40px 0 16px;
+    }
+    .split-edu-inner {
+      max-width: 760px;
+    }
+    .split-edu-block {
+      margin-bottom: 2.5rem;
+    }
+    .split-edu-block:last-child {
+      margin-bottom: 0;
+    }
+    .split-edu h2 {
+      font-size: clamp(1.35rem, 2.5vw, 1.55rem);
+      line-height: 1.3;
+      margin: 0 0 1rem;
+      color: var(--text);
+    }
+    .split-edu p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--text);
+      margin: 0 0 1rem;
+    }
+    .split-edu a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .split-edu a:hover {
+      color: var(--blue-dark);
+    }
+    .split-edu code {
+      font-family: ui-monospace, 'Cascadia Code', 'Courier New', monospace;
+      font-size: 0.9em;
+      padding: 0.1em 0.35em;
+      background: var(--gray-100);
+      border-radius: 4px;
+    }
+    [data-theme='dark'] .split-edu code {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .split-edu strong {
+      font-weight: 700;
+    }
+    .split-table-wrap {
+      overflow-x: auto;
+      margin: 1rem 0 1.25rem;
+      -webkit-overflow-scrolling: touch;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+    .split-compare-table {
+      width: 100%;
+      min-width: 480px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .split-compare-table th,
+    .split-compare-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+    .split-compare-table thead th {
+      background: var(--card);
+      font-weight: 700;
+      color: var(--text);
+    }
+    .split-compare-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .split-related {
+      padding: 8px 0 48px;
+    }
+    .split-related .container {
+      max-width: 820px;
+    }
+    .section-title-sub {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    .split-related-grid {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+    @media (min-width: 520px) {
+      .split-related-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (min-width: 720px) {
+      .split-related-grid:not(.split-related-guides) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .split-related-grid a {
+      display: block;
+      padding: 14px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--blue);
+      font-weight: 600;
+      font-size: 15px;
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .split-related-grid a:hover {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+    [data-theme='dark'] .split-related-grid a:hover {
+      background: rgba(0, 102, 255, 0.12);
+    }
+
     .faq {
-      padding: 40px 0 60px;
+      padding: 8px 0 60px;
     }
     .faq .container {
       max-width: 820px;
@@ -521,6 +875,7 @@ const jsonLd = {
       border-radius: var(--radius);
       padding: 20px 24px;
       margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
     }
     .faq-item h4 {
       font-size: 16px;
@@ -529,6 +884,26 @@ const jsonLd = {
     .faq-item p {
       font-size: 14px;
       color: var(--text-muted);
+      margin: 0;
+      line-height: 1.55;
+    }
+    .faq-item a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .faq-item a:hover {
+      color: var(--blue-dark);
+    }
+    .faq-item code {
+      font-size: 0.92em;
+      padding: 2px 6px;
+      background: var(--gray-100);
+      border-radius: 4px;
+    }
+    [data-theme='dark'] .faq-item code {
+      background: rgba(255, 255, 255, 0.08);
     }
   </style>
 </MainLayout>

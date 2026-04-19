@@ -1,40 +1,73 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/period-ovulation/';
-const site = 'https://doitswift.com';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Period & Ovulation Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'HealthApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Estimated period dates, ovulation, and fertile window from last period and cycle length — educational only.',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [{ '@type': 'Question', name: 'Is this a contraception tool?', acceptedAnswer: { '@type': 'Answer', text: 'No. Calendar methods have high failure rates; use medically approved contraception and professional advice.' } }],
-    },
-    {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: site + '/' },
-        { '@type': 'ListItem', position: 2, name: 'Calculators', item: site + '/calculator/' },
-        { '@type': 'ListItem', position: 3, name: 'Period & Ovulation', item: canonical },
-      ],
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Free period and ovulation calendar: enter your last period start, typical cycle length (21–45 days), and bleed length; browse color-coded months with menstrual days, fertile window, and estimated ovulation, plus an optional rough due-date hint. Calendar estimates only—not for contraception, pregnancy confirmation, or medical diagnosis. Runs locally in your browser.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'Is this a contraception tool?',
+    answer:
+      'No. Calendar rhythm methods have high failure rates compared with modern contraception. Use medically approved options and professional counselling.',
+  },
+  {
+    question: 'How is ovulation estimated?',
+    answer:
+      'We use a simple luteal-phase style offset from the next expected period based on the cycle length you enter—real ovulation shifts with stress, illness, or travel.',
+  },
+  {
+    question: 'What if my cycles are irregular?',
+    answer:
+      'Predictions become unreliable. Track medically or with a clinician if bleeding is heavy, painful, or absent.',
+  },
+  {
+    question: 'Can this confirm pregnancy?',
+    answer:
+      'No. Only tests and providers can confirm pregnancy.',
+  },
+  {
+    question: 'Does the fertile window guarantee conception timing?',
+    answer:
+      'No. It is a rough guide; sperm and egg biology vary.',
+  },
+  {
+    question: 'Are cycle dates sent to DoItSwift?',
+    answer:
+      'No. Calculations run locally in your browser.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Period & Ovulation Calculator',
+  breadcrumbName: 'Period & Ovulation',
+  applicationCategory: 'HealthApplication',
+  browserRequirements:
+    'Requires JavaScript for the interactive cycle calendar, month grid, cycle navigation, per-cycle summaries, and rough due date line',
+  webAppDescription:
+    'Project upcoming menstrual cycles from the first day of your last period and typical cycle and bleed length. Shows a color-coded calendar with period days, a fertile window, and an estimated ovulation day, cycle-by-cycle navigation with summary stats, and an illustrative due-date line from ovulation. Hormonal variation, illness, and irregular cycles are not fully modeled—treat output as educational awareness, not contraceptive efficacy or clinical timing.',
+  featureList: [
+    'First day of last period (date input)',
+    'Average cycle length 21–45 days (range slider and number field)',
+    'Average period length 2–10 days (range slider and number field)',
+    'Horizon selector: next 1, 3, 6, or 12 cycles',
+    'Color-coded calendar: period, fertile window, and ovulation day',
+    'Previous/next cycle navigation with live summary panel',
+    'Rough due date from this cycle’s ovulation (non-clinical hint)',
+    'Educational copy and link to pregnancy due date calculator',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Period & Ovulation Calculator — Track Your Cycle | DoItSwift"
-  description="Estimate next period dates, ovulation, and fertile windows from your last period and cycle length. Not medical advice; not for contraception."
-  keywords="period calculator, ovulation calculator, menstrual cycle calculator, fertile window calculator"
+  title="Period & Ovulation Calculator — Cycle Calendar, Fertile Window & Ovulation Day | DoItSwift"
+  description={pageDescription}
+  keywords="period calculator, ovulation calculator, fertile window calculator, menstrual cycle calendar, next period date estimate, cycle length tracker India, ovulation day calendar, period tracker browser, not contraception"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -92,7 +125,7 @@ const jsonLd = {
       </div>
       <div class="calc-results" aria-live="polite">
         <h2 class="calc-heading">Cycle calendar</h2>
-        <p class="po-sr-only" id="poCalCap">Color-coded calendar for the selected cycle</p>
+        <p class="sr-only" id="poCalCap">Color-coded calendar for the selected cycle</p>
         <div class="po-cal-wrap">
           <div class="calendar-legend" aria-hidden="true">
             <span class="legend-item"><span class="legend-dot legend-period"></span> Period</span>
@@ -118,6 +151,20 @@ const jsonLd = {
           <p class="po-ddp-label">Rough due date (this cycle’s ovulation)</p>
           <p class="po-ddp" id="poDdp"></p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently asked questions</h2>
+      <div class="faq-list">
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>
@@ -512,7 +559,7 @@ const jsonLd = {
     .calc-heading { font-size: 1rem; margin: 0 0 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
     .field label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; }
     .field input, .field select { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 16px; }
-    .po-sr-only {
+    .sr-only {
       position: absolute;
       width: 1px;
       height: 1px;
@@ -522,6 +569,29 @@ const jsonLd = {
       clip: rect(0, 0, 0, 0);
       white-space: nowrap;
       border: 0;
+    }
+    .faq {
+      padding: 24px 0 8px;
+    }
+    .faq .container {
+      max-width: 820px;
+    }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 12px;
+    }
+    .faq-item h4 {
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+    .faq-item p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+      line-height: 1.55;
     }
     .po-nav {
       display: flex;
@@ -611,6 +681,17 @@ const jsonLd = {
     .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
     .edu a { color: var(--blue); font-weight: 600; }
     .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .faq { padding: 28px 0 32px; }
+    .faq .container { max-width: 760px; }
+    .faq-list { display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .faq-item h4 { margin: 0 0 8px; font-size: 15px; }
+    .faq-item p { margin: 0; font-size: 14px; color: var(--text-muted); line-height: 1.55; }
     .related { text-align: center; padding-bottom: 48px; }
     .related-links a { color: var(--blue); font-weight: 600; }
   </style>

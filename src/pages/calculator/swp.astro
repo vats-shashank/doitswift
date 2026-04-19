@@ -1,28 +1,66 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
+import { buildCalculatorJsonLd, calculatorCanonical } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/swp/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Free SWP (systematic withdrawal plan) calculator: starting corpus, fixed monthly withdrawal, assumed annual return %, withdrawal horizon. See ending balance, total withdrawn, depletion timing, rough max sustainable withdrawal, and year-by-year path. Currency formats display only. Not financial advice.';
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift SWP Calculator',
+  breadcrumbName: 'SWP Calculator',
+  applicationCategory: 'FinanceApplication',
+  browserRequirements: 'Requires JavaScript for SWP simulation and yearly table',
+  webAppDescription:
+    'Simulate systematic withdrawals from an invested corpus with a constant assumed return. Models monthly withdrawals, projected balance over years, approximate depletion timing, and a rough maximum sustainable withdrawal. Optional currency formatting for display. Does not model taxes, fees, or variable returns — educational illustration only.',
+  featureList: [
+    'Starting corpus and fixed monthly withdrawal amount',
+    'Expected annual return (illustrative, 0–15%)',
+    'Withdrawal period up to 50 years',
+    'Ending balance, cumulative withdrawals, depletion timing',
+    'Rough maximum sustainable monthly withdrawal estimate',
+    'Year-by-year balance path table',
+    'Multi-currency number formatting (not FX conversion)',
+    'Runs locally in the browser',
+  ],
+  faqs: [
     {
-      '@type': 'WebApplication',
-      name: 'SWP Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'FinanceApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Systematic withdrawal plan simulation with yearly balance and sustainability estimate.',
+      question: 'What is SWP?',
+      answer:
+        'SWP (systematic withdrawal plan) means withdrawing a fixed sum regularly from an investment while the remainder stays invested and may continue to earn returns.',
+    },
+    {
+      question: 'Is the return rate in the SWP calculator guaranteed?',
+      answer:
+        'No. The percentage is an assumption. Actual mutual fund or portfolio returns vary with markets.',
+    },
+    {
+      question: 'What does maximum sustainable withdrawal mean?',
+      answer:
+        'It is a rough monthly amount that would nearly deplete the corpus by the end of the chosen horizon under the same return assumption — highly sensitive to actual returns.',
+    },
+    {
+      question: 'Does the currency dropdown convert exchange rates?',
+      answer:
+        'No. It only changes how numbers are formatted on screen.',
+    },
+    {
+      question: 'Is the SWP calculator free and private?',
+      answer:
+        'Yes. It is free with no signup; inputs are processed in your browser.',
     },
   ],
-};
+});
 ---
 
 <MainLayout
-  title="SWP Calculator — Systematic Withdrawal Plan Returns | DoItSwift"
-  description="Simulate mutual fund SWP: corpus, monthly withdrawal, return rate, years — see balance path, depletion year, and max sustainable withdrawal."
-  keywords="swp calculator, systematic withdrawal calculator, mutual fund swp calculator, monthly withdrawal calculator"
+  title="SWP Calculator India — Systematic Withdrawal Plan & Sustainability | DoItSwift"
+  description={pageDescription}
+  keywords="SWP calculator, systematic withdrawal plan calculator, mutual fund SWP calculator, retirement withdrawal calculator India, monthly SWP calculator, corpus withdrawal calculator"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -92,6 +130,7 @@ const jsonLd = {
           <summary>Year-by-year breakdown</summary>
           <div class="table-wrap">
             <table>
+              <caption class="sr-only">Year-by-year SWP corpus after withdrawals</caption>
               <thead><tr><th>Year</th><th>Start</th><th>Withdrawn</th><th>End</th></tr></thead>
               <tbody id="swpTable"></tbody>
             </table>
@@ -113,6 +152,19 @@ const jsonLd = {
       <p>
         <strong>Tax:</strong> SWP is often discussed as potentially tax-efficient versus arbitrary dividend choices because you withdraw based on cost basis — confirm with a CA for equity/debt fund rules.
       </p>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently asked questions</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>What is SWP?</h4><p>Regular withdrawals from an invested corpus while the remainder may keep earning returns.</p></div>
+        <div class="faq-item"><h4>Is the return % guaranteed?</h4><p>No — it is an assumption only; real returns vary.</p></div>
+        <div class="faq-item"><h4>What is “max sustainable” withdrawal?</h4><p>A rough monthly amount that would nearly exhaust the corpus by the end of the horizon under the same assumption — not a promise.</p></div>
+        <div class="faq-item"><h4>Does currency affect the math?</h4><p>No — only display formatting.</p></div>
+        <div class="faq-item"><h4>Is my data uploaded?</h4><p>No — calculations run locally in your browser.</p></div>
+      </div>
     </div>
   </section>
 
@@ -236,6 +288,11 @@ const jsonLd = {
     .breadcrumb a { color: var(--blue); text-decoration: none; }
     .hero { padding: 36px 0 16px; text-align: center; }
     .subtitle { font-size: 16px; color: var(--text-muted); max-width: 700px; margin: 0 auto 22px; line-height: 1.55; }
+    .subtitle strong { color: var(--text); font-weight: 700; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
     .calc-section { padding: 24px 0 40px; }
     .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 960px; align-items: start; }
     @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
@@ -260,6 +317,17 @@ const jsonLd = {
     .edu .container { max-width: 760px; }
     .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
     .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .faq { padding: 8px 0 28px; }
+    .faq .container { max-width: 760px; }
+    .faq-list { display: flex; flex-direction: column; gap: 10px; }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .faq-item h4 { font-size: 15px; margin-bottom: 4px; }
+    .faq-item p { font-size: 14px; color: var(--text-muted); margin: 0; }
     .affiliate { padding: 28px 0; }
     .affiliate .container { max-width: 900px; }
     .affiliate-inner { background: linear-gradient(135deg, #ecfdf5, #d1fae5); border: 1px solid #6ee7b7; border-radius: var(--radius-lg); padding: 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }

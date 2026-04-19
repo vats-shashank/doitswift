@@ -1,49 +1,76 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const site = Astro.site?.href ?? 'https://doitswift.com';
-const canonical = `${site}calculator/home-loan/`;
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Home Loan EMI Calculator with Prepayment — DoItSwift',
-      url: canonical,
-      applicationCategory: 'FinanceApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Home loan EMI with optional prepayment simulation: interest saved and tenure reduction.',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'Does prepayment always reduce tenure?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Many lenders keep EMI constant and shorten tenure when you prepay principal; others may reduce EMI — confirm your loan terms.',
-          },
-        },
-      ],
-    },
-    {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: site },
-        { '@type': 'ListItem', position: 2, name: 'Calculators', item: `${site}calculator/` },
-        { '@type': 'ListItem', position: 3, name: 'Home Loan Calculator', item: canonical },
-      ],
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'India home loan EMI calculator with optional prepayment: one-time, yearly, or monthly extra principal after a quiet period. Compare total interest and tenure with vs without prepay, see interest saved and months cut, plus a year-wise summary table. Assumes constant EMI and rate—confirm how your bank applies partial prepayment.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'Does prepayment always reduce tenure?',
+    answer:
+      'This tool assumes the lender keeps your EMI fixed and applies extra principal to shorten the remaining tenure—a common option. Some banks may reduce EMI instead; check your sanction letter.',
+  },
+  {
+    question: 'Why does tenure drop sharply after a large prepayment?',
+    answer:
+      'Large principal reductions remove many future interest accruals at once, so the remaining schedule can jump by years until rounding and the final balance settle.',
+  },
+  {
+    question: 'Is EMI recalculated after prepayment here?',
+    answer:
+      'No. We keep the initial EMI constant for the simulation, which matches many “same EMI, shorter tenure” workflows but not every lender rule.',
+  },
+  {
+    question: 'Does this handle floating interest rates?',
+    answer:
+      'It uses one constant annual rate for the whole schedule. When your floating rate resets, change the rate and re-run for a fresh approximation.',
+  },
+  {
+    question: 'Are tax deductions modeled?',
+    answer:
+      'No. Section 24(b) and 80C interactions are outside this calculator—use a chartered accountant for filing decisions.',
+  },
+  {
+    question: 'How is this different from the EMI calculator?',
+    answer:
+      'The EMI page is a clean amortization without prepayment paths. This page adds optional prepayment timing and frequency plus before/after comparison.',
+  },
+  {
+    question: 'Are loan details uploaded?',
+    answer:
+      'No. Math runs locally in your browser.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Home Loan Calculator',
+  breadcrumbName: 'Home Loan Calculator',
+  applicationCategory: 'FinanceApplication',
+  browserRequirements: 'Requires JavaScript for EMI, prepayment simulation, comparison panels, and year-wise table',
+  webAppDescription:
+    'Model a rupee-denominated reducing-balance home loan with sliders and numeric inputs for amount, rate, and tenure, then layer optional prepayments after a chosen number of months. Outputs include baseline vs prepay total interest, effective tenure, interest saved, and an expandable yearly summary. Educational only—banks may apply fees, spreads, or EMI changes differently.',
+  featureList: [
+    'Loan amount, annual interest rate, and tenure in years',
+    'Prepayment amount with none, one-time, yearly, or monthly frequency',
+    'Quiet period before prepayments begin',
+    'Side-by-side total interest and tenure with vs without prepay',
+    'Interest saved and tenure reduction summary',
+    'Expandable year-wise principal, interest, prepay, and balance table',
+    'Note linking to the standard EMI tool when prepay is off',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Home Loan EMI Calculator with Prepayment — Save Interest | DoItSwift"
-  description="Calculate home loan EMI and simulate prepayments (one-time, yearly, or monthly) to see interest saved and months shaved off — reducing balance with same EMI."
-  keywords="home loan calculator, home loan prepayment calculator, emi with prepayment, loan prepayment calculator"
+  title="Home Loan Calculator India — EMI with Prepayment & Interest Saved | DoItSwift"
+  description={pageDescription}
+  keywords="home loan EMI calculator India, home loan prepayment calculator, loan tenure reduction calculator, extra principal payment home loan, reducing balance EMI prepay, interest saved prepayment calculator"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -132,6 +159,7 @@ const jsonLd = {
           <summary>Year-wise summary (with prepayment)</summary>
           <div class="table-wrap">
             <table>
+              <caption class="sr-only">Year-wise principal, interest, prepayments, and ending balance with prepayment simulation.</caption>
               <thead>
                 <tr><th>Year</th><th>Principal paid</th><th>Interest paid</th><th>Prepay</th><th>End balance</th></tr>
               </thead>
@@ -166,10 +194,14 @@ const jsonLd = {
 
   <section class="faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item"><h4>Why does tenure jump oddly?</h4><p>Large prepayments can remove years in one shot; rounding and minimum balance thresholds can affect the last month.</p></div>
-        <div class="faq-item"><h4>Is EMI recalculated?</h4><p>We keep EMI fixed after initial amortization — a simplification.</p></div>
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>
@@ -482,6 +514,7 @@ const jsonLd = {
       margin-bottom: 18px;
       font-size: 1.5rem;
     }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
     .faq-list {
       max-width: 760px;
       margin: 0 auto;

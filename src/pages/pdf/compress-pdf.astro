@@ -1,29 +1,143 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 
-const canonical = 'https://doitswift.com/pdf/compress-pdf/';
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+
+const pageDescription =
+  'Compress PDFs in your browser: Light cleanup (structure/metadata, keeps vectors) or Smaller file (rasterize pages to JPEG with presets or custom quality). Optional size targets in raster mode. Batch queue, before/after sizes, ZIP download. pdf-lib + PDF.js — no upload.';
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
     {
       '@type': 'WebApplication',
-      name: 'Compress PDF — DoItSwift',
+      name: 'DoItSwift Compress PDF',
       url: canonical,
       applicationCategory: 'UtilitiesApplication',
-      operatingSystem: 'Web',
+      operatingSystem: 'Web browser',
+      browserRequirements:
+        'Requires JavaScript, pdf-lib, PDF.js for raster mode, and JSZip for batch ZIP (loaded from CDN)',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-      description: 'Reduce PDF file size in your browser. Compare before and after sizes. Private local processing.',
+      description:
+        'Reduce PDF file size locally with two strategies: Light cleanup rewrites the PDF and strips metadata while copying pages (vectors preserved). Smaller file rasterizes each page via PDF.js to JPEG with Balanced, Strong, Maximum, or Custom quality and scale; optional target max megabytes or minimum shrink percentage runs extra passes in raster mode. Compare original and output sizes in the UI. No server upload.',
+      featureList: [
+        'Light cleanup: copy pages with pdf-lib, clear common metadata, save with object streams — modest size reduction, text stays selectable',
+        'Smaller file: render each page with PDF.js and embed JPEGs in a new PDF — strong reduction for scans and photo-heavy documents',
+        'Raster presets: Balanced, Strong, Maximum, or Custom JPEG quality and sharpness sliders',
+        'Optional targets in Smaller file mode: try to stay under a max MB or shrink by a percentage (binary search; structure mode ignores these)',
+        'Queue multiple PDFs, compress with one run, per-file download with before → after size comparison',
+        'Download all results as compressed-pdfs.zip',
+        'Output files named with original stem plus -compressed.pdf',
+        'Warns when adding a single file over about 50 MB',
+        'Encrypted PDFs may fail until unlocked elsewhere',
+        '100% client-side — PDF bytes are not uploaded to DoItSwift',
+      ],
     },
     {
       '@type': 'FAQPage',
       mainEntity: [
         {
           '@type': 'Question',
-          name: 'How does PDF compression work in the browser?',
+          name: 'Is Compress PDF free and unlimited?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'DoItSwift re-saves or re-encodes your PDF locally. Light modes optimize structure; stronger modes may rasterize pages for smaller files.',
+            text: 'Yes. Compress as many PDFs as your device can handle with no signup, watermarks, or usage quotas.',
           },
+        },
+        {
+          '@type': 'Question',
+          name: 'Are my PDFs uploaded to DoItSwift servers?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No. pdf-lib and PDF.js run in your browser; compression happens locally.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the difference between Light cleanup and Smaller file?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Light cleanup rewrites the PDF and strips metadata while keeping vector text — often modest savings. Smaller file redraws each page as a JPEG image, which can greatly reduce scans and photos but may soften text and reduce copy-paste quality.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Will every PDF get smaller?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Usually, but minimal or already-optimized PDFs may barely shrink in Light cleanup. In Smaller file mode the output can occasionally be larger than the original — the UI shows before and after sizes.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How do optional target size goals work?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'In Smaller file mode you can optionally set a max output size in MB or a minimum shrink percentage. If both are set, the max MB goal takes precedence. Targets are ignored in Light cleanup mode.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Can I compress multiple PDFs at once?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. Add several files to the queue, run compress once, then download each result or all outputs in a ZIP named compressed-pdfs.zip.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What are the output filenames?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Each compressed file uses the original name stem plus -compressed.pdf.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Do password-protected PDFs work?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Encrypted inputs may fail until unlocked. Use DoItSwift Unlock PDF or another trusted tool first.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What about very large PDFs?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'The tool warns when adding a file over about 50 MB. Huge documents can take a long time and use significant memory.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is there a monthly limit or account required?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No accounts, no quotas, and no premium tier.',
+          },
+        },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: new URL('/', Astro.site).href,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'PDF Tools',
+          item: new URL('/pdf/', Astro.site).href,
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: 'Compress PDF',
+          item: canonical,
         },
       ],
     },
@@ -32,9 +146,9 @@ const jsonLd = {
 ---
 
 <MainLayout
-  title="Compress PDF — Free, Private & Unlimited | DoItSwift"
-  description="Shrink PDF file size in your browser. Choose options, add files, then compress — compare sizes and download. No upload, no signup."
-  keywords="compress pdf, reduce pdf size, pdf smaller file, shrink pdf online free, pdf compression browser"
+  title="Compress PDF — Light Cleanup or Raster, Size Targets, Batch ZIP | DoItSwift"
+  description={pageDescription}
+  keywords="compress pdf, reduce pdf size, shrink pdf online, pdf compressor browser, pdf smaller file, scan pdf compress, pdf metadata strip, rasterize pdf jpeg, target pdf size mb, batch compress pdf, private compress pdf, no upload pdf, pdf-lib compress"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -57,8 +171,9 @@ const jsonLd = {
       <div class="badge">🔒 100% Private — Files Never Leave Your Device</div>
       <h1>Compress PDF</h1>
       <p class="subtitle">
-        Set how you want to shrink the file, add your PDFs, then press <strong>Compress PDFs</strong>. Everything runs in your
-        browser — compare sizes and download when you’re ready.
+        Choose <strong>Light cleanup</strong> (vectors, modest savings) or <strong>Smaller file</strong> (JPEG pages, big
+        wins on scans). Optional MB/% targets in raster mode. Queue PDFs, compare before → after, download or ZIP — all
+        local.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> Batch files</span>
@@ -194,22 +309,83 @@ const jsonLd = {
     </div>
   </section>
 
-  <section class="long-form">
+  <article class="compress-edu" aria-label="Guide: PDF compression modes">
+    <div class="container compress-edu-inner">
+      <section class="compress-edu-block">
+        <h2 id="what-compression-means">Understanding PDF compression on this page</h2>
+        <p>
+          PDFs mix vector text, fonts, embedded images, and metadata. <strong>Light cleanup</strong> rewrites the document
+          with pdf-lib, clears common metadata fields, and saves with object streams — <strong>vectors stay vectors</strong>,
+          so savings are often small if the file was already lean. <strong>Smaller file</strong> uses PDF.js to render each
+          page and embeds JPEGs — often dramatic for scans and photo-heavy PDFs, but pages become images, so text can look
+          softer and copy/search may suffer.
+        </p>
+        <p>
+          For a longer privacy-focused guide, read{' '}
+          <a href="/blog/how-to-compress-pdf/">how to compress a PDF</a> on the DoItSwift blog.
+        </p>
+      </section>
+
+      <section class="compress-edu-block">
+        <h2 id="modes-table">Light cleanup vs Smaller file</h2>
+        <div class="compress-table-wrap">
+          <table class="compress-compare-table">
+            <caption class="sr-only">Comparison of Light cleanup and Smaller file compression</caption>
+            <thead>
+              <tr>
+                <th scope="col">Mode</th>
+                <th scope="col">Best for</th>
+                <th scope="col">Trade-off</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Light cleanup</td>
+                <td>Forms, reports, crisp text</td>
+                <td>Often modest file reduction</td>
+              </tr>
+              <tr>
+                <td>Smaller file</td>
+                <td>Scans, photos, huge attachments</td>
+                <td>Lossy JPEG pages; check output before deleting originals</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <strong>Optional targets</strong> (max MB or shrink %) apply only in Smaller file mode; they trigger extra passes to
+          approach your goal. If both fields are filled, <strong>max MB</strong> wins. Light cleanup ignores those fields.
+        </p>
+      </section>
+
+      <section class="compress-edu-block">
+        <h2 id="workflow-next-steps">Split, merge, or export images</h2>
+        <p>
+          Still too big? Try <a href="/pdf/split-pdf/">Split PDF</a> and compress parts separately, or{' '}
+          <a href="/pdf/merge-pdf/">Merge PDF</a> after shrinking pieces. To get pictures out of a PDF, use{' '}
+          <a href="/pdf/pdf-to-jpg/">PDF to JPG</a>.
+        </p>
+      </section>
+    </div>
+  </article>
+
+  <section class="compress-related" aria-label="Related PDF tools and guides">
     <div class="container">
-      <h2 class="section-title">Understanding PDF “compression”</h2>
-      <p>
-        PDFs can contain vector text, fonts, embedded images, and annotations. <strong>Structure only</strong> rewrites the
-        file and strips metadata while keeping vectors — savings are often modest if the PDF was already optimized.
-        <strong>Image-based</strong> redraws each page as a JPEG (using your chosen strength or a custom quality/detail level),
-        which can shrink scans and photo-heavy PDFs a lot. Text may look softer and copy/search can degrade because pages
-        become images.
-      </p>
-      <p>
-        <strong>Max output size (MB)</strong> and <strong>shrink by (%)</strong> run extra passes in image-based mode: quality is
-        adjusted (and resolution reduced if needed) until the goal is met or the minimum safe quality is reached. For contracts
-        and forms that must stay sharp, use structure-only or mild image-based presets. Always open the output and zoom before
-        you delete the original.
-      </p>
+      <h2 class="section-title">Related tools</h2>
+      <ul class="compress-related-grid">
+        <li><a href="/pdf/split-pdf/">Split PDF</a></li>
+        <li><a href="/pdf/merge-pdf/">Merge PDF</a></li>
+        <li><a href="/pdf/unlock-pdf/">Unlock PDF</a></li>
+        <li><a href="/pdf/pdf-to-jpg/">PDF to JPG</a></li>
+        <li><a href="/pdf/image-to-pdf/">Image to PDF</a></li>
+        <li><a href="/pdf/jpg-to-pdf/">JPG to PDF</a></li>
+      </ul>
+      <h2 class="section-title section-title-sub">Related guides</h2>
+      <ul class="compress-related-grid compress-related-guides">
+        <li><a href="/blog/how-to-compress-pdf/">How to compress a PDF</a></li>
+        <li><a href="/blog/how-to-merge-pdf/">How to merge PDFs</a></li>
+        <li><a href="/blog/how-to-split-pdf/">How to split a PDF</a></li>
+      </ul>
     </div>
   </section>
 
@@ -217,11 +393,65 @@ const jsonLd = {
     <div class="container">
       <h2 class="section-title">Frequently Asked Questions</h2>
       <div class="faq-list">
-        <div class="faq-item"><h4>Will every PDF get smaller?</h4><p>Usually, but a minimal PDF or one already optimized might barely shrink — especially in structure-only mode.</p></div>
-        <div class="faq-item"><h4>Is image-based compression lossless?</h4><p>No — it uses lossy JPEG frames per page for smaller bytes.</p></div>
-        <div class="faq-item"><h4>Are files uploaded?</h4><p>No — compression runs entirely in your browser.</p></div>
-        <div class="faq-item"><h4>Multiple PDFs?</h4><p>Yes — each gets a row with size comparison and download; ZIP bundles all outputs.</p></div>
-        <div class="faq-item"><h4>Password-protected PDFs?</h4><p>Encrypted inputs may fail until unlocked in another app.</p></div>
+        <div class="faq-item">
+          <h4>Is Compress PDF free and unlimited?</h4>
+          <p>Yes. Compress as many PDFs as your device can handle with no signup, watermarks, or usage quotas.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Are my PDFs uploaded to DoItSwift servers?</h4>
+          <p>No. pdf-lib and PDF.js run in your browser; compression happens locally.</p>
+        </div>
+        <div class="faq-item">
+          <h4>What is the difference between Light cleanup and Smaller file?</h4>
+          <p>
+            Light cleanup rewrites the PDF and strips metadata while keeping vector text — often modest savings. Smaller file
+            redraws each page as a JPEG image, which can greatly reduce scans and photos but may soften text and reduce
+            copy-paste quality.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Will every PDF get smaller?</h4>
+          <p>
+            Usually, but minimal or already-optimized PDFs may barely shrink in Light cleanup. In Smaller file mode the output
+            can occasionally be larger than the original — the UI shows before and after sizes. Smaller file uses{' '}
+            <strong>lossy</strong> JPEG per page, not lossless compression.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>How do optional target size goals work?</h4>
+          <p>
+            In Smaller file mode you can set a max output size in MB or a minimum shrink percentage. If both are set, max MB
+            takes precedence. Targets are ignored in Light cleanup mode.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Can I compress multiple PDFs at once?</h4>
+          <p>
+            Yes. Add several files to the queue, run compress once, then download each result or all outputs in a ZIP named
+            compressed-pdfs.zip.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>What are the output filenames?</h4>
+          <p>Each file uses the original name stem plus <code>-compressed.pdf</code>.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Do password-protected PDFs work?</h4>
+          <p>
+            Encrypted inputs may fail until unlocked. Use <a href="/pdf/unlock-pdf/">Unlock PDF</a> or another trusted tool
+            first.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>What about very large PDFs?</h4>
+          <p>
+            The tool warns when adding a file over about 50 MB. Huge documents can take a long time and use significant memory.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Is there a monthly limit or account required?</h4>
+          <p>No accounts, no quotas, and no premium tier.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -693,8 +923,12 @@ const jsonLd = {
     .subtitle {
       font-size: 19px;
       color: var(--text-muted);
-      max-width: 680px;
+      max-width: 700px;
       margin: 0 auto 28px;
+    }
+    .subtitle strong {
+      color: var(--text);
+      font-weight: 700;
     }
     .converter-section {
       padding: 30px 0;
@@ -1018,24 +1252,139 @@ const jsonLd = {
       gap: 10px;
       margin-top: 12px;
     }
-    .long-form {
-      padding: 40px 0;
-    }
-    .long-form .container {
-      max-width: 760px;
-    }
-    .long-form p {
-      font-size: 15px;
-      line-height: 1.75;
-      color: var(--text-muted);
-      margin-bottom: 14px;
-    }
     .section-title {
       text-align: center;
       margin-bottom: 20px;
     }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .compress-edu {
+      padding: 40px 0 16px;
+    }
+    .compress-edu-inner {
+      max-width: 760px;
+    }
+    .compress-edu-block {
+      margin-bottom: 2.5rem;
+    }
+    .compress-edu-block:last-child {
+      margin-bottom: 0;
+    }
+    .compress-edu h2 {
+      font-size: clamp(1.35rem, 2.5vw, 1.55rem);
+      line-height: 1.3;
+      margin: 0 0 1rem;
+      color: var(--text);
+    }
+    .compress-edu p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--text);
+      margin: 0 0 1rem;
+    }
+    .compress-edu a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .compress-edu a:hover {
+      color: var(--blue-dark);
+    }
+    .compress-edu strong {
+      font-weight: 700;
+    }
+    .compress-table-wrap {
+      overflow-x: auto;
+      margin: 1rem 0 1.25rem;
+      -webkit-overflow-scrolling: touch;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+    .compress-compare-table {
+      width: 100%;
+      min-width: 560px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .compress-compare-table th,
+    .compress-compare-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+    .compress-compare-table thead th {
+      background: var(--card);
+      font-weight: 700;
+      color: var(--text);
+    }
+    .compress-compare-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .compress-related {
+      padding: 8px 0 48px;
+    }
+    .compress-related .container {
+      max-width: 820px;
+    }
+    .section-title-sub {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    .compress-related-grid {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+    @media (min-width: 520px) {
+      .compress-related-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (min-width: 720px) {
+      .compress-related-grid:not(.compress-related-guides) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .compress-related-grid a {
+      display: block;
+      padding: 14px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--blue);
+      font-weight: 600;
+      font-size: 15px;
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .compress-related-grid a:hover {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+    [data-theme='dark'] .compress-related-grid a:hover {
+      background: rgba(0, 102, 255, 0.12);
+    }
+
     .faq {
-      padding: 40px 0 60px;
+      padding: 8px 0 60px;
     }
     .faq .container {
       max-width: 820px;
@@ -1046,6 +1395,7 @@ const jsonLd = {
       border-radius: var(--radius);
       padding: 20px 24px;
       margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
     }
     .faq-item h4 {
       font-size: 16px;
@@ -1054,6 +1404,30 @@ const jsonLd = {
     .faq-item p {
       font-size: 14px;
       color: var(--text-muted);
+      margin: 0;
+      line-height: 1.55;
+    }
+    .faq-item a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .faq-item a:hover {
+      color: var(--blue-dark);
+    }
+    .faq-item code {
+      font-size: 0.92em;
+      padding: 2px 6px;
+      background: var(--gray-100);
+      border-radius: 4px;
+    }
+    [data-theme='dark'] .faq-item code {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .faq-item strong {
+      font-weight: 700;
+      color: var(--text);
     }
   </style>
 </MainLayout>

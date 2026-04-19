@@ -1,27 +1,71 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/date-difference/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Date Difference Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'UtilityApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Days, weeks, and approximate months between two calendar dates.',
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Free date difference calculator: calendar days between two dates, whole weeks, and approximate months using an average month length. Optional inclusive mode adds one day. Useful for planning and travel—not for legal contract “calendar month” definitions. Runs in your browser.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'How are days between two dates counted?',
+    answer:
+      'We take the absolute difference between the two selected local calendar dates in whole days. If you check inclusive mode, we add one day so both endpoints count.',
+  },
+  {
+    question: 'Why do approximate months use 30.44 days?',
+    answer:
+      'Averaging month length (about 365.25/12) gives a quick sense of scale. It is not the same as counting calendar months, which vary from 28 to 31 days.',
+  },
+  {
+    question: 'How are whole weeks calculated?',
+    answer:
+      'Whole weeks are the number of complete 7-day blocks that fit inside the day span after your inclusive or exclusive choice.',
+  },
+  {
+    question: 'Does time zone affect the result?',
+    answer:
+      'We use date-only fields in the browser’s local calendar, so there is no time-of-day component—only the dates you pick matter.',
+  },
+  {
+    question: 'What if the end date is before the start date?',
+    answer:
+      'We still show the absolute span in days and note in the hint that the end is before the start.',
+  },
+  {
+    question: 'Are my dates sent to a server?',
+    answer:
+      'No. The tool runs locally with JavaScript and does not require signup.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Date Difference Calculator',
+  breadcrumbName: 'Date Difference',
+  applicationCategory: 'UtilitiesApplication',
+  browserRequirements: 'Requires JavaScript to compute days, weeks, and approximate months from your date inputs',
+  webAppDescription:
+    'Measure the span between two calendar dates in your browser. See total days, whole weeks, and a rough month count based on an average month length, with an optional inclusive-day toggle. Helpful for timelines and travel math; confirm legal or payroll month rules with authoritative sources.',
+  featureList: [
+    'Start and end date pickers',
+    'Optional inclusive day count (+1 day)',
+    'Total calendar days and whole weeks',
+    'Approximate months from average month length',
+    'Hint when end is before start',
+    'Defaults to a one-year span for quick trials',
+    'Runs locally without signup',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Date Difference Calculator — Days, Weeks & Months Between Dates | DoItSwift"
-  description="Find the span between two dates: total days, whole weeks, and approximate months — inclusive and exclusive options."
-  keywords="date difference calculator, days between dates, weeks between two dates"
+  title="Date Difference Calculator — Days & Weeks Between Two Dates | DoItSwift"
+  description={pageDescription}
+  keywords="date difference calculator, days between two dates, weeks between dates, inclusive date count, approximate months between dates, online date span calculator India"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -86,6 +130,20 @@ const jsonLd = {
       <p>
         <strong>Days</strong> use midnight-to-midnight UTC-neutral local dates in your browser. <strong>Weeks</strong> are whole 7-day blocks inside that span. <strong>Approximate months</strong> divide the day count by 30.44 — handy for rough duration, not for legal “one calendar month” rules.
       </p>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently asked questions</h2>
+      <div class="faq-list">
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -162,6 +220,17 @@ const jsonLd = {
     .edu .container { max-width: 760px; }
     .edu p { font-size: 15px; line-height: 1.8; color: var(--text-muted); }
     .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .faq { padding: 28px 0 32px; }
+    .faq .container { max-width: 760px; }
+    .faq-list { display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .faq-item h4 { margin: 0 0 8px; font-size: 15px; }
+    .faq-item p { margin: 0; font-size: 14px; color: var(--text-muted); line-height: 1.55; }
     .related { text-align: center; padding-bottom: 48px; }
     .related-links a { color: var(--blue); font-weight: 600; }
   </style>

@@ -1,40 +1,82 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/bmi/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'BMI Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'HealthApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Body Mass Index calculator with unit toggles, categories, and ideal weight range.',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'What is BMI?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'BMI is weight in kilograms divided by height in meters squared. It screens weight status but does not diagnose body fat or health by itself.',
-          },
-        },
-      ],
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Free BMI calculator: body mass index from height and weight with cm/ft-in and kg/lb toggles, WHO-style adult categories, optional ideal-weight band, and a simple meter. Screening tool only—not a diagnosis. Optional age and gender adjust explanatory text, not the core formula. Runs locally in your browser.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'What is BMI?',
+    answer:
+      'BMI is weight in kilograms divided by height in meters squared (kg/m²). It is a quick population-level screen for weight status, not a measure of body fat or overall health by itself.',
+  },
+  {
+    question: 'Does gender change the BMI number?',
+    answer:
+      'The BMI formula is the same for adults; we only tweak explanatory copy when gender is selected. Clinical risk thresholds can differ by context—ask a qualified professional.',
+  },
+  {
+    question: 'Is BMI accurate for Indians or South Asian populations?',
+    answer:
+      'Some guidelines suggest earlier action on waist circumference or BMI for South Asian groups. Use this page as a starting point alongside professional advice, not a standalone rule.',
+  },
+  {
+    question: 'What about body fat percentage?',
+    answer:
+      'DEXA, calipers, and smart scales estimate fat with error. BMI is faster and cheaper but less specific about lean mass versus fat.',
+  },
+  {
+    question: 'Why is the meter needle clipped at extremes?',
+    answer:
+      'Very high or low BMIs are mapped to the ends of the bar so the gauge stays readable on small screens.',
+  },
+  {
+    question: 'Does switching cm/ft or kg/lb keep my measurements consistent?',
+    answer:
+      'Yes—we convert the values you entered so height and weight stay equivalent when you change units.',
+  },
+  {
+    question: 'Is this medical advice?',
+    answer:
+      'No. It is an educational calculator. Pregnancy, eating disorders, medications, and chronic conditions need individualized guidance.',
+  },
+  {
+    question: 'Are my measurements uploaded?',
+    answer:
+      'No. Calculations run in your browser; nothing is sent to DoItSwift for this tool.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift BMI Calculator',
+  breadcrumbName: 'BMI Calculator',
+  applicationCategory: 'HealthApplication',
+  browserRequirements: 'Requires JavaScript for live BMI, category, meter, and unit conversion',
+  webAppDescription:
+    'Estimate adult Body Mass Index from height and weight with flexible units and WHO-style category bands. Shows a simple visual meter and an approximate weight range that would fall in the normal BMI band for your height. Athletes, older adults, and many clinical scenarios need more than BMI alone—this page is illustrative, not diagnostic.',
+  featureList: [
+    'Height in centimeters or feet and inches',
+    'Weight in kilograms or pounds',
+    'BMI value with WHO adult category label',
+    'Optional age and gender for context text',
+    'Ideal weight range band for normal BMI at your height',
+    'Visual meter with category zones',
+    'Unit switches that preserve equivalent measurements',
+    'Runs locally without signup',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="BMI Calculator — Free Online Calculator | DoItSwift"
-  description="Calculate Body Mass Index from height and weight. Toggle cm/ft-in and kg/lb, see category, ideal weight range, and a simple visual meter."
-  keywords="BMI calculator, body mass index, ideal weight range, BMI categories WHO"
+  title="BMI Calculator — kg/m², WHO Categories, Ideal Weight Band | DoItSwift"
+  description={pageDescription}
+  keywords="BMI calculator, body mass index calculator India, BMI kg cm, BMI feet inches pounds, WHO BMI categories, ideal weight range from BMI, online BMI meter, free BMI calculator"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -142,28 +184,14 @@ const jsonLd = {
 
   <section class="faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item">
-          <h4>Does gender change the formula?</h4>
-          <p>The BMI formula is the same; we only adjust explanatory text slightly. Clinical risk thresholds can differ by context — ask your doctor.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Is BMI accurate for Indians?</h4>
-          <p>Some guidelines suggest lower waist or BMI action thresholds for South Asian populations — use this tool as a starting point, not a rule.</p>
-        </div>
-        <div class="faq-item">
-          <h4>What about body fat percentage?</h4>
-          <p>DEXA, calipers, or smart scales estimate fat — each has error. BMI is cheaper and faster but less specific.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Why is my needle clipped?</h4>
-          <p>Extreme BMIs map to the bar edges so the gauge stays readable.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Does switching cm/ft or kg/lb keep my numbers?</h4>
-          <p>Yes — we convert the value you entered so height and weight stay consistent when you change units.</p>
-        </div>
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>

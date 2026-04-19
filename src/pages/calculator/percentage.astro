@@ -1,40 +1,71 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/percentage/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Percentage Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'UtilitiesApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Multi-mode percentage calculator: percent of, ratio, increase/decrease, and percent change.',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'How do you calculate percentage change?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Percent change from X to Y is ((Y − X) / |X|) × 100 when X is not zero.',
-          },
-        },
-      ],
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Multi-mode percentage calculator: percent of a number, “X is what percent of Y?”, increase or decrease a value by a percent, and percent change between two values. Handles negatives where valid; blocks division by zero on percent change. Instant local calculations for homework, pricing, and finance checks.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'How do you calculate percentage change from X to Y?',
+    answer:
+      'Percent change is ((Y − X) divided by the absolute value of X) times 100 when X is not zero. If X is zero, relative percent change is undefined.',
+  },
+  {
+    question: 'Why does percent change show undefined?',
+    answer:
+      'Starting from zero, there is no meaningful ratio of change, so the tool asks you to describe the situation in absolute numbers instead.',
+  },
+  {
+    question: 'Do you apply bank-style rounding?',
+    answer:
+      'We show enough decimal places for clarity; institutions may round currency differently.',
+  },
+  {
+    question: 'Can inputs be negative?',
+    answer:
+      'Yes in modes where it makes sense—for example comparing a loss to a baseline—as long as denominators stay valid.',
+  },
+  {
+    question: 'What is “percent of” mode?',
+    answer:
+      'It computes P% of a base value by multiplying the base by P divided by 100.',
+  },
+  {
+    question: 'Are numbers uploaded?',
+    answer:
+      'No. All modes run locally in JavaScript.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Percentage Calculator',
+  breadcrumbName: 'Percentage Calculator',
+  applicationCategory: 'UtilitiesApplication',
+  browserRequirements: 'Requires JavaScript for live updates across the four percentage modes',
+  webAppDescription:
+    'Switch among four everyday percentage workflows: part from a percent, converting a ratio to a percent, scaling a number up or down by a percentage, and measuring relative change between two numbers. Inline help summarizes formulas. Suitable for quick desk math, homework, and commerce sanity checks—not audited payroll or regulatory reporting.',
+  featureList: [
+    'Percent of a number',
+    'Ratio to percent (“X is what percent of Y?”)',
+    'Increase or decrease a value by a percentage',
+    'Percent change between two values with zero guard',
+    'Short formula reference section',
+    'Links to tip, discount, and GST calculators',
+    'Runs locally without signup',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Percentage Calculator — Free Online Calculator | DoItSwift"
-  description="What is X% of Y? X is what percent of Y? Increase or decrease by a percent, or find percent change between two values — four modes, instant results."
-  keywords="percentage calculator, percent change, percent increase, percent of a number"
+  title="Percentage Calculator — Percent Of, Change, Increase/Decrease | DoItSwift"
+  description={pageDescription}
+  keywords="percentage calculator online, percent change calculator, percent increase decrease calculator, what percent of calculator, ratio to percent calculator, free percent calculator"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -130,20 +161,14 @@ const jsonLd = {
 
   <section class="faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item">
-          <h4>Why is percent change undefined?</h4>
-          <p>Starting from zero, relative change has no meaningful ratio — talk in absolute terms instead.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Do you round?</h4>
-          <p>We show enough decimals for clarity; bank rounding rules may differ.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Can I use negatives?</h4>
-          <p>Yes — for example, loss vs profit comparisons, as long as denominators stay valid.</p>
-        </div>
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>

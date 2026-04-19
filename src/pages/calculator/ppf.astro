@@ -1,57 +1,64 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical } from '../../lib/calculatorJsonLd';
 
-const site = Astro.site?.href ?? 'https://doitswift.com';
-const canonical = `${site}calculator/ppf/`;
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Free PPF calculator (India): yearly contribution up to ₹1.5 lakh, 15–50 year horizon, editable notified interest rate (default 7.1%). Maturity estimate, total invested, interest, bars, and year-by-year balance. Illustrative — verify limits and rates with your bank/post office.';
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift PPF Calculator',
+  breadcrumbName: 'PPF Calculator',
+  applicationCategory: 'FinanceApplication',
+  browserRequirements: 'Requires JavaScript for PPF maturity and year-by-year table',
+  webAppDescription:
+    'Model Public Provident Fund (PPF) style growth with yearly contributions within the annual ceiling, user-editable interest rate, and tenure. Shows maturity amount, total invested, interest, visualization, and year-by-year closing balance. Does not model personal 80C tax savings or extension rules in full — educational estimate only.',
+  featureList: [
+    'Yearly investment from ₹500 up to ₹1,50,000 (typical ceiling — confirm current rules)',
+    'Tenure 15 to 50 years',
+    'Annual interest rate field with default — update when GOI notifies new rate',
+    'Maturity amount, total invested, and total interest',
+    'Invested versus interest bar comparison',
+    'Year-by-year breakdown table',
+    'Runs locally in the browser',
+  ],
+  faqs: [
     {
-      '@type': 'WebApplication',
-      name: 'PPF Calculator 2026 — DoItSwift',
-      url: canonical,
-      applicationCategory: 'FinanceApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Public Provident Fund maturity calculator with yearly investment, government rate, and year-by-year balance.',
+      question: 'What is PPF?',
+      answer:
+        'PPF (Public Provident Fund) is a long-term government-backed savings scheme in India with tax benefits under Section 80C for qualifying contributions and tax-free interest subject to rules.',
     },
     {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'What is PPF?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'PPF is a long-term government-backed savings scheme in India with tax benefits under Section 80C and tax-free interest subject to rules.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'What is the current PPF interest rate?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'The government notifies the rate quarterly; this calculator defaults to 7.1% but you should edit it when the rate changes.',
-          },
-        },
-      ],
+      question: 'What is the current PPF interest rate?',
+      answer:
+        'The government notifies the rate quarterly. This calculator defaults to 7.1% — edit the field when the notified rate changes.',
     },
     {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: site },
-        { '@type': 'ListItem', position: 2, name: 'Calculators', item: `${site}calculator/` },
-        { '@type': 'ListItem', position: 3, name: 'PPF Calculator', item: canonical },
-      ],
+      question: 'Is PPF maturity guaranteed?',
+      answer:
+        'PPF uses notified rates that can change; principal is sovereign-backed subject to scheme rules. Returns are not fixed forever.',
+    },
+    {
+      question: 'Can I invest monthly instead of yearly?',
+      answer:
+        'Many people deposit monthly; this tool uses a yearly total for simplicity. Check your bank or post office for rules.',
+    },
+    {
+      question: 'Does this include tax saved under Section 80C?',
+      answer:
+        'No — it shows corpus growth only, not your personal deduction benefit.',
     },
   ],
-};
+});
 ---
 
 <MainLayout
-  title="PPF Calculator 2026 — Calculate Your PPF Maturity Amount | DoItSwift"
-  description="Estimate PPF maturity with yearly contributions, annual compounding, and a year-by-year balance table. Adjustable interest rate for quarterly updates."
-  keywords="ppf calculator, ppf maturity calculator, public provident fund calculator, ppf interest calculator"
+  title="PPF Calculator 2026 — Maturity, Interest & Year-by-Year Balance | DoItSwift"
+  description={pageDescription}
+  keywords="PPF calculator, PPF maturity calculator India, public provident fund calculator, PPF interest rate calculator, PPF yearly contribution calculator"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -114,6 +121,7 @@ const jsonLd = {
           <summary>Year-by-year breakdown</summary>
           <div class="table-wrap">
             <table>
+              <caption class="sr-only">PPF year-by-year invested, interest, and closing balance</caption>
               <thead>
                 <tr><th>Year</th><th>Invested that year</th><th>Interest</th><th>Closing balance</th></tr>
               </thead>
@@ -148,7 +156,7 @@ const jsonLd = {
 
   <section class="faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
         <div class="faq-item"><h4>Is maturity guaranteed?</h4><p>PPF is a defined contribution scheme with notified rates; returns aren’t “guaranteed” forever because rates change, but principal is sovereign-backed subject to scheme rules.</p></div>
         <div class="faq-item"><h4>Can I invest monthly?</h4><p>Many people deposit monthly; this calculator aggregates to a yearly total for simplicity. Spread contributions before the 5th if you follow common optimization advice — validate with your bank.</p></div>
@@ -255,6 +263,17 @@ const jsonLd = {
       max-width: 720px;
       margin: 0 auto 22px;
       line-height: 1.65;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
     }
     .calc-section {
       padding: 24px 0 40px;

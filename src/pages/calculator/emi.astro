@@ -1,30 +1,125 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
+import { calculatorCanonical } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/emi/';
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageTitle =
+  'EMI Calculator — Home Loan, Car Loan EMI & Amortization Schedule | DoItSwift';
+
+const pageDescription =
+  'Free EMI calculator for home loan, car loan, or any reducing-balance loan. Enter principal, annual %, tenure in years or months; see monthly EMI, total interest, principal vs interest pie chart, and year-wise amortization. Currency formats numbers only — not FX. Runs in your browser; no signup.';
+
+const siteRoot = Astro.site ? new URL('/', Astro.site).href : null;
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
     {
+      '@type': 'WebPage',
+      url: canonical,
+      name: pageTitle,
+      description: pageDescription,
+      ...(siteRoot
+        ? {
+            isPartOf: { '@id': `${siteRoot}#website` },
+            publisher: { '@id': `${siteRoot}#organization` },
+          }
+        : {}),
+    },
+    {
       '@type': 'WebApplication',
-      name: 'EMI Calculator — DoItSwift',
+      name: 'DoItSwift EMI Calculator',
       url: canonical,
       applicationCategory: 'FinanceApplication',
-      operatingSystem: 'Web',
+      operatingSystem: 'Web browser',
+      browserRequirements: 'Requires JavaScript for live EMI, amortization table, and chart updates',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Calculate loan EMI, total interest, and amortization for home, car, or personal loans in India.',
+      description:
+        'Estimate Equated Monthly Installment (EMI) using the standard reducing-balance loan formula. Adjustable loan amount, interest rate, and tenure (years or months). Shows total interest, total payment, principal versus interest visualization, and year-wise amortization summary. Currency selector changes display formatting only. Educational tool — confirm figures with your lender.',
+      featureList: [
+        'Loan principal from ₹10,000 to ₹100 crore (display scales with currency)',
+        'Annual interest rate roughly 1–30%',
+        'Tenure in years or months (up to 360 monthly installments)',
+        'Monthly EMI, total interest, and total repayment',
+        'Principal vs interest pie chart',
+        'Year-wise amortization summary table',
+        'Multi-currency number formatting (not exchange-rate conversion)',
+        'All calculations run locally in the browser',
+      ],
     },
-    { '@type': 'FAQPage', mainEntity: [{ '@type': 'Question', name: 'What is EMI?', acceptedAnswer: { '@type': 'Answer', text: 'Equated Monthly Installment — fixed payment each month toward principal and interest on a loan.' } }] },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is EMI?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'EMI (Equated Monthly Installment) is the fixed amount you pay each month on a reducing-balance loan. Each payment covers interest on the outstanding balance first; the rest reduces principal.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is EMI the same as pre-EMI?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No — pre-EMI is interest-only before full disbursement; this tool is for full EMI.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Does it handle floating rates?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'It assumes a constant rate; for floating loans, re-run when your rate resets.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Does the currency dropdown change EMI math?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No — it only changes number formatting. The same numeric inputs produce the same EMI.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is this calculator free? Are my inputs uploaded?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes, it is free with no signup. Calculations run in your browser and are not sent to our servers.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Which calculator for home loan prepayment or US mortgage?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'For prepayment scenarios use the Home Loan calculator. For US-style PITI and PMI, use the Mortgage calculator.',
+          },
+        },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', Astro.site).href },
+        { '@type': 'ListItem', position: 2, name: 'Calculators', item: new URL('/calculator/', Astro.site).href },
+        { '@type': 'ListItem', position: 3, name: 'EMI Calculator', item: canonical },
+      ],
+    },
   ],
 };
 ---
 
 <MainLayout
-  title="EMI Calculator — Free Online Calculator | DoItSwift"
-  description="Calculate home loan or personal loan EMI, total interest, and repayment breakdown. Adjust amount, rate, and tenure in real time."
-  keywords="EMI calculator, loan EMI calculator India, home loan EMI, car loan EMI, interest calculator"
+  title={pageTitle}
+  description={pageDescription}
+  keywords="EMI calculator, loan EMI calculator, home loan EMI calculator, car loan EMI calculator, reducing balance EMI, loan amortization calculator, monthly installment calculator, EMI interest calculator, free EMI calculator online"
   canonical={canonical}
+  ogImage="/og-emi.svg"
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
@@ -35,8 +130,10 @@ const jsonLd = {
   <section class="hero">
     <div class="container">
       <div class="badge">🧮 Free Calculator</div>
-      <h1>EMI Calculator</h1>
-      <p class="subtitle">Work out monthly EMI, total interest, and how principal vs interest splits over your loan tenure.</p>
+      <h1>EMI Calculator — Home Loan, Car Loan &amp; Amortization</h1>
+      <p class="subtitle">
+        Work out <strong>monthly EMI</strong>, <strong>total interest</strong>, and how <strong>principal vs interest</strong> splits over your tenure — with optional <strong>year-wise amortization</strong>. Reducing-balance formula; use the currency dropdown for display formatting only.
+      </p>
       <div class="trust">
         <span><span class="check">✓</span> No signup</span>
         <span><span class="check">✓</span> Instant results</span>
@@ -96,14 +193,19 @@ const jsonLd = {
         </div>
         <details class="calc-details">
           <summary>Year-wise amortization (summary)</summary>
-          <div class="table-wrap"><table><thead><tr><th>Year</th><th>Principal paid</th><th>Interest paid</th><th>Balance</th></tr></thead><tbody id="emiTable"></tbody></table></div>
+          <div class="table-wrap">
+            <table>
+              <caption class="sr-only">Year-wise principal paid, interest paid, and outstanding balance</caption>
+              <thead><tr><th>Year</th><th>Principal paid</th><th>Interest paid</th><th>Balance</th></tr></thead><tbody id="emiTable"></tbody>
+            </table>
+          </div>
         </details>
       </div>
     </div>
   </section>
 
-  <section class="edu">
-    <div class="container">
+  <article class="emi-edu" aria-label="Guide: how loan EMI is calculated">
+    <div class="container emi-edu-inner">
       <h2 class="section-title">How EMI is calculated</h2>
       <p>
         EMI uses the standard reducing-balance formula: <em>EMI = [P × r × (1+r)<sup>n</sup>] / [(1+r)<sup>n</sup> − 1]</em>, where <em>P</em> is loan principal, <em>r</em> is the monthly interest rate (annual rate ÷ 12 ÷ 100), and <em>n</em> is the number of monthly installments. Each payment covers interest on the outstanding balance first; the rest reduces principal, so interest component falls over time.
@@ -115,27 +217,57 @@ const jsonLd = {
         Use year-wise totals to see how much interest is front-loaded in early years — useful if you are considering partial prepayment. Always confirm numbers with your lender’s official schedule.
       </p>
       <p>
-        For <strong>unsecured personal loans</strong> (often shorter tenure and higher rates), use the <a href="/calculator/personal-loan/">Personal Loan EMI calculator</a>. For <strong>US-style mortgages</strong> with property tax, insurance, and PMI, see the <a href="/calculator/mortgage/">Mortgage calculator</a> — Indian home buyers may prefer the <a href="/calculator/home-loan/">Home Loan calculator</a> with prepayment options.
+        For <strong>unsecured personal loans</strong> (often shorter tenure and higher rates), use the <a href="/calculator/personal-loan/">Personal Loan EMI calculator</a>. For <strong>US-style mortgages</strong> with property tax, insurance, and PMI, see the <a href="/calculator/mortgage/">Mortgage calculator</a> — Indian home buyers may prefer the <a href="/calculator/home-loan/">Home Loan calculator</a> with prepayment options. Considering rent vs buy? See <a href="/blog/buy-vs-rent-india/">buy vs rent in India</a>.
       </p>
     </div>
-  </section>
+  </article>
 
   <section class="faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
+        <div class="faq-item">
+          <h4>What is EMI?</h4>
+          <p>
+            EMI (Equated Monthly Installment) is the fixed amount you pay each month on a reducing-balance loan. Each payment covers interest on the outstanding balance first; the rest reduces principal.
+          </p>
+        </div>
         <div class="faq-item"><h4>Is EMI the same as pre-EMI?</h4><p>No — pre-EMI is interest-only before full disbursement; this tool is for full EMI.</p></div>
         <div class="faq-item"><h4>Does it handle floating rates?</h4><p>It assumes a constant rate; for floating loans, re-run when your rate resets.</p></div>
+        <div class="faq-item">
+          <h4>Does the currency dropdown change EMI math?</h4>
+          <p>No — it only changes number formatting. The same numeric inputs produce the same EMI.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Is this calculator free? Are my inputs uploaded?</h4>
+          <p>Yes, it is free with no signup. Calculations run in your browser and are not sent to our servers.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Which calculator for home loan prepayment or US mortgage?</h4>
+          <p>
+            For prepayment scenarios use the <a href="/calculator/home-loan/">Home Loan calculator</a>. For US-style PITI and PMI, use the <a href="/calculator/mortgage/">Mortgage calculator</a>.
+          </p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="related">
+  <section class="emi-related" aria-label="Related calculators and guides">
     <div class="container">
       <h2 class="section-title">Related calculators</h2>
-      <p class="related-links">
-        <a href="/calculator/home-loan/">Home Loan (prepayment)</a> · <a href="/calculator/personal-loan/">Personal Loan EMI</a> · <a href="/calculator/mortgage/">Mortgage (US)</a> · <a href="/calculator/lumpsum/">Lumpsum</a> · <a href="/calculator/sip/">SIP</a>
-      </p>
+      <ul class="emi-related-grid">
+        <li><a href="/calculator/home-loan/">Home Loan (prepayment)</a></li>
+        <li><a href="/calculator/personal-loan/">Personal Loan EMI</a></li>
+        <li><a href="/calculator/mortgage/">Mortgage (US)</a></li>
+        <li><a href="/calculator/emi-vs-rent/">Buy vs Rent</a></li>
+        <li><a href="/calculator/lumpsum/">Lumpsum Calculator</a></li>
+        <li><a href="/calculator/sip/">SIP Calculator</a></li>
+      </ul>
+      <h2 class="section-title section-title-sub">Related guides</h2>
+      <ul class="emi-related-grid emi-related-guides">
+        <li><a href="/blog/buy-vs-rent-india/">Buy vs rent in India</a></li>
+        <li><a href="/blog/ctc-vs-in-hand-salary/">CTC vs in-hand salary</a></li>
+      </ul>
     </div>
   </section>
 
@@ -219,7 +351,12 @@ const jsonLd = {
     .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
     .breadcrumb a { color: var(--blue); text-decoration: none; }
     .hero { padding: 36px 0 16px; text-align: center; }
-    .subtitle { font-size: 18px; color: var(--text-muted); max-width: 640px; margin: 0 auto 24px; }
+    .subtitle { font-size: 18px; color: var(--text-muted); max-width: 640px; margin: 0 auto 24px; line-height: 1.55; }
+    .subtitle strong { color: var(--text); font-weight: 700; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
     .calc-section { padding: 24px 0 40px; }
     .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 960px; align-items: start; }
     @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
@@ -248,16 +385,70 @@ const jsonLd = {
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     th, td { padding: 8px; border-bottom: 1px solid var(--border); text-align: right; }
     th:first-child, td:first-child { text-align: left; }
-    .edu { padding: 40px 0; }
-    .edu .container { max-width: 760px; }
-    .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
+    .emi-edu { padding: 36px 0 40px; }
+    .emi-edu-inner { max-width: 760px; }
+    .emi-edu p {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .emi-edu a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .emi-edu a:hover {
+      text-decoration: underline;
+    }
     .section-title { text-align: center; margin-bottom: 20px; font-size: 1.5rem; }
     .faq { padding: 32px 0 48px; }
     .faq .container { max-width: 760px; }
-    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 10px; }
+    .faq-list { display: flex; flex-direction: column; gap: 10px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
     .faq-item h4 { font-size: 15px; margin-bottom: 4px; }
-    .faq-item p { font-size: 14px; color: var(--text-muted); }
-    .related { padding: 24px 0 48px; text-align: center; }
-    .related-links a { color: var(--blue); font-weight: 600; }
+    .faq-item p { font-size: 14px; color: var(--text-muted); margin: 0; }
+    .faq-item a { color: var(--blue); font-weight: 600; text-decoration: none; }
+    .faq-item a:hover { text-decoration: underline; }
+    .section-title-sub {
+      margin-top: 32px;
+      margin-bottom: 14px;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    .emi-related { padding: 0 0 56px; }
+    .emi-related .section-title {
+      margin-bottom: 16px;
+    }
+    .emi-related-grid {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px 16px;
+      max-width: 760px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .emi-related-grid a {
+      display: block;
+      padding: 10px 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--blue);
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .emi-related-grid a:hover {
+      border-color: var(--blue);
+      box-shadow: var(--shadow);
+    }
+    .emi-related-guides {
+      margin-top: 0;
+    }
   </style>
 </MainLayout>

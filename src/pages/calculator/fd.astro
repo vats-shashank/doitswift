@@ -1,20 +1,64 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { buildCalculatorJsonLd, calculatorCanonical } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/fd/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    { '@type': 'WebApplication', name: 'FD Calculator — DoItSwift', url: canonical, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' }, description: 'Fixed deposit maturity calculator with compound interest.' },
-    { '@type': 'FAQPage', mainEntity: [{ '@type': 'Question', name: 'What is FD?', acceptedAnswer: { '@type': 'Answer', text: 'A fixed deposit locks principal for a tenure at a stated interest rate with bank compounding rules.' } }] },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Free fixed deposit (FD) calculator for India: enter principal in ₹, annual rate ~1–15%, tenure up to 10 years, and compounding (monthly, quarterly, half-yearly, yearly). See maturity amount, interest earned, and year-by-year balance. A = P(1+r/n)^(nt). No signup; runs locally.';
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift FD Calculator',
+  breadcrumbName: 'FD Calculator',
+  applicationCategory: 'FinanceApplication',
+  browserRequirements: 'Requires JavaScript for maturity and year-by-year FD projections',
+  webAppDescription:
+    'Estimate bank fixed deposit maturity using compound interest A = P(1 + r/n)^(n×t). Enter principal, nominal annual rate, tenure in years, and compounding frequency. Shows interest earned, maturity value, and optional year-by-year balance growth. Does not model TDS, senior citizen rates, or cumulative vs payout options — verify with your bank.',
+  featureList: [
+    'Principal from ₹1,000 to ₹10 crore',
+    'Annual interest rate approximately 1–15%',
+    'Tenure from about one month up to 10 years',
+    'Compounding: monthly, quarterly, half-yearly, or yearly',
+    'Maturity amount and total interest earned',
+    'Expandable year-by-year balance table',
+    'All calculations run in the browser',
   ],
-};
+  faqs: [
+    {
+      question: 'What is a fixed deposit (FD)?',
+      answer:
+        'An FD locks a lump sum with a bank or NBFC for a fixed tenure at a stated interest rate. Interest may compound per the bank’s rules (monthly, quarterly, etc.).',
+    },
+    {
+      question: 'Is FD return guaranteed?',
+      answer:
+        'Bank FDs follow the bank’s terms; deposits are subject to DICGC insurance limits in India. Always confirm rates and terms with your bank.',
+    },
+    {
+      question: 'Does this FD calculator include TDS or senior citizen rates?',
+      answer:
+        'No. Enter the rate you expect after discussing with your bank. TDS on interest and special senior rates are not applied automatically.',
+    },
+    {
+      question: 'How does compounding frequency affect FD maturity?',
+      answer:
+        'More frequent compounding (e.g. monthly vs yearly) slightly increases maturity for the same nominal annual rate, because interest is credited more often.',
+    },
+    {
+      question: 'Is the FD calculator free and private?',
+      answer:
+        'Yes, it is free with no signup. Inputs are processed in your browser and are not uploaded to DoItSwift.',
+    },
+  ],
+});
 ---
 
 <MainLayout
-  title="FD Calculator — Free Online Calculator | DoItSwift"
-  description="Calculate fixed deposit maturity and interest earned. Choose compounding frequency — monthly, quarterly, half-yearly, or yearly."
-  keywords="FD calculator, fixed deposit calculator India, compound interest FD, maturity amount FD"
+  title="FD Calculator India — Fixed Deposit Maturity & Compound Interest | DoItSwift"
+  description={pageDescription}
+  keywords="FD calculator, fixed deposit calculator India, FD maturity calculator, compound interest FD, bank FD calculator, quarterly compounding FD, FD interest calculator online"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -25,7 +69,9 @@ const jsonLd = {
     <div class="container">
       <div class="badge">🧮 Free Calculator</div>
       <h1>Fixed Deposit (FD) Calculator</h1>
-      <p class="subtitle">Compound interest: A = P × (1 + r/n)<sup>n×t</sup> — see maturity and interest for your principal, rate, and tenure.</p>
+      <p class="subtitle">
+        <strong>Compound interest</strong> FD maturity: A = P × (1 + r/n)<sup>n×t</sup> — see <strong>maturity</strong>, <strong>interest earned</strong>, and <strong>year-by-year balance</strong> for your principal, rate, tenure, and compounding.
+      </p>
       <div class="trust"><span><span class="check">✓</span> No signup</span><span><span class="check">✓</span> Instant results</span><span><span class="check">✓</span> Works offline</span></div>
     </div>
   </section>
@@ -55,7 +101,15 @@ const jsonLd = {
           <div><div class="result-sub" id="fdInt">₹0</div><div class="result-caption">Interest earned</div></div>
           <div><div class="result-sub" id="fdPrin">₹0</div><div class="result-caption">Principal</div></div>
         </div>
-        <details class="calc-details"><summary>Year-by-year growth</summary><div class="table-wrap"><table><thead><tr><th>Year</th><th>Balance</th></tr></thead><tbody id="fdTb"></tbody></table></div></details>
+        <details class="calc-details">
+          <summary>Year-by-year growth</summary>
+          <div class="table-wrap">
+            <table>
+              <caption class="sr-only">Year-by-year FD balance after compounding</caption>
+              <thead><tr><th>Year</th><th>Balance</th></tr></thead><tbody id="fdTb"></tbody>
+            </table>
+          </div>
+        </details>
       </div>
     </div>
   </section>
@@ -68,7 +122,18 @@ const jsonLd = {
     </div>
   </section>
 
-  <section class="faq"><div class="container"><h2 class="section-title">FAQ</h2><div class="faq-list"><div class="faq-item"><h4>Is FD return guaranteed?</h4><p>Bank FDs are subject to bank rules and DICGC insurance limits — verify with your bank.</p></div></div></div></section>
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently asked questions</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>What is a fixed deposit (FD)?</h4><p>An FD locks a lump sum for a fixed tenure at a stated rate; interest compounds per the bank’s rules.</p></div>
+        <div class="faq-item"><h4>Is FD return guaranteed?</h4><p>Bank FDs are subject to bank rules and DICGC insurance limits — verify with your bank.</p></div>
+        <div class="faq-item"><h4>Does this include TDS or senior citizen rates?</h4><p>No — enter the rate you expect; TDS and special rates are not modeled here.</p></div>
+        <div class="faq-item"><h4>How does compounding affect maturity?</h4><p>More frequent compounding usually increases maturity slightly for the same nominal annual rate.</p></div>
+        <div class="faq-item"><h4>Is this calculator free and private?</h4><p>Yes. It runs in your browser; inputs are not sent to our servers.</p></div>
+      </div>
+    </div>
+  </section>
   <section class="related"><div class="container"><h2 class="section-title">Related</h2><p class="related-links"><a href="/calculator/sip/">SIP</a> · <a href="/calculator/emi/">EMI</a> · <a href="/calculator/gst/">GST</a></p></div></section>
 
   <script is:inline>
@@ -110,7 +175,12 @@ const jsonLd = {
     .breadcrumb { font-size: 13px; color: var(--text-muted); padding: 16px 0 0; max-width: 960px; }
     .breadcrumb a { color: var(--blue); text-decoration: none; }
     .hero { padding: 36px 0 16px; text-align: center; }
-    .subtitle { font-size: 18px; color: var(--text-muted); max-width: 680px; margin: 0 auto 24px; }
+    .subtitle { font-size: 18px; color: var(--text-muted); max-width: 680px; margin: 0 auto 24px; line-height: 1.55; }
+    .subtitle strong { color: var(--text); font-weight: 700; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
     .calc-section { padding: 24px 0 40px; }
     .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 960px; align-items: start; }
     @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
@@ -134,8 +204,12 @@ const jsonLd = {
     .edu .container { max-width: 760px; }
     .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
     .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
-    .faq { padding: 28px 0; }
-    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+    .faq { padding: 28px 0 40px; }
+    .faq .container { max-width: 760px; }
+    .faq-list { display: flex; flex-direction: column; gap: 10px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
+    .faq-item h4 { font-size: 15px; margin-bottom: 4px; }
+    .faq-item p { font-size: 14px; color: var(--text-muted); margin: 0; }
     .related { text-align: center; padding-bottom: 48px; }
     .related-links a { color: var(--blue); font-weight: 600; }
   </style>

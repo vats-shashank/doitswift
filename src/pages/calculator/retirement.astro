@@ -1,41 +1,73 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
+import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
 
-const canonical = 'https://doitswift.com/calculator/retirement/';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: 'Retirement Calculator — DoItSwift',
-      url: canonical,
-      applicationCategory: 'FinanceApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description: 'Estimate retirement corpus, inflation-adjusted expenses, and monthly SIP needed with year-by-year projections.',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'What is the 25× rule?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'A rough rule of thumb: target a corpus about 25 times your first year of annual retirement expenses, assuming a ~4% sustainable withdrawal rate — useful as a sanity check, not a guarantee.',
-          },
-        },
-      ],
-    },
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageDescription =
+  'Retirement planning calculator: grow current monthly expenses with inflation to retirement, estimate required corpus using post-retirement return assumptions, optional starting savings, monthly SIP needed to bridge the shortfall, 25× rule hint, and a year-by-year expense table. Currency formats display only. Illustrative—does not model tax, fees, or pension income.';
+
+const faqs: CalculatorFaqItem[] = [
+  {
+    question: 'What is the 25× rule shown on the page?',
+    answer:
+      'It is a rough cross-check: about twenty-five times first-year annual retirement expenses if you assume roughly a four percent first-year withdrawal rate. Real portfolios need buffers for taxes, fees, and volatility.',
+  },
+  {
+    question: 'Is the corpus number guaranteed if I follow the SIP?',
+    answer:
+      'No. Returns and inflation are assumptions only. Markets fluctuate and life events change spending—revisit the plan regularly.',
+  },
+  {
+    question: 'Why is my required SIP very high?',
+    answer:
+      'A short horizon to retirement, high future expenses, low assumed pre-retirement return, or starting from zero savings all raise the monthly savings needed to hit the corpus target.',
+  },
+  {
+    question: 'Does this include pension, rental, or part-time income?',
+    answer:
+      'No. Reduce expense inputs or mentally offset other income streams when interpreting the corpus and SIP.',
+  },
+  {
+    question: 'Does the currency dropdown change the mathematics?',
+    answer:
+      'No—it only formats amounts. Enter figures in the currency you are modeling.',
+  },
+  {
+    question: 'Are my financial inputs uploaded?',
+    answer:
+      'No. Projections run locally in your browser.',
+  },
+];
+
+const jsonLd = buildCalculatorJsonLd({
+  site: Astro.site,
+  pathname: Astro.url.pathname,
+  appName: 'DoItSwift Retirement Calculator',
+  breadcrumbName: 'Retirement Calculator',
+  applicationCategory: 'FinanceApplication',
+  browserRequirements: 'Requires JavaScript for inflation projection, corpus math, SIP estimate, chart, and expense table',
+  webAppDescription:
+    'Combine current age, retirement age, life expectancy, monthly expenses, inflation, separate pre- and post-retirement return assumptions, and optional existing savings to estimate a retirement corpus and the monthly SIP that could close the gap. A table shows how expenses inflate year by year, and a 25× heuristic offers a quick benchmark. Sequencing risk, taxes, medical shocks, and variable income are out of scope—treat results as educational planning aids.',
+  featureList: [
+    'Currency display selector',
+    'Current age, retirement age, and life expectancy',
+    'Monthly expenses and inflation assumption',
+    'Pre- and post-retirement return inputs',
+    'Optional current savings lump sum',
+    'Estimated corpus, future monthly expense, and SIP needed',
+    '25× expense rule-of-thumb hint',
+    'Year-by-year projected monthly and annual expenses',
   ],
-};
+  faqs,
+});
 ---
 
 <MainLayout
-  title="Retirement Calculator — How Much You Need to Retire | DoItSwift"
-  description="Plan retirement in India: inflation-adjusted expenses, corpus using real returns, monthly SIP to bridge the gap, and a year-by-year expense table."
-  keywords="retirement calculator, retirement planning calculator, how much money to retire, retirement corpus calculator india"
+  title="Retirement Calculator — Corpus, Inflation & SIP to Retire | DoItSwift"
+  description={pageDescription}
+  keywords="retirement calculator India, retirement corpus calculator, how much to retire calculator, inflation adjusted retirement planning, SIP for retirement goal, 25x rule retirement, retirement expense projection"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -136,6 +168,7 @@ const jsonLd = {
           <summary>Year-by-year expense projection (to retirement)</summary>
           <div class="table-wrap">
             <table>
+              <caption class="sr-only">Projected monthly and annual expenses each year from now until retirement.</caption>
               <thead><tr><th>Year</th><th>Monthly expense</th><th>Annual expense</th></tr></thead>
               <tbody id="retTable"></tbody>
             </table>
@@ -171,11 +204,14 @@ const jsonLd = {
 
   <section class="faq">
     <div class="container">
-      <h2 class="section-title">FAQ</h2>
+      <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item"><h4>Is the corpus guaranteed?</h4><p>No — returns and inflation are assumptions. Revisit them every few years.</p></div>
-        <div class="faq-item"><h4>Why is my SIP so high?</h4><p>A short runway to retirement or high real expenses raises required savings. Try adjusting retirement age or expense growth modestly to see sensitivity.</p></div>
-        <div class="faq-item"><h4>Does this include pension or rental income?</h4><p>No — add those mentally or reduce expense inputs to reflect other income.</p></div>
+        {faqs.map((f) => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>
@@ -360,9 +396,11 @@ const jsonLd = {
     .edu .container { max-width: 760px; }
     .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
     .section-title { text-align: center; margin-bottom: 20px; font-size: 1.5rem; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
     .faq { padding: 32px 0 48px; }
     .faq .container { max-width: 760px; }
-    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 10px; }
+    .faq-list { display: flex; flex-direction: column; gap: 12px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
     .faq-item h4 { font-size: 15px; margin-bottom: 4px; }
     .faq-item p { font-size: 14px; color: var(--text-muted); }
     .related { padding: 24px 0 48px; text-align: center; }

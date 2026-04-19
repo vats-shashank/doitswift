@@ -12,12 +12,14 @@ const tools = [
   { href: '/image/image-to-base64/', icon: '🔢', title: 'Image to Base64', desc: 'Encode images for HTML or APIs' },
 ];
 
+const pageDescription =
+  'Free browser-based image tools: HEIC, WebP, AVIF to JPG; SVG to PNG; image compressor and resizer; favicon ICO generator; Base64 encoder. All run locally — no upload, no signup. Batch and ZIP where supported.';
+
 const collectionJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
   name: 'Free Online Image Tools',
-  description:
-    'Free browser-based image tools. Convert HEIC, WEBP, AVIF, SVG. Compress and resize images. No upload, no signup, unlimited usage.',
+  description: pageDescription,
   url: new URL(Astro.url.pathname, Astro.site).href,
   isPartOf: {
     '@type': 'WebSite',
@@ -36,22 +38,76 @@ const collectionJsonLd = {
     })),
   },
 };
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Which format should I use for my website?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'For photos, modern sites often serve WebP or AVIF with a JPG fallback. For logos with transparency, PNG or SVG is typical. Use compress and resize tools to keep file sizes small without visible quality loss. DoItSwift\'s blog guide "Best Image Format for Websites" compares formats in more detail.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Are my images uploaded to DoItSwift?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'No. These tools run in your browser; your files stay on your device unless you explicitly use a future feature that says otherwise. Disconnect from the internet after the page loads and conversions still work.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Will converting reduce quality?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'JPG and lossy compression always trade size for quality. Use higher quality settings when you need crisp output; use stronger compression for thumbnails and social previews.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I process many files at once?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Yes. Most tools support batch selection or drag-and-drop of multiple files, with ZIP download where it makes sense. There are no artificial batch limits.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do these tools work on mobile?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Yes. Use Safari on iPhone, Chrome on Android, or any modern mobile browser. Very large files may be slower on older phones.',
+      },
+    },
+  ],
+};
 ---
 
 <MainLayout
-  title="Free Online Image Tools — Convert, Compress, Resize Images | DoItSwift"
-  description="Free browser-based image tools. Convert HEIC, WEBP, AVIF, SVG. Compress and resize images. No upload, no signup, unlimited usage."
-  keywords="image converter, heic to jpg, webp converter, image compressor, free image tools, browser image tools, doitswift"
+  title="Free Online Image Tools — HEIC, WebP, AVIF, SVG, Compress, Resize, Base64 | DoItSwift"
+  description={pageDescription}
+  keywords="free image tools online, browser image converter, heic to jpg, webp to jpg, avif to jpg, svg to png, image compressor online, image resizer, favicon generator, image to base64, data url, ico favicon, private image converter, no upload image tools, batch image converter, doitswift"
   canonical={new URL(Astro.url.pathname, Astro.site).toString()}
 >
   <script type="application/ld+json" set:html={JSON.stringify(collectionJsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
 
   <section class="hero">
     <div class="container">
       <div class="badge">🖼️ Image Tools</div>
       <h1>Free Online Image Tools</h1>
       <p class="subtitle">
-        Convert, compress, and resize images instantly in your browser. No uploads, no limits.
+        Convert HEIC, WebP, and AVIF to JPG; SVG to PNG; compress and resize; build favicons; encode Base64 — all in your
+        browser. No uploads, no limits.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> 100% browser-based</span>
@@ -118,7 +174,45 @@ const collectionJsonLd = {
             situation where a smaller file matters and slight quality loss is acceptable.
           </p>
         </div>
+        <div class="format-card">
+          <h3>SVG</h3>
+          <p>
+            Scalable vector graphics: crisp at any size, ideal for logos and icons. Browsers render SVG as XML; when you
+            need a raster PNG for a legacy app or fixed pixel dimensions, use our{' '}
+            <a href="/image/svg-to-png/">SVG to PNG</a> tool — export stays on your device.
+          </p>
+        </div>
       </div>
+      <p class="formats-guide-hint">
+        Choosing between WebP, AVIF, PNG, and JPG? Read{' '}
+        <a href="/blog/best-image-format-for-web/">best image format for websites</a> — a full comparison with when to
+        use each.
+      </p>
+    </div>
+  </section>
+
+  <section class="image-guides" aria-label="Image guides">
+    <div class="container">
+      <h2 class="section-title">Guides</h2>
+      <p class="section-sub">Longer reads that pair well with these tools.</p>
+      <ul class="image-guides-grid">
+        <li>
+          <a href="/blog/best-image-format-for-web/">Best image format for websites</a>
+          <span class="image-guides-desc">WebP, AVIF, PNG, JPG — trade-offs and fallbacks.</span>
+        </li>
+        <li>
+          <a href="/blog/heic-vs-jpg/">HEIC vs JPG</a>
+          <span class="image-guides-desc">Apple photos vs universal JPEG for sharing and editing.</span>
+        </li>
+        <li>
+          <a href="/blog/convert-iphone-photos-to-jpg/">Convert iPhone photos to JPG</a>
+          <span class="image-guides-desc">Workflow tips when you need JPEG from an iPhone library.</span>
+        </li>
+        <li>
+          <a href="/blog/open-heic-windows-11/">Open HEIC on Windows 11</a>
+          <span class="image-guides-desc">View Apple HEIC files before or instead of converting.</span>
+        </li>
+      </ul>
     </div>
   </section>
 
@@ -130,7 +224,9 @@ const collectionJsonLd = {
           <h4>Which format should I use for my website?</h4>
           <p>
             For photos, modern sites often serve WebP or AVIF with a JPG fallback. For logos with transparency, PNG or
-            SVG is typical. Use our compress and resize tools to keep file sizes small without visible quality loss.
+            SVG is typical. Use our compress and resize tools to keep file sizes small without visible quality loss. For a
+            deeper comparison, read{' '}
+            <a href="/blog/best-image-format-for-web/">best image format for websites</a>.
           </p>
         </div>
         <div class="faq-item">
@@ -252,6 +348,87 @@ const collectionJsonLd = {
       line-height: 1.6;
       margin: 0;
     }
+    .format-card a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .format-card a:hover {
+      color: var(--blue-dark);
+    }
+    .formats-guide-hint {
+      text-align: center;
+      max-width: 640px;
+      margin: 28px auto 0;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+    .formats-guide-hint a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .formats-guide-hint a:hover {
+      color: var(--blue-dark);
+    }
+
+    .image-guides {
+      padding: 40px 0 56px;
+    }
+    .image-guides .container {
+      max-width: 900px;
+    }
+    .image-guides-grid {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 12px;
+    }
+    @media (min-width: 560px) {
+      .image-guides-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .image-guides-grid li {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 18px 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+    }
+    .image-guides-grid a {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--blue);
+      text-decoration: none;
+    }
+    .image-guides-grid a:hover {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .image-guides-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .faq-item a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .faq-item a:hover {
+      color: var(--blue-dark);
+    }
+
     .faq {
       padding: 56px 0 40px;
     }
