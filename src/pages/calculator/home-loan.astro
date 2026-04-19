@@ -1,79 +1,137 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
-import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
+import { calculatorCanonical } from '../../lib/calculatorJsonLd';
 
 const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
 
-const pageDescription =
-  'India home loan EMI calculator with optional prepayment: one-time, yearly, or monthly extra principal after a quiet period. Compare total interest and tenure with vs without prepay, see interest saved and months cut, plus a year-wise summary table. Assumes constant EMI and rate—confirm how your bank applies partial prepayment.';
-
-const faqs: CalculatorFaqItem[] = [
-  {
-    question: 'Does prepayment always reduce tenure?',
-    answer:
-      'This tool assumes the lender keeps your EMI fixed and applies extra principal to shorten the remaining tenure—a common option. Some banks may reduce EMI instead; check your sanction letter.',
-  },
-  {
-    question: 'Why does tenure drop sharply after a large prepayment?',
-    answer:
-      'Large principal reductions remove many future interest accruals at once, so the remaining schedule can jump by years until rounding and the final balance settle.',
-  },
-  {
-    question: 'Is EMI recalculated after prepayment here?',
-    answer:
-      'No. We keep the initial EMI constant for the simulation, which matches many “same EMI, shorter tenure” workflows but not every lender rule.',
-  },
-  {
-    question: 'Does this handle floating interest rates?',
-    answer:
-      'It uses one constant annual rate for the whole schedule. When your floating rate resets, change the rate and re-run for a fresh approximation.',
-  },
-  {
-    question: 'Are tax deductions modeled?',
-    answer:
-      'No. Section 24(b) and 80C interactions are outside this calculator—use a chartered accountant for filing decisions.',
-  },
-  {
-    question: 'How is this different from the EMI calculator?',
-    answer:
-      'The EMI page is a clean amortization without prepayment paths. This page adds optional prepayment timing and frequency plus before/after comparison.',
-  },
-  {
-    question: 'Are loan details uploaded?',
-    answer:
-      'No. Math runs locally in your browser.',
-  },
-];
-
-const jsonLd = buildCalculatorJsonLd({
-  site: Astro.site,
-  pathname: Astro.url.pathname,
-  appName: 'DoItSwift Home Loan Calculator',
-  breadcrumbName: 'Home Loan Calculator',
+const softwareAppLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Home Loan EMI Calculator with Prepayment',
   applicationCategory: 'FinanceApplication',
-  browserRequirements: 'Requires JavaScript for EMI, prepayment simulation, comparison panels, and year-wise table',
-  webAppDescription:
-    'Model a rupee-denominated reducing-balance home loan with sliders and numeric inputs for amount, rate, and tenure, then layer optional prepayments after a chosen number of months. Outputs include baseline vs prepay total interest, effective tenure, interest saved, and an expandable yearly summary. Educational only—banks may apply fees, spreads, or EMI changes differently.',
-  featureList: [
-    'Loan amount, annual interest rate, and tenure in years',
-    'Prepayment amount with none, one-time, yearly, or monthly frequency',
-    'Quiet period before prepayments begin',
-    'Side-by-side total interest and tenure with vs without prepay',
-    'Interest saved and tenure reduction summary',
-    'Expandable year-wise principal, interest, prepay, and balance table',
-    'Note linking to the standard EMI tool when prepay is off',
+  operatingSystem: 'Web Browser',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'INR',
+  },
+  description:
+    'Free home loan EMI calculator with prepayment simulation. Calculate monthly EMI, total interest, and see how prepayments reduce tenure and interest. Year-wise amortization included.',
+  url: 'https://doitswift.com/calculator/home-loan/',
+};
+
+const faqPageLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Does prepayment always reduce tenure?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'This tool assumes the lender keeps your EMI fixed and applies extra principal to shorten the remaining tenure—a common option offered by major banks for floating-rate retail home loans. Some banks may instead reduce your EMI while keeping tenure similar, which changes the savings profile. Your sanction letter and loan agreement specify whether part prepayment retires principal against tenure or EMI. If you are uncertain, ask your loan officer before modeling aggressive prepayment schedules.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Why does tenure drop sharply after a large prepayment?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Large principal reductions immediately remove a chunk of balance that would otherwise accrue interest every month until maturity. The amortization math therefore jumps forward by many months or years in a single step until rounding and the remaining balance settle into a new schedule. Early in the loan this effect is especially dramatic because interest accrual per month is high relative to principal paid by EMI. It is normal to see a sudden drop in displayed remaining tenure after a big prepayment compared with small incremental payments.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is EMI recalculated after prepayment here?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. This simulation keeps the initial EMI constant for the entire payoff path whenever prepayments are applied, which aligns with many same-EMI shorter-tenure workflows. Some lenders re-amortize and issue a new lower EMI after each partial prepayment instead. If your bank follows that rule, our tenure and interest-saved numbers will not match your actual statement. Re-enter your remaining balance and revised tenure after any bank-led re-amortization to approximate reality.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does this handle floating interest rates?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The schedule engine assumes one constant annual interest rate from start to closure for simplicity. When your floating rate resets after MCLR or repo-linked repricing, you should update the rate and re-run to approximate forward months. In practice floating loans can also change tenure or EMI depending on lender policy at reset. Treat each run as a snapshot under the current entered rate rather than a contractual forecast.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Are tax deductions modeled?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. Home loan tax interactions—such as Section 24(b) interest caps, Section 80C principal interactions, co-borrower splits, and let-out property rules—are not built into this repayment engine. The calculator focuses on principal, interest, and prepayment cash flows only. Use an income-tax tool or Chartered Accountant to estimate post-tax affordability after deductions. Prepays still reduce actual interest paid even when they change future deduction headroom.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How is this different from the EMI calculator?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The standalone EMI page solves a classic reducing-balance loan without optional prepayment streams and is ideal when you only need a baseline amortization. This page layers optional prepayment frequency, quiet period timing, and before/after comparisons with a year-wise schedule including prepay columns. Choose the EMI page for the simplest schedule export mindset; use this page when you want to stress-test extra principal strategies.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Are loan details uploaded?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. All mathematics execute locally in your browser; loan amount, rate, and prepayment inputs are not uploaded to DoItSwift or third-party servers for this tool path. Closing your session clears unsaved form values on your device. Shared computers may retain history in the browser cache—clear it if you are privacy sensitive.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How much interest can I save by prepaying my home loan?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'It depends on your loan amount, rate, and prepayment timing. As a rough guide: on a ₹50 lakh loan at 8.5% for 20 years, a ₹1 lakh annual prepayment saves approximately ₹11 lakh in interest and finishes the loan 3.5 years early. Monthly prepayments save more because they reduce principal more frequently. Use the calculator above with your exact numbers — enter different prepayment amounts and frequencies to compare scenarios.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Should I prepay my home loan or invest in SIP?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Compare your loan interest rate with your expected after-tax investment return. If your home loan is at 8.5% and you expect equity SIPs to return 12% over 10+ years, investing theoretically builds more wealth — but with market risk and no guarantee. Prepaying gives a guaranteed return equal to your loan rate by eliminating that interest. A balanced approach: maintain core SIP investments while making moderate annual prepayments from bonuses or windfalls. Use our SIP Calculator to estimate investment growth for comparison.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the best time to make a home loan prepayment?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The earlier, the better. In the first 5-7 years of a long-tenure loan, 70-80% of your EMI goes to interest. Prepaying during this period removes principal that would have accrued decades of interest. A ₹5 lakh prepayment in year 2 saves significantly more than the same prepayment in year 15. The amortization table above shows why — early years have much higher interest components.',
+      },
+    },
   ],
-  faqs,
-});
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://doitswift.com/' },
+    { '@type': 'ListItem', position: 2, name: 'Calculators', item: 'https://doitswift.com/calculator/' },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: 'Home Loan EMI Calculator',
+      item: 'https://doitswift.com/calculator/home-loan/',
+    },
+  ],
+};
 ---
 
 <MainLayout
-  title="Home Loan Calculator India — EMI with Prepayment & Interest Saved | DoItSwift"
-  description={pageDescription}
-  keywords="home loan EMI calculator India, home loan prepayment calculator, loan tenure reduction calculator, extra principal payment home loan, reducing balance EMI prepay, interest saved prepayment calculator"
+  title="Home Loan EMI Calculator with Prepayment — See Interest Saved (Free) | DoItSwift"
+  description="Free home loan EMI calculator with prepayment simulation. Calculate monthly EMI, total interest, and see exactly how much interest and tenure you save with prepayments — one-time, yearly, or monthly. Year-wise amortization included. No signup, runs in your browser."
+  keywords="home loan emi calculator, home loan calculator with prepayment, housing loan emi calculator, home loan prepayment calculator, home loan interest calculator, emi calculator with prepayment, home loan amortization, housing loan calculator india, mortgage prepayment calculator, home loan part payment calculator"
   canonical={canonical}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(softwareAppLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqPageLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
 
   <nav class="breadcrumb container" aria-label="Breadcrumb">
     <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Home Loan EMI (Prepayment)</span>
@@ -82,15 +140,18 @@ const jsonLd = buildCalculatorJsonLd({
   <section class="hero">
     <div class="container">
       <div class="badge">🧮 Free Calculator</div>
-      <h1>Home Loan EMI with Prepayment</h1>
+      <h1>Home Loan EMI Calculator with Prepayment</h1>
       <p class="subtitle">
-        Fixed EMI, floating or fixed rate modeled as constant here. After an optional “quiet period,” apply prepayments that shrink principal while EMI stays the same — tenure shortens until closure.
+        Calculate your home loan EMI and see exactly how much interest and tenure you can save with prepayments. Enter your loan amount, interest rate, and tenure, then add optional prepayments — one-time, yearly, or monthly — to compare total interest with and without extra payments. The calculator shows a detailed year-wise amortization schedule with principal paid, interest paid, prepayment amounts, and ending balance. All calculations run in your browser — your loan details are never stored or transmitted.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> No signup</span>
         <span><span class="check">✓</span> Instant results</span>
         <span><span class="check">✓</span> Works offline</span>
       </div>
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+        Uses the standard reducing-balance EMI formula. Prepayment simulation assumes constant EMI with tenure reduction. Last updated: April 2026. Verify prepayment terms with your lender's sanction letter before making extra payments.
+      </p>
     </div>
   </section>
 
@@ -173,21 +234,246 @@ const jsonLd = buildCalculatorJsonLd({
 
   <section class="edu">
     <div class="container">
-      <h2 class="section-title">Prepaying a home loan — what to know</h2>
+      <h2 class="section-title">How Home Loan EMI Works</h2>
       <p>
-        <strong>When prepayment helps:</strong> If your home loan costs more in interest than you reliably earn on alternate investments <em>after tax</em>, directing spare cash to principal can improve net worth. High EMIs also reduce monthly stress — but keep an emergency fund before aggressive prepayment. This calculator assumes the bank keeps your <strong>EMI constant</strong> and uses prepayments to <strong>shorten tenure</strong>, which is a common option; some lenders instead lower EMI — read your sanction letter.
+        A home loan EMI (Equated Monthly Installment) is the fixed monthly payment you make to repay your housing loan. Each EMI has two parts: <strong>principal repayment</strong> (reducing the borrowed amount) and <strong>interest payment</strong> (the cost of borrowing). In the early years, 70-80% of your EMI goes toward interest. As the loan matures, the proportion shifts — by the final years, most of your EMI reduces the principal.
       </p>
       <p>
-        <strong>Tax angle (India, illustrative):</strong> Section <strong>24(b)</strong> allows deduction on home loan interest within limits for self-occupied property; prepaying reduces future interest and therefore future deductions — that is not necessarily bad (you pay less real interest), but optimizers sometimes model the trade-off. Principal repayment may interact with Section <strong>80C</strong> eligibility on principal repayment within overall caps. Consult a CA for your exact structure.
+        This calculator uses the standard <strong>reducing-balance formula</strong>: EMI = [P × r × (1+r)<sup>n</sup>] / [(1+r)<sup>n</sup> − 1], where P is loan principal, r is monthly interest rate, and n is total months. This is the same formula used by all major banks and housing finance companies worldwide.
+      </p>
+
+      <h3>Why prepayment is powerful</h3>
+      <p>
+        When you make a prepayment (extra payment beyond your regular EMI), it goes <strong>directly to principal reduction</strong>. This immediately reduces the outstanding balance on which future interest is calculated. The result: every rupee (or dollar) of prepayment saves you multiple rupees in interest over the remaining tenure. Early prepayments save the most because interest accrual is highest in the first half of the loan.
+      </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Home Loan Prepayment: Complete Guide</h2>
+
+      <h3>How prepayment reduces interest</h3>
+      <p>
+        When you prepay, the bank applies the extra amount to your outstanding principal. Since interest is calculated on the remaining balance, reducing principal immediately lowers the interest charged in every subsequent month. The EMI stays the same, but because less goes to interest, more goes to principal — creating a compounding effect that shortens your loan significantly.
+      </p>
+
+      <h3>Worked example: ₹50 lakh loan, 8.5%, 20 years</h3>
+      <div class="table-wrap" style="overflow-x: auto; margin: 20px 0;">
+        <table>
+          <thead>
+            <tr>
+              <th>Scenario</th>
+              <th>Monthly EMI</th>
+              <th>Total interest</th>
+              <th>Tenure</th>
+              <th>Interest saved</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>No prepayment</td>
+              <td>₹43,391</td>
+              <td>₹54.14 lakh</td>
+              <td>20 years (240 months)</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>₹1 lakh yearly prepayment</td>
+              <td>₹43,391</td>
+              <td>₹42.8 lakh</td>
+              <td>~16.5 years</td>
+              <td>~₹11.3 lakh</td>
+            </tr>
+            <tr>
+              <td>₹10,000 monthly prepayment</td>
+              <td>₹43,391</td>
+              <td>₹37.2 lakh</td>
+              <td>~14.5 years</td>
+              <td>~₹16.9 lakh</td>
+            </tr>
+            <tr>
+              <td>₹5 lakh one-time (year 3)</td>
+              <td>₹43,391</td>
+              <td>₹47.6 lakh</td>
+              <td>~18 years</td>
+              <td>~₹6.5 lakh</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        <strong>Key insight:</strong> A modest ₹10,000/month extra payment on a ₹50 lakh loan saves nearly <strong>₹17 lakh in interest</strong> and finishes the loan 5.5 years early. Enter your exact numbers in the calculator above to see your personal savings.
+      </p>
+
+      <h3>When to prepay vs when to invest</h3>
+      <p>
+        Prepay your home loan when: your loan interest rate exceeds the after-tax return you can reliably earn on investments. For example, if your home loan charges 9% and your post-tax investment return is 7%, prepaying gives you a guaranteed 9% "return" by avoiding that interest. However, if you can earn 12-14% in equity SIPs over 10+ years, investing may build more wealth than prepaying — but with market risk.
       </p>
       <p>
-        <strong>Full vs partial prepayment:</strong> Full closure ends the loan; partial prepayments chip away principal. Some banks charge prepayment penalties on fixed-rate loans — factor that in. Floating-rate retail home loans often have fewer restrictions for individuals, but verify.
+        Use our <a href="/calculator/sip/">SIP Calculator</a> to estimate investment returns and compare against the interest saved from prepayment. The optimal strategy often combines both: maintain SIP investments while making moderate annual prepayments.
       </p>
+
+      <h3>Prepayment penalties</h3>
       <p>
-        For a simpler EMI without prepayment paths, use the <a href="/calculator/emi/">standard EMI calculator</a>. For investment return on idle cash before prepaying, try the <a href="/calculator/lumpsum/">lumpsum calculator</a>.
+        In India, RBI mandates that <strong>floating-rate home loans for individuals have zero prepayment penalty</strong>. Fixed-rate loans may carry a 2-3% penalty on the prepaid amount — check your sanction letter. Internationally, mortgage prepayment penalties vary by lender and country. Some mortgages have "prepayment privilege" allowing 10-20% annual prepayment without penalty.
       </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Home Loan Interest Rates: What to Expect</h2>
       <p>
-        <strong>International readers:</strong> “Mortgage” is the usual term outside India for a home loan. Our <a href="/calculator/mortgage/">Mortgage calculator</a> uses US conventions (PMI, property tax %, annual insurance). For rupee prepayment modeling and Indian loan norms, this page is the closer match.
+        Interest rates vary by country, lender, credit profile, and economic conditions. Here's a reference for common ranges:
+      </p>
+      <div class="table-wrap" style="overflow-x: auto; margin: 20px 0;">
+        <table>
+          <thead>
+            <tr>
+              <th>Country/Region</th>
+              <th>Typical rate range (2026)</th>
+              <th>Loan term</th>
+              <th>Key factor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>India</td>
+              <td>8.25% – 9.5%</td>
+              <td>15 – 30 years</td>
+              <td>Linked to RBI repo rate (EBLR/RLLR)</td>
+            </tr>
+            <tr>
+              <td>United States</td>
+              <td>6.0% – 7.5%</td>
+              <td>15 or 30 years</td>
+              <td>Fixed-rate dominant, linked to Fed funds rate</td>
+            </tr>
+            <tr>
+              <td>United Kingdom</td>
+              <td>4.5% – 6.5%</td>
+              <td>25 – 35 years</td>
+              <td>Fixed 2-5 year intro, then variable</td>
+            </tr>
+            <tr>
+              <td>Canada</td>
+              <td>5.0% – 6.5%</td>
+              <td>25 years amortization</td>
+              <td>Renewed every 5 years typically</td>
+            </tr>
+            <tr>
+              <td>Australia</td>
+              <td>6.0% – 7.0%</td>
+              <td>25 – 30 years</td>
+              <td>Variable rate common</td>
+            </tr>
+            <tr>
+              <td>UAE</td>
+              <td>4.0% – 6.0%</td>
+              <td>25 years max</td>
+              <td>Linked to EIBOR</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        <strong>Note:</strong> This calculator works for home loans in any currency — just enter your loan amount, rate, and tenure. The currency symbol shows ₹ but the math is universal. For US-specific features (PMI, property tax, homeowner's insurance), use our dedicated <a href="/calculator/mortgage/">Mortgage Calculator</a>. The interest rates reference table above covers India, US, UK, Canada, Australia, and UAE.
+      </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">How Much Home Loan Can You Afford?</h2>
+      <p>
+        Banks approve loans based on your income, but approval doesn't mean affordability. Here are standard guidelines:
+      </p>
+
+      <h3>EMI-to-income ratio</h3>
+      <ul>
+        <li><strong>Below 30%:</strong> Comfortable — leaves room for savings, investments, and emergencies</li>
+        <li><strong>30-40%:</strong> Manageable but tight — limited financial flexibility</li>
+        <li><strong>40-50%:</strong> Stressful — any income disruption becomes a crisis</li>
+        <li><strong>Above 50%:</strong> Most financial advisors strongly advise against this</li>
+      </ul>
+
+      <h3>Quick affordability reference</h3>
+      <div class="table-wrap" style="overflow-x: auto; margin: 20px 0;">
+        <table>
+          <thead>
+            <tr>
+              <th>Monthly in-hand salary</th>
+              <th>Max comfortable EMI (30%)</th>
+              <th>Approx loan at 8.5%, 20 yr</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>₹50,000</td><td>₹15,000</td><td>~₹17 lakh</td></tr>
+            <tr><td>₹75,000</td><td>₹22,500</td><td>~₹26 lakh</td></tr>
+            <tr><td>₹1,00,000</td><td>₹30,000</td><td>~₹35 lakh</td></tr>
+            <tr><td>₹1,50,000</td><td>₹45,000</td><td>~₹52 lakh</td></tr>
+            <tr><td>₹2,00,000</td><td>₹60,000</td><td>~₹69 lakh</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Use our <a href="/calculator/salary/">Salary Calculator</a> to find your in-hand salary from CTC, then use this table to gauge your affordable loan range. For a detailed rent-vs-buy analysis, check our <a href="/calculator/emi-vs-rent/">EMI vs Rent Calculator</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Tax Benefits on Home Loans</h2>
+
+      <h3>India</h3>
+      <p>
+        Indian homeowners can claim two tax deductions on home loans under the old tax regime:
+      </p>
+      <ul>
+        <li><strong>Section 24(b):</strong> Deduction on interest paid — up to ₹2,00,000/year for self-occupied property. This reduces your taxable income, not your tax directly</li>
+        <li><strong>Section 80C:</strong> Deduction on principal repaid — up to ₹1,50,000/year (shared limit with ELSS, PPF, EPF, etc.)</li>
+        <li><strong>Section 80EEA:</strong> Additional ₹1,50,000 for first-time buyers (on qualifying affordable housing — verify current eligibility)</li>
+      </ul>
+      <p>
+        <strong>Prepayment trade-off:</strong> Prepaying reduces future interest, which reduces future Section 24(b) deductions. However, you save real interest (money leaving your pocket) while losing a tax deduction (which only saves you the marginal tax rate on that interest). In most cases, prepaying is still financially better — but model it with our <a href="/calculator/income-tax/">Income Tax Calculator</a>.
+      </p>
+
+      <h3>Other countries</h3>
+      <p>
+        <strong>United States:</strong> Mortgage interest is deductible for itemizing taxpayers (up to $750,000 loan). <strong>United Kingdom:</strong> No mortgage interest deduction for owner-occupied homes. <strong>Canada:</strong> Mortgage interest is generally not deductible for primary residences. Tax rules vary — consult a local tax professional for your jurisdiction.
+      </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Choosing the Right Home Loan Tenure</h2>
+      <p>
+        Tenure choice dramatically impacts both monthly EMI and total interest. Here's the trade-off for a ₹50 lakh (or equivalent) loan at 8.5%:
+      </p>
+      <div class="table-wrap" style="overflow-x: auto; margin: 20px 0;">
+        <table>
+          <thead>
+            <tr>
+              <th>Tenure</th>
+              <th>Monthly EMI</th>
+              <th>Total interest</th>
+              <th>Total paid</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>10 years</td><td>₹61,960</td><td>₹24.35 lakh</td><td>₹74.35 lakh</td></tr>
+            <tr><td>15 years</td><td>₹49,236</td><td>₹38.62 lakh</td><td>₹88.62 lakh</td></tr>
+            <tr><td>20 years</td><td>₹43,391</td><td>₹54.14 lakh</td><td>₹1.04 crore</td></tr>
+            <tr><td>25 years</td><td>₹40,261</td><td>₹70.78 lakh</td><td>₹1.21 crore</td></tr>
+            <tr><td>30 years</td><td>₹38,447</td><td>₹88.41 lakh</td><td>₹1.38 crore</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Going from 20 to 30 years reduces EMI by only ₹4,944/month but adds ₹34.27 lakh in total interest. The sweet spot for most borrowers is <strong>15-20 years</strong> — short enough to limit interest but long enough to keep EMI manageable. A powerful strategy: take a 20-year loan but make voluntary prepayments to finish in 14-16 years.
       </p>
     </div>
   </section>
@@ -196,22 +482,98 @@ const jsonLd = buildCalculatorJsonLd({
     <div class="container">
       <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        {faqs.map((f) => (
-          <div class="faq-item">
-            <h4>{f.question}</h4>
-            <p>{f.answer}</p>
-          </div>
-        ))}
+        <div class="faq-item">
+          <h3>Does prepayment always reduce tenure?</h3>
+          <p>
+            This tool assumes the lender keeps your EMI fixed and applies extra principal to shorten the remaining tenure—a common option offered by major banks for floating-rate retail home loans. Some banks may instead reduce your EMI while keeping tenure similar, which changes the savings profile. Your sanction letter and loan agreement specify whether part prepayment retires principal against tenure or EMI. If you are uncertain, ask your loan officer before modeling aggressive prepayment schedules.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Why does tenure drop sharply after a large prepayment?</h3>
+          <p>
+            Large principal reductions immediately remove a chunk of balance that would otherwise accrue interest every month until maturity. The amortization math therefore jumps forward by many months or years in a single step until rounding and the remaining balance settle into a new schedule. Early in the loan this effect is especially dramatic because interest accrual per month is high relative to principal paid by EMI. It is normal to see a sudden drop in displayed remaining tenure after a big prepayment compared with small incremental payments.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Is EMI recalculated after prepayment here?</h3>
+          <p>
+            No. This simulation keeps the initial EMI constant for the entire payoff path whenever prepayments are applied, which aligns with many same-EMI shorter-tenure workflows. Some lenders re-amortize and issue a new lower EMI after each partial prepayment instead. If your bank follows that rule, our tenure and interest-saved numbers will not match your actual statement. Re-enter your remaining balance and revised tenure after any bank-led re-amortization to approximate reality.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Does this handle floating interest rates?</h3>
+          <p>
+            The schedule engine assumes one constant annual interest rate from start to closure for simplicity. When your floating rate resets after MCLR or repo-linked repricing, you should update the rate and re-run to approximate forward months. In practice floating loans can also change tenure or EMI depending on lender policy at reset. Treat each run as a snapshot under the current entered rate rather than a contractual forecast.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Are tax deductions modeled?</h3>
+          <p>
+            No. Home loan tax interactions—such as Section 24(b) interest caps, Section 80C principal interactions, co-borrower splits, and let-out property rules—are not built into this repayment engine. The calculator focuses on principal, interest, and prepayment cash flows only. Use an income-tax tool or Chartered Accountant to estimate post-tax affordability after deductions. Prepays still reduce actual interest paid even when they change future deduction headroom.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>How is this different from the EMI calculator?</h3>
+          <p>
+            The standalone EMI page solves a classic reducing-balance loan without optional prepayment streams and is ideal when you only need a baseline amortization. This page layers optional prepayment frequency, quiet period timing, and before/after comparisons with a year-wise schedule including prepay columns. Choose the EMI page for the simplest schedule export mindset; use this page when you want to stress-test extra principal strategies.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Are loan details uploaded?</h3>
+          <p>
+            No. All mathematics execute locally in your browser; loan amount, rate, and prepayment inputs are not uploaded to DoItSwift or third-party servers for this tool path. Closing your session clears unsaved form values on your device. Shared computers may retain history in the browser cache—clear it if you are privacy sensitive.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>How much interest can I save by prepaying my home loan?</h3>
+          <p>
+            It depends on your loan amount, rate, and prepayment timing. As a rough guide: on a ₹50 lakh loan at 8.5% for 20 years, a ₹1 lakh annual prepayment saves approximately ₹11 lakh in interest and finishes the loan 3.5 years early. Monthly prepayments save more because they reduce principal more frequently. Use the calculator above with your exact numbers — enter different prepayment amounts and frequencies to compare scenarios.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Should I prepay my home loan or invest in SIP?</h3>
+          <p>
+            Compare your loan interest rate with your expected after-tax investment return. If your home loan is at 8.5% and you expect equity SIPs to return 12% over 10+ years, investing theoretically builds more wealth — but with market risk and no guarantee. Prepaying gives a guaranteed "return" equal to your loan rate by eliminating that interest. A balanced approach: maintain core SIP investments while making moderate annual prepayments from bonuses or windfalls. Use our <a href="/calculator/sip/">SIP Calculator</a> to estimate investment growth for comparison.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>What is the best time to make a home loan prepayment?</h3>
+          <p>
+            The earlier, the better. In the first 5-7 years of a long-tenure loan, 70-80% of your EMI goes to interest. Prepaying during this period removes principal that would have accrued decades of interest. A ₹5 lakh prepayment in year 2 saves significantly more than the same prepayment in year 15. The amortization table above shows why — early years have much higher interest components.
+          </p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="related">
-    <div class="container">
-      <h2 class="section-title">Related calculators</h2>
-      <p class="related-links">
-        <a href="/calculator/emi/">EMI Calculator</a> · <a href="/calculator/mortgage/">Mortgage (US)</a> · <a href="/calculator/lumpsum/">Lumpsum</a> · <a href="/calculator/percentage/">Percentage</a>
-      </p>
+  <section class="related edu">
+    <div class="container related-wide">
+      <h2 class="section-title">Related Financial Calculators</h2>
+      <ul class="related-list">
+        <li><a href="/calculator/emi/">EMI Calculator</a> — Standard loan EMI without prepayment modeling</li>
+        <li><a href="/calculator/mortgage/">Mortgage Calculator (US)</a> — US conventions with PMI, property tax, insurance</li>
+        <li><a href="/calculator/emi-vs-rent/">EMI vs Rent Calculator</a> — Should you buy or rent? Data-driven comparison</li>
+        <li><a href="/calculator/sip/">SIP Calculator</a> — Compare: invest the prepayment amount instead?</li>
+        <li><a href="/calculator/lumpsum/">Lumpsum Calculator</a> — One-time investment return from bonus/windfall</li>
+        <li><a href="/calculator/income-tax/">Income Tax Calculator</a> — Model Section 24(b) and 80C home loan deductions</li>
+        <li><a href="/calculator/salary/">Salary Calculator</a> — Find in-hand salary to determine EMI affordability</li>
+        <li><a href="/calculator/compound-interest/">Compound Interest Calculator</a> — Understand how loan interest compounds</li>
+        <li><a href="/calculator/fd/">FD Calculator</a> — Compare FD returns vs home loan interest rate</li>
+        <li><a href="/calculator/retirement/">Retirement Calculator</a> — Factor housing costs into retirement planning</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="related edu">
+    <div class="container related-wide">
+      <h2 class="section-title">Related Guides</h2>
+      <ul class="related-list">
+        <li><a href="/blog/buy-vs-rent-india/">Buy vs Rent in India 2026: Honest Math</a></li>
+        <li><a href="/blog/old-vs-new-tax-regime/">Old vs New Tax Regime (Home Loan Tax Benefits)</a></li>
+        <li><a href="/blog/how-much-to-retire-india/">How Much Do You Need to Retire in India?</a></li>
+        <li><a href="/blog/compound-interest-explained/">Compound Interest Explained</a></li>
+        <li><a href="/blog/sip-vs-lumpsum/">SIP vs Lumpsum: Invest vs Prepay Decision</a></li>
+      </ul>
     </div>
   </section>
 
@@ -478,6 +840,9 @@ const jsonLd = buildCalculatorJsonLd({
       overflow: auto;
       max-height: 260px;
     }
+    .calc-results .table-wrap {
+      max-height: 260px;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -505,6 +870,39 @@ const jsonLd = buildCalculatorJsonLd({
       color: var(--text-muted);
       margin-bottom: 14px;
     }
+    .edu h3 {
+      font-size: 1.1rem;
+      margin: 24px 0 12px;
+      color: var(--text);
+    }
+    .edu ul {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text-muted);
+      margin: 0 0 16px;
+      padding-left: 1.25rem;
+    }
+    .edu .table-wrap {
+      max-height: none;
+      overflow-x: auto;
+    }
+    .edu table {
+      font-size: 14px;
+    }
+    .edu th,
+    .edu td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: left;
+    }
+    .edu thead th {
+      background: var(--gray-100);
+      color: var(--text);
+      font-weight: 600;
+    }
+    [data-theme='dark'] .edu thead th {
+      background: var(--gray-200);
+    }
     .edu a {
       color: var(--blue);
       font-weight: 600;
@@ -528,9 +926,40 @@ const jsonLd = buildCalculatorJsonLd({
       border-radius: var(--radius);
       padding: 16px;
     }
+    .faq-item h3 {
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+    .faq-item p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin: 0;
+    }
+    .faq-item a {
+      color: var(--blue);
+      font-weight: 600;
+    }
     .related {
       text-align: center;
       padding-bottom: 48px;
+    }
+    .related-wide {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .related-list {
+      list-style: disc;
+      padding-left: 1.25rem;
+      margin: 0;
+      line-height: 1.75;
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+    .related-list a {
+      color: var(--blue);
+      font-weight: 600;
     }
     .related-links a {
       color: var(--blue);

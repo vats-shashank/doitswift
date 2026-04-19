@@ -1,72 +1,137 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
-import { buildCalculatorJsonLd, calculatorCanonical } from '../../lib/calculatorJsonLd';
+import { calculatorCanonical } from '../../lib/calculatorJsonLd';
 
 const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
 
-const pageDescription =
-  'Free income tax calculator for India (FY 2026-27 illustrative): compare new vs old regime, standard deduction, Chapter VI-A (80C, 80D, etc.), HRA exemption input, age-based basic exemption in old regime, 4% health & education cess. Shows tax and effective rate — not filing software or legal advice.';
-
-const jsonLd = buildCalculatorJsonLd({
-  site: Astro.site,
-  pathname: Astro.url.pathname,
-  appName: 'DoItSwift Income Tax Calculator (India)',
-  breadcrumbName: 'Income Tax Calculator',
+const softwareAppLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Income Tax Calculator India',
   applicationCategory: 'FinanceApplication',
-  browserRequirements: 'Requires JavaScript for regime comparison and tax estimates',
-  webAppDescription:
-    'Estimate income tax for resident individuals under simplified new and old regime slab models for India. Inputs include gross income, age group, regime selection, standard deduction toggles, common deductions, and HRA exemption amount. Applies 4% health and education cess on tax; high-income surcharge not modeled. Illustrative educational tool — verify with the Income Tax Department and a qualified professional.',
-  featureList: [
-    'Gross annual income input',
-    'Age group for old regime basic exemption (below 60, 60–80, above 80)',
-    'Preview new regime, old regime, or side-by-side comparison',
-    'Standard deduction and simplified rebate logic (confirm eligibility)',
-    'Chapter VI-A style inputs: 80C, 80D, NPS 80CCD, other deductions, HRA exemption',
-    'Estimated tax, cess, and effective tax rate',
-    'Runs locally in the browser',
+  operatingSystem: 'Web Browser',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'INR',
+  },
+  description:
+    'Free income tax calculator for India FY 2026-27. Compare new regime vs old regime, enter deductions (80C, 80D, HRA), and see tax liability under both systems. Browser-based, no data stored.',
+  url: 'https://doitswift.com/calculator/income-tax/',
+};
+
+const faqPageLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Is this official tax filing?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. This is an illustrative estimator for educational comparison only. It is not affiliated with the Income Tax Department and does not file returns. Official filing requires the government portal, Form 16 reconciliation, and verification of rebates and deductions for your assessment year. Always confirm figures with a chartered accountant or the department before you pay tax or file.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Which regime should I choose?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The better regime depends on your income level and total deductions under Chapter VI-A, HRA, and home loan interest. The new regime offers lower slab rates but limits deductions; the old regime can win if your combined deductions are large enough. Use this calculator each year to compare side-by-side totals because budgets can change slabs and rebates. This tool gives a directional comparison only, not binding tax advice.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: "Why doesn't my tax match Form 16?",
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Employers compute TDS using payroll data, proof submissions, perquisites, and employer-specific policies that this page cannot replicate. Your Form 16 may include allowances, relief, and timing differences for HRA proofs and investment declarations. The calculator uses simplified slab math and your entered inputs only. For an exact match, reconcile with Form 16, AIS, and Form 26AS, and consult payroll or a tax professional if numbers diverge.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Are cess and surcharge included?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'This calculator adds 4% health and education cess on the computed income tax for both regimes, which is how many people think about their final liability at common income levels. Surcharge on very high incomes is not modeled here, so if your taxable income crosses surcharge thresholds you should add surcharge manually or use detailed filing software. Cess applies on the tax amount after slabs, not on gross income, under both regimes.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is HRA calculated automatically?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. You must enter the HRA exemption amount you are eligible for based on metro rules, rent paid, and salary structure, or leave it at zero. Many taxpayers use an HRA calculator or employer worksheets first, then paste the exemption here for the old regime. If you do not pay rent or are not salaried under HRA rules, keep this at zero to avoid overstating old-regime benefits.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can NRIs use this calculator?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Non-resident Indians and other non-residents are taxed differently on income arising in India, and residential status affects exemptions and rebate eligibility. This tool assumes simplified resident individual rules for slab comparison. If you are an NRI or have split-year residency, adjust assumptions manually or seek professional advice because results may not reflect your actual filing position.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do I calculate my income tax for FY 2026-27?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Enter your gross annual income in the calculator above, select your age group, choose the regime (new or old), and add any applicable deductions (80C, 80D, HRA for old regime). The calculator instantly shows your tax liability, effective tax rate, and taxable income. Compare both regimes to see which one saves more tax for your specific income and deduction profile. For official filing, verify with Form 16 and the Income Tax Department portal.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the tax-free income limit in India for FY 2026-27?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Under the new regime, income up to ₹7 lakh (after ₹50,000 standard deduction) is effectively tax-free due to the Section 87A rebate — meaning gross salary up to approximately ₹7.5 lakh results in zero tax. Under the old regime, the basic exemption is ₹2.5 lakh (below 60 years), ₹3 lakh (60-80), or ₹5 lakh (above 80), with rebate up to ₹5 lakh taxable income. The exact tax-free limit depends on which regime you choose and your deductions.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How much tax do I pay on ₹10 lakh salary?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Under the new regime: ₹10 lakh gross salary − ₹50,000 standard deduction = ₹9.5 lakh taxable. Tax: ₹20,000 (5% on ₹4L) + ₹25,000 (10% on ₹2.5L) = ₹45,000 + ₹1,800 cess = approximately ₹46,800. Under the old regime with ₹2.5 lakh deductions (80C + 80D): taxable income ₹7 lakh, tax approximately ₹52,000. At ₹10 lakh, the new regime typically wins unless old regime deductions exceed ₹3 lakh. Enter your exact numbers above to compare.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can salaried employees choose between old and new regime every year?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Salaried employees (without business income) can switch between old and new regime every financial year. You don\'t need to inform your employer — you can claim whichever regime is more beneficial at the time of filing your return. Business/professional income taxpayers can switch only once in their lifetime. The new regime is the default since FY 2023-24; you must explicitly opt in to the old regime by filing Form 10-IEA.',
+      },
+    },
   ],
-  faqs: [
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://doitswift.com/' },
+    { '@type': 'ListItem', position: 2, name: 'Calculators', item: 'https://doitswift.com/calculator/' },
     {
-      question: 'Is this official tax filing?',
-      answer:
-        'No. This is an illustrative estimator only. Verify slabs, rebates, and deductions with a CA or the Income Tax Department for your case.',
-    },
-    {
-      question: 'Which regime should I choose?',
-      answer:
-        'Compare total tax under both regimes each year — the better choice depends on your deductions, rent, loans, and income mix. This calculator gives a directional comparison only.',
-    },
-    {
-      question: 'Why does my tax not match Form 16?',
-      answer:
-        'Employers apply TDS with payroll-specific proofs, perquisites, and timing. This tool does not model every salary component or filing rebate beyond simplified rules.',
-    },
-    {
-      question: 'Are cess and surcharge included?',
-      answer:
-        'We add 4% cess on computed tax. Surcharge for high income is not included — add that manually if applicable.',
-    },
-    {
-      question: 'Is HRA calculated automatically?',
-      answer:
-        'No. Enter the HRA exemption you are eligible for under rent and metro rules, or leave at zero.',
-    },
-    {
-      question: 'Can NRIs use this calculator?',
-      answer:
-        'Residential status changes exemptions and slab applicability. This tool assumes resident individual rules unless you adjust inputs yourself.',
+      '@type': 'ListItem',
+      position: 3,
+      name: 'Income Tax Calculator',
+      item: 'https://doitswift.com/calculator/income-tax/',
     },
   ],
-});
+};
 ---
 
 <MainLayout
-  title="Income Tax Calculator India — New vs Old Regime (FY 2026-27) | DoItSwift"
-  description={pageDescription}
-  keywords="income tax calculator India, new tax regime calculator, old vs new tax regime calculator, FY 2026-27 tax calculator, 80C 80D tax calculator, HRA tax calculator India"
+  title="Income Tax Calculator India FY 2026-27 — New vs Old Regime (Free) | DoItSwift"
+  description="Free income tax calculator for India FY 2026-27. Compare new regime vs old regime side by side. Enter salary, deductions (80C, 80D, HRA), and see tax liability, effective rate, and which regime saves more. Instant, private, no signup."
+  keywords="income tax calculator, income tax calculator india, tax calculator fy 2026-27, new vs old regime, income tax calculator online, salary tax calculator, 80c deduction calculator, old regime vs new regime, tax calculator india free, income tax slab 2026-27"
   canonical={canonical}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(softwareAppLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqPageLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
 
   <nav class="breadcrumb container" aria-label="Breadcrumb">
     <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Income Tax Calculator</span>
@@ -75,15 +140,18 @@ const jsonLd = buildCalculatorJsonLd({
   <section class="hero">
     <div class="container">
       <div class="badge">🧮 Free Calculator</div>
-      <h1>Income Tax Calculator (India)</h1>
+      <h1>Income Tax Calculator India — New vs Old Regime (FY 2026-27)</h1>
       <p class="subtitle">
-        Compare <strong>new regime</strong> slabs (FY 2026-27 illustrative) with a simplified <strong>old regime</strong> model including common deductions. Figures are not legal or filing advice — verify with the latest Finance Act and your CA.
+        Calculate your Indian income tax for FY 2026-27 and compare the new tax regime with the old regime side by side. Enter your gross annual income, deductions under Section 80C, 80D, and HRA to see which regime saves you more tax. The calculator shows tax liability, effective tax rate, and taxable income under both regimes — helping you make an informed choice before filing. All calculations run in your browser; your salary and tax details are never sent to any server.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> No signup</span>
         <span><span class="check">✓</span> Instant results</span>
         <span><span class="check">✓</span> Works offline</span>
       </div>
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+        Slabs based on Union Budget 2025 announcements. Last updated: April 2026. This is an illustrative estimator only — verify with the Income Tax Department or a chartered accountant before filing.
+      </p>
     </div>
   </section>
 
@@ -165,18 +233,229 @@ const jsonLd = buildCalculatorJsonLd({
 
   <section class="edu">
     <div class="container">
-      <h2 class="section-title">How income tax estimation works</h2>
+      <h2 class="section-title">How Income Tax Works in India</h2>
       <p>
-        India’s income tax combines <strong>progressive slabs</strong> (higher slices of income face higher marginal rates) with <strong>rebates</strong>, <strong>cess</strong>, and <strong>surcharge</strong> (not modeled here for very high incomes). The <strong>new tax regime</strong> typically offers lower rates but fewer deductions; the <strong>old regime</strong> keeps Section 80C, 80D, HRA, and other provisions if you qualify and opt in where allowed.
+        India uses a <strong>progressive tax system</strong> — your income is taxed in slabs, with higher portions taxed at higher rates. You don't pay the highest rate on your entire income; each slab applies only to the income within that range. For example, with a ₹12 lakh taxable income under the new regime, only the portion above ₹10 lakh (₹2 lakh) is taxed at 15% — the rest is taxed at lower rates or exempt.
       </p>
       <p>
-        For this calculator, <strong>new regime taxable income</strong> starts from gross salary-like income minus a configurable <strong>standard deduction</strong> (commonly ₹50,000 for salaried taxpayers — verify the applicable year’s limit). We then apply the slab structure you specified: nil up to ₹3 lakh, then 5% from ₹3–7 lakh, 10% from ₹7–10 lakh, 15% from ₹10–12 lakh, 20% from ₹12–15 lakh, and 30% above ₹15 lakh. If taxable income after standard deduction is <strong>₹7 lakh or below</strong>, we set tax to zero to reflect typical Section 87A-style relief for residents — this is a simplification; actual eligibility depends on income type and current law.
+        Since FY 2020-21, taxpayers can choose between two systems: the <strong>new tax regime</strong> (lower rates, minimal deductions) and the <strong>old tax regime</strong> (higher rates but allows deductions like 80C, 80D, HRA, home loan interest). The new regime is the default since FY 2023-24, but you can opt for the old regime if it saves you more tax. This calculator helps you compare both instantly.
+      </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Income Tax Slabs FY 2026-27</h2>
+
+      <h3>New regime tax slabs (default from FY 2023-24)</h3>
+      <div class="table-wrap" style="overflow-x: auto; margin: 20px 0;">
+        <table>
+          <thead>
+            <tr>
+              <th>Taxable income slab</th>
+              <th>Tax rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Up to ₹3,00,000</td><td>Nil</td></tr>
+            <tr><td>₹3,00,001 – ₹7,00,000</td><td>5%</td></tr>
+            <tr><td>₹7,00,001 – ₹10,00,000</td><td>10%</td></tr>
+            <tr><td>₹10,00,001 – ₹12,00,000</td><td>15%</td></tr>
+            <tr><td>₹12,00,001 – ₹15,00,000</td><td>20%</td></tr>
+            <tr><td>Above ₹15,00,000</td><td>30%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        <strong>Rebate under Section 87A:</strong> If taxable income after standard deduction is ₹7 lakh or below, tax is reduced to zero under the new regime. Standard deduction for salaried individuals: ₹50,000 (verify for your assessment year).
+      </p>
+
+      <h3>Old regime tax slabs</h3>
+      <div class="table-wrap" style="overflow-x: auto; margin: 20px 0;">
+        <table>
+          <thead>
+            <tr>
+              <th>Taxable income slab</th>
+              <th>Below 60 years</th>
+              <th>60-80 years</th>
+              <th>Above 80 years</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Up to ₹2,50,000 / ₹3,00,000 / ₹5,00,000</td><td>Nil</td><td>Nil</td><td>Nil</td></tr>
+            <tr><td>₹2,50,001 – ₹5,00,000</td><td>5%</td><td>5% (above ₹3L)</td><td>—</td></tr>
+            <tr><td>₹5,00,001 – ₹10,00,000</td><td>20%</td><td>20%</td><td>20%</td></tr>
+            <tr><td>Above ₹10,00,000</td><td>30%</td><td>30%</td><td>30%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Under the old regime, taxable income is calculated after subtracting deductions: Section 80C (up to ₹1.5 lakh), Section 80D (medical insurance), HRA exemption, standard deduction, home loan interest (Section 24), and others. This is why the old regime can be better despite higher slab rates — if your total deductions exceed ₹3-4 lakh, the old regime often saves more tax.
+      </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">New Regime vs Old Regime: Which Should You Choose?</h2>
+      <div class="table-wrap" style="overflow-x: auto; margin: 20px 0;">
+        <table>
+          <thead>
+            <tr>
+              <th>Factor</th>
+              <th>New regime</th>
+              <th>Old regime</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Tax rates</td>
+              <td>Lower (5% to 30% across 6 slabs)</td>
+              <td>Higher (5% to 30% across 3 slabs)</td>
+            </tr>
+            <tr>
+              <td>Deductions allowed</td>
+              <td>Minimal (standard deduction only)</td>
+              <td>Extensive (80C, 80D, HRA, home loan, NPS, etc.)</td>
+            </tr>
+            <tr>
+              <td>Section 87A rebate</td>
+              <td>Full rebate if taxable ≤ ₹7 lakh</td>
+              <td>Full rebate if taxable ≤ ₹5 lakh</td>
+            </tr>
+            <tr>
+              <td>Best for</td>
+              <td>People with few deductions, simple salaries</td>
+              <td>People with high deductions (rent, insurance, ELSS, home loan)</td>
+            </tr>
+            <tr>
+              <td>Complexity</td>
+              <td>Simple — fewer inputs needed</td>
+              <td>Complex — requires proof of investments and expenses</td>
+            </tr>
+            <tr>
+              <td>Default since</td>
+              <td>FY 2023-24 (must opt out to use old)</td>
+              <td>Must explicitly opt in</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Quick decision rule</h3>
+      <p>
+        <strong>If your total deductions (80C + 80D + HRA + other) exceed ₹3.75 lakh,</strong> the old regime likely saves more tax. Below that threshold, the new regime's lower rates typically win. But this varies by income level — always compare both using the calculator above. At higher incomes (₹20 lakh+), even ₹2-3 lakh in deductions may not be enough to offset the new regime's lower rates.
       </p>
       <p>
-        The <strong>old regime</strong> path subtracts standard deduction (₹50,000), capped 80C (₹1.5 lakh), your 80D entry, HRA, and other deductions from gross income, then applies classic slabs with a <strong>basic exemption</strong> that depends on age: ₹2.5 lakh below 60, ₹3 lakh for 60–80, and ₹5 lakh above 80. Marginal rates are 5% above the basic exemption up to ₹5 lakh, 20% from ₹5–10 lakh, and 30% above ₹10 lakh. We add <strong>4% cess</strong> on the tax for both regimes in this demo.
+        For a detailed analysis with Indian tax strategies, read our guide: <a href="/blog/old-vs-new-tax-regime/">Old vs New Tax Regime: Complete Comparison FY 2025-26</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Key Tax Deductions Under the Old Regime</h2>
+      <p>
+        These deductions reduce your taxable income under the old regime. Enter them in the calculator above to see their impact on your tax liability:
+      </p>
+      <div class="table-wrap" style="overflow-x: auto; margin: 20px 0;">
+        <table>
+          <thead>
+            <tr>
+              <th>Section</th>
+              <th>Deduction for</th>
+              <th>Maximum limit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>80C</td><td>ELSS, PPF, EPF, NSC, life insurance, tuition fees, home loan principal</td><td>₹1,50,000</td></tr>
+            <tr><td>80CCD(1B)</td><td>NPS contributions (additional)</td><td>₹50,000</td></tr>
+            <tr><td>80D</td><td>Medical insurance premium (self + family)</td><td>₹25,000-₹1,00,000</td></tr>
+            <tr><td>24(b)</td><td>Home loan interest (self-occupied property)</td><td>₹2,00,000</td></tr>
+            <tr><td>10(13A)</td><td>HRA exemption (salaried, paying rent)</td><td>Based on formula</td></tr>
+            <tr><td>80TTA</td><td>Savings account interest</td><td>₹10,000</td></tr>
+            <tr><td>80E</td><td>Education loan interest</td><td>No upper limit</td></tr>
+            <tr><td>Standard</td><td>Standard deduction (salaried)</td><td>₹50,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        A salaried individual maximizing 80C (₹1.5L), 80CCD(1B) (₹50K), 80D (₹25K), home loan interest (₹2L), and HRA (₹1.5L) can claim approximately ₹6.25 lakh in deductions — making the old regime significantly cheaper despite higher slab rates. Calculate your specific scenario using the inputs above.
       </p>
       <p>
-        <strong>What to verify manually:</strong> surcharge on income above ₹50 lakh, alternate minimum tax, perquisites, capital gains, house property loss set-off, and the exact standard deduction for your assessment year. Use this page to build intuition and compare regimes side by side, then confirm with Form 16, AIS, or a qualified professional before filing.
+        Use our <a href="/calculator/hra/">HRA Calculator</a> to compute your exact HRA exemption, and our <a href="/calculator/ppf/">PPF Calculator</a> to project your 80C investment returns.
+      </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Worked Example: ₹15 Lakh Salary Under Both Regimes</h2>
+
+      <h3>New regime calculation</h3>
+      <ul>
+        <li>Gross income: ₹15,00,000</li>
+        <li>Standard deduction: −₹50,000</li>
+        <li>Taxable income: ₹14,50,000</li>
+        <li>Tax: Nil on ₹3L + 5% on ₹4L (₹20,000) + 10% on ₹3L (₹30,000) + 15% on ₹2L (₹30,000) + 20% on ₹2.5L (₹50,000) = ₹1,30,000</li>
+        <li>Cess (4%): ₹5,200</li>
+        <li><strong>Total tax: ₹1,35,200</strong></li>
+      </ul>
+
+      <h3>Old regime calculation (with moderate deductions)</h3>
+      <ul>
+        <li>Gross income: ₹15,00,000</li>
+        <li>Standard deduction: −₹50,000</li>
+        <li>80C (ELSS + EPF): −₹1,50,000</li>
+        <li>80D (medical insurance): −₹25,000</li>
+        <li>HRA exemption: −₹1,20,000</li>
+        <li>Taxable income: ₹11,55,000</li>
+        <li>Tax: Nil on ₹2.5L + 5% on ₹2.5L (₹12,500) + 20% on ₹5L (₹1,00,000) + 30% on ₹1.55L (₹46,500) = ₹1,59,000</li>
+        <li>Cess (4%): ₹6,360</li>
+        <li><strong>Total tax: ₹1,65,360</strong></li>
+      </ul>
+
+      <h3>Verdict for this example</h3>
+      <p>
+        <strong>New regime saves ₹30,160</strong> (₹1,65,360 − ₹1,35,200). With ₹3.45 lakh in old regime deductions, the new regime still wins at ₹15 lakh income. The old regime would need approximately ₹4.5+ lakh in deductions (adding home loan interest, NPS) to break even. Try your exact numbers in the calculator above.
+      </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Understanding Tax Concepts</h2>
+
+      <h3>What is cess?</h3>
+      <p>
+        Health and Education Cess is a 4% surcharge applied on the total income tax amount (not on income). If your tax is ₹1,00,000, cess adds ₹4,000, making your total ₹1,04,000. Cess is non-deductible and applies under both regimes.
+      </p>
+
+      <h3>What is surcharge?</h3>
+      <p>
+        Surcharge is an additional tax on high incomes — 10% surcharge on income above ₹50 lakh, 15% above ₹1 crore, 25% above ₹2 crore. This calculator does not model surcharge — if your income exceeds ₹50 lakh, add surcharge manually or consult a CA. Surcharge rates may differ between regimes.
+      </p>
+
+      <h3>What is standard deduction?</h3>
+      <p>
+        A flat ₹50,000 deduction available to all salaried individuals and pensioners under both regimes (verify for your assessment year). It's automatically subtracted from gross salary before applying tax slabs. No proof or investment required — it's applied by default.
+      </p>
+
+      <h3>How is CTC different from taxable income?</h3>
+      <p>
+        Your CTC (Cost to Company) includes employer PF contribution, gratuity, insurance, and other components that may not be taxable or may have separate rules. Taxable income starts from gross salary (CTC minus employer's PF, gratuity, and non-taxable allowances). Use our <a href="/calculator/salary/">Salary Calculator</a> to convert CTC to in-hand salary, then use this tax calculator for tax estimation.
+      </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Your Tax Data Stays Private</h2>
+      <p>
+        Income and tax details are among the most sensitive personal information. This calculator processes everything <strong>locally in your browser using JavaScript</strong>. Your salary, deductions, and tax computation are never transmitted to any server, stored in any database, or shared with third parties. When you close the tab, all data disappears.
+      </p>
+      <p>
+        Unlike tax filing portals and financial platforms that store your financial profile, this tool has zero data persistence. You can verify this by disconnecting from the internet — the calculator still works, because no server communication is needed.
       </p>
     </div>
   </section>
@@ -186,49 +465,97 @@ const jsonLd = buildCalculatorJsonLd({
       <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
         <div class="faq-item">
-          <h4>Is this official tax filing?</h4>
-          <p>No. This is an illustrative estimator only — verify with a CA or the Income Tax Department.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Which regime should I choose?</h4>
+          <h3>Is this official tax filing?</h3>
           <p>
-            Compare total tax under both regimes each year — the better choice depends on your deductions, rent, loans, and income mix. This calculator gives a directional comparison only.
+            No. This is an illustrative estimator for educational comparison only. It is not affiliated with the Income Tax Department and does not file returns. Official filing requires the government portal, Form 16 reconciliation, and verification of rebates and deductions for your assessment year. Always confirm figures with a chartered accountant or the department before you pay tax or file.
           </p>
         </div>
         <div class="faq-item">
-          <h4>Why doesn’t my tax match Form 16?</h4>
+          <h3>Which regime should I choose?</h3>
           <p>
-            Employers apply TDS with payroll-specific proofs, perquisites, and timing. We don’t model all salary components or filing rebates beyond the simplified 87A-style rule.
+            The better regime depends on your income level and total deductions under Chapter VI-A, HRA, and home loan interest. The new regime offers lower slab rates but limits deductions; the old regime can win if your combined deductions are large enough. Use this calculator each year to compare side-by-side totals because budgets can change slabs and rebates. This tool gives a directional comparison only, not binding tax advice.
           </p>
         </div>
         <div class="faq-item">
-          <h4>Are cess and surcharge included?</h4>
+          <h3>Why doesn't my tax match Form 16?</h3>
           <p>
-            We add 4% cess on computed tax. Surcharge for high income is <strong>not</strong> included — add that manually if applicable.
+            Employers compute TDS using payroll data, proof submissions, perquisites, and employer-specific policies that this page cannot replicate. Your Form 16 may include allowances, relief, and timing differences for HRA proofs and investment declarations. The calculator uses simplified slab math and your entered inputs only. For an exact match, reconcile with Form 16, AIS, and Form 26AS, and consult payroll or a tax professional if numbers diverge.
           </p>
         </div>
         <div class="faq-item">
-          <h4>Is HRA calculated automatically?</h4>
+          <h3>Are cess and surcharge included?</h3>
           <p>
-            No. Enter the HRA exemption you are eligible for (as per rent receipts and metro rules) or leave at zero to learn the impact of HRA on the old regime.
+            This calculator adds 4% health and education cess on the computed income tax for both regimes, which is how many people think about their final liability at common income levels. Surcharge on very high incomes is not modeled here, so if your taxable income crosses surcharge thresholds you should add surcharge manually or use detailed filing software. Cess applies on the tax amount after slabs, not on gross income, under both regimes.
           </p>
         </div>
         <div class="faq-item">
-          <h4>Can NRIs use this?</h4>
+          <h3>Is HRA calculated automatically?</h3>
           <p>
-            Residential status changes exemptions and slab applicability. This tool assumes resident individual rules unless you adjust inputs yourself.
+            No. You must enter the HRA exemption amount you are eligible for based on metro rules, rent paid, and salary structure, or leave it at zero. Many taxpayers use an HRA calculator or employer worksheets first, then paste the exemption here for the old regime. If you do not pay rent or are not salaried under HRA rules, keep this at zero to avoid overstating old-regime benefits.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Can NRIs use this calculator?</h3>
+          <p>
+            Non-resident Indians and other non-residents are taxed differently on income arising in India, and residential status affects exemptions and rebate eligibility. This tool assumes simplified resident individual rules for slab comparison. If you are an NRI or have split-year residency, adjust assumptions manually or seek professional advice because results may not reflect your actual filing position.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>How do I calculate my income tax for FY 2026-27?</h3>
+          <p>
+            Enter your gross annual income in the calculator above, select your age group, choose the regime (new or old), and add any applicable deductions (80C, 80D, HRA for old regime). The calculator instantly shows your tax liability, effective tax rate, and taxable income. Compare both regimes to see which one saves more tax for your specific income and deduction profile. For official filing, verify with Form 16 and the Income Tax Department portal.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>What is the tax-free income limit in India for FY 2026-27?</h3>
+          <p>
+            Under the new regime, income up to ₹7 lakh (after ₹50,000 standard deduction) is effectively tax-free due to the Section 87A rebate — meaning gross salary up to approximately ₹7.5 lakh results in zero tax. Under the old regime, the basic exemption is ₹2.5 lakh (below 60 years), ₹3 lakh (60-80), or ₹5 lakh (above 80), with rebate up to ₹5 lakh taxable income. The exact tax-free limit depends on which regime you choose and your deductions.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>How much tax do I pay on ₹10 lakh salary?</h3>
+          <p>
+            Under the new regime: ₹10 lakh gross salary − ₹50,000 standard deduction = ₹9.5 lakh taxable. Tax: ₹20,000 (5% on ₹4L) + ₹25,000 (10% on ₹2.5L) = ₹45,000 + ₹1,800 cess = approximately ₹46,800. Under the old regime with ₹2.5 lakh deductions (80C + 80D): taxable income ₹7 lakh, tax approximately ₹52,000. At ₹10 lakh, the new regime typically wins unless old regime deductions exceed ₹3 lakh. Enter your exact numbers above to compare.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Can salaried employees choose between old and new regime every year?</h3>
+          <p>
+            Salaried employees (without business income) can switch between old and new regime every financial year. You don't need to inform your employer — you can claim whichever regime is more beneficial at the time of filing your return. Business/professional income taxpayers can switch only once in their lifetime. The new regime is the default since FY 2023-24; you must explicitly opt in to the old regime by filing Form 10-IEA.
           </p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="related">
-    <div class="container">
-      <h2 class="section-title">Related calculators</h2>
-      <p class="related-links">
-        <a href="/calculator/sip/">SIP</a> · <a href="/calculator/emi/">EMI</a> · <a href="/calculator/fd/">FD</a> · <a href="/calculator/gst/">GST</a>
-      </p>
+  <section class="related edu">
+    <div class="container" style="text-align: left; max-width: 760px; margin: 0 auto;">
+      <h2 class="section-title" style="text-align: center;">Related Financial Calculators</h2>
+      <ul class="related-list">
+        <li><a href="/calculator/salary/">Salary Calculator</a> — Convert CTC to in-hand salary (then calculate tax on it)</li>
+        <li><a href="/calculator/hra/">HRA Calculator</a> — Compute your exact HRA exemption for old regime</li>
+        <li><a href="/calculator/sip/">SIP Calculator</a> — ELSS SIP for Section 80C tax savings</li>
+        <li><a href="/calculator/ppf/">PPF Calculator</a> — Tax-free PPF returns under 80C</li>
+        <li><a href="/calculator/nps/">NPS Calculator</a> — Additional ₹50,000 deduction under 80CCD(1B)</li>
+        <li><a href="/calculator/emi/">EMI Calculator</a> — Home loan EMI (interest deductible under Section 24)</li>
+        <li><a href="/calculator/fd/">FD Calculator</a> — FD interest is taxable — estimate your FD returns</li>
+        <li><a href="/calculator/gst/">GST Calculator</a> — Indirect tax on goods and services</li>
+        <li><a href="/calculator/home-loan/">Home Loan Calculator</a> — Section 24 and 80C benefits on housing loan</li>
+        <li><a href="/calculator/retirement/">Retirement Calculator</a> — Post-retirement income and tax planning</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="related edu">
+    <div class="container" style="text-align: left; max-width: 760px; margin: 0 auto;">
+      <h2 class="section-title" style="text-align: center;">Related Guides</h2>
+      <ul class="related-list">
+        <li><a href="/blog/old-vs-new-tax-regime/">Old vs New Tax Regime: Complete Comparison (FY 2025-26)</a></li>
+        <li><a href="/blog/ctc-vs-in-hand-salary/">CTC vs In-Hand Salary: What You Actually Take Home</a></li>
+        <li><a href="/blog/sip-vs-lumpsum/">SIP vs Lumpsum: ELSS Tax-Saving Investment Strategy</a></li>
+        <li><a href="/blog/how-much-to-retire-india/">How Much Do You Need to Retire in India?</a></li>
+        <li><a href="/blog/how-to-calculate-gst/">How to Calculate GST on Any Amount</a></li>
+      </ul>
     </div>
   </section>
 
@@ -497,6 +824,42 @@ const jsonLd = buildCalculatorJsonLd({
       color: var(--text-muted);
       margin-bottom: 14px;
     }
+    .edu h3 {
+      font-size: 1.1rem;
+      margin: 24px 0 12px;
+      color: var(--text);
+    }
+    .edu ul {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text-muted);
+      margin: 0 0 16px;
+      padding-left: 1.25rem;
+    }
+    .edu table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .edu th,
+    .edu td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: left;
+    }
+    .edu thead th {
+      background: var(--gray-100);
+      color: var(--text);
+      font-weight: 600;
+    }
+    [data-theme='dark'] .edu thead th {
+      background: var(--gray-200);
+    }
+    .edu a {
+      color: var(--blue);
+      font-weight: 600;
+    }
     .section-title {
       text-align: center;
       margin-bottom: 18px;
@@ -518,6 +881,7 @@ const jsonLd = buildCalculatorJsonLd({
       border-radius: var(--radius);
       padding: 16px;
     }
+    .faq-item h3,
     .faq-item h4 {
       margin-bottom: 8px;
       font-size: 15px;
@@ -532,7 +896,16 @@ const jsonLd = buildCalculatorJsonLd({
       text-align: center;
       padding-bottom: 48px;
     }
-    .related-links a {
+    .related-list {
+      list-style: disc;
+      padding-left: 1.25rem;
+      margin: 0;
+      text-align: left;
+      line-height: 1.75;
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+    .related-list a {
       color: var(--blue);
       font-weight: 600;
     }

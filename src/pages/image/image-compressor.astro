@@ -1,39 +1,145 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+
+const softwareAppLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Image Compressor',
+  applicationCategory: 'MultimediaApplication',
+  operatingSystem: 'Web Browser',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  description:
+    'Free online image compressor. Reduce JPG and PNG file size with adjustable quality. Batch compression, ZIP download, before/after comparison. 100% browser-based, files never uploaded.',
+  url: 'https://doitswift.com/image/image-compressor/',
+};
+
+const faqPageLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Is this image compressor really free and unlimited?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. No limits, no signup, no watermarks. Compression runs in your browser using your device — we do not charge or meter usage.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Are my photos private? Do you upload files?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Your files never leave your device. Compression uses the Canvas API locally; we cannot see, store, or access your images.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What do before and after sizes mean?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Before is your original file size. After is the new JPEG size at your chosen quality setting, shown in kilobytes on each row.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Why does PNG upload become a JPG download?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'This tool re-encodes images as JPEG so you can control size with the quality slider. Lossless PNG recompression in the browser rarely shrinks photos much; JPEG gives predictable savings. Transparent areas are composited on white.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What JPEG quality should I use for websites or email?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'For web photos, 75–85% is a common sweet spot. For email or archiving when quality matters, use 90–100%. Lower settings (below 70%) shrink files more but show stronger compression artifacts.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Will compression ruin print quality?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'At high quality (90–100%) changes are usually invisible on screen. For professional printing, keep quality high or use your original files; heavy compression is meant for screens and sharing.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does it work on mobile?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes — on iPhone, iPad, Android, and modern mobile browsers that support the Canvas API.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is there a maximum file size?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'There is no fixed cap — practical limits depend on your device RAM. Very large images may take longer or fail on low-memory tabs.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I compress many images at once?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Select or drag multiple JPG and PNG files, then download each result or all compressed files as one ZIP.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is there a monthly conversion limit?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. Compress as many images as you want. There are no accounts, quotas, or premium tiers.',
+      },
+    },
+  ],
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://doitswift.com/' },
+    { '@type': 'ListItem', position: 2, name: 'Image Tools', item: 'https://doitswift.com/image/' },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: 'Image Compressor',
+      item: 'https://doitswift.com/image/image-compressor/',
+    },
+  ],
+};
 ---
 
 <MainLayout
-  title="Free Image Compressor — JPG & PNG to Smaller JPEG | Private & Unlimited | DoItSwift"
-  description="Compress JPG and PNG images in your browser — free, private, unlimited. Adjustable JPEG quality (30–100%), before/after file sizes on every row, batch download as ZIP. No uploads; files never leave your device."
-  keywords="image compressor, compress jpg, compress png, reduce image file size, shrink photos, jpeg quality, compress images online free, batch compress images, photo compressor browser, optimize images for web, smaller jpg"
-  canonical={new URL(Astro.url.pathname, Astro.site).toString()}
+  title="Compress Images Online Free — Reduce JPG & PNG File Size (No Upload) | DoItSwift"
+  description="Free online image compressor. Reduce JPG and PNG file size by up to 80% with adjustable quality. Batch compression, ZIP download, before/after comparison. 100% browser-based — your photos are never uploaded. No signup, no watermarks, no limits."
+  keywords="compress image, image compressor, compress jpg, compress png, reduce image size, image compression online, compress photo, reduce file size image, image size reducer, compress jpeg online free"
+  canonical={canonical}
 >
-  <!-- Schema markup for SEO (aligned with on-page FAQ) -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      { "@type": "Question", "name": "Is this image compressor really free and unlimited?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. No limits, no signup, no watermarks. Compression runs in your browser using your device — we do not charge or meter usage." }},
-      { "@type": "Question", "name": "Are my photos private? Do you upload files?", "acceptedAnswer": { "@type": "Answer", "text": "Your files never leave your device. Compression uses the Canvas API locally; we cannot see, store, or access your images." }},
-      { "@type": "Question", "name": "What do before and after sizes mean?", "acceptedAnswer": { "@type": "Answer", "text": "Before is your original file size. After is the new JPEG size at your chosen quality setting, shown in kilobytes on each row." }},
-      { "@type": "Question", "name": "Why does PNG upload become a JPG download?", "acceptedAnswer": { "@type": "Answer", "text": "This tool re-encodes images as JPEG so you can control size with the quality slider. Lossless PNG recompression in the browser rarely shrinks photos much; JPEG gives predictable savings. Transparent areas are composited on white." }},
-      { "@type": "Question", "name": "What JPEG quality should I use for websites or email?", "acceptedAnswer": { "@type": "Answer", "text": "For web photos, 75–85% is a common sweet spot. For email or archiving when quality matters, use 90–100%. Lower settings (below 70%) shrink files more but show stronger compression artifacts." }},
-      { "@type": "Question", "name": "Will compression ruin print quality?", "acceptedAnswer": { "@type": "Answer", "text": "At high quality (90–100%) changes are usually invisible on screen. For professional printing, keep quality high or use your original files; heavy compression is meant for screens and sharing." }},
-      { "@type": "Question", "name": "Does it work on mobile?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — on iPhone, iPad, Android, and modern mobile browsers that support the Canvas API." }},
-      { "@type": "Question", "name": "Is there a maximum file size?", "acceptedAnswer": { "@type": "Answer", "text": "There is no fixed cap — practical limits depend on your device RAM. Very large images may take longer or fail on low-memory tabs." }},
-      { "@type": "Question", "name": "Can I compress many images at once?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Select or drag multiple JPG and PNG files, then download each result or all compressed files as one ZIP." }},
-      { "@type": "Question", "name": "Is there a monthly conversion limit?", "acceptedAnswer": { "@type": "Answer", "text": "No. Compress as many images as you want. There are no accounts, quotas, or premium tiers." }}
-    ]
-  })} />
+  <script type="application/ld+json" set:html={JSON.stringify(softwareAppLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqPageLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" is:inline></script>
 
   <section class="hero">
     <div class="container">
       <div class="badge">🔒 100% Private — Files Never Leave Your Device</div>
-      <h1>Image Compressor</h1>
+      <h1>Compress Images Online — Reduce JPG & PNG File Size Free</h1>
       <p class="subtitle">
-        Shrink JPG and PNG photos in your browser — adjustable JPEG quality, before/after sizes on every file, batch ZIP download. Nothing is uploaded.
+        Compress JPG and PNG images directly in your browser — reduce file size by up to 80% with adjustable JPEG quality. See before-and-after file sizes for every image, compress unlimited files in batch, and download individually or as a ZIP. Your photos are never uploaded to any server — all compression runs locally on your device using the Canvas API. No signup, no watermarks, no file limits, no daily caps.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> Unlimited files</span>
@@ -41,6 +147,9 @@ import MainLayout from '../../layouts/MainLayout.astro';
         <span><span class="check">✓</span> Works offline</span>
         <span><span class="check">✓</span> No watermarks</span>
       </div>
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+        Uses the HTML Canvas API for browser-based JPEG encoding. No server processing, no file uploads, no data collection. Last updated: April 2026.
+      </p>
     </div>
   </section>
 
@@ -117,16 +226,23 @@ import MainLayout from '../../layouts/MainLayout.astro';
       </section>
 
       <section class="compress-edu-block">
-        <h2 id="how-compressor-works">How this compressor works in your browser</h2>
+        <h2 id="how-browser-compression-works">How Browser-Based Image Compression Works (Technical)</h2>
         <p>
-          Images are decoded in your tab, drawn to an HTML <strong>canvas</strong>, and exported as a new <strong>JPEG</strong> blob at your selected quality. No data is sent to DoItSwift servers — processing stays on your device.
+          Unlike server-based compressors (TinyPNG, Compressor.io, Squoosh from Google), this tool processes images <strong>entirely in your browser</strong>. Here's the technical pipeline:
         </p>
-        <ol class="compress-steps">
-          <li><strong>Add images.</strong> Drop JPG or PNG files, or click to browse. Batch many files at once.</li>
-          <li><strong>Set quality.</strong> Use the slider (30–100%). Default is 80% — a common balance for web-style photos.</li>
-          <li><strong>Review sizes.</strong> Each row shows <strong>Before → After</strong> in kilobytes so you can compare savings.</li>
-          <li><strong>Download.</strong> Save files one by one or use <strong>Download All as ZIP</strong>.</li>
+        <ol class="compress-steps compress-steps-ol">
+          <li><strong>File read:</strong> Your browser reads the image file using the FileReader API — no network request is made</li>
+          <li><strong>Decode to pixels:</strong> The image data is decoded and drawn onto an HTML Canvas element in memory</li>
+          <li><strong>Re-encode as JPEG:</strong> The Canvas exports the pixel data as a new JPEG blob at your selected quality level using <code>canvas.toBlob('image/jpeg', quality)</code></li>
+          <li><strong>Size comparison:</strong> Original and compressed file sizes are compared and displayed</li>
+          <li><strong>Download:</strong> The compressed blob is made available for download via a local object URL — still no server involved</li>
         </ol>
+        <p>
+          <strong>Proof it's private:</strong> Turn off your internet connection, then try compressing an image. It works — because no server communication is needed. Server-based tools like TinyPNG cannot function offline.
+        </p>
+        <p>
+          <strong>Trade-off:</strong> Browser-based compression depends on your device's processing power. Very large images (50+ MP) may be slow on older phones. Server-based tools handle large files faster because they use powerful cloud hardware — but at the cost of your privacy. For most images (up to 20-30 MP), browser-based compression is instant.
+        </p>
       </section>
 
       <section class="compress-edu-block">
@@ -154,6 +270,134 @@ import MainLayout from '../../layouts/MainLayout.astro';
       </section>
 
       <section class="compress-edu-block">
+        <h2 id="typical-compression-results">How Much Can You Compress? Typical Results</h2>
+        <p>
+          Compression results vary by image content (photos compress more than graphics), original quality, and resolution. Here are typical results for common scenarios:
+        </p>
+        <div class="compress-table-wrap">
+          <table class="compress-compare-table compress-table-wide">
+            <caption class="sr-only">Typical compression results by source</caption>
+            <thead>
+              <tr>
+                <th scope="col">Source</th>
+                <th scope="col">Original size</th>
+                <th scope="col">Quality 85%</th>
+                <th scope="col">Quality 70%</th>
+                <th scope="col">Reduction</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Smartphone photo (12 MP)</td>
+                <td>4-6 MB</td>
+                <td>800 KB – 1.2 MB</td>
+                <td>400-700 KB</td>
+                <td>70-85%</td>
+              </tr>
+              <tr>
+                <td>DSLR photo (24 MP)</td>
+                <td>8-15 MB</td>
+                <td>1.5-3 MB</td>
+                <td>800 KB – 1.5 MB</td>
+                <td>75-90%</td>
+              </tr>
+              <tr>
+                <td>Screenshot (PNG, 1080p)</td>
+                <td>1-3 MB</td>
+                <td>200-500 KB</td>
+                <td>100-300 KB</td>
+                <td>80-90%</td>
+              </tr>
+              <tr>
+                <td>Product photo (e-commerce)</td>
+                <td>2-5 MB</td>
+                <td>300-800 KB</td>
+                <td>150-400 KB</td>
+                <td>75-85%</td>
+              </tr>
+              <tr>
+                <td>Already compressed web JPG</td>
+                <td>100-300 KB</td>
+                <td>Similar or slightly larger</td>
+                <td>80-200 KB</td>
+                <td>0-30%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <strong>Tip:</strong> If your images are very large (4000+ pixels wide), <a href="/image/image-resizer/">resize them first</a> to your target display size, then compress. Resizing removes unnecessary pixels; compression removes unnecessary data within those pixels. Combining both gives the maximum reduction.
+        </p>
+      </section>
+
+      <section class="compress-edu-block">
+        <h2 id="use-case-quality-settings">Best Quality Settings for Common Use Cases</h2>
+        <div class="compress-table-wrap">
+          <table class="compress-compare-table compress-table-wide">
+            <caption class="sr-only">Recommended JPEG quality by use case</caption>
+            <thead>
+              <tr>
+                <th scope="col">Use case</th>
+                <th scope="col">Recommended quality</th>
+                <th scope="col">Target file size</th>
+                <th scope="col">Why</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Website hero images</td>
+                <td>75-80%</td>
+                <td>100-300 KB</td>
+                <td>Core Web Vitals, LCP optimization</td>
+              </tr>
+              <tr>
+                <td>Blog post images</td>
+                <td>75-85%</td>
+                <td>50-200 KB</td>
+                <td>Fast page load, good SEO signal</td>
+              </tr>
+              <tr>
+                <td>E-commerce product photos</td>
+                <td>80-85%</td>
+                <td>100-400 KB</td>
+                <td>Detail matters for purchase decisions</td>
+              </tr>
+              <tr>
+                <td>Email attachments</td>
+                <td>70-80%</td>
+                <td>Under 1 MB</td>
+                <td>Inbox limits (Gmail: 25 MB total)</td>
+              </tr>
+              <tr>
+                <td>WhatsApp / messaging</td>
+                <td>70-75%</td>
+                <td>Under 500 KB</td>
+                <td>Faster send on mobile data</td>
+              </tr>
+              <tr>
+                <td>Resume / ID photo upload</td>
+                <td>80-85%</td>
+                <td>50-200 KB</td>
+                <td>Government portals often cap at 100-200 KB</td>
+              </tr>
+              <tr>
+                <td>Social media posts</td>
+                <td>80-85%</td>
+                <td>Under 1 MB</td>
+                <td>Platforms recompress anyway, start clean</td>
+              </tr>
+              <tr>
+                <td>Archiving / backup</td>
+                <td>90-95%</td>
+                <td>Varies</td>
+                <td>Preserve quality, modest size reduction</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="compress-edu-block">
         <h2 id="png-to-jpg-note">Why PNG uploads become JPEG downloads</h2>
         <p>
           <strong>PNG</strong> uses lossless compression — you cannot “turn down quality” the same way as JPEG. To achieve meaningful size reduction for photos, this tool outputs <strong>JPG</strong>. <strong>Transparent</strong> PNG areas are composited on a <strong>white background</strong> (same approach as our <a href="/image/webp-to-jpg/">WebP to JPG</a> tool). If you must keep transparency, keep the PNG or use a format that supports alpha (see the <a href="/blog/best-image-format-for-web/">format comparison</a>).
@@ -161,14 +405,110 @@ import MainLayout from '../../layouts/MainLayout.astro';
       </section>
 
       <section class="compress-edu-block">
-        <h2 id="who-uses-compressor">Who uses an image compressor?</h2>
+        <h2 id="web-performance-seo">Image Compression for Web Performance (SEO Impact)</h2>
+        <p>
+          Images account for <strong>50-80% of total page weight</strong> on most websites. Compressing them is the single highest-impact optimization for page speed — directly affecting Core Web Vitals scores and Google rankings.
+        </p>
+
+        <h3 class="compress-edu-h3">How image size affects Core Web Vitals</h3>
         <ul class="compress-audience-list">
-          <li><strong>Website owners</strong> optimizing hero images and blog photos before upload.</li>
-          <li><strong>Job seekers and students</strong> shrinking headshots and scans to meet portal limits.</li>
-          <li><strong>Real estate and e-commerce</strong> teams batch-processing listing photos.</li>
-          <li><strong>Anyone emailing large attachments</strong> when the inbox caps file size.</li>
-          <li><strong>Social media users</strong> reducing camera originals before posting or messaging.</li>
+          <li><strong>LCP (Largest Contentful Paint):</strong> If your hero image is 3 MB, LCP will be slow regardless of server speed. Compressing to 200-400 KB can improve LCP by 1-3 seconds</li>
+          <li><strong>CLS (Cumulative Layout Shift):</strong> Properly sized images with width/height attributes prevent layout shift</li>
+          <li><strong>Total page weight:</strong> Google PageSpeed Insights flags uncompressed images as the #1 opportunity on most sites</li>
         </ul>
+
+        <h3 class="compress-edu-h3">Optimal workflow for web images</h3>
+        <ol class="compress-steps compress-steps-ol">
+          <li><strong>Resize first:</strong> Use our <a href="/image/image-resizer/">Image Resizer</a> to match your display dimensions (don't serve 4000px images in 800px containers)</li>
+          <li><strong>Compress:</strong> Use this compressor at 75-85% quality for web photos</li>
+          <li><strong>Choose format:</strong> For maximum savings, convert to WebP — read our <a href="/blog/best-image-format-for-web/">image format guide</a></li>
+          <li><strong>Test:</strong> Run Google PageSpeed Insights to verify improvement</li>
+        </ol>
+        <p>
+          This resize → compress → format workflow typically reduces image weight by <strong>70-90%</strong> from camera originals.
+        </p>
+      </section>
+
+      <section class="compress-edu-block">
+        <h2 id="doitswift-vs-competitors">DoItSwift vs Other Image Compressors</h2>
+        <div class="compress-table-wrap">
+          <table class="compress-compare-table compress-table-competitors">
+            <caption class="sr-only">Feature comparison with other image compressors</caption>
+            <thead>
+              <tr>
+                <th scope="col">Feature</th>
+                <th scope="col">DoItSwift</th>
+                <th scope="col">TinyPNG</th>
+                <th scope="col">Compressor.io</th>
+                <th scope="col">Squoosh (Google)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Privacy (files stay local)</td>
+                <td><strong>Yes — never uploaded</strong></td>
+                <td>No — uploaded to server</td>
+                <td>No — uploaded to server</td>
+                <td>Yes — browser-based</td>
+              </tr>
+              <tr>
+                <td>Batch compression</td>
+                <td><strong>Yes — unlimited files</strong></td>
+                <td>20 files max (free)</td>
+                <td>1 file at a time</td>
+                <td>1 file at a time</td>
+              </tr>
+              <tr>
+                <td>Quality control</td>
+                <td><strong>Yes — adjustable slider</strong></td>
+                <td>No — automatic only</td>
+                <td>Yes</td>
+                <td>Yes — advanced</td>
+              </tr>
+              <tr>
+                <td>ZIP download</td>
+                <td><strong>Yes</strong></td>
+                <td>Yes (paid for bulk)</td>
+                <td>No</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td>Before/after size</td>
+                <td><strong>Yes — per file</strong></td>
+                <td>Yes — per file</td>
+                <td>Yes</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Free tier limits</td>
+                <td><strong>None — fully free</strong></td>
+                <td>20 images, 5 MB each</td>
+                <td>10 MB limit</td>
+                <td>None — fully free</td>
+              </tr>
+              <tr>
+                <td>Works offline</td>
+                <td><strong>Yes</strong></td>
+                <td>No</td>
+                <td>No</td>
+                <td>Yes (PWA)</td>
+              </tr>
+              <tr>
+                <td>WebP/AVIF output</td>
+                <td>No (JPG only)</td>
+                <td>WebP yes</td>
+                <td>Multiple formats</td>
+                <td>All modern formats</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <strong>Where DoItSwift wins:</strong> Unlimited batch compression with privacy — no other tool offers all three simultaneously. TinyPNG is the market leader but uploads your files and limits free usage. Squoosh is excellent but single-file only. DoItSwift fills the gap: <strong>private, batch, free, no limits</strong>.
+        </p>
+        <p>
+          <strong>Where others win:</strong> If you need WebP or AVIF output, Squoosh or TinyPNG are better choices. If you need advanced controls (chroma subsampling, color profiles), Squoosh offers more granularity. For most everyday compression needs — website images, email attachments, uploads — DoItSwift is faster and more private.
+        </p>
       </section>
 
       <section class="compress-edu-block">
@@ -203,18 +543,25 @@ import MainLayout from '../../layouts/MainLayout.astro';
 
   <section class="compress-related" aria-label="Related tools and guides">
     <div class="container">
-      <h2 class="section-title">Related tools</h2>
-      <ul class="compress-related-grid">
-        <li><a href="/image/image-resizer/">Image Resizer</a></li>
-        <li><a href="/image/webp-to-jpg/">WebP to JPG Converter</a></li>
-        <li><a href="/image/heic-to-jpg/">HEIC to JPG Converter</a></li>
-        <li><a href="/image/avif-to-jpg/">AVIF to JPG Converter</a></li>
+      <h2 class="section-title">Related Image Tools</h2>
+      <ul class="compress-related-list">
+        <li><a href="/image/image-resizer/">Image Resizer</a> — Resize images to exact dimensions before compressing</li>
+        <li><a href="/image/heic-to-jpg/">HEIC to JPG Converter</a> — Convert iPhone HEIC photos to JPG, then compress</li>
+        <li><a href="/image/webp-to-jpg/">WebP to JPG Converter</a> — Convert WebP images to universally compatible JPG</li>
+        <li><a href="/image/avif-to-jpg/">AVIF to JPG Converter</a> — Convert next-gen AVIF format to JPG</li>
+        <li><a href="/image/svg-to-png/">SVG to PNG Converter</a> — Rasterize vector graphics at any resolution</li>
+        <li><a href="/image/favicon-generator/">Favicon Generator</a> — Create multi-size favicons from any image</li>
+        <li><a href="/image/image-to-base64/">Image to Base64</a> — Embed small images directly in HTML/CSS</li>
+        <li><a href="/pdf/compress-pdf/">PDF Compressor</a> — Compress PDF files (similar concept for documents)</li>
+        <li><a href="/pdf/image-to-pdf/">Image to PDF</a> — Combine compressed images into a PDF</li>
       </ul>
-      <h2 class="section-title section-title-sub">Related guides</h2>
-      <ul class="compress-related-grid compress-related-guides">
-        <li><a href="/blog/best-image-format-for-web/">Best Image Format for Websites (WebP vs AVIF vs JPG)</a></li>
-        <li><a href="/blog/how-to-compress-pdf/">How to Compress a PDF</a></li>
+      <h2 class="section-title section-title-sub">Related Guides</h2>
+      <ul class="compress-related-list compress-related-guides">
+        <li><a href="/blog/best-image-format-for-web/">Best Image Format for Websites 2026: WebP vs AVIF vs JPG vs PNG</a></li>
+        <li><a href="/blog/how-to-compress-pdf/">How to Compress PDF Without Losing Quality</a></li>
         <li><a href="/blog/heic-vs-jpg/">HEIC vs JPG: Complete Comparison</a></li>
+        <li><a href="/blog/convert-iphone-photos-to-jpg/">How to Convert iPhone Photos to JPG</a></li>
+        <li><a href="/blog/open-heic-windows-11/">How to Open HEIC Files on Windows 11</a></li>
       </ul>
     </div>
   </section>
@@ -542,6 +889,11 @@ import MainLayout from '../../layouts/MainLayout.astro';
       margin: 0 0 1rem;
       color: var(--text);
     }
+    .compress-edu-h3 {
+      font-size: 1.1rem;
+      margin: 1.5rem 0 0.75rem;
+      color: var(--text);
+    }
     .compress-edu p {
       font-size: 16px;
       line-height: 1.7;
@@ -557,9 +909,22 @@ import MainLayout from '../../layouts/MainLayout.astro';
     .compress-edu a:hover {
       color: var(--blue-dark);
     }
+    .compress-edu code {
+      font-size: 0.9em;
+      padding: 0.15em 0.4em;
+      background: var(--gray-100);
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+    [data-theme='dark'] .compress-edu code {
+      background: var(--gray-200);
+    }
     .compress-steps {
       margin: 0 0 0.5rem;
       padding-left: 1.35rem;
+    }
+    .compress-steps-ol {
+      list-style: decimal;
     }
     .compress-steps li {
       font-size: 16px;
@@ -582,6 +947,13 @@ import MainLayout from '../../layouts/MainLayout.astro';
       min-width: 480px;
       border-collapse: collapse;
       font-size: 14px;
+    }
+    .compress-table-wide {
+      min-width: 640px;
+    }
+    .compress-table-competitors {
+      min-width: 720px;
+      font-size: 13px;
     }
     .compress-compare-table th,
     .compress-compare-table td {
@@ -623,37 +995,27 @@ import MainLayout from '../../layouts/MainLayout.astro';
       margin-bottom: 1rem;
       font-size: 1.2rem;
     }
-    .compress-related-grid {
-      list-style: none;
+    .compress-related-list {
+      list-style: disc;
       margin: 0;
-      padding: 0;
-      display: grid;
-      gap: 10px;
+      padding-left: 1.35rem;
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--text);
     }
-    @media (min-width: 520px) {
-      .compress-related-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    .compress-related-list li {
+      margin-bottom: 0.65rem;
     }
-    .compress-related-grid a {
-      display: block;
-      padding: 14px 16px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+    .compress-related-list a {
       color: var(--blue);
       font-weight: 600;
-      font-size: 15px;
       text-decoration: none;
-      box-shadow: var(--shadow-sm);
-      transition: border-color 0.15s ease, background 0.15s ease;
     }
-    .compress-related-grid a:hover {
-      border-color: var(--blue);
-      background: var(--blue-light);
+    .compress-related-list a:hover {
+      text-decoration: underline;
     }
-    [data-theme='dark'] .compress-related-grid a:hover {
-      background: rgba(0, 102, 255, 0.12);
+    .compress-related-guides {
+      margin-top: 0;
     }
   </style>
 </MainLayout>

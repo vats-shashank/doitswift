@@ -3,152 +3,129 @@ import MainLayout from '../../layouts/MainLayout.astro';
 
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 
-const pageDescription =
-  'Merge PDF files in your browser with pdf-lib — combine two or more documents, drag to reorder, see page counts per file, download merged.pdf. Private, unlimited, no upload. Works offline after load.';
-
-const jsonLd = {
+const softwareAppLd = {
   '@context': 'https://schema.org',
-  '@graph': [
+  '@type': 'SoftwareApplication',
+  name: 'Merge PDF',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web Browser',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  description:
+    'Free online PDF merger. Combine multiple PDF files into one document with drag-and-drop reordering. Browser-based processing — files never uploaded.',
+  url: canonical,
+};
+
+const faqPageLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
     {
-      '@type': 'WebApplication',
-      name: 'DoItSwift Merge PDF',
-      url: canonical,
-      applicationCategory: 'UtilitiesApplication',
-      operatingSystem: 'Web browser',
-      browserRequirements: 'Requires JavaScript and pdf-lib (loaded from CDN)',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-      description:
-        'Combine multiple PDF files into one document using pdf-lib in the browser. Reorder sources with drag and drop, copy all pages in sequence, save as merged.pdf. Processing is local — PDFs are not uploaded to DoItSwift.',
-      featureList: [
-        'Merge two or more PDFs into a single downloadable file',
-        'Drag-and-drop list to set merge order before combining',
-        'Shows page count per file in the merge queue',
-        'Copies every page from each source PDF in list order',
-        'Default download filename merged.pdf',
-        'Client-side merge with pdf-lib — no server upload',
-        'Merge button requires at least two PDFs',
-        'Password-protected or unreadable PDFs may fail; unlock or re-export first',
-      ],
+      '@type': 'Question',
+      name: 'How do I merge PDF files into one?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Drop your PDF files onto the tool above, drag rows to set the desired order, and click "Merge into one PDF." The combined document downloads automatically as merged.pdf — rename it after saving if you prefer a different name. Each source file\'s page count is shown so you can verify the order before merging. All processing happens in your browser — no files are uploaded anywhere.',
+      },
     },
     {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'Is Merge PDF free and unlimited?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes. Combine as many PDFs as your device can handle with no signup, watermarks, or usage quotas.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Are my PDFs uploaded to DoItSwift servers?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'No. pdf-lib runs in your browser; merge happens locally and we never receive your files.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Why do I need at least two PDF files?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Merging combines multiple sources into one. For a single PDF, use split, compress, or other tools instead.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Does the order of files matter?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes. The top of the list becomes the first pages of the merged PDF. Drag rows to change order before merging.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Will bookmarks, forms, and links be preserved?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'pdf-lib copies page content; complex interactive features may not transfer perfectly. Test important forms after merging.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Can I merge password-protected or encrypted PDFs?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Encrypted PDFs may fail to load. Unlock with the correct password using DoItSwift Unlock PDF, or re-export from the original app, then merge.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'What is the download filename?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'The merged file downloads as merged.pdf by default; you can rename it after saving.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'How many PDFs can I combine at once?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'There is no fixed count limit — practical limits are your device memory and browser performance for very large batches.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Does Merge PDF work on mobile?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes on modern phones; very large PDFs may be slow — use Wi-Fi and keep the tab active until the merge finishes.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Is there a monthly limit or account required?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'No accounts, no quotas, and no premium tier.',
-          },
-        },
-      ],
+      '@type': 'Question',
+      name: 'Can I merge PDFs for free without a watermark?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes — this merger is completely free with no watermarks, no daily limits, and no account required. Unlike Smallpdf (2 free merges/day) and Adobe Acrobat Online (requires login), DoItSwift has no restrictions. The tool runs in your browser, so there are no server costs to limit, which is why it can be fully free. There is no monthly quota and no premium tier.',
+      },
     },
     {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        {
-          '@type': 'ListItem',
-          position: 1,
-          name: 'Home',
-          item: new URL('/', Astro.site).href,
-        },
-        {
-          '@type': 'ListItem',
-          position: 2,
-          name: 'PDF Tools',
-          item: new URL('/pdf/', Astro.site).href,
-        },
-        {
-          '@type': 'ListItem',
-          position: 3,
-          name: 'Merge PDF',
-          item: canonical,
-        },
-      ],
+      '@type': 'Question',
+      name: 'Is it safe to merge PDFs online?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'It depends on the tool. Most online PDF mergers (iLovePDF, Smallpdf, Adobe) upload your files to remote servers — risky for contracts, financial documents, or identity proofs. This tool processes files entirely in your browser without uploading. Your documents never leave your device. You can verify this by disconnecting from the internet and trying the merger — it still works.',
+      },
     },
+    {
+      '@type': 'Question',
+      name: 'Can I merge a PDF with a Word document or image?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Not directly — all files must be PDFs. To include a Word document, first export or print it as PDF from Word or Google Docs. To include images, use our Image to PDF tool to convert them. Then merge all the PDFs together using this tool.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is Merge PDF free and unlimited?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Combine as many PDFs as your device can handle with no signup, watermarks, or usage quotas. There is no fixed count cap — practical limits are your device RAM and browser performance for very large batches. On modern phones the tool works too; very large PDFs may be slower, so use Wi-Fi and keep the tab active until the merge finishes.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Are my PDFs uploaded to DoItSwift servers?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. pdf-lib runs in your browser; merge happens locally and we never receive your files. Files are read with the FileReader API and processed in memory only. No network request sends your document bytes to DoItSwift. After you close the tab, nothing persists on our side because nothing was transmitted.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Why do I need at least two PDF files?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Merging combines multiple sources into one output document — that workflow only makes sense when you have two or more PDFs to join. If you only have a single PDF, use Split PDF, Compress PDF, or other tools instead to edit or shrink that file. Adding one PDF and exporting it unchanged would not add value over keeping the original.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does the order of files matter?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. The top of the list becomes the first pages of the merged PDF, and each following file is appended in order. Drag rows to change order before merging so the final document reads the way you intend. Getting order right before merge saves you from splitting and re-merging later when a page ends up in the wrong place.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Will bookmarks, forms, and links be preserved?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'pdf-lib copies page content; complex interactive features may not transfer perfectly compared with desktop Acrobat. Bookmarks and some form fields can be dropped or simplified during merge. For mission-critical forms, merge a test copy first and verify fields and links in your PDF reader. If preservation fails, re-export from the authoring app and merge again.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I merge password-protected or encrypted PDFs?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Encrypted PDFs may fail to load or parse depending on encryption settings. When you have the password, use DoItSwift Unlock PDF first to produce an unlocked copy, then add that file to the merge list. If a file is corrupted, open it in Chrome to verify — if the browser cannot display it, re-export from the original application before merging.',
+      },
+    },
+  ],
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://doitswift.com/' },
+    { '@type': 'ListItem', position: 2, name: 'PDF Tools', item: 'https://doitswift.com/pdf/' },
+    { '@type': 'ListItem', position: 3, name: 'Merge PDF', item: canonical },
   ],
 };
 ---
 
 <MainLayout
-  title="Merge PDF — Combine PDFs Online, Reorder Pages, merged.pdf | DoItSwift"
-  description={pageDescription}
-  keywords="merge pdf, combine pdf files, join pdf online, merge pdf free, pdf merger browser, combine multiple pdfs, reorder pdf merge, pdf-lib merge, private merge pdf, no upload merge pdf, unlimited merge pdf"
+  title="Merge PDF Online Free — Combine PDF Files Without Uploading | DoItSwift"
+  description="Merge multiple PDF files into one document for free. Drag-and-drop reordering, unlimited files, no watermarks. 100% browser-based — your PDFs are never uploaded to any server. No signup required."
+  keywords="merge pdf, combine pdf, merge pdf online, pdf merger, combine pdf files, join pdf, merge pdf free, merge pdf files online free, combine pdf files into one, pdf combiner"
   canonical={canonical}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(softwareAppLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqPageLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" is:inline></script>
 
   <nav class="breadcrumb container" aria-label="Breadcrumb">
@@ -158,10 +135,9 @@ const jsonLd = {
   <section class="hero">
     <div class="container">
       <div class="badge">🔒 100% Private — Files Never Leave Your Device</div>
-      <h1>Merge PDF</h1>
+      <h1>Merge PDF Files Online — Free, Private, No Upload</h1>
       <p class="subtitle">
-        Combine two or more PDFs with pdf-lib in your browser — drag rows to set order, see page counts, download{' '}
-        <code class="hero-code">merged.pdf</code>. Nothing uploads to our servers.
+        Combine multiple PDF files into a single document instantly. Drop your PDFs, drag to reorder, click merge — download one combined file. Unlike most PDF mergers that upload your documents to remote servers, this tool processes everything in your browser using the pdf-lib JavaScript library. Your files never leave your device — there's no upload, no server processing, and no data retention. Unlimited files, no size limit, no watermarks, no signup.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> Unlimited files</span>
@@ -169,6 +145,9 @@ const jsonLd = {
         <span><span class="check">✓</span> Works offline</span>
         <span><span class="check">✓</span> No watermarks</span>
       </div>
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+        Uses the open-source pdf-lib library for browser-based PDF processing. No server uploads, no file retention, no tracking. Last updated: April 2026.
+      </p>
     </div>
   </section>
 
@@ -205,119 +184,362 @@ const jsonLd = {
   <article class="merge-edu" aria-label="Guide: merging PDF files">
     <div class="container merge-edu-inner">
       <section class="merge-edu-block">
-        <h2 id="merge-workflows">How merging PDFs helps in real workflows</h2>
+        <h2 id="how-to-merge-steps">How to Merge PDF Files (Step by Step)</h2>
+
+        <h3 class="merge-edu-h3">Step 1: Add your PDF files</h3>
         <p>
-          People merge PDFs every day: bundling invoices, combining legal exhibits, joining lecture notes, or assembling
-          signed forms. A <strong>browser-based</strong> merger keeps sensitive documents off random upload servers — you
-          stay in control from selection through download.
+          Drag and drop your PDF files onto the drop zone, or click to open your file manager and select PDFs. You can add as many files as you need — there's no cap. Each file's name and page count appears in the list below.
         </p>
         <p>
-          For step-by-step context and privacy tips, read{' '}
-          <a href="/blog/how-to-merge-pdf/">how to merge PDFs</a> on the DoItSwift blog.
+          <strong>Tip:</strong> You can select multiple files at once. On Windows, hold Ctrl and click each file. On Mac, hold Cmd and click. This saves time compared to adding files one by one.
+        </p>
+
+        <h3 class="merge-edu-h3">Step 2: Arrange the order</h3>
+        <p>
+          The first file in the list becomes the first pages of your merged document. Drag rows up or down to rearrange. Getting this right before merging saves you from having to split and re-merge later.
+        </p>
+
+        <h3 class="merge-edu-h3">Step 3: Click merge</h3>
+        <p>
+          Hit <strong>Merge into one PDF</strong>. The tool reads each PDF using the pdf-lib JavaScript library, copies all pages in order into a new document, and creates the merged file. This happens entirely in your browser's memory — nothing is sent to any server.
+        </p>
+
+        <h3 class="merge-edu-h3">Step 4: Download your merged PDF</h3>
+        <p>
+          The merged file downloads automatically as <code>merged.pdf</code>. Rename it to something meaningful — like "Invoices_Q1_2026.pdf" or "Application_Documents.pdf" — so you can find it later.
         </p>
       </section>
 
       <section class="merge-edu-block">
-        <h2 id="how-merge-works">How this tool merges your PDFs</h2>
+        <h2 id="when-merge-pdfs">When You Need to Merge PDF Files</h2>
+
+        <h3 class="merge-edu-h3">Document submission</h3>
         <p>
-          The page uses <strong>pdf-lib</strong>: each chosen file is loaded in memory, then <strong>all pages are copied
-          in list order</strong> into one new document. You can <strong>drag rows</strong> to change which file comes first;
-          the banner shows <strong>page counts</strong> per file so you know what you are combining. Output downloads as{' '}
-          <code>merged.pdf</code> — rename after saving if you need a different name.
+          Government portals, university applications, job portals, and visa applications often accept only one PDF upload. Merge your cover letter, resume, certificates, and ID proof into a single file that meets the portal's requirements.
         </p>
+
+        <h3 class="merge-edu-h3">Invoice and receipt bundling</h3>
         <p>
-          If a file is <strong>encrypted or corrupted</strong>, it may fail to load; use{' '}
-          <a href="/pdf/unlock-pdf/">Unlock PDF</a> when you have the password, or re-export from the original application.
+          Accountants and business owners merge monthly invoices into one file for record-keeping, tax filing, or sharing with auditors. Instead of emailing 12 attachments, one merged "Invoices_March_2026.pdf" is cleaner and easier to archive.
+        </p>
+
+        <h3 class="merge-edu-h3">Legal document compilation</h3>
+        <p>
+          Lawyers compile case files from multiple sources — contracts, correspondence, exhibits, court orders. A merged PDF with proper ordering becomes the definitive case file. For legal documents, browser-based merging is especially important since the content is sensitive and should not be uploaded to third-party servers.
+        </p>
+
+        <h3 class="merge-edu-h3">Academic and student use</h3>
+        <p>
+          Students merge assignment pages, research papers, and reference materials into single submissions. Professors merge syllabi, handouts, and reading materials into course packs.
+        </p>
+
+        <h3 class="merge-edu-h3">Real estate and property</h3>
+        <p>
+          Property transactions involve dozens of documents — sale deed, title report, encumbrance certificate, tax receipts, NOCs. Merging these into one packet simplifies sharing with buyers, sellers, banks, and registrars.
+        </p>
+
+        <h3 class="merge-edu-h3">Portfolio creation</h3>
+        <p>
+          Designers, photographers, and architects merge selected work into a portfolio PDF. Convert images to PDF first using our <a href="/pdf/image-to-pdf/">Image to PDF</a> tool, then merge with a cover page.
         </p>
       </section>
 
       <section class="merge-edu-block">
-        <h2 id="merge-vs-split">After merging: split or compress</h2>
+        <h2 id="browser-merge-technical">How Browser-Based PDF Merging Works</h2>
         <p>
-          Merged files can grow large. Use <a href="/pdf/compress-pdf/">Compress PDF</a> to shrink the download, or{' '}
-          <a href="/pdf/split-pdf/">Split PDF</a> if you later need separate documents again.
+          Most online PDF mergers (iLovePDF, Smallpdf, Adobe Acrobat Online) upload your files to their servers for processing. Your documents travel over the internet, are processed on remote machines, and are stored temporarily (or sometimes not so temporarily) on their infrastructure. For sensitive documents — contracts, financial statements, identity documents — this is a privacy risk.
+        </p>
+        <p>
+          DoItSwift works differently. Here's the technical process:
+        </p>
+        <ol class="merge-edu-ol">
+          <li><strong>File read:</strong> Your browser reads each PDF file using the JavaScript FileReader API — no network request is made</li>
+          <li><strong>Parse:</strong> The pdf-lib library parses each PDF's page structure, fonts, and embedded content in memory</li>
+          <li><strong>Copy pages:</strong> Pages from each source PDF are copied sequentially into a new PDF document object</li>
+          <li><strong>Generate output:</strong> The merged document is serialized to bytes and offered as a download via a local blob URL</li>
+          <li><strong>No server:</strong> At no point is any data transmitted over the network</li>
+        </ol>
+        <p>
+          <strong>Proof:</strong> Disconnect your internet connection, then try merging two PDFs. It works — because no server is involved. Try that with iLovePDF or Smallpdf and it fails instantly.
+        </p>
+      </section>
+
+      <section class="merge-edu-block">
+        <h2 id="large-files-merge">Handling Large Files and Many Documents</h2>
+        <p>
+          Browser-based tools process files using your device's RAM. Here's what to expect:
+        </p>
+        <div class="merge-table-wrap">
+          <table class="merge-compare-table">
+            <caption class="sr-only">Performance expectations by scenario</caption>
+            <thead>
+              <tr>
+                <th scope="col">Scenario</th>
+                <th scope="col">Expected performance</th>
+                <th scope="col">Tips</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2-5 small PDFs (under 5 MB total)</td>
+                <td>Instant (under 1 second)</td>
+                <td>No issues</td>
+              </tr>
+              <tr>
+                <td>10-20 PDFs (10-50 MB total)</td>
+                <td>2-10 seconds</td>
+                <td>Close other browser tabs to free RAM</td>
+              </tr>
+              <tr>
+                <td>50+ pages of scanned documents (50-100 MB)</td>
+                <td>10-30 seconds</td>
+                <td>Use a desktop/laptop, not mobile</td>
+              </tr>
+              <tr>
+                <td>100+ MB combined</td>
+                <td>30-60 seconds, may struggle on older devices</td>
+                <td>Merge in two batches, then merge the results</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <strong>If the merge fails:</strong> Your device ran out of memory. Close other applications and browser tabs, then retry. If it still fails, split the job into smaller batches — merge files 1-5 first, then files 6-10, then merge the two results.
+        </p>
+      </section>
+
+      <section class="merge-edu-block">
+        <h2 id="after-merging">What to Do After Merging</h2>
+
+        <h3 class="merge-edu-h3">Compress the merged file</h3>
+        <p>
+          Merged PDFs often accumulate duplicate fonts and embedded data from each source file, making the output larger than expected. Run the merged file through our <a href="/pdf/compress-pdf/">PDF Compressor</a> for a typical 30-60% size reduction. This is especially useful before emailing or uploading to portals with size limits.
+        </p>
+
+        <h3 class="merge-edu-h3">Extract specific pages</h3>
+        <p>
+          If you merged too many documents, use <a href="/pdf/split-pdf/">Split PDF</a> to extract only the pages you need from the combined file.
+        </p>
+
+        <h3 class="merge-edu-h3">Convert to images</h3>
+        <p>
+          Need individual pages as images? Use <a href="/pdf/pdf-to-jpg/">PDF to JPG</a> on the merged file to get one JPG per page — useful for presentations or social media.
+        </p>
+
+        <h3 class="merge-edu-h3">Common workflow: merge → compress → upload</h3>
+        <ol class="merge-edu-ol">
+          <li>Collect your PDF documents</li>
+          <li><strong>Merge</strong> them into one file (this tool)</li>
+          <li><a href="/pdf/compress-pdf/"><strong>Compress</strong></a> to reduce size</li>
+          <li>Upload to email, portal, or shared drive</li>
+        </ol>
+        <p>
+          All three steps happen in your browser without uploading to any third-party server.
+        </p>
+      </section>
+
+      <section class="merge-edu-block">
+        <h2 id="vs-competitors">DoItSwift vs Other PDF Mergers</h2>
+        <div class="merge-table-wrap">
+          <table class="merge-compare-table merge-table-wide">
+            <caption class="sr-only">Feature comparison with other PDF mergers</caption>
+            <thead>
+              <tr>
+                <th scope="col">Feature</th>
+                <th scope="col">DoItSwift</th>
+                <th scope="col">iLovePDF</th>
+                <th scope="col">Smallpdf</th>
+                <th scope="col">Adobe Acrobat Online</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Files stay on device</td>
+                <td><strong>Yes — never uploaded</strong></td>
+                <td>No — uploaded to server</td>
+                <td>No — uploaded to server</td>
+                <td>No — uploaded to Adobe cloud</td>
+              </tr>
+              <tr>
+                <td>Free merges</td>
+                <td><strong>Unlimited</strong></td>
+                <td>Limited per day</td>
+                <td>2 per day (free)</td>
+                <td>Limited (requires login)</td>
+              </tr>
+              <tr>
+                <td>File count limit</td>
+                <td><strong>None</strong></td>
+                <td>25 files</td>
+                <td>Varies</td>
+                <td>Varies</td>
+              </tr>
+              <tr>
+                <td>File size limit</td>
+                <td><strong>None (device RAM)</strong></td>
+                <td>100-250 MB</td>
+                <td>5 GB (paid)</td>
+                <td>100 MB</td>
+              </tr>
+              <tr>
+                <td>Signup required</td>
+                <td><strong>No</strong></td>
+                <td>No (limited)</td>
+                <td>Yes (after free limit)</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Watermarks</td>
+                <td><strong>Never</strong></td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td>Works offline</td>
+                <td><strong>Yes</strong></td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td>Drag-to-reorder</td>
+                <td><strong>Yes</strong></td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Yes</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <strong>Where DoItSwift wins:</strong> Privacy and unlimited usage. No other popular merger combines browser-only processing with zero limits. iLovePDF and Smallpdf are the market leaders but upload your confidential documents to their servers and cap free usage.
+        </p>
+        <p>
+          <strong>Where others win:</strong> Server-based tools handle very large files (500+ MB) better because they use powerful cloud hardware. Adobe Acrobat also preserves bookmarks and advanced PDF features more reliably. For everyday merging of documents under 100 MB, DoItSwift is faster, more private, and fully free.
+        </p>
+      </section>
+
+      <section class="merge-edu-block">
+        <h2 id="troubleshooting-merge">Troubleshooting Common Merge Problems</h2>
+
+        <h3 class="merge-edu-h3">"One of my PDFs won't load"</h3>
+        <p>
+          The file may be password-protected or corrupted. If password-protected, use our <a href="/pdf/unlock-pdf/">Unlock PDF</a> tool first (you'll need the password), then retry the merge. If corrupted, try opening the PDF in Chrome to verify — if Chrome can't display it, the file itself is damaged.
+        </p>
+
+        <h3 class="merge-edu-h3">"My merged file is much larger than expected"</h3>
+        <p>
+          This happens when source files use different fonts — the merged file embeds all font families from all sources. Run the merged file through our <a href="/pdf/compress-pdf/">PDF Compressor</a> for typical 30-60% reduction.
+        </p>
+
+        <h3 class="merge-edu-h3">"Pages from one PDF appear rotated"</h3>
+        <p>
+          Some PDFs have page rotation metadata that causes issues during merging. Try opening the problematic PDF in Chrome, print it to PDF (Ctrl+P → Save as PDF), then use this fresh version in the merge.
+        </p>
+
+        <h3 class="merge-edu-h3">"The merge is very slow or crashes"</h3>
+        <p>
+          Your device is running low on memory. Close other browser tabs and applications. For very large files (100+ MB total), merge in two batches: merge files 1-5 first, then files 6-10, then merge the two results together.
+        </p>
+      </section>
+
+      <section class="merge-edu-block">
+        <h2 id="merge-blog-more">More on merging PDFs</h2>
+        <p>
+          For step-by-step context and privacy tips, read <a href="/blog/how-to-merge-pdf/">how to merge PDFs</a> on the DoItSwift blog.
         </p>
       </section>
     </div>
   </article>
-
-  <section class="merge-related" aria-label="Related PDF tools and guides">
-    <div class="container">
-      <h2 class="section-title">Related tools</h2>
-      <ul class="merge-related-grid">
-        <li><a href="/pdf/split-pdf/">Split PDF</a></li>
-        <li><a href="/pdf/compress-pdf/">Compress PDF</a></li>
-        <li><a href="/pdf/unlock-pdf/">Unlock PDF</a></li>
-        <li><a href="/pdf/image-to-pdf/">Image to PDF</a></li>
-        <li><a href="/pdf/pdf-to-jpg/">PDF to JPG</a></li>
-        <li><a href="/pdf/jpg-to-pdf/">JPG to PDF</a></li>
-      </ul>
-      <h2 class="section-title section-title-sub">Related guides</h2>
-      <ul class="merge-related-grid merge-related-guides">
-        <li><a href="/blog/how-to-merge-pdf/">How to merge PDFs</a></li>
-        <li><a href="/blog/how-to-split-pdf/">How to split a PDF</a></li>
-        <li><a href="/blog/how-to-compress-pdf/">How to compress a PDF</a></li>
-      </ul>
-    </div>
-  </section>
 
   <section class="faq">
     <div class="container">
       <h2 class="section-title">Frequently Asked Questions</h2>
       <div class="faq-list">
         <div class="faq-item">
-          <h4>Is Merge PDF free and unlimited?</h4>
-          <p>Yes. Combine as many PDFs as your device can handle with no signup, watermarks, or usage quotas.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Are my PDFs uploaded to DoItSwift servers?</h4>
-          <p>No. pdf-lib runs in your browser; merge happens locally and we never receive your files.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Why do I need at least two PDF files?</h4>
+          <h3>How do I merge PDF files into one?</h3>
           <p>
-            Merging combines multiple sources into one. For a single PDF, use{' '}
-            <a href="/pdf/split-pdf/">Split PDF</a>, <a href="/pdf/compress-pdf/">Compress PDF</a>, or other tools instead.
+            Drop your PDF files onto the tool above, drag rows to set the desired order, and click "Merge into one PDF." The combined document downloads automatically. Each source file's page count is shown so you can verify the order before merging. All processing happens in your browser — no files are uploaded anywhere.
           </p>
         </div>
         <div class="faq-item">
-          <h4>Does the order of files matter?</h4>
-          <p>Yes. The top of the list becomes the first pages of the merged PDF. Drag rows to change order before merging.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Will bookmarks, forms, and links be preserved?</h4>
+          <h3>Can I merge PDFs for free without a watermark?</h3>
           <p>
-            pdf-lib copies page content; complex interactive features may not transfer perfectly. Test important forms after
-            merging.
+            Yes — this merger is completely free with no watermarks, no daily limits, and no account required. Unlike Smallpdf (2 free merges/day) and Adobe Acrobat Online (requires login), DoItSwift has no restrictions. The tool runs in your browser, so there are no server costs to limit, which is why it can be fully free.
           </p>
         </div>
         <div class="faq-item">
-          <h4>Can I merge password-protected or encrypted PDFs?</h4>
+          <h3>Is it safe to merge PDFs online?</h3>
           <p>
-            Encrypted PDFs may fail to load. Unlock with the correct password using{' '}
-            <a href="/pdf/unlock-pdf/">Unlock PDF</a>, or re-export from the original app, then merge.
+            It depends on the tool. Most online PDF mergers (iLovePDF, Smallpdf, Adobe) upload your files to remote servers — risky for contracts, financial documents, or identity proofs. This tool processes files entirely in your browser without uploading. Your documents never leave your device. You can verify this by disconnecting from the internet and trying the merger — it still works.
           </p>
         </div>
         <div class="faq-item">
-          <h4>What is the download filename?</h4>
-          <p>The merged file downloads as <code>merged.pdf</code> by default; you can rename it after saving.</p>
-        </div>
-        <div class="faq-item">
-          <h4>How many PDFs can I combine at once?</h4>
+          <h3>Can I merge a PDF with a Word document or image?</h3>
           <p>
-            There is no fixed count limit — practical limits are your device memory and browser performance for very large
-            batches.
+            Not directly — all files must be PDFs. To include a Word document, first export or print it as PDF from Word or Google Docs. To include images, use our <a href="/pdf/image-to-pdf/">Image to PDF</a> tool to convert them. Then merge all the PDFs together using this tool.
           </p>
         </div>
         <div class="faq-item">
-          <h4>Does Merge PDF work on mobile?</h4>
-          <p>Yes on modern phones; very large PDFs may be slow — use Wi-Fi and keep the tab active until the merge finishes.</p>
+          <h3>Is Merge PDF free and unlimited?</h3>
+          <p>
+            Yes. Combine as many PDFs as your device can handle with no signup, watermarks, or usage quotas. There is no fixed count cap — practical limits are your device RAM and browser performance for very large batches. On modern phones the tool works too; very large PDFs may be slower, so use Wi-Fi and keep the tab active until the merge finishes.
+          </p>
         </div>
         <div class="faq-item">
-          <h4>Is there a monthly limit or account required?</h4>
-          <p>No accounts, no quotas, and no premium tier.</p>
+          <h3>Are my PDFs uploaded to DoItSwift servers?</h3>
+          <p>
+            No. pdf-lib runs in your browser; merge happens locally and we never receive your files. Files are read with the FileReader API and processed in memory only. No network request sends your document bytes to DoItSwift. After you close the tab, nothing persists on our side because nothing was transmitted.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Why do I need at least two PDF files?</h3>
+          <p>
+            Merging combines multiple sources into one. For a single PDF, use <a href="/pdf/split-pdf/">Split PDF</a>, <a href="/pdf/compress-pdf/">Compress PDF</a>, or other tools instead. Adding one PDF and exporting it unchanged would not add value over keeping the original.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Does the order of files matter?</h3>
+          <p>
+            Yes. The top of the list becomes the first pages of the merged PDF. Drag rows to change order before merging. Getting order right before merge saves you from splitting and re-merging later when a page ends up in the wrong place.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Will bookmarks, forms, and links be preserved?</h3>
+          <p>
+            pdf-lib copies page content; complex interactive features may not transfer perfectly. Test important forms after merging. For mission-critical forms, merge a test copy first and verify fields and links in your PDF reader.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Can I merge password-protected or encrypted PDFs?</h3>
+          <p>
+            Encrypted PDFs may fail to load. Unlock with the correct password using <a href="/pdf/unlock-pdf/">Unlock PDF</a>, or re-export from the original app, then merge. If a file is corrupted, open it in Chrome to verify before merging again.
+          </p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="merge-related" aria-label="Related PDF tools and guides">
+    <div class="container">
+      <h2 class="section-title">Related PDF Tools</h2>
+      <ul class="merge-related-list">
+        <li><a href="/pdf/split-pdf/">Split PDF</a> — Extract specific pages or break into parts</li>
+        <li><a href="/pdf/compress-pdf/">Compress PDF</a> — Shrink merged files before emailing or uploading</li>
+        <li><a href="/pdf/pdf-to-jpg/">PDF to JPG</a> — Convert merged PDF pages to images</li>
+        <li><a href="/pdf/image-to-pdf/">Image to PDF</a> — Convert images to PDF before merging</li>
+        <li><a href="/pdf/unlock-pdf/">Unlock PDF</a> — Remove password before merging protected files</li>
+        <li><a href="/image/image-compressor/">Image Compressor</a> — Compress images before converting to PDF</li>
+      </ul>
+      <h2 class="section-title section-title-sub">Related Guides</h2>
+      <ul class="merge-related-list merge-related-guides">
+        <li><a href="/blog/how-to-merge-pdf/">How to Merge PDF Files: Complete Guide</a></li>
+        <li><a href="/blog/how-to-compress-pdf/">How to Compress PDF Without Losing Quality</a></li>
+        <li><a href="/blog/how-to-split-pdf/">How to Split a PDF Into Parts</a></li>
+        <li><a href="/blog/how-to-convert-pdf-to-jpg/">How to Convert PDF to JPG</a></li>
+        <li><a href="/blog/best-image-format-for-web/">Best Image Format for Websites 2026</a></li>
+      </ul>
     </div>
   </section>
 
@@ -696,6 +918,14 @@ const jsonLd = {
       margin: 0 0 1rem;
       color: var(--text);
     }
+    .merge-edu-h3 {
+      font-size: 1.1rem;
+      margin: 1.5rem 0 0.65rem;
+      color: var(--text);
+    }
+    .merge-edu-block > .merge-edu-h3:first-of-type {
+      margin-top: 0.5rem;
+    }
     .merge-edu p {
       font-size: 16px;
       line-height: 1.75;
@@ -721,6 +951,59 @@ const jsonLd = {
     [data-theme='dark'] .merge-edu code {
       background: rgba(255, 255, 255, 0.08);
     }
+    .merge-edu-ol {
+      margin: 0 0 1rem;
+      padding-left: 1.35rem;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text);
+    }
+    .merge-edu-ol li {
+      margin-bottom: 0.65rem;
+    }
+    .merge-table-wrap {
+      overflow-x: auto;
+      margin: 1rem 0 1.25rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      -webkit-overflow-scrolling: touch;
+    }
+    .merge-compare-table {
+      width: 100%;
+      min-width: 520px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .merge-table-wide {
+      min-width: 720px;
+      font-size: 13px;
+    }
+    .merge-compare-table th,
+    .merge-compare-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+    .merge-compare-table thead th {
+      background: var(--card);
+      font-weight: 700;
+      color: var(--text);
+    }
+    .merge-compare-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
 
     .merge-related {
       padding: 8px 0 48px;
@@ -733,46 +1016,28 @@ const jsonLd = {
       margin-bottom: 1rem;
       font-size: 1.2rem;
     }
-    .merge-related-grid {
-      list-style: none;
+    .merge-related-list {
+      list-style: disc;
       margin: 0;
-      padding: 0;
-      display: grid;
-      gap: 10px;
+      padding-left: 1.35rem;
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--text);
     }
-    @media (min-width: 520px) {
-      .merge-related-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    .merge-related-list li {
+      margin-bottom: 0.65rem;
     }
-    @media (min-width: 720px) {
-      .merge-related-grid:not(.merge-related-guides) {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-    .merge-related-grid a {
-      display: block;
-      padding: 14px 16px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+    .merge-related-list a {
       color: var(--blue);
       font-weight: 600;
-      font-size: 15px;
       text-decoration: none;
-      box-shadow: var(--shadow-sm);
-      transition: border-color 0.15s ease, background 0.15s ease;
     }
-    .merge-related-grid a:hover {
-      border-color: var(--blue);
-      background: var(--blue-light);
-    }
-    [data-theme='dark'] .merge-related-grid a:hover {
-      background: rgba(0, 102, 255, 0.12);
+    .merge-related-list a:hover {
+      text-decoration: underline;
     }
 
     .faq {
-      padding: 8px 0 60px;
+      padding: 8px 0 24px;
     }
     .faq .container {
       max-width: 820px;
@@ -785,6 +1050,7 @@ const jsonLd = {
       margin-bottom: 12px;
       box-shadow: var(--shadow-sm);
     }
+    .faq-item h3,
     .faq-item h4 {
       font-size: 16px;
       margin-bottom: 6px;

@@ -1,74 +1,137 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
-import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
+import { calculatorCanonical } from '../../lib/calculatorJsonLd';
 
 const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
 
-const pageDescription =
-  'TDEE and calorie target calculator using Mifflin-St Jeor BMR, activity factor, and weekly weight-change goal to adjust calories. Shows example macro grams from a 30/40/30 calorie split—illustrative, not a meal plan. Screening only; consult professionals for medical nutrition.';
-
-const faqs: CalculatorFaqItem[] = [
-  {
-    question: 'What is TDEE?',
-    answer:
-      'Total Daily Energy Expenditure estimates how many calories you burn in a day including baseline metabolism and your chosen activity level, usually built as BMR times an activity multiplier.',
-  },
-  {
-    question: 'What is BMR here?',
-    answer:
-      'Basal Metabolic Rate is estimated with the Mifflin-St Jeor equation from sex, age, height, and weight before activity is applied.',
-  },
-  {
-    question: "Why doesn't my scale weight move exactly with the target?",
-    answer:
-      'Water retention, sodium, stress, and menstrual cycles shift day-to-day weight. Track multi-week trends instead of single readings.',
-  },
-  {
-    question: 'Is aggressive weight loss safe?',
-    answer:
-      'Not for everyone. Very large deficits can be inappropriate with certain conditions—seek medical guidance when in doubt.',
-  },
-  {
-    question: 'Are the macro grams prescriptive?',
-    answer:
-      'They are a simple teaching split from your calorie target. Athletes, diabetes patients, and others may need individualized macros.',
-  },
-  {
-    question: 'Are my stats uploaded?',
-    answer:
-      'No. Calculations run locally in your browser.',
-  },
-];
-
-const jsonLd = buildCalculatorJsonLd({
-  site: Astro.site,
-  pathname: Astro.url.pathname,
-  appName: 'DoItSwift Calorie / TDEE Calculator',
-  breadcrumbName: 'Calorie Calculator',
+const softwareAppLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Calorie Calculator',
   applicationCategory: 'HealthApplication',
-  browserRequirements: 'Requires JavaScript for BMR, TDEE, goal adjustment, and macro example updates',
-  webAppDescription:
-    'Estimate resting energy needs with Mifflin-St Jeor, scale by an activity factor you select, then nudge calories up or down based on a desired weekly weight change rate. Displays BMR, TDEE, per-day adjustment, a floor-guarded calorie target, and example protein, carbohydrate, and fat grams using standard energy densities. Online calculators cannot see body composition or clinical history—treat outputs as educational starting points.',
-  featureList: [
-    'Sex, age, height, and weight with cm/ft-in and kg/lb toggles',
-    'Activity level multiplier dropdown',
-    'Weekly weight change goal slider',
-    'BMR, TDEE, daily delta, and calorie target outputs',
-    'Example macro grams from a fixed calorie split',
-    'Educational article on limitations and dietitian referral',
-    'Links to BMI and ideal weight tools for context',
+  operatingSystem: 'Web Browser',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  description:
+    'Free calorie calculator using the Mifflin-St Jeor formula. Find BMR, TDEE, and daily calorie target for weight loss, maintenance, or gain with macro split.',
+  url: 'https://doitswift.com/calculator/calorie/',
+};
+
+const faqPageLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is TDEE?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Total Daily Energy Expenditure estimates the total calories you burn in a full day combining your basal metabolic rate with the energy cost of movement, exercise, work, and daily activity. In practice it is calculated as BMR multiplied by an activity factor from sedentary to very active. TDEE is your maintenance intake band when averaged over time—eating near TDEE helps stabilize weight while allowing normal life rhythms. Treat this calculator’s TDEE as an estimate; adjust using your measured weight trend over several weeks.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is BMR here?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Basal Metabolic Rate is the calorie burn your body needs at complete rest to sustain breathing, circulation, organ function, and basic repair. This page estimates BMR with the Mifflin–St Jeor equation using sex, age, height, and weight before any activity multiplier is applied. BMR usually makes up a large fraction of total daily expenditure for sedentary people and remains the anchor when you change activity settings. It is still not a lab measurement—clinical indirect calorimetry can differ from equation predictions.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: "Why doesn't my scale weight move exactly with the target?",
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Day-to-day scale changes reflect water retention, sodium shifts, stress hormones, digestive contents, and menstrual cycle phases—not just fat mass. A steady deficit does not plot as a straight line on the bathroom scale because glycogen and fluids fluctuate faster than adipose tissue changes. We recommend comparing weekly averages and multi-week slopes instead of single readings after high-salt meals or intense workouts. Sleep and stress also influence perceived stalls even when fat loss continues slowly.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is aggressive weight loss safe?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Very large deficits can raise fatigue, strength loss, micronutrient gaps, and medical risks—especially alongside chronic illness, pregnancy, adolescence, or eating-disorder history. Aggressive settings may be inappropriate for people on medications that affect appetite, glucose, or electrolytes. Always prefer medically supervised plans if you have cardiac, renal, or endocrine conditions and you want fast loss. If a goal feels unsustainable, slow the pace and reassess with a clinician or registered dietitian.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Are the macro grams prescriptive?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The protein, carbohydrate, and fat grams shown here come from splitting your calorie target using a fixed 30/40/30 template and standard energy densities (4/4/9 kcal per gram). That split is a teaching example—not a personalized meal plan for athletes, diabetes, renal diets, or therapeutic ketogenic protocols. People who strength train often keep calories similar but raise protein; endurance athletes may tilt carbohydrate higher. Ask a dietitian when clinical nuance matters.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Are my stats uploaded?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No—this tool runs entirely in your browser and does not send your age, body size, or outputs to our servers. There is no account storage, cloud sync, or third-party analytics tied to your inputs for this calculation pathway. Clearing the page or closing the tab discards locally shown numbers. Review your browser privacy settings if you share devices with others.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How many calories should I eat per day to lose weight?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Subtract 500-750 calories from your TDEE (maintenance calories) for a safe weight loss rate of 0.5-0.75 kg (1-1.5 lbs) per week. For example, if your TDEE is 2,200 kcal, target 1,450-1,700 kcal/day. Never go below 1,200 kcal (women) or 1,500 kcal (men) without medical supervision. Use the calculator above to find your exact target — select "Lose weight — moderate" as your goal.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the difference between BMR and TDEE?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'BMR (Basal Metabolic Rate) is the calories your body burns at complete rest — just to stay alive. TDEE (Total Daily Energy Expenditure) is BMR multiplied by your activity level — it is the total calories you burn in a day including exercise and daily movement. TDEE is always higher than BMR. You should eat based on TDEE (not BMR) to determine your weight loss or gain target.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is the Mifflin-St Jeor formula accurate?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The Mifflin-St Jeor equation is considered the most accurate BMR predictor for most healthy adults, as endorsed by the Academy of Nutrition and Dietetics. It is more accurate than the older Harris-Benedict formula by approximately 5%. However, it is still an estimate — actual BMR can vary by ±10% due to genetics, thyroid function, body composition, and metabolic adaptation. Use the result as a starting point and adjust based on real-world weight changes over 2-4 weeks.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do I count calories effectively?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Start by calculating your daily target using this calculator. Then track food intake using a food diary, kitchen scale (most accurate), or a calorie tracking app. Focus on tracking consistently rather than perfectly — even approximate tracking builds awareness of portion sizes and calorie-dense foods. Common high-calorie culprits: cooking oil (120 kcal per tablespoon), nuts (160+ kcal per handful), sugary drinks (150-300 kcal per glass), and restaurant meals (often 50-100% more calories than home-cooked equivalents).',
+      },
+    },
   ],
-  faqs,
-});
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://doitswift.com/' },
+    { '@type': 'ListItem', position: 2, name: 'Calculators', item: 'https://doitswift.com/calculator/' },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: 'Calorie Calculator',
+      item: 'https://doitswift.com/calculator/calorie/',
+    },
+  ],
+};
 ---
 
 <MainLayout
-  title="Calorie Calculator — TDEE, BMR & Macro Examples | DoItSwift"
-  description={pageDescription}
-  keywords="TDEE calculator, calorie calculator India, Mifflin St Jeor BMR, daily calorie target weight loss, maintenance calories calculator, macro grams example from calories"
+  title="Calorie Calculator — Find Your Daily Calories, TDEE & BMR (Free) | DoItSwift"
+  description="Free calorie calculator using the Mifflin-St Jeor formula. Find your BMR, TDEE, and daily calorie target for weight loss, maintenance, or gain — with macro split. Supports kg/lb and cm/ft. No signup, runs in your browser."
+  keywords="calorie calculator, tdee calculator, bmr calculator, daily calorie intake calculator, how many calories per day, calorie calculator for weight loss, maintenance calories calculator, calorie intake calculator, calorie deficit calculator, macro calculator"
   canonical={canonical}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(softwareAppLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqPageLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
 
   <nav class="breadcrumb container" aria-label="Breadcrumb">
     <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Calorie Calculator</span>
@@ -77,15 +140,18 @@ const jsonLd = buildCalculatorJsonLd({
   <section class="hero">
     <div class="container">
       <div class="badge">🧮 Free Calculator</div>
-      <h1>Daily Calorie Calculator (TDEE)</h1>
+      <h1>Free Calorie Calculator — Daily Calories, TDEE & BMR</h1>
       <p class="subtitle">
-        Mifflin-St Jeor for BMR, activity multiplier for TDEE, then adjust for weight-loss or gain goals using ~7,700 kcal per kg of body-weight change.
+        Calculate how many calories you should eat per day based on your age, gender, height, weight, and activity level. This calculator uses the Mifflin-St Jeor equation — the most widely recommended BMR formula by nutritionists — to estimate your Basal Metabolic Rate (BMR) and Total Daily Energy Expenditure (TDEE). Set a weight loss, maintenance, or gain goal to see your daily calorie target with a suggested macro split for protein, carbs, and fat. Supports both metric (kg/cm) and imperial (lb/ft) units. All calculations run in your browser — no health data is stored or transmitted.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> No signup</span>
         <span><span class="check">✓</span> Instant results</span>
         <span><span class="check">✓</span> Works offline</span>
       </div>
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+        Uses the Mifflin-St Jeor equation (1990), recommended by the Academy of Nutrition and Dietetics. Last updated: April 2026. This calculator provides estimates — consult a registered dietitian for personalized nutrition advice.
+      </p>
     </div>
   </section>
 
@@ -169,18 +235,256 @@ const jsonLd = buildCalculatorJsonLd({
 
   <section class="edu">
     <div class="container">
-      <h2 class="section-title">BMR, TDEE, and safe targets</h2>
+      <h2 class="section-title">How Many Calories Do You Need Per Day?</h2>
       <p>
-        <strong>Basal Metabolic Rate (BMR)</strong> estimates calories your body would burn at rest — breathing, circulation, temperature control. The <strong>Mifflin–St Jeor</strong> equation is widely used in apps and research for adults: it depends on weight, height, age, and sex. <strong>Total Daily Energy Expenditure (TDEE)</strong> multiplies BMR by an <strong>activity factor</strong> from sedentary to very active lifestyles.
+        Your daily calorie needs depend on five factors: <strong>age</strong> (metabolism slows ~2% per decade after 20), <strong>gender</strong> (males typically need 200-300 more calories due to higher muscle mass), <strong>height and weight</strong> (larger bodies burn more energy), and <strong>activity level</strong> (exercise can add 300-1,000+ calories to daily needs).
+      </p>
+      <p>As a rough reference, average daily calorie needs are:</p>
+      <div class="table-wrap" style="overflow-x: auto; margin: 20px 0;">
+        <table>
+          <thead>
+            <tr>
+              <th>Profile</th>
+              <th>Sedentary</th>
+              <th>Moderately active</th>
+              <th>Very active</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Female, 25, 160 cm, 60 kg</td>
+              <td>~1,650 kcal</td>
+              <td>~2,000 kcal</td>
+              <td>~2,350 kcal</td>
+            </tr>
+            <tr>
+              <td>Male, 25, 175 cm, 75 kg</td>
+              <td>~2,100 kcal</td>
+              <td>~2,550 kcal</td>
+              <td>~3,000 kcal</td>
+            </tr>
+            <tr>
+              <td>Female, 40, 165 cm, 65 kg</td>
+              <td>~1,550 kcal</td>
+              <td>~1,900 kcal</td>
+              <td>~2,250 kcal</td>
+            </tr>
+            <tr>
+              <td>Male, 40, 178 cm, 80 kg</td>
+              <td>~1,950 kcal</td>
+              <td>~2,400 kcal</td>
+              <td>~2,850 kcal</td>
+            </tr>
+            <tr>
+              <td>Female, 55, 158 cm, 62 kg</td>
+              <td>~1,400 kcal</td>
+              <td>~1,750 kcal</td>
+              <td>~2,050 kcal</td>
+            </tr>
+            <tr>
+              <td>Male, 55, 170 cm, 78 kg</td>
+              <td>~1,750 kcal</td>
+              <td>~2,200 kcal</td>
+              <td>~2,600 kcal</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        These are estimates using the Mifflin-St Jeor equation. Your actual needs may differ based on body composition, genetics, thyroid function, and metabolic adaptation. Use the calculator above with your exact measurements for a personalized estimate.
+      </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">What Are BMR, TDEE, and Calorie Deficit?</h2>
+
+      <h3>BMR (Basal Metabolic Rate)</h3>
+      <p>
+        BMR is the number of calories your body burns at complete rest — just to keep you alive (breathing, circulation, cell repair, brain function). It typically accounts for <strong>60-75% of your total daily calories</strong>. BMR is determined primarily by your weight, height, age, and gender. You cannot exercise your way past a slow BMR — it's the baseline your body runs on.
+      </p>
+
+      <h3>TDEE (Total Daily Energy Expenditure)</h3>
+      <p>
+        TDEE is your BMR multiplied by an activity factor that accounts for exercise, walking, work, and daily movement. TDEE represents the <strong>total calories you burn in a day</strong> — it's your maintenance calories. Eat at TDEE and your weight stays stable. Eat below and you lose weight. Eat above and you gain weight.
+      </p>
+
+      <h3>Calorie deficit and surplus</h3>
+      <p>
+        A <strong>calorie deficit</strong> means eating fewer calories than your TDEE. A deficit of ~500 kcal/day leads to approximately 0.5 kg (1 lb) of weight loss per week. A <strong>calorie surplus</strong> means eating more than TDEE — used for muscle gain when combined with resistance training. A surplus of ~250-500 kcal/day is typical for lean muscle building.
       </p>
       <p>
-        To <strong>change body weight</strong>, we apply a daily calorie difference derived from the rule of thumb that <strong>~7,700 kcal</strong> matches roughly <strong>1 kg</strong> of tissue energy over time. So losing 0.5 kg/week suggests about 550 kcal/day deficit. These are population averages — metabolism adapts, water weight swings, and menstrual cycles matter. Very aggressive deficits (especially combined with high training load) can raise injury and fatigue risk.
+        The relationship is often simplified as: <strong>~7,700 kcal ≈ 1 kg of body weight change</strong> (or ~3,500 kcal ≈ 1 lb). This is an approximation — actual results vary as your body adapts metabolically over weeks.
       </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">The Mifflin-St Jeor Formula</h2>
       <p>
-        <strong>Macros</strong> here split target calories into 30% protein, 40% carbohydrate, and 30% fat using 4 kcal/g for protein and carbs and 9 kcal/g for fat — a teaching template, not a prescription for athletes or clinical diets. People who strength-train often prioritize protein higher; ketogenic diets flip carb and fat shares.
+        This calculator uses the <strong>Mifflin-St Jeor equation</strong>, published in 1990 and considered the most accurate BMR predictor for most adults by the Academy of Nutrition and Dietetics (formerly ADA). It replaced the older Harris-Benedict equation, which tends to overestimate BMR by 5-15%.
       </p>
+      <div
+        class="callout formula-callout"
+        style="background: #f0fdf4; border-left: 4px solid #16a34a; padding: 16px 20px; border-radius: 8px; margin: 20px 0; font-family: 'Courier New', monospace;"
+      >
+        <strong>Male BMR = (10 × weight in kg) + (6.25 × height in cm) − (5 × age) + 5</strong><br />
+        <strong>Female BMR = (10 × weight in kg) + (6.25 × height in cm) − (5 × age) − 161</strong>
+      </div>
+
+      <h3>Activity multipliers</h3>
+      <div class="table-wrap" style="overflow-x: auto; margin: 20px 0;">
+        <table>
+          <thead>
+            <tr>
+              <th>Activity level</th>
+              <th>Multiplier</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Sedentary</td><td>×1.2</td><td>Desk job, little or no exercise</td></tr>
+            <tr><td>Lightly active</td><td>×1.375</td><td>Light exercise 1-3 days/week</td></tr>
+            <tr><td>Moderately active</td><td>×1.55</td><td>Moderate exercise 3-5 days/week</td></tr>
+            <tr><td>Very active</td><td>×1.725</td><td>Hard exercise 6-7 days/week</td></tr>
+            <tr><td>Super active</td><td>×1.9</td><td>Very hard exercise + physical job</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Worked example</h3>
+      <p>A 30-year-old male, 175 cm, 78 kg, moderately active, wanting to lose 0.5 kg/week:</p>
+      <ul>
+        <li>BMR = (10 × 78) + (6.25 × 175) − (5 × 30) + 5 = 780 + 1,094 − 150 + 5 = <strong>1,729 kcal</strong></li>
+        <li>TDEE = 1,729 × 1.55 = <strong>2,680 kcal</strong> (maintenance)</li>
+        <li>Deficit for 0.5 kg/week loss = 550 kcal/day</li>
+        <li>Target = 2,680 − 550 = <strong>2,130 kcal/day</strong></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Understanding Macros: Protein, Carbs, and Fat</h2>
       <p>
-        <strong>Limitations:</strong> Online calculators cannot see lean mass, thyroid status, medications, sleep, or stress. Use results as a starting band, then adjust based on weekly weight trend and performance. <strong>Consult a registered dietitian</strong> if you have diabetes, eating disorders, pregnancy, or sport-specific needs. Pair with our <a href="/calculator/bmi/">BMI</a> and <a href="/calculator/ideal-weight/">ideal weight</a> tools only for context — not diagnosis.
+        Macronutrients ("macros") are the three energy-providing nutrients in food. How you distribute your calories across them affects body composition, energy, and satiety:
+      </p>
+
+      <h3>Protein (4 kcal per gram)</h3>
+      <p>
+        Essential for muscle repair, immune function, and satiety. Higher protein diets help preserve muscle during weight loss and support muscle growth during surplus. General recommendations: <strong>1.6-2.2 g per kg of body weight</strong> for active individuals, 0.8-1.0 g/kg for sedentary adults. A 75 kg active person needs roughly 120-165 g protein/day.
+      </p>
+
+      <h3>Carbohydrates (4 kcal per gram)</h3>
+      <p>
+        Primary fuel for brain function and high-intensity exercise. Complex carbs (whole grains, vegetables, legumes) provide sustained energy; refined carbs (sugar, white bread) cause blood sugar spikes. Typical range: <strong>3-7 g per kg</strong> depending on activity level. Endurance athletes need more; sedentary individuals need less.
+      </p>
+
+      <h3>Fat (9 kcal per gram)</h3>
+      <p>
+        Essential for hormone production, vitamin absorption, and cell membrane health. Minimum healthy intake is approximately <strong>0.5-1.0 g per kg of body weight</strong>. Prioritize unsaturated fats (olive oil, nuts, fish) over saturated and trans fats. Fat has 9 kcal/gram (more than double protein/carbs), so small portions pack significant calories.
+      </p>
+
+      <h3>Common macro splits</h3>
+      <div class="table-wrap" style="overflow-x: auto; margin: 20px 0;">
+        <table>
+          <thead>
+            <tr>
+              <th>Goal</th>
+              <th>Protein</th>
+              <th>Carbs</th>
+              <th>Fat</th>
+              <th>Best for</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Balanced (this calculator)</td><td>30%</td><td>40%</td><td>30%</td><td>General fitness, most people</td></tr>
+            <tr><td>High protein</td><td>40%</td><td>30%</td><td>30%</td><td>Muscle building, weight loss with training</td></tr>
+            <tr><td>Low carb</td><td>30%</td><td>20%</td><td>50%</td><td>People who do better with fewer carbs</td></tr>
+            <tr><td>Endurance athlete</td><td>20%</td><td>55%</td><td>25%</td><td>Runners, cyclists, swimmers</td></tr>
+            <tr><td>Ketogenic</td><td>20%</td><td>5%</td><td>75%</td><td>Specific therapeutic or weight loss protocols</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        This calculator uses a 30/40/30 split as a general starting template. For personalized macros, use our <a href="/calculator/macro/">Macro Calculator</a> which lets you set custom ratios based on your specific goals.
+      </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Calorie Targets for Weight Loss: What Actually Works</h2>
+
+      <h3>Safe rates of weight loss</h3>
+      <div class="table-wrap" style="overflow-x: auto; margin: 20px 0;">
+        <table>
+          <thead>
+            <tr>
+              <th>Rate</th>
+              <th>Daily deficit</th>
+              <th>Weekly loss</th>
+              <th>Sustainability</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Slow</td><td>~275 kcal</td><td>~0.25 kg (0.5 lb)</td><td>Very sustainable, minimal muscle loss</td></tr>
+            <tr><td>Moderate</td><td>~550 kcal</td><td>~0.5 kg (1 lb)</td><td>Sustainable for most people, recommended</td></tr>
+            <tr><td>Aggressive</td><td>~1,100 kcal</td><td>~1 kg (2 lb)</td><td>Hard to maintain, risk of muscle loss and fatigue</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Why crash diets backfire</h3>
+      <p>
+        Cutting calories too aggressively (below BMR) triggers <strong>metabolic adaptation</strong> — your body lowers its metabolic rate to conserve energy. This makes further weight loss harder and weight regain almost inevitable when you return to normal eating. Research consistently shows that moderate deficits (10-25% below TDEE) maintained over months produce better long-term results than extreme short-term cuts.
+      </p>
+
+      <h3>The minimum safe intake</h3>
+      <p>
+        General guidelines recommend not eating below <strong>1,200 kcal/day for women</strong> and <strong>1,500 kcal/day for men</strong> without medical supervision. Below these levels, it becomes difficult to get adequate micronutrients (vitamins, minerals) from food alone. If the calculator suggests a target below these thresholds, consider a slower rate of weight loss or consult a dietitian.
+      </p>
+
+      <h3>Exercise vs diet for weight loss</h3>
+      <p>
+        Diet creates the calorie deficit; exercise enhances it and preserves muscle. You cannot out-exercise a bad diet — a 30-minute run burns ~300 kcal, which a single pastry replaces. The most effective approach combines a moderate calorie deficit (from diet) with 3-5 days of exercise (for health, muscle preservation, and metabolic support). Track your intake against the target from this calculator, and track your weight weekly to verify you're on track.
+      </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Calorie Needs for Special Situations</h2>
+
+      <h3>Pregnancy</h3>
+      <p>
+        Calorie needs increase during pregnancy: approximately +0 kcal in the first trimester, +340 kcal/day in the second trimester, and +450 kcal/day in the third trimester (ACOG guidelines). Do not use this calculator to plan weight loss during pregnancy — consult your OB-GYN for personalized nutrition guidance.
+      </p>
+
+      <h3>Breastfeeding</h3>
+      <p>
+        Breastfeeding mothers need approximately 300-500 additional calories per day to support milk production. Aggressive calorie restriction during breastfeeding can reduce milk supply and quality.
+      </p>
+
+      <h3>Teenagers and growing adolescents</h3>
+      <p>
+        The Mifflin-St Jeor equation is designed for adults. Teenagers have higher calorie needs relative to body weight due to growth. Calorie restriction for weight loss in teens should only be done under pediatric medical supervision.
+      </p>
+
+      <h3>Older adults (60+)</h3>
+      <p>
+        BMR naturally declines with age due to loss of muscle mass (sarcopenia). However, protein needs actually <em>increase</em> with age — older adults benefit from higher protein intake (1.0-1.2 g/kg) to preserve muscle function and bone health, even at lower total calorie targets.
+      </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Your Health Data Stays Private</h2>
+      <p>
+        Your age, weight, height, and calorie results are processed <strong>entirely in your browser</strong>. Nothing is transmitted to any server — there's no account, no tracking, and no data collection. Unlike fitness apps (MyFitnessPal, Lose It, Noom) that store your dietary profile on their servers for advertising and analytics, this calculator has zero data persistence. Close the tab and everything disappears.
       </p>
     </div>
   </section>
@@ -189,22 +493,95 @@ const jsonLd = buildCalculatorJsonLd({
     <div class="container">
       <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        {faqs.map((f) => (
-          <div class="faq-item">
-            <h4>{f.question}</h4>
-            <p>{f.answer}</p>
-          </div>
-        ))}
+        <div class="faq-item">
+          <h3>What is TDEE?</h3>
+          <p>
+            Total Daily Energy Expenditure estimates the total calories you burn in a full day combining your basal metabolic rate with the energy cost of movement, exercise, work, and daily activity. In practice it is calculated as BMR multiplied by an activity factor from sedentary to very active. TDEE is your maintenance intake band when averaged over time—eating near TDEE helps stabilize weight while allowing normal life rhythms. Treat this calculator’s TDEE as an estimate; adjust using your measured weight trend over several weeks.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>What is BMR here?</h3>
+          <p>
+            Basal Metabolic Rate is the calorie burn your body needs at complete rest to sustain breathing, circulation, organ function, and basic repair. This page estimates BMR with the Mifflin–St Jeor equation using sex, age, height, and weight before any activity multiplier is applied. BMR usually makes up a large fraction of total daily expenditure for sedentary people and remains the anchor when you change activity settings. It is still not a lab measurement—clinical indirect calorimetry can differ from equation predictions.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Why doesn't my scale weight move exactly with the target?</h3>
+          <p>
+            Day-to-day scale changes reflect water retention, sodium shifts, stress hormones, digestive contents, and menstrual cycle phases—not just fat mass. A steady deficit does not plot as a straight line on the bathroom scale because glycogen and fluids fluctuate faster than adipose tissue changes. We recommend comparing weekly averages and multi-week slopes instead of single readings after high-salt meals or intense workouts. Sleep and stress also influence perceived stalls even when fat loss continues slowly.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Is aggressive weight loss safe?</h3>
+          <p>
+            Very large deficits can raise fatigue, strength loss, micronutrient gaps, and medical risks—especially alongside chronic illness, pregnancy, adolescence, or eating-disorder history. Aggressive settings may be inappropriate for people on medications that affect appetite, glucose, or electrolytes. Always prefer medically supervised plans if you have cardiac, renal, or endocrine conditions and you want fast loss. If a goal feels unsustainable, slow the pace and reassess with a clinician or registered dietitian.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Are the macro grams prescriptive?</h3>
+          <p>
+            The protein, carbohydrate, and fat grams shown here come from splitting your calorie target using a fixed 30/40/30 template and standard energy densities (4/4/9 kcal per gram). That split is a teaching example—not a personalized meal plan for athletes, diabetes, renal diets, or therapeutic ketogenic protocols. People who strength train often keep calories similar but raise protein; endurance athletes may tilt carbohydrate higher. Ask a dietitian when clinical nuance matters.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Are my stats uploaded?</h3>
+          <p>
+            No—this tool runs entirely in your browser and does not send your age, body size, or outputs to our servers. There is no account storage, cloud sync, or third-party analytics tied to your inputs for this calculation pathway. Clearing the page or closing the tab discards locally shown numbers. Review your browser privacy settings if you share devices with others.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>How many calories should I eat per day to lose weight?</h3>
+          <p>
+            Subtract 500-750 calories from your TDEE (maintenance calories) for a safe weight loss rate of 0.5-0.75 kg (1-1.5 lbs) per week. For example, if your TDEE is 2,200 kcal, target 1,450-1,700 kcal/day. Never go below 1,200 kcal (women) or 1,500 kcal (men) without medical supervision. Use the calculator above to find your exact target — select "Lose weight — moderate" as your goal.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>What is the difference between BMR and TDEE?</h3>
+          <p>
+            BMR (Basal Metabolic Rate) is the calories your body burns at complete rest — just to stay alive. TDEE (Total Daily Energy Expenditure) is BMR multiplied by your activity level — it's the total calories you burn in a day including exercise and daily movement. TDEE is always higher than BMR. You should eat based on TDEE (not BMR) to determine your weight loss or gain target.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Is the Mifflin-St Jeor formula accurate?</h3>
+          <p>
+            The Mifflin-St Jeor equation is considered the most accurate BMR predictor for most healthy adults, as endorsed by the Academy of Nutrition and Dietetics. It's more accurate than the older Harris-Benedict formula by approximately 5%. However, it's still an estimate — actual BMR can vary by ±10% due to genetics, thyroid function, body composition, and metabolic adaptation. Use the result as a starting point and adjust based on real-world weight changes over 2-4 weeks.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>How do I count calories effectively?</h3>
+          <p>
+            Start by calculating your daily target using this calculator. Then track food intake using a food diary, kitchen scale (most accurate), or a calorie tracking app. Focus on tracking consistently rather than perfectly — even approximate tracking builds awareness of portion sizes and calorie-dense foods. Common high-calorie culprits: cooking oil (120 kcal per tablespoon), nuts (160+ kcal per handful), sugary drinks (150-300 kcal per glass), and restaurant meals (often 50-100% more calories than home-cooked equivalents).
+          </p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="related">
-    <div class="container">
-      <h2 class="section-title">Related calculators</h2>
-      <p class="related-links">
-        <a href="/calculator/bmi/">BMI</a> · <a href="/calculator/ideal-weight/">Ideal weight</a> · <a href="/calculator/age/">Age</a>
-      </p>
+  <section class="related edu">
+    <div class="container related-wide">
+      <h2 class="section-title">Related Health & Fitness Calculators</h2>
+      <ul class="related-list">
+        <li><a href="/calculator/bmi/">BMI Calculator</a> — Check your Body Mass Index alongside calorie targets</li>
+        <li><a href="/calculator/ideal-weight/">Ideal Weight Calculator</a> — Find your healthy weight range for goal setting</li>
+        <li><a href="/calculator/macro/">Macro Calculator</a> — Custom protein, carbs, and fat ratios</li>
+        <li><a href="/calculator/body-fat/">Body Fat Calculator</a> — Estimate body fat percentage from measurements</li>
+        <li><a href="/calculator/water-intake/">Water Intake Calculator</a> — Daily hydration target based on weight and activity</li>
+        <li><a href="/calculator/period-ovulation/">Period & Ovulation Calculator</a> — Cycle tracking affects calorie needs</li>
+        <li><a href="/calculator/age/">Age Calculator</a> — Exact age for accurate BMR calculation</li>
+        <li><a href="/calculator/percentage/">Percentage Calculator</a> — Calculate macro percentages and deficit ratios</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="related edu">
+    <div class="container related-wide">
+      <h2 class="section-title">Related Guides</h2>
+      <ul class="related-list">
+        <li><a href="/blog/how-many-calories-per-day/">How Many Calories Per Day: Complete Guide</a></li>
+        <li><a href="/blog/how-to-calculate-bmi/">How to Calculate BMI (with Indian Ranges)</a></li>
+        <li><a href="/blog/how-much-water-per-day/">How Much Water Should You Drink Per Day?</a></li>
+        <li><a href="/blog/how-to-track-period-cycle/">How to Track Your Period Cycle</a></li>
+      </ul>
     </div>
   </section>
 
@@ -437,6 +814,43 @@ const jsonLd = buildCalculatorJsonLd({
       color: var(--text-muted);
       margin-bottom: 14px;
     }
+    .edu h3 {
+      font-size: 1.1rem;
+      margin: 24px 0 12px;
+      color: var(--text);
+    }
+    .edu ul {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text-muted);
+      margin: 0 0 16px;
+      padding-left: 1.25rem;
+    }
+    .edu table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .edu th,
+    .edu td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: left;
+    }
+    .edu thead th {
+      background: var(--gray-100);
+      color: var(--text);
+      font-weight: 600;
+    }
+    [data-theme='dark'] .edu thead th {
+      background: var(--gray-200);
+    }
+    [data-theme='dark'] .formula-callout {
+      background: var(--gray-200) !important;
+      border-left-color: #22c55e !important;
+      color: var(--text);
+    }
     .edu a {
       color: var(--blue);
       font-weight: 600;
@@ -459,9 +873,36 @@ const jsonLd = buildCalculatorJsonLd({
       border-radius: var(--radius);
       padding: 16px;
     }
+    .faq-item h3 {
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+    .faq-item p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin: 0;
+    }
     .related {
       text-align: center;
       padding-bottom: 48px;
+    }
+    .related-wide {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .related-list {
+      list-style: disc;
+      padding-left: 1.25rem;
+      margin: 0;
+      line-height: 1.75;
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+    .related-list a {
+      color: var(--blue);
+      font-weight: 600;
     }
     .related-links a {
       color: var(--blue);

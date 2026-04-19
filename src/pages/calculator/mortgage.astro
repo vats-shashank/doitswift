@@ -1,82 +1,129 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
-import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
+import { calculatorCanonical } from '../../lib/calculatorJsonLd';
 
 const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
 
-const pageDescription =
-  'US-style mortgage calculator: principal and interest, property tax as percent of value, annual homeowners insurance, PMI when down payment is under 20%, optional HOA, and a yearly P&I amortization table. Currency selector formats numbers only. Illustrative—confirm taxes, insurance, and PMI rules with your lender and state.';
-
-const faqs: CalculatorFaqItem[] = [
+const faqsForSchema: { question: string; answerPlain: string }[] = [
+  {
+    question: 'How much mortgage can I afford on my salary?',
+    answerPlain:
+      'Use the 28/36 rule: your total monthly housing cost (PITI + PMI + HOA) should not exceed 28% of your gross monthly income. If you earn $100,000/year ($8,333/month), your maximum housing cost is approximately $2,333/month. Enter different home prices in the calculator above until the total monthly payment fits within this budget. Remember to factor in maintenance costs (1-2% of home value/year) that are not included in the calculator.',
+  },
+  {
+    question: 'How do I calculate my mortgage payment?',
+    answerPlain:
+      'The principal and interest portion uses the standard amortization formula: M = P[r(1+r)^n]/[(1+r)^n-1], where P is loan amount, r is monthly interest rate, and n is total months. Then add monthly property tax (annual tax ÷ 12), monthly insurance (annual premium ÷ 12), PMI if applicable (annual PMI ÷ 12), and HOA fees. This calculator handles all of this automatically — enter your numbers and see the complete breakdown.',
+  },
+  {
+    question: 'What is PMI and when can I remove it?',
+    answerPlain:
+      'PMI (Private Mortgage Insurance) is required on conventional mortgages with less than 20% down payment. It costs 0.3-1.5% of the loan amount annually, added to your monthly payment. By law (Homeowners Protection Act), your lender must automatically cancel PMI when your loan balance reaches 78% of the original home value. You can also request PMI removal at 80% — some lenders require an appraisal to confirm. Making extra principal payments accelerates reaching this threshold.',
+  },
+  {
+    question: 'Can I use this mortgage calculator for countries other than the US?',
+    answerPlain:
+      'Yes — select your currency from the 35-currency dropdown. The P&I calculation works identically worldwide. The property tax and insurance fields use US conventions but can be adapted: enter your local property tax rate and annual insurance cost. PMI may not apply in your country — set it to 0% if not relevant. For Indian home loans with prepayment modeling, our Home Loan Calculator at /calculator/home-loan/ is purpose-built.',
+  },
+  {
+    question: 'Should I choose a 15-year or 30-year mortgage?',
+    answerPlain:
+      'A 15-year mortgage saves $150,000-$300,000+ in total interest but requires a higher monthly payment ($800-$1,200 more on a typical loan). Choose 15-year if you can comfortably afford the higher payment while still saving for retirement and emergencies. Choose 30-year if you need lower monthly payments or want to invest the difference in higher-return assets. A middle ground: take a 30-year mortgage but make extra payments as if it were a 20-year — this gives flexibility with the benefits of faster payoff.',
+  },
   {
     question: 'What is PITI?',
-    answer:
-      'PITI is Principal and Interest on the loan, property Taxes, and homeowners Insurance—the core pieces of many US monthly housing payments before HOA or PMI.',
+    answerPlain:
+      'PITI stands for Principal, Interest, Taxes, and Insurance — the four pillars of many monthly mortgage payments in the US and similar markets. Principal pays down your loan balance; interest is the cost of borrowing. Taxes are usually property taxes levied as a percentage of assessed home value, often paid monthly through escrow. Insurance is homeowner coverage, also commonly escrowed. Together they approximate your recurring housing obligation before PMI and HOA. This calculator shows each piece so you are not surprised by the gap between P&I alone and your full monthly cost.',
   },
   {
     question: 'When does PMI apply in this calculator?',
-    answer:
-      'We apply the PMI rate you enter when the down payment is below 20% of the home price and the loan amount is positive. Otherwise PMI is treated as zero in the estimate.',
+    answerPlain:
+      'We apply the PMI rate you enter when the down payment is below 20% of the home price and the loan amount is positive. Otherwise PMI is treated as zero in the estimate. The PMI field is expressed as an annual percentage of the loan amount, which is a common way lenders quote it. If your loan program does not use PMI (or uses a different structure), set the PMI rate to zero. Always confirm PMI rules, cancellation timing, and lender-specific overlays with your loan officer.',
   },
   {
     question: 'Does the currency dropdown change loan math?',
-    answer:
-      'No. It only changes how amounts are formatted on screen. Enter numbers consistent with the currency you are modeling.',
+    answerPlain:
+      'No. The currency selector only changes how amounts are formatted on screen — number grouping and symbol — not the underlying arithmetic. You should enter home price, down payment, insurance, and HOA in the same currency you selected so labels and totals stay consistent. There is no foreign-exchange conversion between currencies; you are modeling one loan in one currency at a time. Switching currency is useful for international readers who think in EUR, GBP, INR, AED, and others among the 35 supported codes.',
   },
   {
     question: 'Is this tax, insurance, or legal advice?',
-    answer:
-      'No. Tax deductibility, escrow rules, and exact PMI cancellation timelines vary by loan program and law—verify with a licensed professional.',
+    answerPlain:
+      'No. This page is for education and planning only. Tax deductibility of mortgage interest, escrow requirements, insurance mandates, and PMI cancellation timelines vary by country, loan program, and law. Insurance premiums depend on property type, location, and carrier. Nothing here replaces advice from a licensed tax professional, insurance agent, or attorney. Before you commit to a loan, review the official Loan Estimate and Closing Disclosure from your lender and ask questions until every fee and assumption is clear.',
   },
   {
     question: 'How should I use the 15-year versus 30-year term selector?',
-    answer:
-      'It changes the amortization length and monthly P&I. Compare scenarios side by side by switching the control and noting total interest in the summary.',
+    answerPlain:
+      'The term control changes the amortization length and therefore your monthly principal and interest. A 15-year loan has higher monthly P&I but much lower total interest than a 30-year at the same rate. Use the selector to compare scenarios for the same home price, down payment, and rate — watch total interest and monthly payment together. Many buyers run both options, then decide whether the higher 15-year payment still leaves room for savings and emergencies. Your results table updates instantly as you switch terms.',
   },
   {
     question: 'Where can I model Indian home loans or prepayment?',
-    answer:
-      'Use the Home Loan calculator on DoItSwift for India-style schedules and prepayment options; this page focuses on common US PITI components.',
+    answerPlain:
+      'For India-style amortization, floating-rate context, and prepayment or part-prepayment simulations, use DoItSwift Home Loan Calculator at /calculator/home-loan/. That tool is tailored to how Indian banks typically quote EMIs and handle partial prepayments. This mortgage calculator remains useful for quick PITI-style estimates in rupees or other currencies, but it does not model every India-specific fee or tax section (such as Section 24(b) limits) inside the math. Pick the calculator that matches your country workflow.',
   },
   {
     question: 'Are my inputs uploaded?',
-    answer:
-      'No. Calculations run locally in your browser with no signup.',
+    answerPlain:
+      'No. All calculations run locally in your browser using the inline script on this page. Values you type are not sent to DoItSwift servers, and we do not store loan scenarios. You can disconnect from the internet after the page loads and the tool will still work for modeling. Clear the tab when you are done if you are on a shared computer. For sensitive borrowing decisions, also avoid sharing screenshots that expose personal financial details.',
   },
 ];
 
-const jsonLd = buildCalculatorJsonLd({
-  site: Astro.site,
-  pathname: Astro.url.pathname,
-  appName: 'DoItSwift Mortgage Calculator',
-  breadcrumbName: 'Mortgage Calculator',
+const faqPageLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqsForSchema.map((f) => ({
+    '@type': 'Question',
+    name: f.question,
+    acceptedAnswer: { '@type': 'Answer', text: f.answerPlain },
+  })),
+};
+
+const softwareAppLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Mortgage Calculator',
   applicationCategory: 'FinanceApplication',
-  priceCurrency: 'USD',
-  browserRequirements: 'Requires JavaScript for payment breakdown, stacked bar chart, and amortization table',
-  webAppDescription:
-    'Estimate a US-style monthly housing payment including loan principal and interest, property taxes as a percent of home value, annual insurance converted to monthly, PMI when equity is below a typical 20% threshold, and optional HOA dues. An expandable table summarizes principal and interest by year. Actual escrow, tax caps, and loan programs differ by lender—treat output as educational.',
-  featureList: [
-    'Home price and down payment as percent or fixed amount',
-    '15- or 30-year term and annual interest rate',
-    'Property tax, insurance, PMI rate, and HOA inputs',
-    'Principal and interest payment plus full PITI+PMI+HOA total',
-    'Total interest and total P&I paid over the term',
-    'Stacked bar visualization of payment components',
-    'Yearly principal and interest amortization table',
-    'Multi-currency display formatting without FX conversion',
+  operatingSystem: 'Web Browser',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  description:
+    'Free mortgage calculator with PITI breakdown — principal, interest, taxes, insurance, PMI, and HOA. Supports 35 currencies. Year-by-year amortization schedule. Browser-based, no data stored.',
+  url: canonical,
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: Astro.site ? new URL('/', Astro.site).href : 'https://doitswift.com/',
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Calculators',
+      item: Astro.site ? new URL('/calculator/', Astro.site).href : 'https://doitswift.com/calculator/',
+    },
+    { '@type': 'ListItem', position: 3, name: 'Mortgage Calculator', item: canonical },
   ],
-  faqs,
-});
+};
 ---
 
 <MainLayout
-  title="Mortgage Calculator (US) — PITI, PMI, HOA & Amortization | DoItSwift"
-  description={pageDescription}
-  keywords="mortgage calculator US, PITI calculator, PMI calculator monthly payment, 30 year mortgage amortization, property tax and insurance estimate, HOA mortgage payment, free mortgage calculator online"
+  title="Mortgage Calculator — Monthly Payment, PITI, PMI & Amortization (Free) | DoItSwift"
+  description="Free mortgage calculator with full PITI breakdown — principal, interest, property tax, insurance, PMI, and HOA. Supports 35 currencies. See monthly payment, total interest, and year-by-year amortization. No signup, runs in your browser."
+  keywords="mortgage calculator, mortgage payment calculator, home loan calculator, mortgage calculator with pmi, mortgage calculator with taxes, piti calculator, mortgage amortization calculator, house payment calculator, mortgage interest calculator, how much mortgage can i afford"
   canonical={canonical}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(softwareAppLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqPageLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
 
   <nav class="breadcrumb container" aria-label="Breadcrumb">
     <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Mortgage Calculator</span>
@@ -85,21 +132,20 @@ const jsonLd = buildCalculatorJsonLd({
   <section class="hero">
     <div class="container">
       <div class="badge">🧮 Free Calculator</div>
-      <h1>Mortgage Calculator</h1>
+      <h1>Free Mortgage Calculator — Monthly Payment with Taxes, Insurance &amp; PMI</h1>
       <p class="subtitle">
-        Estimate <strong>monthly P&amp;I</strong> plus <strong>taxes, insurance, PMI, and HOA</strong> — common US mortgage structure. For Indian home loans with prepayment options, use our <a href="/calculator/home-loan/">Home Loan Calculator</a>.
+        Calculate your monthly mortgage payment including principal, interest, property tax, homeowner's insurance, PMI, and HOA fees. Enter the home price, down payment, loan term, and interest rate to see your complete monthly housing cost — not just the loan payment that most calculators show. Supports 35 currencies for mortgages worldwide. Includes a full year-by-year amortization schedule showing how principal and interest split over your loan. All calculations run in your browser — your financial details are never stored or transmitted.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> No signup</span>
         <span><span class="check">✓</span> Instant results</span>
         <span><span class="check">✓</span> Works offline</span>
       </div>
+      <p class="trust-signal">
+        Uses the standard fixed-rate amortization formula. Supports 35 currencies for global mortgage calculations. Last updated: April 2026. This calculator provides estimates — verify with your lender's official loan estimate before committing.
+      </p>
     </div>
   </section>
-
-  <p class="locale-note container">
-    This calculator uses <strong>US conventions</strong> (PMI, property tax % of home value, etc.). For Indian home loan calculations with prepayment options, see our <a href="/calculator/home-loan/">Home Loan Calculator</a>.
-  </p>
 
   <section class="calc-section">
     <div class="container calc-layout">
@@ -177,7 +223,7 @@ const jsonLd = buildCalculatorJsonLd({
         <ul class="bar-legend" id="mgLeg"></ul>
         <details class="calc-details">
           <summary>Yearly amortization (principal &amp; interest)</summary>
-          <div class="table-wrap">
+          <div class="table-wrap table-wrap--amort">
             <table>
               <caption class="sr-only">Yearly principal paid, interest paid, and remaining loan balance for the amortization schedule.</caption>
               <thead><tr><th>Year</th><th>Principal</th><th>Interest</th><th>Balance</th></tr></thead><tbody id="mgTable"></tbody>
@@ -189,20 +235,226 @@ const jsonLd = buildCalculatorJsonLd({
   </section>
 
   <section class="edu">
-    <div class="container">
-      <h2 class="section-title">Mortgages — US terminology and trade-offs</h2>
-      <p>
-        A <strong>mortgage</strong> is a loan secured by real estate; in the United States the word is standard, while in India many people say <strong>home loan</strong> for a similar product. Monthly payments often bundle <strong>PITI</strong>: Principal and Interest on the loan, property Taxes, and homeowners Insurance. <strong>PMI</strong> (Private Mortgage Insurance) may apply when the down payment is below 20% on conventional loans — it protects the lender and adds to your monthly cost until you have enough equity.
-      </p>
-      <p>
-        <strong>15-year vs 30-year:</strong> shorter terms mean higher monthly P&amp;I but far less total interest. <strong>Fixed vs adjustable (ARM):</strong> fixed rates give predictability; ARMs can start lower but reset with market rates. <strong>Refinancing</strong> replaces your loan — often to lower the rate or change term — but closing costs matter; break-even analysis is essential.
-      </p>
-      <p>
-        In the US, <strong>mortgage interest</strong> may be tax-deductible for itemizers subject to limits and law changes — this is not tax advice; consult a CPA. <strong>First-time buyer mistakes</strong> include ignoring PMI, underestimating maintenance, and looking only at P&amp;I instead of full housing cost.
-      </p>
-      <p>
-        Compare with our <a href="/calculator/emi/">EMI</a> and <a href="/calculator/home-loan/">Home Loan</a> calculators for India-style schedules, and <a href="/calculator/compound-interest/">Compound Interest</a> for wealth growth alongside debt decisions.
-      </p>
+    <div class="container edu-inner">
+      <section class="edu-block" aria-labelledby="mortgage-understanding">
+        <h2 id="mortgage-understanding">Understanding Your Monthly Mortgage Payment</h2>
+        <p>
+          Your monthly housing cost is more than just the loan payment. Most mortgage calculators show only principal and interest (P&amp;I), which significantly understates your actual monthly obligation. Here's what makes up your true monthly housing cost:
+        </p>
+
+        <h3>PITI: The four components</h3>
+        <ul>
+          <li><strong>Principal:</strong> The portion that repays your loan balance. Starts small (5-15% of payment in early years) and grows over time</li>
+          <li><strong>Interest:</strong> The cost of borrowing. In early years, 70-85% of your payment is interest. This is why mortgages are so front-loaded with interest cost</li>
+          <li><strong>Taxes:</strong> Property tax, typically 0.5-2.5% of home value per year depending on location. Baked into monthly payment via escrow in most US mortgages</li>
+          <li><strong>Insurance:</strong> Homeowner's insurance protects against damage, theft, and liability. Typically $800-$2,500/year depending on home value and location</li>
+        </ul>
+
+        <h3>Additional costs most calculators miss</h3>
+        <ul>
+          <li><strong>PMI (Private Mortgage Insurance):</strong> Required when down payment is below 20%. Typically 0.3-1.5% of the loan annually. Automatically included in this calculator when applicable. PMI can be removed once you reach 20% equity</li>
+          <li><strong>HOA (Homeowner's Association):</strong> Monthly fees for condos, townhomes, and planned communities. Can range from $100 to $1,000+/month</li>
+          <li><strong>Maintenance:</strong> Budget 1-2% of home value annually for repairs and upkeep (not included in this calculator but essential for planning)</li>
+        </ul>
+        <p>
+          This calculator includes all six components (P&amp;I + tax + insurance + PMI + HOA) so you see the <strong>true monthly cost</strong> of homeownership — not just the loan payment.
+        </p>
+        <p class="edu-note">
+          <strong>US defaults:</strong> PMI when down payment is under 20% and property tax as a percent of home value follow common US conventions. You can still model other countries by choosing your currency and entering local tax and insurance figures; set PMI to 0% where it does not apply.
+        </p>
+      </section>
+
+      <section class="edu-block" aria-labelledby="mortgage-basics">
+        <h2 id="mortgage-basics">Mortgage Basics: What Every Homebuyer Should Know</h2>
+
+        <h3>15-year vs 30-year mortgage</h3>
+        <div class="table-wrap" style="overflow-x: auto; margin: 20px 0;">
+          <table>
+            <thead>
+              <tr>
+                <th>Factor</th>
+                <th>15-year mortgage</th>
+                <th>30-year mortgage</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Monthly P&amp;I (on $400K loan at 6.5%)</td><td>~$3,484</td><td>~$2,528</td></tr>
+              <tr><td>Total interest paid</td><td>~$227,000</td><td>~$510,000</td></tr>
+              <tr><td>Interest saved (vs 30-year)</td><td><strong>~$283,000</strong></td><td>—</td></tr>
+              <tr><td>Interest rate</td><td>Typically 0.5-0.75% lower</td><td>Higher</td></tr>
+              <tr><td>Monthly flexibility</td><td>Less — higher payment</td><td>More — lower required payment</td></tr>
+              <tr><td>Best for</td><td>Higher earners wanting to build equity fast</td><td>Most buyers wanting lower monthly payments</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          The 30-year mortgage costs <strong>$283,000 more in interest</strong> on a $400K loan — but the monthly payment is $956 less. Toggle between 15 and 30 years in the calculator above to see your personal comparison.
+        </p>
+
+        <h3>Fixed rate vs adjustable rate (ARM)</h3>
+        <p>
+          <strong>Fixed-rate mortgages</strong> lock your interest rate for the entire loan term — your P&amp;I payment never changes. <strong>Adjustable-rate mortgages (ARMs)</strong> start with a lower rate for an introductory period (typically 5 or 7 years), then adjust periodically based on market rates. ARMs can save money if you plan to sell or refinance before the adjustment period, but carry the risk of payment increases. This calculator models fixed-rate scenarios — for ARM estimates, run the calculator twice: once with the intro rate and once with a higher potential adjusted rate.
+        </p>
+
+        <h3>How much down payment do you need?</h3>
+        <div class="table-wrap" style="overflow-x: auto; margin: 20px 0;">
+          <table>
+            <thead>
+              <tr>
+                <th>Down payment %</th>
+                <th>On $400K home</th>
+                <th>PMI required?</th>
+                <th>Key consideration</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>3% (minimum conventional)</td><td>$12,000</td><td>Yes</td><td>Lowest barrier but highest PMI cost</td></tr>
+              <tr><td>5%</td><td>$20,000</td><td>Yes</td><td>Common first-time buyer threshold</td></tr>
+              <tr><td>10%</td><td>$40,000</td><td>Yes</td><td>Lower PMI, reasonable savings target</td></tr>
+              <tr><td>20%</td><td>$80,000</td><td><strong>No</strong></td><td>Eliminates PMI entirely — saves hundreds/month</td></tr>
+              <tr><td>25%+</td><td>$100,000+</td><td>No</td><td>Best rates, lowest monthly payment</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Use the down payment inputs above to see how different amounts affect your monthly payment and PMI cost. The jump from 19% to 20% down is often the most impactful single change because it eliminates PMI.
+        </p>
+      </section>
+
+      <section class="edu-block" aria-labelledby="mortgage-afford">
+        <h2 id="mortgage-afford">How Much Mortgage Can You Afford?</h2>
+        <p>
+          Lenders and financial advisors use the <strong>28/36 rule</strong> for mortgage affordability:
+        </p>
+        <ul>
+          <li><strong>28% rule:</strong> Your total monthly housing cost (PITI + PMI + HOA) should not exceed 28% of your gross monthly income</li>
+          <li><strong>36% rule:</strong> Your total monthly debt payments (housing + car loan + student loans + credit cards) should not exceed 36% of gross monthly income</li>
+        </ul>
+
+        <h3>Affordability quick reference</h3>
+        <div class="table-wrap" style="overflow-x: auto; margin: 20px 0;">
+          <table>
+            <thead>
+              <tr>
+                <th>Annual income</th>
+                <th>Max monthly housing (28%)</th>
+                <th>Approx home price (30yr, 6.5%, 20% down)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>$60,000</td><td>$1,400</td><td>~$220,000</td></tr>
+              <tr><td>$80,000</td><td>$1,867</td><td>~$295,000</td></tr>
+              <tr><td>$100,000</td><td>$2,333</td><td>~$370,000</td></tr>
+              <tr><td>$120,000</td><td>$2,800</td><td>~$440,000</td></tr>
+              <tr><td>$150,000</td><td>$3,500</td><td>~$550,000</td></tr>
+              <tr><td>$200,000</td><td>$4,667</td><td>~$735,000</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          These estimates assume 20% down, 6.5% rate, 30-year term, 1.2% property tax, and $1,500/year insurance. Your local market, tax rate, and rate may differ — enter your specifics in the calculator above for a precise estimate.
+        </p>
+        <p>
+          <strong>Important:</strong> What a lender approves and what you can comfortably afford are different things. Lenders approve the maximum; financial advisors recommend staying below 28% of gross income. Factor in maintenance (1-2% of home value/year), utilities, and your savings goals before committing.
+        </p>
+      </section>
+
+      <section class="edu-block" aria-labelledby="mortgage-rates-world">
+        <h2 id="mortgage-rates-world">Mortgage Rates Around the World (2026 Reference)</h2>
+        <p>
+          This calculator supports 35 currencies and works for mortgages globally. Here are typical mortgage rates and conventions by country:
+        </p>
+        <div class="table-wrap" style="overflow-x: auto; margin: 20px 0;">
+          <table>
+            <thead>
+              <tr>
+                <th>Country</th>
+                <th>Typical rate (2026)</th>
+                <th>Common term</th>
+                <th>Key convention</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>United States</td><td>6.0-7.5%</td><td>30 years (fixed)</td><td>PITI + PMI if &lt;20% down</td></tr>
+              <tr><td>United Kingdom</td><td>4.5-6.5%</td><td>25-35 years</td><td>Fixed 2-5yr intro, then variable</td></tr>
+              <tr><td>Canada</td><td>5.0-6.5%</td><td>25yr amortization</td><td>Term renewed every 5 years</td></tr>
+              <tr><td>Australia</td><td>6.0-7.0%</td><td>25-30 years</td><td>Variable rate common</td></tr>
+              <tr><td>Germany</td><td>3.5-4.5%</td><td>15-30 years</td><td>Fixed for 10-15yr periods</td></tr>
+              <tr><td>France</td><td>3.0-4.0%</td><td>20-25 years</td><td>Fixed rate dominant</td></tr>
+              <tr><td>UAE</td><td>4.0-6.0%</td><td>25 years max</td><td>Linked to EIBOR, expats max 75% LTV</td></tr>
+              <tr><td>Singapore</td><td>3.0-4.0%</td><td>25-30 years</td><td>HDB vs private, TDSR limits</td></tr>
+              <tr><td>India</td><td>8.25-9.5%</td><td>15-30 years</td><td>Floating rate, linked to repo rate</td></tr>
+              <tr><td>Japan</td><td>0.5-1.5%</td><td>35 years</td><td>Ultra-low fixed rates</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Select your currency from the dropdown above, enter your local interest rate and home price, and the calculator adapts instantly. The PMI and property tax fields are US-centric but can be used as proxies for similar costs in other countries (e.g., stamp duty amortized over the loan, or mortgage insurance in Canada/Australia).
+        </p>
+        <p>
+          For Indian home loans with prepayment modeling and Indian tax deduction context (Section 24b, 80C), use our dedicated <a href="/calculator/home-loan/">Home Loan Calculator</a>.
+        </p>
+      </section>
+
+      <section class="edu-block" aria-labelledby="mortgage-tax-deductions">
+        <h2 id="mortgage-tax-deductions">Mortgage Interest Tax Deductions by Country</h2>
+        <p>
+          Mortgage interest deductibility significantly affects the true cost of homeownership:
+        </p>
+        <div class="table-wrap" style="overflow-x: auto; margin: 20px 0;">
+          <table>
+            <thead>
+              <tr>
+                <th>Country</th>
+                <th>Interest deductible?</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>United States</td><td>Yes (itemizers)</td><td>Up to $750,000 loan; must itemize vs standard deduction</td></tr>
+              <tr><td>India</td><td>Yes</td><td>Up to ₹2,00,000/year under Section 24(b) for self-occupied</td></tr>
+              <tr><td>Netherlands</td><td>Yes</td><td>One of the most generous; deductible for 30 years</td></tr>
+              <tr><td>Sweden</td><td>Yes (partial)</td><td>30% of interest up to certain limits</td></tr>
+              <tr><td>United Kingdom</td><td>No (owner-occupied)</td><td>No deduction for primary residence since 2000</td></tr>
+              <tr><td>Canada</td><td>No (primary residence)</td><td>Deductible for rental/investment properties only</td></tr>
+              <tr><td>Australia</td><td>No (owner-occupied)</td><td>Deductible for investment properties (negative gearing)</td></tr>
+              <tr><td>Germany</td><td>No (owner-occupied)</td><td>Deductible for rental properties</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Tax rules change frequently and vary by jurisdiction — verify with a local tax professional. In countries with mortgage interest deductions, the true after-tax cost of your mortgage is lower than the calculator shows.
+        </p>
+      </section>
+
+      <section class="edu-block" aria-labelledby="mortgage-mistakes">
+        <h2 id="mortgage-mistakes">5 Common Mortgage Mistakes to Avoid</h2>
+
+        <h3>1. Looking only at P&amp;I, not total cost</h3>
+        <p>
+          A $2,500/month P&amp;I payment becomes $3,400+ with taxes, insurance, PMI, and HOA. Always calculate PITI (this calculator does) before deciding what you can afford.
+        </p>
+
+        <h3>2. Ignoring PMI</h3>
+        <p>
+          With less than 20% down on a $400K home, PMI adds $100-$300/month. Over 5-7 years before you reach 20% equity, that's $6,000-$25,000 in extra cost. Saving for a larger down payment or accelerating principal payments to remove PMI faster can save significantly.
+        </p>
+
+        <h3>3. Choosing 30 years without considering 15</h3>
+        <p>
+          The monthly difference between 15 and 30 years is often less than people expect ($500-$1,000 more/month), but the total interest savings is enormous (often $200,000+). Run both scenarios in the calculator above.
+        </p>
+
+        <h3>4. Forgetting maintenance costs</h3>
+        <p>
+          Budget 1-2% of home value annually for maintenance and repairs. On a $400K home, that's $4,000-$8,000/year ($333-$667/month) that doesn't appear in any mortgage calculator but is a real cost of ownership.
+        </p>
+
+        <h3>5. Not shopping rates</h3>
+        <p>
+          A 0.5% difference in interest rate on a $400K, 30-year mortgage saves approximately $45,000 in total interest. Always get quotes from at least 3-4 lenders. Even a 0.25% reduction saves $20,000+.
+        </p>
+      </section>
     </div>
   </section>
 
@@ -210,26 +462,105 @@ const jsonLd = buildCalculatorJsonLd({
     <div class="container">
       <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        {faqs.map((f) => (
-          <div class="faq-item">
-            <h4>{f.question}</h4>
-            <p>{f.answer}</p>
-          </div>
-        ))}
+        <div class="faq-item">
+          <h3>How much mortgage can I afford on my salary?</h3>
+          <p>
+            Use the 28/36 rule: your total monthly housing cost (PITI + PMI + HOA) should not exceed 28% of your gross monthly income. If you earn $100,000/year ($8,333/month), your maximum housing cost is approximately $2,333/month. Enter different home prices in the calculator above until the total monthly payment fits within this budget. Remember to factor in maintenance costs (1-2% of home value/year) that aren't included in the calculator.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>How do I calculate my mortgage payment?</h3>
+          <p>
+            The principal and interest portion uses the standard amortization formula: M = P[r(1+r)^n]/[(1+r)^n-1], where P is loan amount, r is monthly interest rate, and n is total months. Then add monthly property tax (annual tax ÷ 12), monthly insurance (annual premium ÷ 12), PMI if applicable (annual PMI ÷ 12), and HOA fees. This calculator handles all of this automatically — enter your numbers and see the complete breakdown.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>What is PMI and when can I remove it?</h3>
+          <p>
+            PMI (Private Mortgage Insurance) is required on conventional mortgages with less than 20% down payment. It costs 0.3-1.5% of the loan amount annually, added to your monthly payment. By law (Homeowners Protection Act), your lender must automatically cancel PMI when your loan balance reaches 78% of the original home value. You can also request PMI removal at 80% — some lenders require an appraisal to confirm. Making extra principal payments accelerates reaching this threshold.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Can I use this mortgage calculator for countries other than the US?</h3>
+          <p>
+            Yes — select your currency from the 35-currency dropdown. The P&amp;I calculation works identically worldwide. The property tax and insurance fields use US conventions but can be adapted: enter your local property tax rate and annual insurance cost. PMI may not apply in your country — set it to 0% if not relevant. For Indian home loans with prepayment modeling, our <a href="/calculator/home-loan/">Home Loan Calculator</a> is purpose-built.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Should I choose a 15-year or 30-year mortgage?</h3>
+          <p>
+            A 15-year mortgage saves $150,000-$300,000+ in total interest but requires a higher monthly payment ($800-$1,200 more on a typical loan). Choose 15-year if you can comfortably afford the higher payment while still saving for retirement and emergencies. Choose 30-year if you need lower monthly payments or want to invest the difference in higher-return assets. A middle ground: take a 30-year mortgage but make extra payments as if it were a 20-year — this gives flexibility with the benefits of faster payoff.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>What is PITI?</h3>
+          <p>
+            PITI stands for Principal, Interest, Taxes, and Insurance — the four pillars of many monthly mortgage payments in the US and similar markets. Principal pays down your loan balance; interest is the cost of borrowing. Taxes are usually property taxes levied as a percentage of assessed home value, often paid monthly through escrow. Insurance is homeowner coverage, also commonly escrowed. Together they approximate your recurring housing obligation before PMI and HOA. This calculator shows each piece so you are not surprised by the gap between P&amp;I alone and your full monthly cost.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>When does PMI apply in this calculator?</h3>
+          <p>
+            We apply the PMI rate you enter when the down payment is below 20% of the home price and the loan amount is positive. Otherwise PMI is treated as zero in the estimate. The PMI field is expressed as an annual percentage of the loan amount, which is a common way lenders quote it. If your loan program does not use PMI (or uses a different structure), set the PMI rate to zero. Always confirm PMI rules, cancellation timing, and lender-specific overlays with your loan officer.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Does the currency dropdown change loan math?</h3>
+          <p>
+            No. The currency selector only changes how amounts are formatted on screen — number grouping and symbol — not the underlying arithmetic. You should enter home price, down payment, insurance, and HOA in the same currency you selected so labels and totals stay consistent. There is no foreign-exchange conversion between currencies; you are modeling one loan in one currency at a time. Switching currency is useful for international readers who think in EUR, GBP, INR, AED, and others among the 35 supported codes.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Is this tax, insurance, or legal advice?</h3>
+          <p>
+            No. This page is for education and planning only. Tax deductibility of mortgage interest, escrow requirements, insurance mandates, and PMI cancellation timelines vary by country, loan program, and law. Insurance premiums depend on property type, location, and carrier. Nothing here replaces advice from a licensed tax professional, insurance agent, or attorney. Before you commit to a loan, review the official Loan Estimate and Closing Disclosure from your lender and ask questions until every fee and assumption is clear.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>How should I use the 15-year versus 30-year term selector?</h3>
+          <p>
+            The term control changes the amortization length and therefore your monthly principal and interest. A 15-year loan has higher monthly P&amp;I but much lower total interest than a 30-year at the same rate. Use the selector to compare scenarios for the same home price, down payment, and rate — watch total interest and monthly payment together. Many buyers run both options, then decide whether the higher 15-year payment still leaves room for savings and emergencies. Your results table updates instantly as you switch terms.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Where can I model Indian home loans or prepayment?</h3>
+          <p>
+            For India-style amortization, floating-rate context, and prepayment or part-prepayment simulations, use DoItSwift <a href="/calculator/home-loan/">Home Loan Calculator</a>. That tool is tailored to how Indian banks typically quote EMIs and handle partial prepayments. This mortgage calculator remains useful for quick PITI-style estimates in rupees or other currencies, but it does not model every India-specific fee or tax section (such as Section 24(b) limits) inside the math. Pick the calculator that matches your country workflow.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Are my inputs uploaded?</h3>
+          <p>
+            No. All calculations run locally in your browser using the inline script on this page. Values you type are not sent to DoItSwift servers, and we do not store loan scenarios. You can disconnect from the internet after the page loads and the tool will still work for modeling. Clear the tab when you are done if you are on a shared computer. For sensitive borrowing decisions, also avoid sharing screenshots that expose personal financial details.
+          </p>
+        </div>
       </div>
     </div>
   </section>
 
   <section class="related">
-    <div class="container">
-      <h2 class="section-title">Related calculators</h2>
-      <p class="related-links">
-        <a href="/calculator/emi/">EMI Calculator</a>
-        ·
-        <a href="/calculator/home-loan/">Home Loan</a>
-        ·
-        <a href="/calculator/compound-interest/">Compound Interest</a>
-      </p>
+    <div class="container related-inner">
+      <h2 class="section-title">Related Financial Calculators</h2>
+      <ul class="related-list">
+        <li><a href="/calculator/home-loan/">Home Loan Calculator (with Prepayment)</a> — Indian home loan with prepayment simulation and interest savings</li>
+        <li><a href="/calculator/emi/">EMI Calculator</a> — Standard loan EMI with amortization schedule</li>
+        <li><a href="/calculator/emi-vs-rent/">EMI vs Rent Calculator</a> — Should you buy or continue renting?</li>
+        <li><a href="/calculator/compound-interest/">Compound Interest Calculator</a> — Compare mortgage cost vs investment growth</li>
+        <li><a href="/calculator/sip/">SIP Calculator</a> — Should you invest vs pay down mortgage faster?</li>
+        <li><a href="/calculator/lumpsum/">Lumpsum Calculator</a> — Model windfall investing vs mortgage prepayment</li>
+        <li><a href="/calculator/income-tax/">Income Tax Calculator</a> — Model mortgage interest deduction impact</li>
+        <li><a href="/calculator/salary/">Salary Calculator</a> — Find take-home pay to determine affordability</li>
+        <li><a href="/calculator/fd/">FD Calculator</a> — Compare savings returns vs mortgage rate</li>
+        <li><a href="/calculator/retirement/">Retirement Calculator</a> — Factor housing into retirement planning</li>
+      </ul>
+
+      <h2 class="section-title section-title-sub">Related Guides</h2>
+      <ul class="related-list">
+        <li><a href="/blog/buy-vs-rent-india/">Buy vs Rent: Data-Driven Decision Framework</a></li>
+        <li><a href="/blog/compound-interest-explained/">Compound Interest Explained: Formula &amp; Examples</a></li>
+        <li><a href="/blog/how-much-to-retire-india/">How Much Money Do You Need to Retire?</a></li>
+        <li><a href="/blog/sip-vs-lumpsum/">SIP vs Lumpsum: Invest or Pay Down Debt?</a></li>
+      </ul>
     </div>
   </section>
 
@@ -351,9 +682,13 @@ const jsonLd = buildCalculatorJsonLd({
     .hero { padding: 36px 0 16px; text-align: center; }
     .subtitle { font-size: 17px; color: var(--text-muted); max-width: 720px; margin: 0 auto 16px; line-height: 1.6; }
     .subtitle a { color: var(--blue); }
-    .locale-note { font-size: 14px; color: var(--text-muted); background: var(--blue-light); padding: 14px 18px; border-radius: var(--radius); max-width: 900px; margin: 0 auto 8px; border: 1px solid var(--border); }
-    :global([data-theme='dark']) .locale-note { background: rgba(0, 102, 255, 0.12); }
-    .locale-note a { color: var(--blue); font-weight: 600; }
+    .trust-signal {
+      font-size: 12px;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto 16px;
+      line-height: 1.55;
+    }
     .calc-section { padding: 24px 0 40px; }
     .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 960px; align-items: start; }
     @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
@@ -381,15 +716,42 @@ const jsonLd = buildCalculatorJsonLd({
     .bar-legend { list-style: none; margin: 0; padding: 0; font-size: 12px; color: var(--text-muted); }
     .bar-legend li { margin-bottom: 4px; }
     .calc-details summary { cursor: pointer; font-weight: 600; }
-    .table-wrap { overflow: auto; max-height: 240px; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th, td { padding: 8px; border-bottom: 1px solid var(--border); text-align: right; }
-    th:first-child, td:first-child { text-align: left; }
+    .table-wrap--amort { overflow: auto; max-height: 240px; }
+    .edu .table-wrap { overflow-x: auto; margin: 20px 0; }
+    .edu table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .edu th, .edu td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+    .edu th { font-weight: 700; color: var(--text); background: var(--blue-light); }
+    :global([data-theme='dark']) .edu th { background: rgba(0, 102, 255, 0.12); }
+    .edu-inner { max-width: 760px; }
+    .edu-block { margin-bottom: 40px; }
+    .edu-block:last-child { margin-bottom: 0; }
+    .edu-block h2 {
+      font-size: 1.45rem;
+      color: var(--text);
+      margin: 0 0 14px;
+      line-height: 1.25;
+      text-align: left;
+    }
+    .edu-block h3 { font-size: 1.05rem; color: var(--text); margin: 22px 0 10px; }
+    .edu-block > p,
+    .edu-block p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
+    .edu-block ul { margin: 0 0 14px; padding-left: 1.25rem; color: var(--text-muted); line-height: 1.7; font-size: 15px; }
+    .edu-block li { margin-bottom: 8px; }
+    .edu-note {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--text-muted);
+      background: var(--blue-light);
+      padding: 14px 18px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+    :global([data-theme='dark']) .edu-note { background: rgba(0, 102, 255, 0.12); }
+    .edu-note a { color: var(--blue); font-weight: 600; }
     .edu { padding: 36px 0 48px; }
-    .edu .container { max-width: 760px; }
-    .edu p { font-size: 15px; line-height: 1.75; color: var(--text-muted); margin-bottom: 14px; }
     .edu a { color: var(--blue); font-weight: 600; }
     .section-title { text-align: center; margin-bottom: 18px; font-size: 1.5rem; }
+    .section-title-sub { margin-top: 36px; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
     .faq { padding: 28px 0 32px; }
     .faq .container { max-width: 760px; }
@@ -400,9 +762,21 @@ const jsonLd = buildCalculatorJsonLd({
       border-radius: var(--radius);
       padding: 16px 18px;
     }
-    .faq-item h4 { margin: 0 0 8px; font-size: 15px; }
+    .faq-item h3 { margin: 0 0 8px; font-size: 16px; line-height: 1.35; color: var(--text); }
     .faq-item p { margin: 0; font-size: 14px; color: var(--text-muted); line-height: 1.55; }
-    .related { text-align: center; padding-bottom: 48px; }
-    .related-links a { color: var(--blue); font-weight: 600; }
+    .faq-item p a { color: var(--blue); font-weight: 600; }
+    .related { padding-bottom: 48px; }
+    .related-inner { max-width: 720px; }
+    .related-list {
+      list-style: none;
+      margin: 0 auto 8px;
+      padding: 0;
+      text-align: left;
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+    .related-list li { margin-bottom: 10px; padding-left: 0; }
+    .related-list a { color: var(--blue); font-weight: 600; }
   </style>
 </MainLayout>
