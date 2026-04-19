@@ -3,155 +3,125 @@ import MainLayout from '../../layouts/MainLayout.astro';
 
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 
-const pageDescription =
-  'Compress PDFs in your browser: Light cleanup (structure/metadata, keeps vectors) or Smaller file (rasterize pages to JPEG with presets or custom quality). Optional size targets in raster mode. Batch queue, before/after sizes, ZIP download. pdf-lib + PDF.js — no upload.';
+const faqsForSchema: { question: string; answerPlain: string }[] = [
+  {
+    question: 'Is Compress PDF free and unlimited?',
+    answerPlain:
+      'Yes. You can compress as many PDFs as your device can handle with no signup, watermarks, or daily task limits. There is no paid tier hiding features — batch queue, ZIP download, and optional size targets are all included. Practical limits are your RAM, CPU, and patience for very large files. Because processing stays in the browser, there is no server-side quota to enforce.',
+  },
+  {
+    question: 'Are my PDFs uploaded to DoItSwift servers?',
+    answerPlain:
+      'No. pdf-lib and PDF.js run entirely in your browser; bytes are read with the File API and never sent to DoItSwift. You can disconnect from the internet after the page loads and compression still works for files already in the queue. That behavior is different from most online PDF tools that upload to cloud workers. Clear downloads and close the tab on shared computers if the documents are sensitive.',
+  },
+  {
+    question: 'What is the difference between Light cleanup and Smaller file?',
+    answerPlain:
+      'Light cleanup rewrites the PDF structure with pdf-lib, clears common metadata, and saves with object streams while copying existing pages — vectors and text stay selectable, but savings are often modest. Smaller file renders each page to a canvas and embeds JPEGs in a new PDF, which can slash size for scans and photos but makes pages raster images. Choose Light cleanup when fidelity and search matter; choose Smaller file when attachment size is the priority. The UI always shows before and after sizes so you can compare.',
+  },
+  {
+    question: 'Will every PDF get smaller?',
+    answerPlain:
+      'Usually, but not always. Already-lean PDFs may barely shrink in Light cleanup because there is little redundant structure left to remove. In Smaller file mode the output can occasionally be larger than the original if the source was highly optimized or if JPEG settings are too gentle for the content. The results list shows original size, new size, and percent change so you can spot outliers. Keep originals until you have verified the compressed file opens and looks acceptable.',
+  },
+  {
+    question: 'How do optional target size goals work?',
+    answerPlain:
+      'In Smaller file mode you can optionally set a maximum output size in megabytes or a minimum shrink percentage. The tool may run multiple compression passes, adjusting JPEG quality (and related settings) to approach the goal when possible. If both fields are filled, the max megabytes goal takes precedence over the percentage goal. These targets are ignored in Light cleanup mode because that path does not rasterize pages. Large targets on huge inputs can take noticeably longer.',
+  },
+  {
+    question: 'Can I compress multiple PDFs at once?',
+    answerPlain:
+      'Yes. Add several PDFs to the queue, choose your mode and strength once, then click Compress PDFs to process the whole batch. Each finished file gets its own download link with a before-and-after size line. When you have more than one success, use Download all as ZIP to fetch compressed-pdfs.zip in one step. You can change options and run again without re-adding files until you clear the queue or results.',
+  },
+  {
+    question: 'What are the output filenames?',
+    answerPlain:
+      'Each output keeps the original base filename and adds -compressed.pdf before the extension so you do not overwrite your source by accident. If the input lacks a .pdf suffix, the tool still appends the suffix pattern to a sensible stem. Rename after download if your portal requires a specific naming pattern. Keeping the stem makes it easy to match outputs back to originals in a folder.',
+  },
+  {
+    question: 'Do password-protected PDFs work?',
+    answerPlain:
+      'Encrypted or password-protected PDFs may fail to load in the browser libraries until they are unlocked. Use DoItSwift Unlock PDF at /pdf/unlock-pdf/ when you have the password, or decrypt with a trusted desktop tool, then compress the unlocked copy here. Do not share passwords in screenshots or support tickets. If unlock is not possible, you will need an authorized copy from the document owner.',
+  },
+  {
+    question: 'What about very large PDFs?',
+    answerPlain:
+      'The interface warns when you add a file over about 50 megabytes because raster mode can be slow and memory-heavy on long, high-resolution documents. Very large jobs may make the tab unresponsive for a while; avoid closing the tab until processing finishes. On low-RAM devices, try fewer files per batch or use Light cleanup first. If the browser crashes, split the PDF with Split PDF and compress parts separately.',
+  },
+  {
+    question: 'Is there a monthly limit or account required?',
+    answerPlain:
+      'No accounts are required and there is no monthly cap or premium gate. The tool is fully client-side, so there is no server-side metering of tasks. You still need a modern browser with JavaScript enabled and enough local resources for your file sizes. Corporate proxies that block CDN scripts may prevent PDF.js from loading — allowlist the CDN or try another network if raster mode never starts.',
+  },
+  {
+    question: 'How do I compress a PDF to under 1 MB or 2 MB?',
+    answerPlain:
+      'Use Smaller file mode and set an optional target in the Try to stay under field — enter 1 or 2 for your megabyte target. The compressor adjusts JPEG quality across multiple passes when needed to approach your target. For very large PDFs (20+ MB), you may need Maximum strength alongside the size target. Extremely aggressive settings can reduce text readability, so preview the output before discarding the original.',
+  },
+  {
+    question: 'Does compressing a PDF reduce quality?',
+    answerPlain:
+      'Light cleanup mode does not intentionally reduce visual quality; it removes redundant data and metadata while preserving the page content model. Smaller file mode converts pages to JPEG images, which is inherently lossy. At Balanced strength, on-screen quality is usually acceptable for everyday documents. At Maximum strength, text may look softer and gradients may band. The quality and sharpness sliders in Custom mode give fine control. Always preview important documents before distribution.',
+  },
+];
 
-const jsonLd = {
+const faqPageLd = {
   '@context': 'https://schema.org',
-  '@graph': [
+  '@type': 'FAQPage',
+  mainEntity: faqsForSchema.map((f) => ({
+    '@type': 'Question',
+    name: f.question,
+    acceptedAnswer: { '@type': 'Answer', text: f.answerPlain },
+  })),
+};
+
+const softwareAppLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Compress PDF',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web Browser',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  description:
+    'Free PDF compressor with two modes — light cleanup for text PDFs and raster compression for scans. Adjustable quality, target file size, batch processing. Browser-based, files never uploaded.',
+  url: canonical,
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
     {
-      '@type': 'WebApplication',
-      name: 'DoItSwift Compress PDF',
-      url: canonical,
-      applicationCategory: 'UtilitiesApplication',
-      operatingSystem: 'Web browser',
-      browserRequirements:
-        'Requires JavaScript, pdf-lib, PDF.js for raster mode, and JSZip for batch ZIP (loaded from CDN)',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-      description:
-        'Reduce PDF file size locally with two strategies: Light cleanup rewrites the PDF and strips metadata while copying pages (vectors preserved). Smaller file rasterizes each page via PDF.js to JPEG with Balanced, Strong, Maximum, or Custom quality and scale; optional target max megabytes or minimum shrink percentage runs extra passes in raster mode. Compare original and output sizes in the UI. No server upload.',
-      featureList: [
-        'Light cleanup: copy pages with pdf-lib, clear common metadata, save with object streams — modest size reduction, text stays selectable',
-        'Smaller file: render each page with PDF.js and embed JPEGs in a new PDF — strong reduction for scans and photo-heavy documents',
-        'Raster presets: Balanced, Strong, Maximum, or Custom JPEG quality and sharpness sliders',
-        'Optional targets in Smaller file mode: try to stay under a max MB or shrink by a percentage (binary search; structure mode ignores these)',
-        'Queue multiple PDFs, compress with one run, per-file download with before → after size comparison',
-        'Download all results as compressed-pdfs.zip',
-        'Output files named with original stem plus -compressed.pdf',
-        'Warns when adding a single file over about 50 MB',
-        'Encrypted PDFs may fail until unlocked elsewhere',
-        '100% client-side — PDF bytes are not uploaded to DoItSwift',
-      ],
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: Astro.site ? new URL('/', Astro.site).href : 'https://doitswift.com/',
     },
     {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'Is Compress PDF free and unlimited?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes. Compress as many PDFs as your device can handle with no signup, watermarks, or usage quotas.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Are my PDFs uploaded to DoItSwift servers?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'No. pdf-lib and PDF.js run in your browser; compression happens locally.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'What is the difference between Light cleanup and Smaller file?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Light cleanup rewrites the PDF and strips metadata while keeping vector text — often modest savings. Smaller file redraws each page as a JPEG image, which can greatly reduce scans and photos but may soften text and reduce copy-paste quality.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Will every PDF get smaller?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Usually, but minimal or already-optimized PDFs may barely shrink in Light cleanup. In Smaller file mode the output can occasionally be larger than the original — the UI shows before and after sizes.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'How do optional target size goals work?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'In Smaller file mode you can optionally set a max output size in MB or a minimum shrink percentage. If both are set, the max MB goal takes precedence. Targets are ignored in Light cleanup mode.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Can I compress multiple PDFs at once?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes. Add several files to the queue, run compress once, then download each result or all outputs in a ZIP named compressed-pdfs.zip.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'What are the output filenames?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Each compressed file uses the original name stem plus -compressed.pdf.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Do password-protected PDFs work?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Encrypted inputs may fail until unlocked. Use DoItSwift Unlock PDF or another trusted tool first.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'What about very large PDFs?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'The tool warns when adding a file over about 50 MB. Huge documents can take a long time and use significant memory.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Is there a monthly limit or account required?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'No accounts, no quotas, and no premium tier.',
-          },
-        },
-      ],
+      '@type': 'ListItem',
+      position: 2,
+      name: 'PDF Tools',
+      item: Astro.site ? new URL('/pdf/', Astro.site).href : 'https://doitswift.com/pdf/',
     },
-    {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        {
-          '@type': 'ListItem',
-          position: 1,
-          name: 'Home',
-          item: new URL('/', Astro.site).href,
-        },
-        {
-          '@type': 'ListItem',
-          position: 2,
-          name: 'PDF Tools',
-          item: new URL('/pdf/', Astro.site).href,
-        },
-        {
-          '@type': 'ListItem',
-          position: 3,
-          name: 'Compress PDF',
-          item: canonical,
-        },
-      ],
-    },
+    { '@type': 'ListItem', position: 3, name: 'Compress PDF', item: canonical },
   ],
 };
 ---
 
 <MainLayout
-  title="Compress PDF — Light Cleanup or Raster, Size Targets, Batch ZIP | DoItSwift"
-  description={pageDescription}
-  keywords="compress pdf, reduce pdf size, shrink pdf online, pdf compressor browser, pdf smaller file, scan pdf compress, pdf metadata strip, rasterize pdf jpeg, target pdf size mb, batch compress pdf, private compress pdf, no upload pdf, pdf-lib compress"
+  title="Compress PDF Online Free — Reduce PDF File Size Without Uploading | DoItSwift"
+  description="Free PDF compressor that runs in your browser — your files are never uploaded. Reduce PDF size by up to 90% for scans, or use light cleanup for text-based PDFs. Batch compression, before/after comparison, ZIP download. No signup, no watermarks, no limits."
+  keywords="compress pdf, pdf compressor, reduce pdf size, compress pdf online, pdf size reducer, shrink pdf, compress pdf free, reduce pdf file size, pdf compression online, make pdf smaller"
   canonical={canonical}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(softwareAppLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqPageLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" is:inline></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" is:inline></script>
 
@@ -169,11 +139,9 @@ const jsonLd = {
   <section class="hero">
     <div class="container">
       <div class="badge">🔒 100% Private — Files Never Leave Your Device</div>
-      <h1>Compress PDF</h1>
+      <h1>Compress PDF Online — Reduce File Size Free, No Upload</h1>
       <p class="subtitle">
-        Choose <strong>Light cleanup</strong> (vectors, modest savings) or <strong>Smaller file</strong> (JPEG pages, big
-        wins on scans). Optional MB/% targets in raster mode. Queue PDFs, compare before → after, download or ZIP — all
-        local.
+        Reduce PDF file size directly in your browser — choose Light cleanup for text-based documents (preserves vectors and text selection) or Smaller file mode for scans and photo-heavy PDFs (up to 90% reduction). Set optional size targets, compress multiple PDFs in batch, compare before-and-after sizes, and download individually or as ZIP. Unlike iLovePDF, Smallpdf, and Adobe Acrobat Online, your files are never uploaded to any server — all compression runs locally on your device.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> Batch files</span>
@@ -181,6 +149,9 @@ const jsonLd = {
         <span><span class="check">✓</span> Works offline</span>
         <span><span class="check">✓</span> No watermarks</span>
       </div>
+      <p class="trust-signal">
+        Uses pdf-lib and PDF.js (open-source libraries) for browser-based compression. No server uploads, no file retention. Last updated: April 2026.
+      </p>
     </div>
   </section>
 
@@ -359,6 +330,246 @@ const jsonLd = {
       </section>
 
       <section class="compress-edu-block">
+        <h2 id="how-much-compress">How Much Can You Compress? Typical Results</h2>
+        <div class="compress-table-wrap">
+          <table class="compress-compare-table compress-results-table">
+            <caption class="sr-only">Typical compression results by PDF type and mode</caption>
+            <thead>
+              <tr>
+                <th scope="col">PDF type</th>
+                <th scope="col">Original size</th>
+                <th scope="col">Light cleanup</th>
+                <th scope="col">Smaller file (balanced)</th>
+                <th scope="col">Smaller file (maximum)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Text-heavy report (50 pages)</td>
+                <td>2-5 MB</td>
+                <td>1.5-4 MB (10-30%)</td>
+                <td>1-2 MB (40-60%)</td>
+                <td>500 KB-1 MB (70-80%)</td>
+              </tr>
+              <tr>
+                <td>Scanned document (20 pages)</td>
+                <td>10-30 MB</td>
+                <td>9-28 MB (minimal)</td>
+                <td>2-5 MB (70-85%)</td>
+                <td>1-3 MB (85-95%)</td>
+              </tr>
+              <tr>
+                <td>Photo-heavy presentation</td>
+                <td>15-50 MB</td>
+                <td>12-45 MB (10-20%)</td>
+                <td>3-10 MB (60-80%)</td>
+                <td>2-5 MB (80-90%)</td>
+              </tr>
+              <tr>
+                <td>Simple form / letter</td>
+                <td>100-500 KB</td>
+                <td>80-450 KB (5-15%)</td>
+                <td>Similar or slightly larger</td>
+                <td>Similar or slightly larger</td>
+              </tr>
+              <tr>
+                <td>Merged multi-source PDF</td>
+                <td>5-20 MB</td>
+                <td>4-15 MB (15-30%)</td>
+                <td>2-5 MB (50-70%)</td>
+                <td>1-3 MB (75-85%)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <strong>Key insight:</strong> Light cleanup works best when the PDF has redundant metadata, duplicate fonts, or uncompressed object streams. Smaller file mode works best on scans and photo-heavy PDFs where rasterizing to JPEG yields dramatic savings. Already-optimized PDFs may not shrink much with either mode.
+        </p>
+      </section>
+
+      <section class="compress-edu-block">
+        <h2 id="when-compress">When You Need to Compress a PDF</h2>
+
+        <h3>Email attachment limits</h3>
+        <p>
+          Gmail caps attachments at 25 MB, Outlook at 20 MB, and many corporate email servers at 10 MB. Compress your PDF to fit within these limits instead of using external file-sharing links that may expire or require accounts.
+        </p>
+
+        <h3>Government and university portals</h3>
+        <p>
+          Online submission portals frequently limit uploads to 2-5 MB per file. Passport applications, visa forms, university admissions, job portals, and tax filing systems all impose strict size limits. Compress scanned documents to meet these requirements.
+        </p>
+
+        <h3>After merging multiple PDFs</h3>
+        <p>
+          Merged PDFs accumulate duplicate fonts and metadata from every source file, making the output larger than expected. A 5+3+4 MB merge can produce a 15 MB file instead of 12 MB. Compress after merging for significant savings — typically 30-60% reduction. Use our <a href="/pdf/merge-pdf/">PDF Merger</a> first, then compress the result.
+        </p>
+
+        <h3>Website and app uploads</h3>
+        <p>
+          CMS platforms, e-commerce product listings, and document management systems often have PDF size limits. Compressing PDFs before upload reduces storage costs and improves download speed for end users.
+        </p>
+
+        <h3>Archiving and backup</h3>
+        <p>
+          Compressing PDFs before archiving saves significant storage space over time. A company generating 100 PDFs/month at 5 MB each saves 30+ GB/year with even modest compression.
+        </p>
+
+        <h3>WhatsApp and messaging</h3>
+        <p>
+          WhatsApp limits document sharing to 100 MB, but large PDFs are slow to send on mobile data. Compressing scanned documents from 20 MB to 2-3 MB makes sharing instant even on slower connections.
+        </p>
+      </section>
+
+      <section class="compress-edu-block">
+        <h2 id="which-mode">Which Compression Mode Should You Use?</h2>
+        <div class="compress-table-wrap">
+          <table class="compress-compare-table compress-results-table">
+            <caption class="sr-only">Recommended compression mode by document type</caption>
+            <thead>
+              <tr>
+                <th scope="col">Your PDF type</th>
+                <th scope="col">Recommended mode</th>
+                <th scope="col">Why</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Contract or legal document</td><td><strong>Light cleanup</strong></td><td>Preserves text selectability and search</td></tr>
+              <tr><td>Scanned pages / receipts</td><td><strong>Smaller file (balanced)</strong></td><td>Already images — rasterizing loses nothing</td></tr>
+              <tr><td>Photo-heavy report</td><td><strong>Smaller file (balanced)</strong></td><td>Biggest gains on embedded photos</td></tr>
+              <tr><td>Tax / government form</td><td><strong>Light cleanup</strong></td><td>Must preserve form fields and text clarity</td></tr>
+              <tr><td>University assignment</td><td><strong>Light cleanup first, Smaller file if still too large</strong></td><td>Try preserving quality first</td></tr>
+              <tr><td>Portfolio / design work</td><td><strong>Smaller file (custom, high quality)</strong></td><td>Adjust quality slider to balance visuals vs size</td></tr>
+              <tr><td>Merged multi-document PDF</td><td><strong>Light cleanup</strong></td><td>Removes duplicate fonts and metadata from merge</td></tr>
+              <tr><td>Email attachment too large</td><td><strong>Smaller file + target size</strong></td><td>Set target to match email limit (e.g., 5 MB)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <strong>General rule:</strong> Start with Light cleanup. If the result isn't small enough, try Smaller file at Balanced strength. Only use Maximum or set aggressive targets when file size matters more than visual quality.
+        </p>
+      </section>
+
+      <section class="compress-edu-block">
+        <h2 id="browser-compress">How Browser-Based PDF Compression Works</h2>
+        <p>
+          Most PDF compressors (iLovePDF, Smallpdf, Adobe) upload your documents to cloud servers for processing. Your contracts, financial statements, identity documents, and medical records travel across the internet and are processed on someone else's infrastructure. For sensitive documents, this is a privacy risk.
+        </p>
+        <p>
+          DoItSwift compresses PDFs entirely in your browser:
+        </p>
+
+        <h3>Light cleanup mode</h3>
+        <ol class="compress-edu-ol">
+          <li>The pdf-lib JavaScript library reads your PDF in browser memory</li>
+          <li>It rewrites the document structure, removing redundant metadata and optimizing object streams</li>
+          <li>Vector text, fonts, and images are preserved — the output is structurally identical but cleaner</li>
+          <li>A new, smaller PDF is generated and offered for download</li>
+        </ol>
+
+        <h3>Smaller file mode</h3>
+        <ol class="compress-edu-ol">
+          <li>PDF.js renders each page to an HTML Canvas at your specified quality</li>
+          <li>Each rendered page is exported as a JPEG image at the selected compression level</li>
+          <li>A new PDF is built from these JPEG pages using pdf-lib</li>
+          <li>The result is typically 50-90% smaller but pages are now images (text becomes non-selectable)</li>
+        </ol>
+
+        <p>
+          <strong>Privacy proof:</strong> Disconnect your internet and try compressing a PDF. It works — because no server communication happens at any point. Server-based tools fail instantly when offline.
+        </p>
+      </section>
+
+      <section class="compress-edu-block">
+        <h2 id="vs-competitors">DoItSwift vs Other PDF Compressors</h2>
+        <div class="compress-table-wrap">
+          <table class="compress-compare-table compress-results-table">
+            <caption class="sr-only">Feature comparison: DoItSwift vs iLovePDF, Smallpdf, Adobe Acrobat Online</caption>
+            <thead>
+              <tr>
+                <th scope="col">Feature</th>
+                <th scope="col">DoItSwift</th>
+                <th scope="col">iLovePDF</th>
+                <th scope="col">Smallpdf</th>
+                <th scope="col">Adobe Acrobat Online</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Files stay on device</td>
+                <td><strong>Yes — never uploaded</strong></td>
+                <td>No — server processed</td>
+                <td>No — server processed</td>
+                <td>No — Adobe cloud</td>
+              </tr>
+              <tr>
+                <td>Compression modes</td>
+                <td><strong>2 (Light + Raster with quality control)</strong></td>
+                <td>3 levels (no control)</td>
+                <td>2 levels</td>
+                <td>3 levels</td>
+              </tr>
+              <tr>
+                <td>Quality/sharpness control</td>
+                <td><strong>Yes — sliders for both</strong></td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td>Target file size</td>
+                <td><strong>Yes — set max MB or min % reduction</strong></td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td>Batch compression</td>
+                <td><strong>Yes — unlimited</strong></td>
+                <td>Limited (free tier)</td>
+                <td>2/day free</td>
+                <td>Limited</td>
+              </tr>
+              <tr>
+                <td>Before/after comparison</td>
+                <td><strong>Yes — per file</strong></td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>ZIP download</td>
+                <td><strong>Yes</strong></td>
+                <td>Yes</td>
+                <td>Limited</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td>Works offline</td>
+                <td><strong>Yes</strong></td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td>Free tier limits</td>
+                <td><strong>None — fully free</strong></td>
+                <td>Daily caps</td>
+                <td>2 tasks/day</td>
+                <td>Requires login</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <strong>Where DoItSwift wins:</strong> Privacy (no upload), quality control (adjustable sliders), target file size, and unlimited batch processing. No other popular compressor offers all four simultaneously.
+        </p>
+        <p>
+          <strong>Where others win:</strong> Server-based tools handle extremely large files (100+ MB) faster and can apply advanced compression algorithms that aren't available in browser JavaScript. Adobe Acrobat also preserves PDF/A compliance and metadata more reliably. For everyday compression of documents under 50 MB, DoItSwift is faster, more private, and offers more control.
+        </p>
+      </section>
+
+      <section class="compress-edu-block">
         <h2 id="workflow-next-steps">Split, merge, or export images</h2>
         <p>
           Still too big? Try <a href="/pdf/split-pdf/">Split PDF</a> and compress parts separately, or{' '}
@@ -379,12 +590,15 @@ const jsonLd = {
         <li><a href="/pdf/pdf-to-jpg/">PDF to JPG</a></li>
         <li><a href="/pdf/image-to-pdf/">Image to PDF</a></li>
         <li><a href="/pdf/jpg-to-pdf/">JPG to PDF</a></li>
+        <li><a href="/image/image-compressor/">Image Compressor — Compress images before embedding in PDFs</a></li>
       </ul>
       <h2 class="section-title section-title-sub">Related guides</h2>
       <ul class="compress-related-grid compress-related-guides">
         <li><a href="/blog/how-to-compress-pdf/">How to compress a PDF</a></li>
         <li><a href="/blog/how-to-merge-pdf/">How to merge PDFs</a></li>
         <li><a href="/blog/how-to-split-pdf/">How to split a PDF</a></li>
+        <li><a href="/blog/how-to-convert-pdf-to-jpg/">How to Convert PDF to JPG</a></li>
+        <li><a href="/blog/best-image-format-for-web/">Best Image Format for Websites 2026</a></li>
       </ul>
     </div>
   </section>
@@ -394,63 +608,76 @@ const jsonLd = {
       <h2 class="section-title">Frequently Asked Questions</h2>
       <div class="faq-list">
         <div class="faq-item">
-          <h4>Is Compress PDF free and unlimited?</h4>
-          <p>Yes. Compress as many PDFs as your device can handle with no signup, watermarks, or usage quotas.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Are my PDFs uploaded to DoItSwift servers?</h4>
-          <p>No. pdf-lib and PDF.js run in your browser; compression happens locally.</p>
-        </div>
-        <div class="faq-item">
-          <h4>What is the difference between Light cleanup and Smaller file?</h4>
+          <h3>Is Compress PDF free and unlimited?</h3>
           <p>
-            Light cleanup rewrites the PDF and strips metadata while keeping vector text — often modest savings. Smaller file
-            redraws each page as a JPEG image, which can greatly reduce scans and photos but may soften text and reduce
-            copy-paste quality.
+            Yes. You can compress as many PDFs as your device can handle with no signup, watermarks, or daily task limits. There is no paid tier hiding features — batch queue, ZIP download, and optional size targets are all included. Practical limits are your RAM, CPU, and patience for very large files. Because processing stays in the browser, there is no server-side quota to enforce.
           </p>
         </div>
         <div class="faq-item">
-          <h4>Will every PDF get smaller?</h4>
+          <h3>Are my PDFs uploaded to DoItSwift servers?</h3>
           <p>
-            Usually, but minimal or already-optimized PDFs may barely shrink in Light cleanup. In Smaller file mode the output
-            can occasionally be larger than the original — the UI shows before and after sizes. Smaller file uses{' '}
-            <strong>lossy</strong> JPEG per page, not lossless compression.
+            No. pdf-lib and PDF.js run entirely in your browser; bytes are read with the File API and never sent to DoItSwift. You can disconnect from the internet after the page loads and compression still works for files already in the queue. That behavior is different from most online PDF tools that upload to cloud workers. Clear downloads and close the tab on shared computers if the documents are sensitive.
           </p>
         </div>
         <div class="faq-item">
-          <h4>How do optional target size goals work?</h4>
+          <h3>What is the difference between Light cleanup and Smaller file?</h3>
           <p>
-            In Smaller file mode you can set a max output size in MB or a minimum shrink percentage. If both are set, max MB
-            takes precedence. Targets are ignored in Light cleanup mode.
+            Light cleanup rewrites the PDF structure with pdf-lib, clears common metadata, and saves with object streams while copying existing pages — vectors and text stay selectable, but savings are often modest. Smaller file renders each page to a canvas and embeds JPEGs in a new PDF, which can slash size for scans and photos but makes pages raster images. Choose Light cleanup when fidelity and search matter; choose Smaller file when attachment size is the priority. The UI always shows before and after sizes so you can compare.
           </p>
         </div>
         <div class="faq-item">
-          <h4>Can I compress multiple PDFs at once?</h4>
+          <h3>Will every PDF get smaller?</h3>
           <p>
-            Yes. Add several files to the queue, run compress once, then download each result or all outputs in a ZIP named
-            compressed-pdfs.zip.
+            Usually, but not always. Already-lean PDFs may barely shrink in Light cleanup because there is little redundant structure left to remove. In Smaller file mode the output can occasionally be larger than the original if the source was highly optimized or if JPEG settings are too gentle for the content. The results list shows original size, new size, and percent change so you can spot outliers. Smaller file uses <strong>lossy</strong> JPEG per page. Keep originals until you have verified the compressed file opens and looks acceptable.
           </p>
         </div>
         <div class="faq-item">
-          <h4>What are the output filenames?</h4>
-          <p>Each file uses the original name stem plus <code>-compressed.pdf</code>.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Do password-protected PDFs work?</h4>
+          <h3>How do optional target size goals work?</h3>
           <p>
-            Encrypted inputs may fail until unlocked. Use <a href="/pdf/unlock-pdf/">Unlock PDF</a> or another trusted tool
-            first.
+            In Smaller file mode you can optionally set a maximum output size in megabytes or a minimum shrink percentage. The tool may run multiple compression passes, adjusting JPEG quality (and related settings) to approach the goal when possible. If both fields are filled, the max megabytes goal takes precedence over the percentage goal. These targets are ignored in Light cleanup mode because that path does not rasterize pages. Large targets on huge inputs can take noticeably longer.
           </p>
         </div>
         <div class="faq-item">
-          <h4>What about very large PDFs?</h4>
+          <h3>Can I compress multiple PDFs at once?</h3>
           <p>
-            The tool warns when adding a file over about 50 MB. Huge documents can take a long time and use significant memory.
+            Yes. Add several PDFs to the queue, choose your mode and strength once, then click Compress PDFs to process the whole batch. Each finished file gets its own download link with a before-and-after size line. When you have more than one success, use Download all as ZIP to fetch compressed-pdfs.zip in one step. You can change options and run again without re-adding files until you clear the queue or results.
           </p>
         </div>
         <div class="faq-item">
-          <h4>Is there a monthly limit or account required?</h4>
-          <p>No accounts, no quotas, and no premium tier.</p>
+          <h3>What are the output filenames?</h3>
+          <p>
+            Each output keeps the original base filename and adds <code>-compressed.pdf</code> before the extension so you do not overwrite your source by accident. If the input lacks a .pdf suffix, the tool still appends the suffix pattern to a sensible stem. Rename after download if your portal requires a specific naming pattern. Keeping the stem makes it easy to match outputs back to originals in a folder.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Do password-protected PDFs work?</h3>
+          <p>
+            Encrypted or password-protected PDFs may fail to load in the browser libraries until they are unlocked. Use <a href="/pdf/unlock-pdf/">Unlock PDF</a> when you have the password, or decrypt with a trusted desktop tool, then compress the unlocked copy here. Do not share passwords in screenshots or support tickets. If unlock is not possible, you will need an authorized copy from the document owner.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>What about very large PDFs?</h3>
+          <p>
+            The interface warns when you add a file over about 50 megabytes because raster mode can be slow and memory-heavy on long, high-resolution documents. Very large jobs may make the tab unresponsive for a while; avoid closing the tab until processing finishes. On low-RAM devices, try fewer files per batch or use Light cleanup first. If the browser crashes, split the PDF with Split PDF and compress parts separately.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Is there a monthly limit or account required?</h3>
+          <p>
+            No accounts are required and there is no monthly cap or premium gate. The tool is fully client-side, so there is no server-side metering of tasks. You still need a modern browser with JavaScript enabled and enough local resources for your file sizes. Corporate proxies that block CDN scripts may prevent PDF.js from loading — allowlist the CDN or try another network if raster mode never starts.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>How do I compress a PDF to under 1 MB or 2 MB?</h3>
+          <p>
+            Use "Smaller file" mode and set an optional target in the "Try to stay under" field — enter 1 or 2 for your MB target. The compressor will adjust JPEG quality automatically across multiple passes to approach your target. For very large PDFs (20+ MB), you may need to use Maximum strength alongside the size target. Note that extremely aggressive compression may reduce text readability — always check the output before discarding the original.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Does compressing a PDF reduce quality?</h3>
+          <p>
+            Light cleanup mode does not reduce visual quality — it only removes redundant data and metadata while preserving the document exactly as-is. Smaller file mode converts pages to JPEG images, which introduces lossy compression. At Balanced strength (default), quality loss is minimal on screen. At Maximum strength, text may appear softer and gradients may show banding. The quality and sharpness sliders give you precise control over this trade-off. For important documents, always preview the compressed output before using it.
+          </p>
         </div>
       </div>
     </div>
@@ -924,7 +1151,15 @@ const jsonLd = {
       font-size: 19px;
       color: var(--text-muted);
       max-width: 700px;
-      margin: 0 auto 28px;
+      margin: 0 auto 20px;
+      line-height: 1.6;
+    }
+    .trust-signal {
+      font-size: 12px;
+      color: var(--text-muted);
+      max-width: 700px;
+      margin: 0 auto 20px;
+      line-height: 1.55;
     }
     .subtitle strong {
       color: var(--text);
@@ -1287,6 +1522,25 @@ const jsonLd = {
       margin: 0 0 1rem;
       color: var(--text);
     }
+    .compress-edu h3 {
+      font-size: 1.05rem;
+      margin: 1.35rem 0 0.5rem;
+      color: var(--text);
+      line-height: 1.35;
+    }
+    .compress-edu-block h2 + h3 {
+      margin-top: 0.65rem;
+    }
+    .compress-edu-ol {
+      margin: 0 0 1rem;
+      padding-left: 1.35rem;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text);
+    }
+    .compress-edu-ol li {
+      margin-bottom: 0.5rem;
+    }
     .compress-edu p {
       font-size: 16px;
       line-height: 1.75;
@@ -1317,6 +1571,9 @@ const jsonLd = {
       min-width: 560px;
       border-collapse: collapse;
       font-size: 14px;
+    }
+    .compress-results-table {
+      min-width: 720px;
     }
     .compress-compare-table th,
     .compress-compare-table td {
@@ -1397,9 +1654,11 @@ const jsonLd = {
       margin-bottom: 12px;
       box-shadow: var(--shadow-sm);
     }
-    .faq-item h4 {
+    .faq-item h3 {
       font-size: 16px;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
+      line-height: 1.35;
+      color: var(--text);
     }
     .faq-item p {
       font-size: 14px;
