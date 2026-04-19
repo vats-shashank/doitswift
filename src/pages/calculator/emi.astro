@@ -6,110 +6,103 @@ import { calculatorCanonical } from '../../lib/calculatorJsonLd';
 const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
 
 const pageTitle =
-  'EMI Calculator — Home Loan, Car Loan EMI & Amortization Schedule | DoItSwift';
+  'EMI Calculator — Free Loan EMI Calculator for Home, Car & Personal Loan | DoItSwift';
 
 const pageDescription =
-  'Free EMI calculator for home loan, car loan, or any reducing-balance loan. Enter principal, annual %, tenure in years or months; see monthly EMI, total interest, principal vs interest pie chart, and year-wise amortization. Currency formats numbers only — not FX. Runs in your browser; no signup.';
+  'Free EMI calculator for home loan, car loan, and personal loan. Calculate monthly EMI, total interest, and view year-wise amortization schedule. Instant results, no signup — runs entirely in your browser.';
 
-const siteRoot = Astro.site ? new URL('/', Astro.site).href : null;
+const pageKeywords =
+  'emi calculator, emi calculator online, home loan emi calculator, personal loan emi calculator, car loan emi calculator, loan emi calculator, emi calculator india, loan calculator, monthly emi calculator, housing loan emi calculator';
 
-const jsonLd = {
+const faqItems = [
+  {
+    question: 'What is EMI?',
+    answer:
+      'EMI (Equated Monthly Installment) is the fixed amount you pay each month on a reducing-balance loan until the loan is fully repaid. Each payment covers interest on the outstanding balance first; the remainder reduces principal, so the interest portion shrinks over time while the principal portion grows. EMI is used for home loans, car loans, personal loans, and most term loans in India. This calculator assumes a fixed annual rate for the full tenure unless you change the inputs.',
+  },
+  {
+    question: 'Is EMI the same as pre-EMI?',
+    answer:
+      'No. Pre-EMI is typically an interest-only payment phase before the loan is fully disbursed (common in under-construction home loans), so you are not yet paying down the full principal on a complete schedule. Full EMI starts once disbursement is complete and includes both principal and interest according to the amortization schedule. This tool models standard full EMI on the entire principal from day one. If you are in a pre-EMI phase, your bank statement will not match this calculator until you convert to full EMI.',
+  },
+  {
+    question: 'What is EMI and how is it calculated?',
+    answer:
+      'EMI (Equated Monthly Installment) is the fixed amount you pay every month to repay a loan. It is calculated using the reducing-balance formula: EMI = [P × r × (1+r)^n] / [(1+r)^n − 1], where P is principal, r is monthly interest rate, and n is total months. Each EMI includes a principal and interest component — early payments are interest-heavy, later payments are principal-heavy.',
+  },
+  {
+    question: 'How much EMI can I afford on my salary?',
+    answer:
+      'Financial experts recommend keeping total EMI below 30-40% of your in-hand (post-tax) salary. If your in-hand salary is ₹60,000, your total EMI burden should ideally be ₹18,000-24,000. Banks may approve up to 50-60%, but that leaves minimal room for savings and emergencies. Use our <a href="/calculator/salary/">Salary Calculator</a> to find your in-hand salary from CTC first.',
+  },
+  {
+    question: 'What is the EMI for a ₹50 lakh home loan?',
+    answer:
+      'At 8.5% for 20 years: EMI is approximately ₹43,391/month. Total payment over 20 years: ₹1.04 crore (₹54 lakh interest). At 8.5% for 15 years: EMI is approximately ₹49,236/month but total interest drops to ₹38.6 lakh — saving ₹15.5 lakh. Enter your exact numbers in the calculator above to compare different scenarios.',
+  },
+  {
+    question: 'What is the EMI for a ₹10 lakh personal loan?',
+    answer:
+      'At 12% for 5 years: EMI is approximately ₹22,244/month. Total interest paid: ₹3,34,640. At 14% for 3 years: EMI is approximately ₹34,178/month but total interest is only ₹2,30,400 — shorter tenure means less total interest despite higher monthly payments. Personal loan rates vary significantly (10-24%) based on credit score and lender.',
+  },
+  {
+    question: 'Does prepaying a loan reduce EMI or tenure?',
+    answer:
+      'You typically choose. Most banks offer two options: reduce EMI (keep same tenure, lower monthly payment) or reduce tenure (keep same EMI, finish loan faster). Reducing tenure saves more total interest. Prepaying early in the loan (first 5-7 years) gives the maximum interest savings because the outstanding balance is highest then. Use our <a href="/calculator/home-loan/">Home Loan Calculator</a> to simulate prepayment scenarios.',
+  },
+  {
+    question: 'What happens if I miss an EMI payment?',
+    answer:
+      'Missing an EMI triggers a late payment fee (typically ₹500-2,000 or 2% of EMI), negatively impacts your CIBIL credit score, and may result in penal interest charges. Multiple missed EMIs can lead to loan default proceedings. If you anticipate difficulty, contact your lender proactively — most banks offer restructuring options like tenure extension or temporary EMI reduction rather than allowing default.',
+  },
+  {
+    question: 'Is this EMI calculator accurate for all banks?',
+    answer:
+      'Yes — all Indian banks and NBFCs use the same reducing-balance EMI formula. The calculator gives you the mathematically exact EMI for any given combination of principal, rate, and tenure. However, banks may add processing fees (0.5-2% of loan amount), insurance premiums, and other charges that increase your effective cost beyond the base EMI. Always confirm with the bank\'s official sanction letter.',
+  },
+  {
+    question: 'What is the difference between flat rate and reducing balance rate?',
+    answer:
+      'Flat rate calculates interest on the original loan amount throughout the tenure. Reducing balance rate (used by all major banks) calculates interest only on the outstanding balance. A 10% flat rate is equivalent to roughly 17-18% reducing balance rate. This calculator uses reducing balance — which is the standard for home loans, car loans, and personal loans from banks. Some NBFCs and older schemes still quote flat rates — always ask for the reducing balance equivalent.',
+  },
+];
+
+const softwareApplicationLd = {
   '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebPage',
-      url: canonical,
-      name: pageTitle,
-      description: pageDescription,
-      ...(siteRoot
-        ? {
-            isPartOf: { '@id': `${siteRoot}#website` },
-            publisher: { '@id': `${siteRoot}#organization` },
-          }
-        : {}),
+  '@type': 'SoftwareApplication',
+  name: 'EMI Calculator',
+  applicationCategory: 'FinanceApplication',
+  operatingSystem: 'Web Browser',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'INR',
+  },
+  description:
+    'Free EMI calculator for home loan, car loan, and personal loan. Calculate monthly EMI, total interest, and year-wise amortization. Browser-based, no data stored.',
+  url: 'https://doitswift.com/calculator/emi/',
+};
+
+const faqPageLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((f) => ({
+    '@type': 'Question',
+    name: f.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: f.answer.replace(/<[^>]*>/g, ''),
     },
-    {
-      '@type': 'WebApplication',
-      name: 'DoItSwift EMI Calculator',
-      url: canonical,
-      applicationCategory: 'FinanceApplication',
-      operatingSystem: 'Web browser',
-      browserRequirements: 'Requires JavaScript for live EMI, amortization table, and chart updates',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description:
-        'Estimate Equated Monthly Installment (EMI) using the standard reducing-balance loan formula. Adjustable loan amount, interest rate, and tenure (years or months). Shows total interest, total payment, principal versus interest visualization, and year-wise amortization summary. Currency selector changes display formatting only. Educational tool — confirm figures with your lender.',
-      featureList: [
-        'Loan principal from ₹10,000 to ₹100 crore (display scales with currency)',
-        'Annual interest rate roughly 1–30%',
-        'Tenure in years or months (up to 360 monthly installments)',
-        'Monthly EMI, total interest, and total repayment',
-        'Principal vs interest pie chart',
-        'Year-wise amortization summary table',
-        'Multi-currency number formatting (not exchange-rate conversion)',
-        'All calculations run locally in the browser',
-      ],
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'What is EMI?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'EMI (Equated Monthly Installment) is the fixed amount you pay each month on a reducing-balance loan. Each payment covers interest on the outstanding balance first; the rest reduces principal.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Is EMI the same as pre-EMI?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'No — pre-EMI is interest-only before full disbursement; this tool is for full EMI.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Does it handle floating rates?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'It assumes a constant rate; for floating loans, re-run when your rate resets.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Does the currency dropdown change EMI math?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'No — it only changes number formatting. The same numeric inputs produce the same EMI.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Is this calculator free? Are my inputs uploaded?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes, it is free with no signup. Calculations run in your browser and are not sent to our servers.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Which calculator for home loan prepayment or US mortgage?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'For prepayment scenarios use the Home Loan calculator. For US-style PITI and PMI, use the Mortgage calculator.',
-          },
-        },
-      ],
-    },
-    {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', Astro.site).href },
-        { '@type': 'ListItem', position: 2, name: 'Calculators', item: new URL('/calculator/', Astro.site).href },
-        { '@type': 'ListItem', position: 3, name: 'EMI Calculator', item: canonical },
-      ],
-    },
+  })),
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://doitswift.com/' },
+    { '@type': 'ListItem', position: 2, name: 'Calculators', item: 'https://doitswift.com/calculator/' },
+    { '@type': 'ListItem', position: 3, name: 'EMI Calculator', item: 'https://doitswift.com/calculator/emi/' },
   ],
 };
 ---
@@ -117,11 +110,13 @@ const jsonLd = {
 <MainLayout
   title={pageTitle}
   description={pageDescription}
-  keywords="EMI calculator, loan EMI calculator, home loan EMI calculator, car loan EMI calculator, reducing balance EMI, loan amortization calculator, monthly installment calculator, EMI interest calculator, free EMI calculator online"
+  keywords={pageKeywords}
   canonical={canonical}
   ogImage="/og-emi.svg"
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(softwareApplicationLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqPageLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
 
   <nav class="breadcrumb container" aria-label="Breadcrumb">
     <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>EMI Calculator</span>
@@ -130,15 +125,18 @@ const jsonLd = {
   <section class="hero">
     <div class="container">
       <div class="badge">🧮 Free Calculator</div>
-      <h1>EMI Calculator — Home Loan, Car Loan &amp; Amortization</h1>
+      <h1>Free EMI Calculator — Home Loan, Car Loan &amp; Personal Loan</h1>
       <p class="subtitle">
-        Work out <strong>monthly EMI</strong>, <strong>total interest</strong>, and how <strong>principal vs interest</strong> splits over your tenure — with optional <strong>year-wise amortization</strong>. Reducing-balance formula; use the currency dropdown for display formatting only.
+        Calculate your monthly EMI (Equated Monthly Installment) for any loan — home loan, car loan, personal loan, or education loan. Enter the loan amount, interest rate, and tenure to see your monthly payment, total interest payable, and a detailed year-wise amortization schedule showing how principal and interest split over time. All calculations run in your browser using the standard reducing-balance formula — no data is sent to any server or financial institution.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> No signup</span>
         <span><span class="check">✓</span> Instant results</span>
         <span><span class="check">✓</span> Works offline</span>
       </div>
+      <p class="emi-trust-signal">
+        Uses the standard reducing-balance formula as per RBI guidelines. Last updated: April 2026. Verify EMI with your lender's official sanction letter before committing.
+      </p>
     </div>
   </section>
 
@@ -204,20 +202,233 @@ const jsonLd = {
     </div>
   </section>
 
-  <article class="emi-edu" aria-label="Guide: how loan EMI is calculated">
+  <article class="emi-edu" aria-label="What is EMI">
     <div class="container emi-edu-inner">
-      <h2 class="section-title">How EMI is calculated</h2>
+      <h2 class="section-title">What is EMI? (Equated Monthly Installment Explained)</h2>
       <p>
-        EMI uses the standard reducing-balance formula: <em>EMI = [P × r × (1+r)<sup>n</sup>] / [(1+r)<sup>n</sup> − 1]</em>, where <em>P</em> is loan principal, <em>r</em> is the monthly interest rate (annual rate ÷ 12 ÷ 100), and <em>n</em> is the number of monthly installments. Each payment covers interest on the outstanding balance first; the rest reduces principal, so interest component falls over time.
+        EMI stands for <strong>Equated Monthly Installment</strong> — a fixed amount you pay to your bank or lender every month until the loan is fully repaid. Each EMI has two components: a <strong>principal portion</strong> (repaying the borrowed amount) and an <strong>interest portion</strong> (the cost of borrowing). In the early years of a loan, most of your EMI goes toward interest. As the loan matures, a larger share goes toward principal — this is visible in the amortization table above.
       </p>
       <p>
-        <strong>Example:</strong> A ₹10 lakh loan at 9% for 5 years produces a fixed monthly outgo; over the tenure you pay more than ₹10 lakh because of interest — the pie chart shows that split. Banks may add processing fees, insurance, or floating rates; this calculator assumes a fixed rate for the full tenure unless you change inputs.
+        EMI remains the same throughout the loan tenure for fixed-rate loans. For floating-rate loans (common in India for home loans), the EMI adjusts when the bank changes the interest rate based on RBI's repo rate decisions. The EMI amount depends on three factors: the loan amount (principal), the annual interest rate, and the loan tenure (in months or years).
+      </p>
+    </div>
+  </article>
+
+  <article class="emi-edu" aria-label="EMI formula explained">
+    <div class="container emi-edu-inner">
+      <h2 class="section-title">The EMI Formula Explained</h2>
+
+      <h3>Reducing balance formula</h3>
+      <p>EMI is calculated using the standard reducing-balance formula used by all Indian banks and NBFCs:</p>
+      <div class="callout formula-callout">
+        <strong set:html="EMI = [P × r × (1+r)<sup>n</sup>] / [(1+r)<sup>n</sup> − 1]"></strong>
+      </div>
+      <p>Where:</p>
+      <ul class="emi-edu-list">
+        <li><strong>P</strong> = Principal loan amount</li>
+        <li><strong>r</strong> = Monthly interest rate (annual rate ÷ 12 ÷ 100)</li>
+        <li><strong>n</strong> = Total number of monthly installments (years × 12)</li>
+      </ul>
+
+      <h3>Worked example: ₹50 lakh home loan at 8.5% for 20 years</h3>
+      <ul class="emi-edu-list">
+        <li>P = ₹50,00,000</li>
+        <li>r = 8.5% ÷ 12 ÷ 100 = 0.007083 per month</li>
+        <li>n = 20 × 12 = 240 months</li>
+        <li><span set:html="EMI = [50,00,000 × 0.007083 × (1.007083)<sup>240</sup>] / [(1.007083)<sup>240</sup> − 1]"></span></li>
+        <li><strong>EMI ≈ ₹43,391 per month</strong></li>
+        <li>Total payment over 20 years: ₹1,04,13,840</li>
+        <li>Total interest paid: ₹54,13,840</li>
+      </ul>
+      <p>
+        Notice: you pay <strong>₹54 lakh in interest</strong> on a ₹50 lakh loan — more than the loan itself. This is why loan tenure has such a dramatic impact on total cost. Reducing tenure from 20 to 15 years increases EMI by ~₹5,000 but saves ~₹15 lakh in total interest.
+      </p>
+
+      <h3>How amortization works</h3>
+      <p>
+        Each month, the bank first deducts interest on the outstanding balance, then applies the remaining EMI toward principal. In early months, 70-80% of your EMI is interest. By the final years, 90%+ of EMI goes to principal. This is why prepaying a loan early (in the first 5-7 years) saves the most interest — because that's when the interest component is highest.
       </p>
       <p>
-        Use year-wise totals to see how much interest is front-loaded in early years — useful if you are considering partial prepayment. Always confirm numbers with your lender’s official schedule.
+        The amortization table above shows this split year by year. Use it to decide when partial prepayment gives the best return.
+      </p>
+    </div>
+  </article>
+
+  <article class="emi-edu" aria-label="EMI for different loan types">
+    <div class="container emi-edu-inner">
+      <h2 class="section-title">EMI for Different Loan Types in India</h2>
+      <p>
+        While the EMI formula is the same for all loans, the typical loan amounts, interest rates, and tenures differ significantly:
+      </p>
+      <div class="table-wrap emi-edu-table-wrap">
+        <table class="emi-compare-table">
+          <thead>
+            <tr>
+              <th>Loan type</th>
+              <th>Typical amount</th>
+              <th>Interest rate (2026)</th>
+              <th>Typical tenure</th>
+              <th>EMI per ₹1 lakh</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Home loan</td>
+              <td>₹20L – ₹2 Cr</td>
+              <td>8.25% – 9.5%</td>
+              <td>15 – 30 years</td>
+              <td>₹848 (20yr, 8.5%)</td>
+            </tr>
+            <tr>
+              <td>Car loan</td>
+              <td>₹3L – ₹30L</td>
+              <td>8% – 12%</td>
+              <td>3 – 7 years</td>
+              <td>₹2,029 (5yr, 9%)</td>
+            </tr>
+            <tr>
+              <td>Personal loan</td>
+              <td>₹50K – ₹25L</td>
+              <td>10% – 24%</td>
+              <td>1 – 5 years</td>
+              <td>₹2,125 (5yr, 12%)</td>
+            </tr>
+            <tr>
+              <td>Education loan</td>
+              <td>₹5L – ₹50L</td>
+              <td>8% – 14%</td>
+              <td>5 – 15 years</td>
+              <td>₹1,213 (10yr, 9%)</td>
+            </tr>
+            <tr>
+              <td>Gold loan</td>
+              <td>₹25K – ₹50L</td>
+              <td>7% – 15%</td>
+              <td>3 months – 3 years</td>
+              <td>₹2,861 (3yr, 10%)</td>
+            </tr>
+            <tr>
+              <td>Two-wheeler loan</td>
+              <td>₹30K – ₹5L</td>
+              <td>10% – 18%</td>
+              <td>1 – 5 years</td>
+              <td>₹2,224 (4yr, 14%)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        The "EMI per ₹1 lakh" column is a quick reference — multiply by your loan amount in lakhs to get your approximate EMI. For example, ₹40 lakh home loan at 8.5% for 20 years: 40 × ₹848 = <strong>₹33,920/month</strong>.
       </p>
       <p>
-        For <strong>unsecured personal loans</strong> (often shorter tenure and higher rates), use the <a href="/calculator/personal-loan/">Personal Loan EMI calculator</a>. For <strong>US-style mortgages</strong> with property tax, insurance, and PMI, see the <a href="/calculator/mortgage/">Mortgage calculator</a> — Indian home buyers may prefer the <a href="/calculator/home-loan/">Home Loan calculator</a> with prepayment options. Considering rent vs buy? See <a href="/blog/buy-vs-rent-india/">buy vs rent in India</a>.
+        For home loans specifically, use our <a href="/calculator/home-loan/">Home Loan Calculator</a> which includes prepayment scenarios and shows how partial payments reduce total interest.
+      </p>
+    </div>
+  </article>
+
+  <article class="emi-edu" aria-label="How to reduce EMI">
+    <div class="container emi-edu-inner">
+      <h2 class="section-title">5 Ways to Reduce Your Loan EMI</h2>
+
+      <h3>1. Negotiate a lower interest rate</h3>
+      <p>
+        Banks offer different rates based on credit score, employer profile, and relationship. A 0.5% reduction on a ₹50 lakh home loan saves ₹1,800/month and ₹4.3 lakh over 20 years. Always compare rates across 3-4 lenders before accepting. Existing borrowers can request a rate reduction or switch lenders (balance transfer).
+      </p>
+
+      <h3>2. Extend the loan tenure</h3>
+      <p>
+        Increasing tenure from 15 to 20 years reduces monthly EMI significantly but increases total interest paid. Use this calculator to compare: enter the same loan amount and rate but change tenure to see the trade-off. Extending tenure is a short-term relief that costs more long-term.
+      </p>
+
+      <h3>3. Make a larger down payment</h3>
+      <p>
+        For home and car loans, a larger down payment reduces the loan amount and therefore the EMI. Increasing down payment from 10% to 25% on a ₹50 lakh property reduces the loan from ₹45 lakh to ₹37.5 lakh — saving approximately ₹6,500/month in EMI.
+      </p>
+
+      <h3>4. Prepay when you have surplus</h3>
+      <p>
+        Making partial prepayments (lump sum payments toward principal) reduces the outstanding balance, which either shortens your tenure or reduces your EMI — you choose. Prepaying in the first 5-7 years saves the most interest. Use our <a href="/calculator/home-loan/">Home Loan Calculator with prepayment</a> to see the exact savings.
+      </p>
+
+      <h3>5. Maintain a high credit score</h3>
+      <p>
+        A CIBIL score above 750 qualifies you for the lowest available rates. Below 700, banks charge 1-3% premium. For a ₹30 lakh personal loan, the difference between 11% and 14% interest is ₹2,800/month extra — over 5 years, that's ₹1.7 lakh in unnecessary interest.
+      </p>
+    </div>
+  </article>
+
+  <article class="emi-edu" aria-label="EMI to income ratio">
+    <div class="container emi-edu-inner">
+      <h2 class="section-title">What Percentage of Income Should EMI Be?</h2>
+      <p>
+        Banks and financial advisors use the <strong>EMI-to-income ratio</strong> to assess loan affordability. Here are the standard guidelines:
+      </p>
+      <ul class="emi-edu-list">
+        <li><strong>Below 30% of in-hand income:</strong> Comfortable — leaves room for savings, investments, and emergencies</li>
+        <li><strong>30-40% of in-hand income:</strong> Manageable but tight — limited financial flexibility</li>
+        <li><strong>40-50% of in-hand income:</strong> Stressful — any income disruption becomes a crisis</li>
+        <li><strong>Above 50%:</strong> Dangerous — most financial advisors strongly advise against this</li>
+      </ul>
+      <p>
+        <strong>Example:</strong> If your in-hand salary is ₹80,000/month, your total EMI burden (all loans combined) should ideally stay below ₹24,000-32,000. Use our <a href="/calculator/salary/">Salary Calculator</a> to find your in-hand salary from CTC, then use this EMI calculator to check if the loan fits within 30-40% of that amount.
+      </p>
+      <p>
+        Banks typically approve loans where total EMI (including existing loans) doesn't exceed 50-60% of net income. But approval doesn't mean affordability — banks approve the maximum, not the optimal.
+      </p>
+    </div>
+  </article>
+
+  <article class="emi-edu" aria-label="Fixed vs floating rate EMI">
+    <div class="container emi-edu-inner">
+      <h2 class="section-title">Fixed Rate vs Floating Rate EMI</h2>
+      <p>
+        This calculator assumes a fixed interest rate for the entire tenure. In practice, most Indian home loans use floating rates:
+      </p>
+      <div class="table-wrap emi-edu-table-wrap">
+        <table class="emi-compare-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Fixed rate</th>
+              <th>Floating rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>EMI changes?</td>
+              <td>No — same throughout tenure</td>
+              <td>Yes — changes when bank adjusts rate</td>
+            </tr>
+            <tr>
+              <td>Linked to</td>
+              <td>Set at loan sanction</td>
+              <td>RBI repo rate (via EBLR/RLLR)</td>
+            </tr>
+            <tr>
+              <td>Typical rate</td>
+              <td>0.5-1% higher than floating</td>
+              <td>Lower starting rate</td>
+            </tr>
+            <tr>
+              <td>Common for</td>
+              <td>Personal loans, car loans</td>
+              <td>Home loans</td>
+            </tr>
+            <tr>
+              <td>Prepayment penalty</td>
+              <td>Often has penalty</td>
+              <td>No penalty for individuals (RBI rule)</td>
+            </tr>
+            <tr>
+              <td>Best when rates are</td>
+              <td>Expected to rise</td>
+              <td>Expected to fall or stable</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        <strong>Practical tip:</strong> For floating-rate loans, re-run this calculator whenever your bank announces a rate change. If your rate goes from 8.5% to 9%, your EMI on a ₹50 lakh, 20-year loan increases by approximately ₹1,700/month.
       </p>
     </div>
   </article>
@@ -226,47 +437,43 @@ const jsonLd = {
     <div class="container">
       <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item">
-          <h4>What is EMI?</h4>
-          <p>
-            EMI (Equated Monthly Installment) is the fixed amount you pay each month on a reducing-balance loan. Each payment covers interest on the outstanding balance first; the rest reduces principal.
-          </p>
-        </div>
-        <div class="faq-item"><h4>Is EMI the same as pre-EMI?</h4><p>No — pre-EMI is interest-only before full disbursement; this tool is for full EMI.</p></div>
-        <div class="faq-item"><h4>Does it handle floating rates?</h4><p>It assumes a constant rate; for floating loans, re-run when your rate resets.</p></div>
-        <div class="faq-item">
-          <h4>Does the currency dropdown change EMI math?</h4>
-          <p>No — it only changes number formatting. The same numeric inputs produce the same EMI.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Is this calculator free? Are my inputs uploaded?</h4>
-          <p>Yes, it is free with no signup. Calculations run in your browser and are not sent to our servers.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Which calculator for home loan prepayment or US mortgage?</h4>
-          <p>
-            For prepayment scenarios use the <a href="/calculator/home-loan/">Home Loan calculator</a>. For US-style PITI and PMI, use the <a href="/calculator/mortgage/">Mortgage calculator</a>.
-          </p>
-        </div>
+        {faqItems.map((f) => (
+          <div class="faq-item">
+            <h3>{f.question}</h3>
+            <p set:html={f.answer} />
+          </div>
+        ))}
       </div>
     </div>
   </section>
 
-  <section class="emi-related" aria-label="Related calculators and guides">
+  <section class="emi-related" aria-label="Related financial calculators">
     <div class="container">
-      <h2 class="section-title">Related calculators</h2>
-      <ul class="emi-related-grid">
-        <li><a href="/calculator/home-loan/">Home Loan (prepayment)</a></li>
-        <li><a href="/calculator/personal-loan/">Personal Loan EMI</a></li>
-        <li><a href="/calculator/mortgage/">Mortgage (US)</a></li>
-        <li><a href="/calculator/emi-vs-rent/">Buy vs Rent</a></li>
-        <li><a href="/calculator/lumpsum/">Lumpsum Calculator</a></li>
-        <li><a href="/calculator/sip/">SIP Calculator</a></li>
+      <h2 class="section-title">Related Financial Calculators</h2>
+      <ul class="emi-related-links">
+        <li><a href="/calculator/home-loan/">Home Loan Calculator</a> — EMI with prepayment and amortization</li>
+        <li><a href="/calculator/personal-loan/">Personal Loan EMI Calculator</a> — Dedicated personal loan calculation</li>
+        <li><a href="/calculator/emi-vs-rent/">EMI vs Rent Calculator</a> — Compare buying vs renting a house</li>
+        <li><a href="/calculator/sip/">SIP Calculator</a> — Invest instead of prepay? Compare returns</li>
+        <li><a href="/calculator/lumpsum/">Lumpsum Calculator</a> — One-time investment return estimate</li>
+        <li><a href="/calculator/compound-interest/">Compound Interest Calculator</a> — Understand how interest compounds</li>
+        <li><a href="/calculator/income-tax/">Income Tax Calculator</a> — Home loan interest tax deduction (Sec 24)</li>
+        <li><a href="/calculator/salary/">Salary Calculator</a> — Find in-hand salary to determine EMI affordability</li>
+        <li><a href="/calculator/gst/">GST Calculator</a> — Calculate GST on processing fees</li>
+        <li><a href="/calculator/fd/">FD Calculator</a> — Compare loan interest vs FD returns</li>
       </ul>
-      <h2 class="section-title section-title-sub">Related guides</h2>
-      <ul class="emi-related-grid emi-related-guides">
-        <li><a href="/blog/buy-vs-rent-india/">Buy vs rent in India</a></li>
-        <li><a href="/blog/ctc-vs-in-hand-salary/">CTC vs in-hand salary</a></li>
+    </div>
+  </section>
+
+  <section class="emi-related emi-related-guides-block" aria-label="Related guides">
+    <div class="container">
+      <h2 class="section-title">Related Guides</h2>
+      <ul class="emi-related-links">
+        <li><a href="/blog/buy-vs-rent-india/">Buy vs Rent in India 2026: Honest Math</a></li>
+        <li><a href="/blog/how-much-to-retire-india/">How Much Money Do You Need to Retire in India?</a></li>
+        <li><a href="/blog/ctc-vs-in-hand-salary/">CTC vs In-Hand Salary (Know What You Can Afford)</a></li>
+        <li><a href="/blog/old-vs-new-tax-regime/">Old vs New Tax Regime (Home Loan Tax Benefits)</a></li>
+        <li><a href="/blog/compound-interest-explained/">Compound Interest Explained</a></li>
       </ul>
     </div>
   </section>
@@ -353,6 +560,16 @@ const jsonLd = {
     .hero { padding: 36px 0 16px; text-align: center; }
     .subtitle { font-size: 18px; color: var(--text-muted); max-width: 640px; margin: 0 auto 24px; line-height: 1.55; }
     .subtitle strong { color: var(--text); font-weight: 700; }
+    .emi-trust-signal {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      margin-bottom: 0;
+      max-width: 640px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.5;
+    }
     .sr-only {
       position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
       clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
@@ -393,6 +610,61 @@ const jsonLd = {
       color: var(--text-muted);
       margin-bottom: 14px;
     }
+    .emi-edu h3 {
+      font-size: 1.1rem;
+      margin: 22px 0 10px;
+      color: var(--text);
+      text-align: left;
+    }
+    .emi-edu-list {
+      margin: 0 0 14px;
+      padding-left: 1.25rem;
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+    .emi-edu-list li {
+      margin-bottom: 8px;
+    }
+    .formula-callout {
+      background: #f0fdf4;
+      border-left: 4px solid #16a34a;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 15px;
+      color: var(--text);
+    }
+    :global([data-theme='dark']) .formula-callout {
+      background: rgba(22, 163, 74, 0.12);
+      border-left-color: #22c55e;
+    }
+    .emi-edu-table-wrap {
+      overflow-x: auto;
+      margin: 20px 0;
+      max-height: none;
+    }
+    .emi-compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .emi-compare-table th,
+    .emi-compare-table td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+    .emi-compare-table thead th {
+      background: var(--gray-50);
+      font-weight: 700;
+      color: var(--text);
+    }
+    :global([data-theme='dark']) .emi-compare-table thead th {
+      background: rgba(255, 255, 255, 0.06);
+    }
     .emi-edu a {
       color: var(--blue);
       font-weight: 600;
@@ -406,49 +678,38 @@ const jsonLd = {
     .faq .container { max-width: 760px; }
     .faq-list { display: flex; flex-direction: column; gap: 10px; }
     .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
-    .faq-item h4 { font-size: 15px; margin-bottom: 4px; }
+    .faq-item h3 { font-size: 15px; margin-bottom: 8px; }
     .faq-item p { font-size: 14px; color: var(--text-muted); margin: 0; }
     .faq-item a { color: var(--blue); font-weight: 600; text-decoration: none; }
     .faq-item a:hover { text-decoration: underline; }
-    .section-title-sub {
-      margin-top: 32px;
-      margin-bottom: 14px;
-      font-size: 1.2rem;
-      font-weight: 700;
+    .emi-related { padding: 16px 0 32px; }
+    .emi-related-guides-block {
+      padding-top: 0;
+      padding-bottom: 56px;
     }
-    .emi-related { padding: 0 0 56px; }
     .emi-related .section-title {
       margin-bottom: 16px;
     }
-    .emi-related-grid {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 10px 16px;
+    .emi-related-links {
+      list-style: disc;
+      text-align: left;
       max-width: 760px;
-      margin-left: auto;
-      margin-right: auto;
+      margin: 0 auto;
+      padding-left: 1.25rem;
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.65;
     }
-    .emi-related-grid a {
-      display: block;
-      padding: 10px 12px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+    .emi-related-links li {
+      margin-bottom: 12px;
+    }
+    .emi-related-links a {
       color: var(--blue);
       font-weight: 600;
-      font-size: 14px;
       text-decoration: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
-    .emi-related-grid a:hover {
-      border-color: var(--blue);
-      box-shadow: var(--shadow);
-    }
-    .emi-related-guides {
-      margin-top: 0;
+    .emi-related-links a:hover {
+      text-decoration: underline;
     }
   </style>
 </MainLayout>
