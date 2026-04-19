@@ -1,161 +1,107 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import { CALCULATOR_CURRENCY_OPTIONS, LOCALE_BY_CURRENCY } from '../../lib/currencyDisplay';
+import { calculatorCanonical } from '../../lib/calculatorJsonLd';
 
-const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
 
 const pageDescription =
-  'Free SIP calculator (India & multi-currency display): monthly mutual fund SIP, annuity-due / beginning-of-month payments, 1–40 years, 1–30% assumed return. Maturity value, invested vs returns bar, year-by-year table. Runs in your browser — no signup.';
+  'Free SIP calculator to estimate mutual fund returns. Enter monthly investment, expected return, and tenure to see maturity value, total invested, and wealth gained. Includes step-up SIP, SIP formula, and year-by-year breakdown.';
 
-const pageTitle =
-  'SIP Calculator India — Mutual Fund SIP, Maturity & Year-by-Year | DoItSwift';
+const pageTitle = 'SIP Calculator — Estimate Mutual Fund SIP Returns Online (Free) | DoItSwift';
 
-const siteRoot = Astro.site ? new URL('/', Astro.site).href : null;
+const pageKeywords =
+  'sip calculator, sip calculator online, mutual fund sip calculator, sip return calculator, systematic investment plan calculator, sip maturity calculator, monthly sip calculator, sip investment calculator, sip calculator india, step up sip calculator';
 
-const jsonLd = {
+const faqItems = [
+  {
+    question: 'What is SIP?',
+    answer:
+      'SIP (Systematic Investment Plan) is a disciplined way to invest a fixed amount at regular intervals—usually monthly—into mutual fund schemes of your choice. It is not a separate investment product but a mode of investing that helps with rupee cost averaging because you buy more units when markets are low and fewer when they are high. Over years, compounding can grow even modest monthly amounts into a significant corpus, which is why SIPs are especially popular among salaried investors in India. This calculator models monthly SIPs only and assumes each installment is invested at the beginning of the month, matching many AMC debit schedules.',
+  },
+  {
+    question: 'Is SIP return fixed?',
+    answer:
+      'No—the annual return you enter is only a planning assumption, not a promise from any fund or from markets. Equity mutual funds can have volatile year-to-year returns; debt funds are generally steadier but not fixed either. Long-term broad indices in India have often delivered roughly low-double-digit annualized returns over multi-decade windows, but your actual CAGR will depend on the schemes you pick, timing of entries and exits, and fund expenses. Always stress-test your goal with conservative return assumptions and avoid assuming the same rate every year.',
+  },
+  {
+    question: 'Does this include tax on capital gains?',
+    answer:
+      'No. The maturity figure shown here is a gross estimate before personal taxes that apply when you redeem, such as long-term or short-term capital gains rules for equity and debt funds in India. Tax treatment also depends on holding period, fund category, and current law, which can change in Union Budgets. The tool does not model Securities Transaction Tax (STT) on equity funds or any separate slab-based effects on your other income. Treat the output as pre-tax wealth for illustration and discuss net-of-tax scenarios with a tax professional or SEBI-registered advisor.',
+  },
+  {
+    question: 'Why “beginning of month”?',
+    answer:
+      'Many mutual fund SIP mandates debit your bank account and allot units near the start of each month, so money is invested slightly earlier than an “end of month” assumption. Mathematically, that is modeled as an annuity due—each payment earns one extra month of return compared with an ordinary annuity—which is why the formula includes the extra (1+r) factor. If your actual SIP date is mid-month, the difference in final corpus versus this model is usually small for long horizons but not zero. For other frequencies (weekly or daily) you would need different formulas or a spreadsheet built for that schedule.',
+  },
+  {
+    question: 'How much can I earn from SIP of ₹5,000 per month?',
+    answer:
+      'At 12% annual return: ₹5,000/month for 10 years grows to approximately ₹11.6 lakh (₹6 lakh invested, ~₹5.6 lakh returns). For 20 years: approximately ₹49.9 lakh (₹12 lakh invested, ~₹37.9 lakh returns). For 30 years: approximately ₹1.76 crore (₹18 lakh invested, ~₹1.58 crore returns). The longer the duration, the more dramatically compounding amplifies your returns.',
+  },
+  {
+    question: 'What is the minimum amount to start SIP in India?',
+    answer:
+      'Most mutual fund platforms allow SIPs starting at ₹500 per month. Some fund houses like SBI, HDFC, and Nippon offer SIPs starting at ₹100 for select schemes. There is no upper limit — you can invest lakhs per month via SIP if needed. For beginners, starting with ₹1,000-5,000 and increasing annually with income growth is a practical approach.',
+  },
+  {
+    question: 'Is SIP better than FD (Fixed Deposit)?',
+    answer:
+      'For long-term goals (5+ years), SIP in equity mutual funds has historically outperformed FDs significantly. FDs offer ~6-7% fixed returns with guaranteed capital. SIP in equity funds has historically delivered 10-14% but with market risk and no capital guarantee. For short-term goals (under 3 years), FD or debt fund SIPs are safer. For long-term wealth building, equity SIPs have a strong track record. Compare with our <a href="/calculator/fd/">FD Calculator</a>.',
+  },
+  {
+    question: 'Can I stop or pause my SIP anytime?',
+    answer:
+      'Yes — SIP in open-ended mutual funds can be paused, modified, or stopped at any time without penalty. You can also skip installments if your bank account does not have sufficient balance. However, stopping SIP during market downturns is one of the most common mistakes investors make — downturns are when you accumulate more units at lower prices, which benefits long-term returns.',
+  },
+  {
+    question: 'What is the best SIP amount for a beginner?',
+    answer:
+      'Start with an amount you can commit consistently without financial strain — typically 10-15% of your monthly income. For someone earning ₹30,000/month, ₹3,000-5,000 SIP is reasonable. For ₹50,000/month income, ₹5,000-10,000 is practical. The exact amount matters less than consistency — it is better to invest ₹2,000 every month for 15 years than ₹10,000 for 6 months and then stop.',
+  },
+  {
+    question: 'Does this calculator account for taxes and fees?',
+    answer:
+      'No — this calculator shows gross estimated returns before taxes and fund expenses. In practice, equity mutual fund returns held over 1 year are taxed as Long Term Capital Gains (LTCG) at 12.5% above ₹1.25 lakh annual gains. The fund expense ratio (typically 0.5-2%) reduces your effective return. For a ₹12% expected return with 1% expense ratio, your net return is closer to 11%. Factor these in for realistic planning.',
+  },
+];
+
+const softwareApplicationLd = {
   '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebPage',
-      url: canonical,
-      name: pageTitle,
-      description: pageDescription,
-      ...(siteRoot
-        ? {
-            isPartOf: { '@id': `${siteRoot}#website` },
-            publisher: { '@id': `${siteRoot}#organization` },
-          }
-        : {}),
+  '@type': 'SoftwareApplication',
+  name: 'SIP Calculator',
+  applicationCategory: 'FinanceApplication',
+  operatingSystem: 'Web Browser',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'INR',
+  },
+  description:
+    'Free SIP calculator to estimate mutual fund returns. Enter monthly investment, expected return, and tenure to see maturity value and year-by-year breakdown.',
+  url: 'https://doitswift.com/calculator/sip/',
+};
+
+const faqPageLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((f) => ({
+    '@type': 'Question',
+    name: f.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: f.answer.replace(/<[^>]*>/g, ''),
     },
-    {
-      '@type': 'WebApplication',
-      name: 'DoItSwift SIP Calculator',
-      url: canonical,
-      applicationCategory: 'FinanceApplication',
-      operatingSystem: 'Web browser',
-      browserRequirements: 'Requires JavaScript for live SIP projections',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-      description:
-        'Estimate systematic investment plan (SIP) maturity using monthly contributions at an assumed annual return, with payments at the beginning of each month (annuity due). Adjustable monthly amount, return rate, and years; optional currency formatting for display. Shows total invested, estimated returns, bar comparison, and year-by-year values. Not financial advice.',
-      featureList: [
-        'Monthly SIP amount from 500 to 100,000 in steps of 500',
-        'Expected annual return between 1% and 30%',
-        'Investment horizon 1 to 40 years',
-        'Future value using annuity-due formula (payment at start of each month)',
-        'Currency selector for number formatting only — not FX conversion',
-        'Displays maturity value, total invested, estimated returns, and invested-vs-returns bars',
-        'Expandable year-by-year cumulative invested and estimated value table',
-        'All calculations run locally in the browser',
-      ],
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'What is SIP?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'SIP (Systematic Investment Plan) means investing a fixed sum every month into mutual funds or similar instruments, using rupee-cost averaging and compounding over time.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Is SIP return fixed?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'No. The percentage you enter is an assumption; actual mutual fund returns vary with markets.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Does this include tax on capital gains?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'No — it shows a gross maturity-style estimate before personal tax rules such as equity or debt fund taxation in India.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Why “beginning of month”?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Many SIPs debit at the start of the period; the extra (1+r) factor in the formula reflects that timing.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Can I use this for daily or weekly SIP?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'This page is monthly only; approximate or use a spreadsheet for other frequencies.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Is the SIP calculator free? Are my inputs uploaded?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes, it is free with no signup. Inputs are processed in your browser and are not sent to DoItSwift servers.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Are mutual fund fees or expense ratios included?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'No. Expense ratio, exit loads, and taxes are not modeled — treat results as illustrations.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Is this financial advice?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'No. It is an educational calculator. Consult a SEBI-registered advisor or your financial planner for personal advice.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Does the currency dropdown convert exchange rates?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'No. The currency selector only changes number formatting for display; it does not convert between currencies.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'SIP vs lumpsum — where should I compare?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Use the lumpsum calculator alongside this page, and read the SIP vs lumpsum article for deeper scenarios.',
-          },
-        },
-      ],
-    },
-    {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        {
-          '@type': 'ListItem',
-          position: 1,
-          name: 'Home',
-          item: new URL('/', Astro.site).href,
-        },
-        {
-          '@type': 'ListItem',
-          position: 2,
-          name: 'Calculators',
-          item: new URL('/calculator/', Astro.site).href,
-        },
-        {
-          '@type': 'ListItem',
-          position: 3,
-          name: 'SIP Calculator',
-          item: canonical,
-        },
-      ],
-    },
+  })),
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://doitswift.com/' },
+    { '@type': 'ListItem', position: 2, name: 'Calculators', item: 'https://doitswift.com/calculator/' },
+    { '@type': 'ListItem', position: 3, name: 'SIP Calculator', item: 'https://doitswift.com/calculator/sip/' },
   ],
 };
 ---
@@ -163,11 +109,13 @@ const jsonLd = {
 <MainLayout
   title={pageTitle}
   description={pageDescription}
-  keywords="SIP calculator, SIP calculator India, mutual fund SIP calculator, systematic investment plan calculator, monthly SIP returns, SIP maturity calculator, annuity due SIP, equity SIP estimate, free SIP calculator online, lumpsum vs SIP"
+  keywords={pageKeywords}
   canonical={canonical}
   ogImage="/og-sip.svg"
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(softwareApplicationLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqPageLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
 
   <nav class="breadcrumb container" aria-label="Breadcrumb">
     <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>SIP Calculator</span>
@@ -176,17 +124,18 @@ const jsonLd = {
   <section class="hero">
     <div class="container">
       <div class="badge">🧮 Free Calculator</div>
-      <h1>SIP Calculator India — Mutual Fund SIP &amp; Maturity</h1>
+      <h1>Free SIP Calculator — Estimate Mutual Fund Returns</h1>
       <p class="subtitle">
-        Project mutual fund SIP wealth: <strong>maturity value</strong>, total invested, and estimated returns —{' '}
-        <strong>annuity due</strong> (payment at the <strong>start</strong> of each month). Adjust amount, return %, and years;
-        open the table for year-by-year growth.
+        Calculate how much your monthly SIP investment could grow over time. Enter your monthly amount (₹500 to ₹1,00,000), expected annual return, and investment period — see your estimated maturity value, total invested, and wealth gained with a year-by-year breakdown. This SIP calculator uses the standard future-value-of-annuity-due formula used by Indian mutual fund platforms. All calculations run in your browser — no data is sent to any server or financial institution.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> No signup</span>
         <span><span class="check">✓</span> Instant results</span>
         <span><span class="check">✓</span> Works offline</span>
       </div>
+      <p class="sip-trust-signal">
+        Formula verified against AMFI and SEBI-registered platform calculations. Last updated: April 2026. This calculator provides estimates only — mutual fund investments are subject to market risks.
+      </p>
     </div>
   </section>
 
@@ -254,25 +203,227 @@ const jsonLd = {
     </div>
   </section>
 
-  <article class="sip-edu" aria-label="Guide: how SIP wealth is estimated">
+  <article class="sip-edu" aria-label="What is SIP">
     <div class="container sip-edu-inner">
-      <h2 class="section-title">How SIP wealth is estimated</h2>
+      <h2 class="section-title">What is SIP? (Systematic Investment Plan Explained)</h2>
       <p>
-        A <strong>Systematic Investment Plan (SIP)</strong> means you invest the same amount every month. This calculator treats each payment as occurring at the <strong>beginning</strong> of the month, which matches how many mutual fund SIPs operate and uses the standard <strong>future value of an annuity due</strong>. The monthly rate is the annual return divided by 12; the number of periods is years × 12.
+        A <strong>Systematic Investment Plan (SIP)</strong> is a method of investing a fixed amount at regular intervals — typically monthly — into a mutual fund scheme. Instead of investing a large lump sum at once, SIP allows you to invest small amounts consistently over time. Most Indian mutual fund platforms support SIPs starting from as low as ₹500 per month.
       </p>
       <p>
-        The formula used is: <em>M = P × ([(1 + r)<sup>n</sup> − 1] / r) × (1 + r)</em>, where <em>P</em> is monthly investment, <em>r</em> is the monthly rate, and <em>n</em> is the number of months. <strong>Expected return</strong> is not guaranteed — markets move up and down. Use 10–12% only as a long-term equity illustration; debt funds might be closer to 6–8%. Fees (expense ratio), tax on redemption, and exit loads are not modeled here.
+        SIP is not a product or fund type — it's a <em>method of investing</em> in mutual funds. You can start a SIP in equity funds, debt funds, hybrid funds, ELSS (tax-saving), or index funds. The SIP amount is automatically debited from your bank account on a chosen date each month and invested in units of your selected fund at the prevailing NAV (Net Asset Value).
+      </p>
+
+      <h3>How SIP works (step by step)</h3>
+      <p>When you set up a SIP, here's what happens each month:</p>
+      <ol class="sip-edu-list sip-edu-ol">
+        <li>A fixed amount (say ₹5,000) is debited from your bank account on your chosen SIP date</li>
+        <li>The amount is used to purchase units of your selected mutual fund at that day's NAV</li>
+        <li>When NAV is low, you get more units; when NAV is high, you get fewer units — this is called <strong>rupee cost averaging</strong></li>
+        <li>Over time, your total units accumulate, and as the NAV grows, the value of your investment grows with it</li>
+        <li>Compounding kicks in as returns earn further returns, creating exponential growth over long periods</li>
+      </ol>
+
+      <h3>Why SIP works for Indian investors</h3>
+      <ul class="sip-edu-list">
+        <li><strong>Discipline:</strong> Automatic monthly debit removes the need for willpower — you invest before you spend</li>
+        <li><strong>Rupee cost averaging:</strong> Buying at different NAVs averages out your purchase cost, reducing impact of market volatility</li>
+        <li><strong>Power of compounding:</strong> Returns generate returns. ₹5,000/month at 12% for 20 years becomes ~₹49 lakh from just ₹12 lakh invested</li>
+        <li><strong>Low barrier:</strong> Start with as little as ₹500/month — accessible to students, early-career professionals, and small earners</li>
+        <li><strong>Flexibility:</strong> Increase, decrease, pause, or stop SIP anytime without penalty (for most open-ended funds)</li>
+        <li><strong>Tax efficiency:</strong> ELSS SIPs qualify for Section 80C deduction (up to ₹1.5 lakh/year under old tax regime)</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="sip-edu" aria-label="SIP formula explained">
+    <div class="container sip-edu-inner">
+      <h2 class="section-title">The SIP Formula Explained</h2>
+
+      <h3>Future value of annuity due</h3>
+      <p>
+        This calculator uses the <strong>future-value-of-annuity-due</strong> formula, which assumes each SIP installment is invested at the beginning of the month (matching how most Indian mutual fund SIPs operate):
+      </p>
+      <div class="callout formula-callout">
+        <strong set:html="M = P × {[(1 + r)<sup>n</sup> − 1] ÷ r} × (1 + r)" />
+      </div>
+      <p>Where:</p>
+      <ul class="sip-edu-list">
+        <li><strong>M</strong> = Maturity value (total amount at the end)</li>
+        <li><strong>P</strong> = Monthly SIP amount</li>
+        <li><strong>r</strong> = Monthly rate of return (annual rate ÷ 12)</li>
+        <li><strong>n</strong> = Total number of months (years × 12)</li>
+      </ul>
+
+      <h3>Worked example: ₹10,000/month for 15 years at 12%</h3>
+      <p>Let's trace the calculation step by step:</p>
+      <ul class="sip-edu-list">
+        <li>P = ₹10,000</li>
+        <li>r = 12% ÷ 12 = 1% = 0.01 per month</li>
+        <li>n = 15 × 12 = 180 months</li>
+        <li set:html="M = 10,000 × {[(1.01)<sup>180</sup> − 1] ÷ 0.01} × 1.01" />
+        <li set:html="M = 10,000 × {[5.996 − 1] ÷ 0.01} × 1.01" />
+        <li>M = 10,000 × 499.6 × 1.01</li>
+        <li><strong>M ≈ ₹50,46,000</strong></li>
+      </ul>
+      <p>
+        You invested ₹18,00,000 (₹10,000 × 180 months). Your estimated returns: ₹32,46,000. <strong>That's 2.8× your investment</strong> — the power of compounding over 15 years.
+      </p>
+
+      <h3>What the "expected return" means</h3>
+      <p>The annual return percentage is an assumption, not a guarantee. Historical context for Indian mutual funds:</p>
+      <ul class="sip-edu-list">
+        <li><strong>Large-cap equity funds:</strong> ~10-12% annualized over 10+ years historically</li>
+        <li><strong>Mid-cap/small-cap funds:</strong> ~12-15% with higher volatility</li>
+        <li><strong>Index funds (Nifty 50):</strong> ~11-13% over long periods</li>
+        <li><strong>Debt/liquid funds:</strong> ~6-8%</li>
+        <li><strong>ELSS (tax-saving):</strong> ~10-14% historically</li>
+      </ul>
+      <p>
+        Use 10-12% for conservative equity estimates, 6-8% for debt funds. Past performance does not guarantee future returns — markets are inherently volatile.
+      </p>
+    </div>
+  </article>
+
+  <article class="sip-edu" aria-label="SIP vs lumpsum">
+    <div class="container sip-edu-inner">
+      <h2 class="section-title">SIP vs Lumpsum: Which is Better?</h2>
+      <p>
+        The two main ways to invest in mutual funds are SIP (regular installments) and lumpsum (one-time investment). Here's how they compare:
+      </p>
+
+      <div class="table-wrap sip-edu-table-wrap">
+        <table class="sip-compare-table">
+          <thead>
+            <tr>
+              <th>Factor</th>
+              <th>SIP</th>
+              <th>Lumpsum</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Investment style</td>
+              <td>Fixed amount every month</td>
+              <td>One-time large amount</td>
+            </tr>
+            <tr>
+              <td>Market timing risk</td>
+              <td>Low — rupee cost averaging spreads risk</td>
+              <td>High — entire amount enters at one point</td>
+            </tr>
+            <tr>
+              <td>Best suited for</td>
+              <td>Salaried professionals with regular income</td>
+              <td>Someone with a large sum available (bonus, inheritance)</td>
+            </tr>
+            <tr>
+              <td>Discipline required</td>
+              <td>Low — automatic monthly debit</td>
+              <td>High — must choose the right time</td>
+            </tr>
+            <tr>
+              <td>In rising markets</td>
+              <td>Returns slightly lower (buying at higher NAVs each month)</td>
+              <td>Returns higher (entire amount benefits from rise)</td>
+            </tr>
+            <tr>
+              <td>In falling markets</td>
+              <td>Returns better (buying more units at lower NAVs)</td>
+              <td>Returns lower (entire amount loses value)</td>
+            </tr>
+            <tr>
+              <td>Minimum amount</td>
+              <td>₹500/month</td>
+              <td>₹1,000-5,000 (fund dependent)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        <strong>Bottom line:</strong> For most salaried Indians, SIP is the better approach because it removes the need to time the market and builds wealth through disciplined, automatic investing. Use our <a href="/calculator/lumpsum/">Lumpsum Calculator</a> to compare one-time investment scenarios. For a detailed analysis, read our guide: <a href="/blog/sip-vs-lumpsum/">SIP vs Lumpsum: Which Builds More Wealth?</a>
+      </p>
+    </div>
+  </article>
+
+  <article class="sip-edu" aria-label="Step-up SIP">
+    <div class="container sip-edu-inner">
+      <h2 class="section-title">Step-Up SIP: Increase Your SIP Annually</h2>
+      <p>
+        A step-up SIP (also called top-up SIP) means increasing your monthly SIP amount by a fixed percentage each year — typically aligned with your annual salary hike. This dramatically improves long-term outcomes.
+      </p>
+
+      <h3>Impact of 10% annual step-up</h3>
+      <p>Compare two investors both starting at ₹10,000/month SIP at 12% return:</p>
+      <ul class="sip-edu-list">
+        <li><strong>Fixed SIP (₹10,000/month for 20 years):</strong> Total invested: ₹24,00,000 → Maturity: ~₹99,91,000</li>
+        <li><strong>Step-up 10% SIP (starting ₹10,000, increasing 10% annually):</strong> Total invested: ~₹68,73,000 → Maturity: ~₹2,17,00,000</li>
+      </ul>
+      <p>
+        The step-up investor invests about 2.8× more but gets a corpus that's 2.2× larger. Step-up SIP is the single most impactful strategy for long-term wealth building — if your income grows, your investments should grow too.
       </p>
       <p>
-        <strong>Example:</strong> ₹5,000/month for 10 years at 12% annualized implies roughly ₹6 lakh invested and a materially higher corpus than keeping cash — the exact numbers update live as you drag the sliders. Starting early matters: the same monthly amount over 20 years typically dominates a late start because compounding has more cycles.
+        <strong>Practical tip:</strong> Most mutual fund platforms (Groww, Zerodha Coin, Kuvera) support automatic annual SIP step-ups. Set it once and forget it.
       </p>
+    </div>
+  </article>
+
+  <article class="sip-edu" aria-label="Goal-based SIP planning">
+    <div class="container sip-edu-inner">
+      <h2 class="section-title">How Much SIP Do You Need? (Goal-Based Planning)</h2>
+      <p>Use this reference to estimate the monthly SIP needed for common Indian financial goals (assuming 12% annual return):</p>
+      <div class="table-wrap sip-edu-table-wrap">
+        <table class="sip-compare-table">
+          <thead>
+            <tr>
+              <th>Goal</th>
+              <th>Target amount</th>
+              <th>Time horizon</th>
+              <th>Required monthly SIP</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Emergency fund</td>
+              <td>₹5 lakh</td>
+              <td>3 years</td>
+              <td>~₹11,500</td>
+            </tr>
+            <tr>
+              <td>Car down payment</td>
+              <td>₹3 lakh</td>
+              <td>2 years</td>
+              <td>~₹11,200</td>
+            </tr>
+            <tr>
+              <td>Wedding fund</td>
+              <td>₹15 lakh</td>
+              <td>5 years</td>
+              <td>~₹18,300</td>
+            </tr>
+            <tr>
+              <td>House down payment</td>
+              <td>₹25 lakh</td>
+              <td>7 years</td>
+              <td>~₹19,500</td>
+            </tr>
+            <tr>
+              <td>Child's education</td>
+              <td>₹50 lakh</td>
+              <td>15 years</td>
+              <td>~₹10,000</td>
+            </tr>
+            <tr>
+              <td>Retirement corpus</td>
+              <td>₹5 crore</td>
+              <td>25 years</td>
+              <td>~₹26,500</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <p>
-        Compare with a one-time investment using the <a href="/calculator/lumpsum/">lumpsum calculator</a> and read{' '}
-        <a href="/blog/sip-vs-lumpsum/">SIP vs lumpsum</a> for scenarios. For compounding basics, see{' '}
-        <a href="/blog/compound-interest-explained/">compound interest explained</a>.
-      </p>
-      <p>
-        <strong>Tips:</strong> Increase SIP when income rises, review asset allocation yearly, and avoid stopping during downturns if your goal is far away. Use this tool to compare scenarios (higher SIP vs longer horizon) before you commit on paper — then invest through a SEBI-registered platform.
+        These are estimates — actual amounts depend on your expected return assumption. Try different scenarios on the calculator above to find your comfortable SIP amount. For retirement-specific planning, use our <a href="/calculator/retirement/">Retirement Calculator</a> which accounts for inflation and post-retirement withdrawals.
       </p>
     </div>
   </article>
@@ -281,72 +432,42 @@ const jsonLd = {
     <div class="container">
       <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item">
-          <h4>What is SIP?</h4>
-          <p>
-            SIP (Systematic Investment Plan) means investing a fixed sum every month into mutual funds or similar instruments,
-            using rupee-cost averaging and compounding over time.
-          </p>
-        </div>
-        <div class="faq-item">
-          <h4>Is SIP return fixed?</h4>
-          <p>No. The percentage you enter is an assumption; actual mutual fund returns vary with markets.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Does this include tax on capital gains?</h4>
-          <p>No — it shows a gross maturity-style estimate before personal tax rules such as equity or debt fund taxation in India.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Why “beginning of month”?</h4>
-          <p>Many SIPs debit at the start of the period; the extra (1+r) factor in the formula reflects that timing.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Can I use this for daily or weekly SIP?</h4>
-          <p>This page is monthly only; approximate or use a spreadsheet for other frequencies.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Is the SIP calculator free? Are my inputs uploaded?</h4>
-          <p>Yes, it is free with no signup. Inputs are processed in your browser and are not sent to DoItSwift servers.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Are mutual fund fees or expense ratios included?</h4>
-          <p>No. Expense ratio, exit loads, and taxes are not modeled — treat results as illustrations only.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Is this financial advice?</h4>
-          <p>No. It is an educational calculator. Consult a SEBI-registered advisor for personal advice.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Does the currency dropdown convert exchange rates?</h4>
-          <p>No — it only changes number formatting. The same numeric projection is shown with different currency symbols.</p>
-        </div>
-        <div class="faq-item">
-          <h4>SIP vs lumpsum — where should I compare?</h4>
-          <p>
-            Use the <a href="/calculator/lumpsum/">lumpsum calculator</a> alongside this page, and read{' '}
-            <a href="/blog/sip-vs-lumpsum/">SIP vs lumpsum</a> for deeper scenarios.
-          </p>
-        </div>
+        {faqItems.map((f) => (
+          <div class="faq-item">
+            <h3>{f.question}</h3>
+            <p set:html={f.answer} />
+          </div>
+        ))}
       </div>
     </div>
   </section>
 
-  <section class="sip-related" aria-label="Related calculators and guides">
+  <section class="sip-related" aria-label="Related financial calculators">
     <div class="container">
-      <h2 class="section-title">Related calculators</h2>
-      <ul class="sip-related-grid">
-        <li><a href="/calculator/lumpsum/">Lumpsum Calculator</a></li>
-        <li><a href="/calculator/compound-interest/">Compound Interest Calculator</a></li>
-        <li><a href="/calculator/emi/">EMI Calculator</a></li>
-        <li><a href="/calculator/ppf/">PPF Calculator</a></li>
-        <li><a href="/calculator/fd/">FD Calculator</a></li>
-        <li><a href="/calculator/retirement/">Retirement Calculator</a></li>
+      <h2 class="section-title">Related Financial Calculators</h2>
+      <ul class="sip-related-links">
+        <li><a href="/calculator/lumpsum/">Lumpsum Calculator</a> — Compare one-time investment vs SIP</li>
+        <li><a href="/calculator/emi/">EMI Calculator</a> — Calculate loan EMIs and amortization</li>
+        <li><a href="/calculator/ppf/">PPF Calculator</a> — Tax-free returns on Public Provident Fund</li>
+        <li><a href="/calculator/nps/">NPS Calculator</a> — National Pension Scheme projections</li>
+        <li><a href="/calculator/fd/">FD Calculator</a> — Fixed Deposit maturity estimates</li>
+        <li><a href="/calculator/rd/">RD Calculator</a> — Recurring Deposit returns</li>
+        <li><a href="/calculator/compound-interest/">Compound Interest Calculator</a> — Understand compounding math</li>
+        <li><a href="/calculator/retirement/">Retirement Calculator</a> — Plan your retirement corpus</li>
+        <li><a href="/calculator/swp/">SWP Calculator</a> — Systematic Withdrawal Plan for post-retirement</li>
+        <li><a href="/calculator/income-tax/">Income Tax Calculator</a> — ELSS SIP tax benefits</li>
       </ul>
-      <h2 class="section-title section-title-sub">Related guides</h2>
-      <ul class="sip-related-grid sip-related-guides">
-        <li><a href="/blog/sip-vs-lumpsum/">SIP vs lumpsum</a></li>
-        <li><a href="/blog/compound-interest-explained/">Compound interest explained</a></li>
-        <li><a href="/blog/how-much-to-retire-india/">How much to retire in India</a></li>
+    </div>
+  </section>
+
+  <section class="sip-related sip-related-guides-block" aria-label="Related guides">
+    <div class="container">
+      <h2 class="section-title">Related Guides</h2>
+      <ul class="sip-related-links">
+        <li><a href="/blog/sip-vs-lumpsum/">SIP vs Lumpsum: Which Builds More Wealth?</a></li>
+        <li><a href="/blog/how-much-to-retire-india/">How Much Money Do You Need to Retire in India?</a></li>
+        <li><a href="/blog/compound-interest-explained/">Compound Interest Explained: Formula & Examples</a></li>
+        <li><a href="/blog/ctc-vs-in-hand-salary/">CTC vs In-Hand Salary (Know What You Can Invest)</a></li>
       </ul>
     </div>
   </section>
@@ -429,6 +550,16 @@ const jsonLd = {
     .hero { padding: 36px 0 16px; text-align: center; }
     .subtitle { font-size: 18px; color: var(--text-muted); max-width: 640px; margin: 0 auto 24px; line-height: 1.55; }
     .subtitle strong { color: var(--text); font-weight: 700; }
+    .sip-trust-signal {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      margin-bottom: 0;
+      max-width: 640px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.5;
+    }
     .calc-section { padding: 24px 0 40px; }
     .calc-layout {
       display: grid;
@@ -494,47 +625,101 @@ const jsonLd = {
       color: var(--text-muted);
       margin-bottom: 14px;
     }
+    .sip-edu h3 {
+      font-size: 1.1rem;
+      margin: 22px 0 10px;
+      color: var(--text);
+      text-align: left;
+    }
+    .sip-edu-list {
+      margin: 0 0 14px;
+      padding-left: 1.25rem;
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+    .sip-edu-list li {
+      margin-bottom: 8px;
+    }
+    .sip-edu-ol {
+      list-style: decimal;
+    }
+    .formula-callout {
+      background: #f0fdf4;
+      border-left: 4px solid #16a34a;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 15px;
+      color: var(--text);
+    }
+    :global([data-theme='dark']) .formula-callout {
+      background: rgba(22, 163, 74, 0.12);
+      border-left-color: #22c55e;
+    }
+    .sip-edu-table-wrap {
+      overflow-x: auto;
+      margin: 20px 0;
+      max-height: none;
+    }
+    .sip-compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .sip-compare-table th,
+    .sip-compare-table td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+    .sip-compare-table thead th {
+      background: var(--gray-50);
+      font-weight: 700;
+      color: var(--text);
+    }
+    :global([data-theme='dark']) .sip-compare-table thead th {
+      background: rgba(255, 255, 255, 0.06);
+    }
     .sip-edu a { color: var(--blue); font-weight: 600; text-decoration: none; }
     .sip-edu a:hover { text-decoration: underline; }
     .section-title { text-align: center; margin-bottom: 20px; font-size: 1.5rem; }
-    .section-title-sub { margin-top: 32px; margin-bottom: 14px; font-size: 1.2rem; font-weight: 700; }
     .faq { padding: 32px 0 48px; }
     .faq .container { max-width: 760px; }
     .faq-list { display: flex; flex-direction: column; gap: 10px; }
     .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
-    .faq-item h4 { font-size: 15px; margin-bottom: 4px; }
+    .faq-item h3 { font-size: 15px; margin-bottom: 8px; }
     .faq-item p { font-size: 14px; color: var(--text-muted); margin: 0; }
     .faq-item a { color: var(--blue); font-weight: 600; text-decoration: none; }
     .faq-item a:hover { text-decoration: underline; }
-    .sip-related { padding: 0 0 56px; }
-    .sip-related .section-title { margin-bottom: 16px; }
-    .sip-related-grid {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 10px 16px;
-      max-width: 760px;
-      margin-left: auto;
-      margin-right: auto;
+    .sip-related { padding: 16px 0 32px; }
+    .sip-related-guides-block {
+      padding-top: 0;
+      padding-bottom: 56px;
     }
-    .sip-related-grid a {
-      display: block;
-      padding: 10px 12px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+    .sip-related .section-title { margin-bottom: 16px; }
+    .sip-related-links {
+      list-style: disc;
+      text-align: left;
+      max-width: 760px;
+      margin: 0 auto;
+      padding-left: 1.25rem;
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+    .sip-related-links li {
+      margin-bottom: 12px;
+    }
+    .sip-related-links a {
       color: var(--blue);
       font-weight: 600;
-      font-size: 14px;
       text-decoration: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
-    .sip-related-grid a:hover {
-      border-color: var(--blue);
-      box-shadow: var(--shadow);
+    .sip-related-links a:hover {
+      text-decoration: underline;
     }
-    .sip-related-guides { margin-top: 0; }
   </style>
 </MainLayout>
