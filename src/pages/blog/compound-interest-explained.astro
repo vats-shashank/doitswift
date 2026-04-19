@@ -1,10 +1,12 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
 
 const title = "Compound Interest Explained: Formula, Examples & Calculator (2026)";
 const description = "Understand compound interest with simple formulas, worked examples in Indian Rupees, and the magic of compounding. Includes daily, monthly, and annual compounding explained.";
 const publishDate = "2026-04-18";
 const lastUpdated = "2026-04-18";
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <MainLayout
@@ -638,6 +640,8 @@ const lastUpdated = "2026-04-18";
           <p>Use our <a href="/calculator/compound-interest/">free compound interest calculator</a>. Enter principal, rate, time, and compounding frequency to instantly see the final amount and total interest. No formulas required.</p>
         </div>
       </section>
+
+      <ShareButtons title={title} url={canonical} />
 
       <section class="cta-section">
         <h2>See Compounding in Action</h2>

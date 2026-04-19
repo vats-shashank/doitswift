@@ -1,10 +1,12 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
 
 const title = "How to Track Your Period Cycle: A Complete Guide to Understanding Your Menstrual Cycle";
 const description = "Learn how to track your menstrual cycle, predict your next period, identify your fertile window, and understand what's normal. Free period calculator included — no app download needed.";
 const publishDate = "2026-04-18";
 const lastUpdated = "2026-04-18";
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <MainLayout
@@ -766,6 +768,8 @@ const lastUpdated = "2026-04-18";
           </p>
         </div>
       </section>
+
+      <ShareButtons title={title} url={canonical} />
 
       <section class="cta-section">
         <h2>Predict your next period — free and private</h2>

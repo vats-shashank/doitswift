@@ -1,10 +1,12 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
 
 const title = "How to Split a PDF: Extract Pages, Remove Pages, or Break Into Parts (Free)";
 const description = "Split any PDF into separate pages, extract specific page ranges, or remove unwanted pages. Free browser-based tool — files never leave your device. Step-by-step guide with real examples.";
 const publishDate = "2026-04-18";
 const lastUpdated = "2026-04-18";
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <MainLayout
@@ -669,6 +671,8 @@ const lastUpdated = "2026-04-18";
           </p>
         </div>
       </section>
+
+      <ShareButtons title={title} url={canonical} />
 
       <section class="cta-section">
         <h2>Split your PDF now — free and private</h2>

@@ -1,10 +1,12 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
 
 const title = "How to Compress a PDF Without Losing Quality (Free, No Upload)";
 const description = "Reduce PDF file size by 50-90% without visible quality loss. Free browser-based compression, no upload to servers. Covers how PDF compression works, best settings, and when to use each method.";
 const publishDate = "2026-04-17";
 const lastUpdated = "2026-04-17";
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <MainLayout
@@ -613,6 +615,8 @@ const lastUpdated = "2026-04-17";
           </p>
         </div>
       </section>
+
+      <ShareButtons title={title} url={canonical} />
 
       <section class="cta-section">
         <h2>Compress your PDF now — free and private</h2>

@@ -1,10 +1,12 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
 
 const title = "GST Calculator: How to Calculate GST on Any Amount (2025-26)";
 const description = "Learn how to calculate GST on any amount instantly. Includes GST formula, tax slab breakdown, HSN codes, CGST vs SGST vs IGST explained, and a free GST calculator for India.";
 const publishDate = "2026-04-18";
 const lastUpdated = "2026-04-18";
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <MainLayout
@@ -542,6 +544,8 @@ const lastUpdated = "2026-04-18";
           <p>Yes — our <a href="/calculator/gst/">GST calculator</a> is completely free. Enter an amount and select a GST rate to instantly calculate GST payable or reverse-calculate the original price from a GST-inclusive amount.</p>
         </div>
       </section>
+
+      <ShareButtons title={title} url={canonical} />
 
       <section class="cta-section">
         <h2>Calculate GST in Seconds</h2>

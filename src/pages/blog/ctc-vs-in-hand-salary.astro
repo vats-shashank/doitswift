@@ -1,10 +1,12 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
 
 const title = "CTC vs In-Hand Salary in India: Where Does Your Money Actually Go? (2026 Breakdown)";
 const description = "Your CTC says ₹12 lakh but in-hand is only ₹72,000/month? Here's the full breakdown of every deduction — PF, tax, gratuity, HRA — with real examples and calculator.";
 const publishDate = "2026-04-17";
 const lastUpdated = "2026-04-17";
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <MainLayout
@@ -779,6 +781,8 @@ const lastUpdated = "2026-04-17";
           </p>
         </div>
       </section>
+
+      <ShareButtons title={title} url={canonical} />
 
       <section class="cta-section">
         <h2>Calculate your exact in-hand salary</h2>

@@ -1,5 +1,6 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
 
 const title = "How Much Money Do You REALLY Need to Retire in India? (2026 Math)";
 const description = "Most Indians need ₹3-7 crore to retire — not the ₹1 crore they think. Real calculations with inflation, healthcare, and expense projections. Find your true retirement number.";
@@ -7,6 +8,7 @@ const description = "Most Indians need ₹3-7 crore to retire — not the ₹1 c
 const publishDate = "2026-04-14";
 const lastUpdated = "2026-04-14";
 const displayDate = "April 14, 2026";
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <MainLayout
@@ -702,6 +704,8 @@ const displayDate = "April 14, 2026";
           </p>
         </div>
       </section>
+
+      <ShareButtons title={title} url={canonical} />
 
       <section class="cta-section">
         <h2>Find your retirement number now</h2>

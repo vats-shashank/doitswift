@@ -1,10 +1,12 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
 
 const title = "How to Calculate Your BMI: Formula, Chart, and What Your Number Really Means (2026 Guide)";
 const description = "Calculate your BMI using our free calculator. Includes BMI formula, BMI chart for adults, BMI ranges for Indians and South Asians, and what to do after checking your number.";
 const publishDate = "2026-04-17";
 const lastUpdated = "2026-04-17";
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <MainLayout
@@ -735,6 +737,8 @@ const lastUpdated = "2026-04-17";
           </p>
         </div>
       </section>
+
+      <ShareButtons title={title} url={canonical} />
 
       <section class="cta-section">
         <h2>Check your BMI now — takes 10 seconds</h2>

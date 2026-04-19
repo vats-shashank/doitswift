@@ -1,10 +1,12 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
 
 const title = "Old vs New Tax Regime in India: Which Saves You More Money? (FY 2025-26)";
 const description = "Compare old vs new tax regime with real examples at ₹8, ₹12, ₹15, ₹20, and ₹30 LPA. Side-by-side tax calculations, deduction breakdowns, and a clear decision rule to pick the right regime.";
 const publishDate = "2026-04-17";
 const lastUpdated = "2026-04-17";
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <MainLayout
@@ -847,6 +849,8 @@ const lastUpdated = "2026-04-17";
           </p>
         </div>
       </section>
+
+      <ShareButtons title={title} url={canonical} />
 
       <section class="cta-section">
         <h2>Compare both regimes with your actual numbers</h2>

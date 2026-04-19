@@ -1,10 +1,12 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
 
 const title = "SIP vs Lumpsum: Which Investment Wins in 2026? (Real Numbers)";
 const description = "SIP vs lumpsum: which builds more wealth? Real comparison with ₹6 lakh invested 3 ways. See scenarios, risks, and which strategy fits your situation.";
 const publishDate = "2026-04-13";
 const lastUpdated = "2026-04-13";
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <MainLayout
@@ -596,6 +598,8 @@ const lastUpdated = "2026-04-13";
           </p>
         </div>
       </section>
+
+      <ShareButtons title={title} url={canonical} />
 
       <section class="cta-section">
         <h2>Run your own numbers</h2>

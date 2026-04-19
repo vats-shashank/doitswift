@@ -1,10 +1,12 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
 
 const title = "How to Calculate GPA and CGPA: Formulas, Conversion Charts, and Calculator";
 const description = "Calculate GPA and CGPA from marks or grades. Covers 4.0 scale, 10-point CGPA, CGPA to percentage conversion, semester GPA, and grading systems used by Indian universities.";
 const publishDate = "2026-04-18";
 const lastUpdated = "2026-04-18";
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <MainLayout
@@ -961,6 +963,8 @@ const lastUpdated = "2026-04-18";
           </p>
         </div>
       </section>
+
+      <ShareButtons title={title} url={canonical} />
 
       <section class="cta-section">
         <h2>Calculate your GPA and CGPA now</h2>

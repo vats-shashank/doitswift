@@ -1,10 +1,12 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
 
 const title = "Best Image Format for Websites in 2026: WebP vs AVIF vs JPG vs PNG (Complete Guide)";
 const description = "Which image format should you use? Compare WebP, AVIF, JPG, PNG, and SVG — file size, quality, browser support, and when to use each. With free conversion tools.";
 const publishDate = "2026-04-18";
 const lastUpdated = "2026-04-18";
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <MainLayout
@@ -754,6 +756,8 @@ const lastUpdated = "2026-04-18";
           </p>
         </div>
       </section>
+
+      <ShareButtons title={title} url={canonical} />
 
       <section class="cta-section">
         <h2>Convert and optimize your images now</h2>
