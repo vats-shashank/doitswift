@@ -1,76 +1,122 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
-import { buildCalculatorJsonLd, calculatorCanonical, type CalculatorFaqItem } from '../../lib/calculatorJsonLd';
+import { calculatorCanonical } from '../../lib/calculatorJsonLd';
 
 const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
 
 const pageDescription =
-  'Free period and ovulation calendar: enter your last period start, typical cycle length (21–45 days), and bleed length; browse color-coded months with menstrual days, fertile window, and estimated ovulation, plus an optional rough due-date hint. Calendar estimates only—not for contraception, pregnancy confirmation, or medical diagnosis. Runs locally in your browser.';
+  'Free period calculator and ovulation tracker. Predict your next period, fertile window, and ovulation day on a visual calendar. 100% browser-based — no app, no account, no data stored.';
 
-const faqs: CalculatorFaqItem[] = [
+const pageKeywords =
+  'period calculator, ovulation calculator, period tracker, when is my next period, fertile window calculator, ovulation tracker, menstrual cycle calculator, period predictor, free period calculator, period calculator online';
+
+const faqItems = [
   {
     question: 'Is this a contraception tool?',
     answer:
-      'No. Calendar rhythm methods have high failure rates compared with modern contraception. Use medically approved options and professional counselling.',
+      'No. This tool is for education and illustration only. Calendar-based rhythm methods and similar approaches have significantly higher failure rates than modern contraception options such as IUDs, implants, injectables, or correctly used hormonal methods. Natural family planning can only be used reliably when taught by qualified instructors and combined with consistent observation. Always discuss contraception with a healthcare professional rather than relying on any online calendar for pregnancy prevention.',
   },
   {
     question: 'How is ovulation estimated?',
     answer:
-      'We use a simple luteal-phase style offset from the next expected period based on the cycle length you enter—real ovulation shifts with stress, illness, or travel.',
+      'We estimate ovulation using a luteal-phase approach: roughly fourteen days before the start of your next expected period, based on the cycle length you enter. Real ovulation can shift earlier or later because of stress, illness, travel, sleep disruption, or hormonal changes—so treat the marked day as a midpoint estimate, not an exact event. People with irregular cycles may ovulate on very different days from cycle to cycle. For timing that matters clinically, combine calendar estimates with ovulation tests, temperature tracking, or advice from your provider.',
   },
   {
     question: 'What if my cycles are irregular?',
     answer:
-      'Predictions become unreliable. Track medically or with a clinician if bleeding is heavy, painful, or absent.',
+      'Predictions from any calendar become less reliable when cycle length varies widely from month to month. Irregular bleeding, very short or very long gaps between periods, or sudden pattern changes deserve attention from a clinician—not guesswork from an app or website. Conditions such as PCOS, thyroid disorders, and others can disturb ovulation timing even when the calendar looks predictable in hindsight. Use this calculator as a rough planning aid only, and seek medical evaluation if bleeding is heavy, painful, or absent without a known cause.',
   },
   {
     question: 'Can this confirm pregnancy?',
     answer:
-      'No. Only tests and providers can confirm pregnancy.',
+      'No. Only a pregnancy test performed on urine or blood—or confirmation by a qualified healthcare provider—can diagnose pregnancy. Early pregnancy symptoms overlap with premenstrual symptoms, so calendar delays alone are not proof of conception. Ultrasound dating and serial hCG levels are used clinically when timing matters. If you think you may be pregnant, use an appropriate test and arrange medical follow-up rather than interpreting this tool’s output as a diagnosis.',
   },
   {
     question: 'Does the fertile window guarantee conception timing?',
     answer:
-      'No. It is a rough guide; sperm and egg biology vary.',
+      'No. The fertile window shown here is an educational band based on typical sperm survival and a fixed offset around estimated ovulation. Individual variation in ovulation day, cervical mucus quality, sperm factors, and countless other variables means that conception is never guaranteed on a particular calendar day. The window is useful for general awareness of when pregnancy is biologically more likely, not for precise scheduling. Couples trying to conceive or avoid pregnancy should discuss evidence-based strategies with their providers.',
   },
   {
     question: 'Are cycle dates sent to DoItSwift?',
     answer:
-      'No. Calculations run locally in your browser.',
+      'No. All arithmetic and date handling for this calculator execute entirely in your web browser using JavaScript on your own device. When you enter your last period and cycle settings, that information never leaves your machine as part of our calculator logic, and we do not store it in a database tied to your visit. Closing the tab clears the session; we do not require an account or login for this page. That design supports privacy-sensitive health use cases more than typical cloud-based period apps might.',
+  },
+  {
+    question: 'How do I calculate when my next period will come?',
+    answer:
+      'Add your average cycle length to the first day of your last period. For example, if your last period started March 5 and your average cycle is 28 days, your next period is expected around April 2. This calculator does this automatically and shows results on a visual calendar. Track for 3-6 months to find your true average cycle length, since cycles can vary by a few days each month.',
+  },
+  {
+    question: 'How many days after my period do I ovulate?',
+    answer:
+      'Ovulation typically occurs about 14 days before your next period—not 14 days after your last period. The day count depends on your cycle length. For a 28-day cycle, ovulation is around Day 14 (which happens to be 14 days after the period starts). For a 32-day cycle, ovulation is around Day 18. For a 25-day cycle, it is around Day 11. This calculator estimates your specific ovulation day based on your cycle length.',
+  },
+  {
+    question: 'Can I use this period calculator if I have PCOS or irregular cycles?',
+    answer:
+      'You can use it for rough estimates, but predictions will be less accurate with irregular cycles. PCOS and other conditions that cause cycle variability mean ovulation may not follow the standard luteal phase pattern. For irregular cycles, combining this calculator with ovulation predictor kits (OPKs) or basal body temperature tracking gives more reliable results. Consult a gynecologist for personalized fertility guidance.',
+  },
+  {
+    question: 'Is this period tracker private? Where is my data stored?',
+    answer:
+      'Your data is not stored anywhere. This calculator runs entirely in your browser using JavaScript—no information is sent to any server, no account is created, and no cookies track your cycle data. When you close the tab, all data disappears. This makes it one of the most private period tracking options available, unlike apps that store your intimate health data on company servers.',
   },
 ];
 
-const jsonLd = buildCalculatorJsonLd({
-  site: Astro.site,
-  pathname: Astro.url.pathname,
-  appName: 'DoItSwift Period & Ovulation Calculator',
-  breadcrumbName: 'Period & Ovulation',
+const softwareApplicationLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Period Calculator & Ovulation Tracker',
   applicationCategory: 'HealthApplication',
-  browserRequirements:
-    'Requires JavaScript for the interactive cycle calendar, month grid, cycle navigation, per-cycle summaries, and rough due date line',
-  webAppDescription:
-    'Project upcoming menstrual cycles from the first day of your last period and typical cycle and bleed length. Shows a color-coded calendar with period days, a fertile window, and an estimated ovulation day, cycle-by-cycle navigation with summary stats, and an illustrative due-date line from ovulation. Hormonal variation, illness, and irregular cycles are not fully modeled—treat output as educational awareness, not contraceptive efficacy or clinical timing.',
-  featureList: [
-    'First day of last period (date input)',
-    'Average cycle length 21–45 days (range slider and number field)',
-    'Average period length 2–10 days (range slider and number field)',
-    'Horizon selector: next 1, 3, 6, or 12 cycles',
-    'Color-coded calendar: period, fertile window, and ovulation day',
-    'Previous/next cycle navigation with live summary panel',
-    'Rough due date from this cycle’s ovulation (non-clinical hint)',
-    'Educational copy and link to pregnancy due date calculator',
+  operatingSystem: 'Web Browser',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  description:
+    'Free period calculator and ovulation tracker. Predicts next period, fertile window, and ovulation day on a visual calendar. Browser-based, no data stored.',
+  url: 'https://doitswift.com/calculator/period-ovulation/',
+};
+
+const faqPageLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((f) => ({
+    '@type': 'Question',
+    name: f.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: f.answer,
+    },
+  })),
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://doitswift.com/' },
+    { '@type': 'ListItem', position: 2, name: 'Calculators', item: 'https://doitswift.com/calculator/' },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: 'Period & Ovulation Calculator',
+      item: 'https://doitswift.com/calculator/period-ovulation/',
+    },
   ],
-  faqs,
-});
+};
 ---
 
 <MainLayout
-  title="Period & Ovulation Calculator — Cycle Calendar, Fertile Window & Ovulation Day | DoItSwift"
+  title="Free Period Calculator & Ovulation Tracker — Predict Your Next Period | DoItSwift"
   description={pageDescription}
-  keywords="period calculator, ovulation calculator, fertile window calculator, menstrual cycle calendar, next period date estimate, cycle length tracker India, ovulation day calendar, period tracker browser, not contraception"
+  keywords={pageKeywords}
   canonical={canonical}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(softwareApplicationLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqPageLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
 
   <nav class="breadcrumb container" aria-label="Breadcrumb">
     <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Period &amp; Ovulation</span>
@@ -93,6 +139,9 @@ const jsonLd = buildCalculatorJsonLd({
 
   <div class="medical-callout container" role="note">
     <strong>⚠️ Important:</strong> This calculator provides <strong>estimates</strong> based on average cycle data. It is <strong>not for contraception</strong> — natural family planning has high failure rates unless taught and monitored professionally. It does <strong>not</strong> confirm pregnancy. Consult a <strong>healthcare provider</strong> for fertility, contraception, irregular cycles, or pregnancy planning. Many women have <strong>irregular cycles</strong>; treat outputs as illustrations only.
+    <p class="medical-reviewed">
+      Last reviewed: April 2026. Calculations based on standard luteal phase method. For medical advice, consult a qualified healthcare professional.
+    </p>
   </div>
 
   <section class="calc-section">
@@ -155,13 +204,101 @@ const jsonLd = buildCalculatorJsonLd({
     </div>
   </section>
 
+  <section class="period-seo-section">
+    <div class="container">
+      <h2>How to Use This Period Calculator</h2>
+
+      <h3>Step 1: Enter your last period start date</h3>
+      <p>
+        Select the first day of your most recent menstrual bleeding (not spotting). This is Day 1 of your cycle. If you're unsure, check your calendar or messaging history for clues — many people can recall within a day or two.
+      </p>
+
+      <h3>Step 2: Set your average cycle length</h3>
+      <p>
+        Your cycle length is the number of days from the first day of one period to the first day of the next. The average is 28 days, but anything between 21 and 35 days is considered normal. If you haven't tracked before, start with 28 — you can adjust after tracking for 2-3 months. Use the slider or type directly into the field.
+      </p>
+
+      <h3>Step 3: Set your average period length</h3>
+      <p>
+        This is how many days your period bleeding typically lasts. Most people have periods lasting 3-7 days, with 5 being the average. This determines how many days are highlighted as "period days" on the calendar.
+      </p>
+
+      <h3>Step 4: Read your cycle calendar</h3>
+      <p>
+        The calendar uses color coding to show your predicted cycle: red for period days, green for your fertile window, and a highlighted marker for your estimated ovulation day. Navigate between cycles using the arrows. The calculator also shows a rough due date estimate if conception were to occur during that cycle's ovulation window.
+      </p>
+    </div>
+  </section>
+
+  <section class="period-seo-section">
+    <div class="container">
+      <h2>Understanding Your Menstrual Cycle</h2>
+
+      <h3>The 4 phases of your menstrual cycle</h3>
+      <p>
+        Your cycle has four distinct phases that repeat each month. <strong>Menstruation</strong> (Days 1-5 typically) is when the uterine lining sheds — this is your period. The <strong>follicular phase</strong> (Days 1 to ovulation) overlaps with menstruation; your body prepares eggs and estrogen rises. <strong>Ovulation</strong> occurs when a mature egg is released — typically about 14 days before your next period starts. The <strong>luteal phase</strong> (ovulation to next period) lasts almost exactly 12-16 days as progesterone prepares the uterus for potential pregnancy.
+      </p>
+
+      <h3>When does ovulation happen?</h3>
+      <p>
+        Ovulation doesn't always happen on Day 14. It occurs approximately <strong>14 days before your next period starts</strong>, not 14 days after your last period. For a 28-day cycle, that's Day 14. For a 32-day cycle, it's around Day 18. For a 25-day cycle, it's around Day 11. This calculator uses this luteal-phase method to estimate your ovulation date based on your specific cycle length.
+      </p>
+
+      <h3>What is the fertile window?</h3>
+      <p>
+        The fertile window is the approximately 6-day period each cycle when pregnancy is possible: the 5 days before ovulation plus the day of ovulation itself. Sperm can survive in the reproductive tract for up to 5 days, while the egg is viable for only 12-24 hours after release. This is why the fertile window extends well before ovulation day. Our calculator highlights this entire window on the calendar in green.
+      </p>
+
+      <h3>How this calculator estimates your dates</h3>
+      <p>
+        This period calculator uses the <strong>luteal phase method</strong>: it takes your cycle length, subtracts 14 days to estimate ovulation, then marks 5 days before ovulation as the fertile window start. Period days are marked from your last period start date through your period length. Future cycles are projected by adding your cycle length repeatedly. These are estimates — actual ovulation can vary by 1-4 days even in regular cycles.
+      </p>
+    </div>
+  </section>
+
+  <section class="period-seo-section">
+    <div class="container">
+      <h2>Period Tracking and Privacy</h2>
+      <p>
+        Period tracking data is deeply personal — it reveals information about fertility, sexual activity, and reproductive health. Most period tracking apps (Flo, Clue, Natural Cycles) store your data on their servers, often in jurisdictions with varying data protection standards.
+      </p>
+      <p>
+        This calculator takes a different approach. <strong>All calculations run entirely in your browser using JavaScript.</strong> Your dates, cycle length, and results are never transmitted to any server. When you close the tab, everything disappears. There is no account, no login, no cloud storage, and no way for us to access your data — because it never leaves your device.
+      </p>
+      <p>
+        You can verify this yourself: load this page, disconnect your internet, and the calculator still works. That's impossible with server-based tools.
+      </p>
+    </div>
+  </section>
+
+  <section class="period-seo-section">
+    <div class="container">
+      <h2>When to See a Doctor About Your Period</h2>
+      <p>
+        This calculator is a screening tool, not a medical diagnosis. Consult a healthcare provider if you experience any of the following:
+      </p>
+      <ul class="period-seo-list">
+        <li>Cycles consistently shorter than 21 days or longer than 35 days</li>
+        <li>Missed periods for 3 or more consecutive months (without pregnancy)</li>
+        <li>Very heavy bleeding (soaking through a pad or tampon every hour for several hours)</li>
+        <li>Severe pain that interferes with daily activities</li>
+        <li>Bleeding between periods that happens frequently</li>
+        <li>Significant change in your established cycle pattern</li>
+        <li>Bleeding after menopause</li>
+      </ul>
+      <p>
+        <strong>PCOS awareness:</strong> India has among the highest rates of Polycystic Ovary Syndrome (PCOS) in the world, affecting approximately 1 in 5 women of reproductive age. PCOS causes irregular or absent periods, and calendar-based predictions become unreliable. If you suspect PCOS, consult a gynecologist for proper diagnosis and management.
+      </p>
+    </div>
+  </section>
+
   <section class="faq">
     <div class="container">
       <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        {faqs.map((f) => (
+        {faqItems.map((f) => (
           <div class="faq-item">
-            <h4>{f.question}</h4>
+            <h3>{f.question}</h3>
             <p>{f.answer}</p>
           </div>
         ))}
@@ -169,29 +306,49 @@ const jsonLd = buildCalculatorJsonLd({
     </div>
   </section>
 
-  <section class="edu">
+  <section class="related">
     <div class="container">
-      <h2 class="section-title">Menstrual cycle basics</h2>
-      <p>
-        A typical cycle includes <strong>menstrual</strong>, <strong>follicular</strong>, <strong>ovulatory</strong>, and <strong>luteal</strong> phases. <strong>Ovulation</strong> often occurs about <strong>14 days before</strong> the next expected period — not always “day 14 of the cycle” unless your cycle is very regular and 28 days. Signs such as <strong>basal body temperature</strong> shift, <strong>cervical mucus</strong> changes, or <strong>LH</strong> test surges can help time ovulation better than a calendar alone.
-      </p>
-      <p>
-        <strong>Irregular cycles</strong> (large variation in length), very heavy bleeding, severe pain, or missed periods warrant medical evaluation — do not rely on this page for diagnosis.
-      </p>
-      <p>
-        If you conceive around ovulation, a rough <strong>due date</strong> from LMP is on the order of 280 days — use our <a href="/calculator/pregnancy-due-date/">Pregnancy Due Date</a> calculator for Naegele-style estimates and discuss dating scans with your clinician.
-      </p>
+      <h2 class="section-title">Related Health Calculators</h2>
+      <ul class="related-list">
+        <li>
+          <a href="/calculator/pregnancy-due-date/">Pregnancy Due Date Calculator</a> — Estimate your due date from last period or conception date
+        </li>
+        <li>
+          <a href="/calculator/bmi/">BMI Calculator</a> — Body weight affects cycle regularity and fertility
+        </li>
+        <li>
+          <a href="/calculator/calorie/">Calorie / TDEE Calculator</a> — Nutrition impacts hormonal health and cycle regularity
+        </li>
+        <li>
+          <a href="/calculator/ideal-weight/">Ideal Weight Calculator</a> — Find your healthy weight range for your height
+        </li>
+        <li>
+          <a href="/calculator/body-fat/">Body Fat Calculator</a> — Body composition affects ovulation and fertility
+        </li>
+        <li>
+          <a href="/calculator/water-intake/">Water Intake Calculator</a> — Hydration needs during menstruation
+        </li>
+        <li>
+          <a href="/calculator/age/">Age Calculator</a> — Calculate your exact age
+        </li>
+      </ul>
     </div>
   </section>
 
-  <section class="related">
+  <section class="related related-guides">
     <div class="container">
-      <h2 class="section-title">Related calculators</h2>
-      <p class="related-links">
-        <a href="/calculator/pregnancy-due-date/">Pregnancy Due Date</a>
-        ·
-        <a href="/calculator/age/">Age Calculator</a>
-      </p>
+      <h2 class="section-title">Related Guides</h2>
+      <ul class="related-list">
+        <li>
+          <a href="/blog/how-to-track-period-cycle/">How to Track Your Period Cycle: Complete Guide</a>
+        </li>
+        <li>
+          <a href="/blog/how-to-calculate-bmi/">How to Calculate Your BMI (Indian Ranges Included)</a>
+        </li>
+        <li>
+          <a href="/blog/how-many-calories-per-day/">How Many Calories Per Day (Indian Food Guide)</a>
+        </li>
+      </ul>
     </div>
   </section>
 
@@ -552,6 +709,45 @@ const jsonLd = buildCalculatorJsonLd({
       background: rgba(248, 113, 113, 0.12);
       border-color: rgba(248, 113, 113, 0.5);
     }
+    .medical-reviewed {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      margin-bottom: 0;
+    }
+    .period-seo-section {
+      padding: 28px 0;
+    }
+    .period-seo-section .container {
+      max-width: 760px;
+    }
+    .period-seo-section h2 {
+      font-size: 1.5rem;
+      margin: 0 0 16px;
+      color: var(--text);
+      text-align: center;
+    }
+    .period-seo-section h3 {
+      font-size: 1.05rem;
+      margin: 22px 0 8px;
+      color: var(--text);
+    }
+    .period-seo-section p {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text-muted);
+      margin: 0 0 12px;
+    }
+    .period-seo-list {
+      margin: 0 0 16px;
+      padding-left: 1.25rem;
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+    .period-seo-list li {
+      margin-bottom: 8px;
+    }
     .calc-section { padding: 16px 0 40px; }
     .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 960px; align-items: start; margin: 0 auto; }
     @media (max-width: 768px) { .calc-layout { grid-template-columns: 1fr; } }
@@ -583,7 +779,7 @@ const jsonLd = buildCalculatorJsonLd({
       padding: 20px 24px;
       margin-bottom: 12px;
     }
-    .faq-item h4 {
+    .faq-item h3 {
       font-size: 16px;
       margin-bottom: 6px;
     }
@@ -690,9 +886,30 @@ const jsonLd = buildCalculatorJsonLd({
       border-radius: var(--radius);
       padding: 16px 18px;
     }
-    .faq-item h4 { margin: 0 0 8px; font-size: 15px; }
+    .faq-item h3 { margin: 0 0 8px; font-size: 15px; }
     .faq-item p { margin: 0; font-size: 14px; color: var(--text-muted); line-height: 1.55; }
-    .related { text-align: center; padding-bottom: 48px; }
+    .related { text-align: center; padding: 8px 0 40px; }
+    .related-guides {
+      padding-top: 0;
+      padding-bottom: 48px;
+    }
+    .related-list {
+      text-align: left;
+      max-width: 720px;
+      margin: 0 auto;
+      padding-left: 1.25rem;
+      list-style: disc;
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+    .related-list li {
+      margin-bottom: 12px;
+    }
+    .related-list a {
+      color: var(--blue);
+      font-weight: 600;
+    }
     .related-links a { color: var(--blue); font-weight: 600; }
   </style>
 
