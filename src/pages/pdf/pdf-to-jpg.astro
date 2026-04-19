@@ -3,148 +3,145 @@ import MainLayout from '../../layouts/MainLayout.astro';
 
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 
-const jsonLd = {
+const schemaSoftwareApplication = {
   '@context': 'https://schema.org',
-  '@graph': [
+  '@type': 'SoftwareApplication',
+  name: 'PDF to JPG Converter',
+  applicationCategory: 'MultimediaApplication',
+  operatingSystem: 'Web Browser',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  description:
+    'Free PDF to JPG converter. Convert PDF pages to high-quality JPEG images with 3 quality presets. Batch conversion, ZIP download. Browser-based, files never uploaded.',
+  url: canonical,
+};
+
+const schemaFaqPage = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
     {
-      '@type': 'WebApplication',
-      name: 'DoItSwift PDF to JPG',
-      url: canonical,
-      applicationCategory: 'UtilitiesApplication',
-      operatingSystem: 'Web browser',
-      browserRequirements: 'Requires JavaScript, HTML5 Canvas, and PDF.js (loaded from CDN)',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-      description:
-        'Export PDF pages as JPEG images in the browser using PDF.js. Each page renders to a canvas at 2x scale, then encodes to JPG with selectable quality. Supports batch PDFs and ZIP download. No server upload.',
-      featureList: [
-        'Render PDFs locally with PDF.js — files are not uploaded to DoItSwift',
-        'One JPEG per page; filenames use the PDF name stem plus -page-N.jpg',
-        'Page rasterization at 2x viewport scale for sharper images',
-        'JPEG quality presets: Maximum, Balanced (~85%), and Small file (~70%)',
-        'Process multiple PDFs in one session; pages export in document order',
-        'Per-page download links plus Download All as ZIP',
-        'Optional confirmation when a single PDF exceeds 50 MB',
-      ],
+      '@type': 'Question',
+      name: 'Is PDF to JPG free and unlimited?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. DoItSwift does not charge for this tool or cap how many pages you export in a single session. The only practical limits come from your device CPU, RAM, and browser stability when you work with very large documents. There is no signup wall, no payment step, and no premium tier that unlocks more conversions.',
+      },
     },
     {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'Is PDF to JPG free and unlimited?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes. Export as many pages as your device can handle with no signup, watermarks, or usage quotas.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Are PDFs uploaded to DoItSwift servers?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'No. PDF.js and the canvas run entirely in your browser. Your PDF bytes stay on your device.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'What resolution or sharpness do the JPG images have?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Each page is rendered to a canvas at 2x the PDF page viewport scale for sharper output. JPEG compression is controlled by the quality preset you choose (Maximum, Balanced, or Small file).',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Can I convert multiple PDFs at once?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes. Drop or select several PDFs; the tool processes each file in order and exports every page. You can download JPGs individually or all at once as a ZIP archive.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'How are output JPG files named?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Files use the original PDF filename stem plus -page- and the page number, for example report-page-1.jpg. Multiple PDFs keep separate stems so batches stay organized.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Can I get PNG instead of JPG?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'This tool outputs JPEG for smaller files. If you need lossless PNG, export JPG here and convert with an image tool, or use a workflow that rasterizes to PNG elsewhere.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Do password-protected PDFs work?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Encrypted PDFs must be unlocked before conversion. Use DoItSwift Unlock PDF with the correct password, then convert the unlocked file to JPG.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Does PDF to JPG work on mobile?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes for moderate file sizes. Very large PDFs or hundreds of pages may exhaust memory on phones or older tablets.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'What about very large PDFs?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'The tool asks for confirmation when a single PDF is over 50 MB. Huge documents or many pages use significant CPU and RAM; keep the tab active until export finishes.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Is there a monthly limit or account required?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'No accounts, no quotas, and no premium tier.',
-          },
-        },
-      ],
+      '@type': 'Question',
+      name: 'Are PDFs uploaded to DoItSwift servers?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. PDF.js runs in your browser tab, and each page is drawn to a local HTML canvas before being encoded as a JPEG on your machine. Your PDF bytes are not sent to DoItSwift for storage or scanning. That local-only model matters for confidential contracts, medical paperwork, and financial statements you would not want on a third-party server.',
+      },
     },
     {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        {
-          '@type': 'ListItem',
-          position: 1,
-          name: 'Home',
-          item: new URL('/', Astro.site).href,
-        },
-        {
-          '@type': 'ListItem',
-          position: 2,
-          name: 'PDF Tools',
-          item: new URL('/pdf/', Astro.site).href,
-        },
-        {
-          '@type': 'ListItem',
-          position: 3,
-          name: 'PDF to JPG',
-          item: canonical,
-        },
-      ],
+      '@type': 'Question',
+      name: 'What resolution or sharpness do the JPG images have?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Each page is rasterized at 2× the PDF page viewport scale so edges and small text stay sharper than typical single-scale exports. After rendering, JPEG compression is applied according to your preset: Maximum, Balanced, or Small file. The preset changes file size and visible compression artifacts, not the base pixel dimensions produced by the 2× render.',
+      },
     },
+    {
+      '@type': 'Question',
+      name: 'Can I convert multiple PDFs at once?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Drop or select several PDFs and the tool processes each file in order, exporting every page from every document. You can download JPGs one at a time from the results list or use Download All as ZIP to fetch everything in one archive. Filenames keep each PDF stem plus -page-N so batches stay organized and easy to sort.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How are output JPG files named?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Names follow the pattern: original PDF filename stem, then -page-, then the 1-based page number, for example report-page-1.jpg. If you convert several PDFs in one session, each document keeps its own stem so names do not collide inside the ZIP. You can batch-rename files afterward in your file manager if your workflow needs a different naming pattern.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I get PNG instead of JPG?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'This tool outputs JPEG only, which keeps file sizes smaller for photos, scans, and typical document pages. If you need lossless PNG for graphics with flat colors and hard edges, use a separate image converter after export or a workflow that rasterizes directly to PNG. JPEG is usually the better default for slides, scans, and web uploads where smaller files matter most.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do password-protected PDFs work?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Encrypted PDFs cannot be rendered until they are unlocked with the correct password. Use the DoItSwift Unlock PDF tool in your browser, save the unlocked copy locally, then convert that file to JPG here. Unlocking follows the same privacy model as this converter: processing stays in your tab and files are not uploaded to DoItSwift servers.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does PDF to JPG work on mobile?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes for typical documents and moderate page counts on modern phones and tablets. Very large PDFs or hundreds of pages can exhaust device memory or make the browser tab sluggish because rendering runs entirely on your device. If export fails on mobile, try splitting the PDF first or switch to a desktop browser for especially heavy jobs.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What about very large PDFs?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'When a single PDF exceeds about 50 MB, the tool asks you to confirm before processing so you are not surprised by wait time or memory use. Huge documents stress CPU and RAM; keep the tab in the foreground until every page finishes exporting. Splitting a very long file with Split PDF first often improves reliability on low-memory machines.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is there a monthly limit or account required?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No accounts are required and there are no monthly quotas or free-tier resets. You can open the tool whenever you need it without signing in. The only real constraints are your hardware performance and normal browser limits for extremely large files.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do I convert just one page of a PDF to JPG?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'You have two practical options. First, convert the entire PDF and download only the page you need from the results list. Second, extract the specific page using the DoItSwift Split PDF tool to make a single-page PDF, then convert that smaller file here. Method two is faster for large PDFs because it avoids rendering pages you do not need.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What resolution are the output images?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Pages are rendered at 2× the PDF viewport scale. For a standard A4 page, this typically produces roughly 1654 by 2339 pixels, often described as about 200 DPI equivalent for print planning. That is sharp enough for screen viewing, presentations, and most web uses. For professional print workflows that demand 300 DPI or higher with explicit DPI control, a desktop tool such as Adobe Acrobat may be more appropriate.',
+      },
+    },
+  ],
+};
+
+const schemaBreadcrumbList = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: 'PDF Tools', item: new URL('/pdf/', Astro.site).href },
+    { '@type': 'ListItem', position: 3, name: 'PDF to JPG', item: canonical },
   ],
 };
 ---
 
 <MainLayout
-  title="PDF to JPG Converter — Batch Pages, ZIP, Private Browser Export | DoItSwift"
-  description="Convert PDF pages to JPG in your browser with PDF.js: 2x sharpness, Maximum/Balanced/Small JPEG quality, batch PDFs, per-page or ZIP download. No upload, no signup. For slides, scans, and sharing where JPEG works best."
-  keywords="pdf to jpg, pdf to jpeg, convert pdf to jpg online, pdf pages to images, extract pdf pages as jpg, batch pdf to jpg, pdf to jpg free private, browser pdf to jpg, pdf.js jpg export, zip pdf pages jpg, no upload pdf converter"
+  title="PDF to JPG Converter — Convert PDF Pages to Images Free (No Upload) | DoItSwift"
+  description="Convert PDF pages to JPG images for free. Each page becomes a separate high-quality JPEG. Batch conversion, 3 quality presets, ZIP download. 100% browser-based — your PDFs are never uploaded. No signup, no watermarks, no limits."
+  keywords="pdf to jpg, convert pdf to jpg, pdf to image, pdf to jpeg, pdf to jpg converter, pdf to jpg online free, convert pdf to image, save pdf as image, pdf page to jpg, extract images from pdf"
   canonical={canonical}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(schemaSoftwareApplication)} />
+  <script type="application/ld+json" set:html={JSON.stringify(schemaFaqPage)} />
+  <script type="application/ld+json" set:html={JSON.stringify(schemaBreadcrumbList)} />
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" is:inline></script>
 
   <script type="module" is:inline>
@@ -161,10 +158,16 @@ const jsonLd = {
   <section class="hero">
     <div class="container">
       <div class="badge">🔒 100% Private — Files Never Leave Your Device</div>
-      <h1>PDF to JPG</h1>
+      <h1>Convert PDF to JPG Online — Free, Private, No Upload</h1>
       <p class="subtitle">
-        Export every page as a JPEG using PDF.js in your tab — 2× rendering, three quality presets, batch PDFs, individual
-        downloads or one ZIP. Nothing uploads to our servers.
+        Convert any PDF to JPG images — each page becomes a separate high-quality JPEG file. Drop one or multiple PDFs, choose
+        from three quality presets (Maximum, Balanced, Small file), and download pages individually or as a single ZIP. The
+        converter uses PDF.js to render pages at 2× resolution for sharp output. Unlike most PDF-to-image tools, your files are
+        never uploaded — all processing happens in your browser. No signup, no watermarks, no file limits.
+      </p>
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+        Uses Mozilla's open-source PDF.js library for browser-based rendering. 2× viewport scale for sharp output. No server
+        uploads, no file retention. Last updated: April 2026.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> Unlimited pages</span>
@@ -222,16 +225,25 @@ const jsonLd = {
   <article class="pdf-edu" aria-label="Guide: PDF to JPG conversion">
     <div class="container pdf-edu-inner">
       <section class="pdf-edu-block">
-        <h2 id="why-pdf-to-jpg">Why export PDF pages as JPG?</h2>
+        <h2 id="how-to-convert-pdf-to-jpg">How to Convert PDF to JPG (Step by Step)</h2>
+
+        <h3>Step 1: Add your PDF</h3>
         <p>
-          PDF is ideal for fixed-layout documents, but social apps, CMS galleries, and some email clients prefer raster
-          images. Turning slides, flyers, or scanned pages into JPEGs lets you use Instagram carousels, WordPress media
-          libraries, or PowerPoint without asking recipients to install a PDF reader. Each page becomes a standalone file named
-          <code>YourFile-page-1.jpg</code>, <code>YourFile-page-2.jpg</code>, and so on — easy to sort and rename in bulk.
+          Drag and drop your PDF onto the drop zone or click to browse. You can add multiple PDFs at once — each file's pages
+          will be converted separately. There's no file size cap; practical limits depend on your device's memory.
         </p>
+
+        <h3>Step 2: Choose quality</h3>
         <p>
-          For a longer walkthrough — use cases, quality trade-offs, and privacy — see{' '}
-          <a href="/blog/how-to-convert-pdf-to-jpg/">how to convert PDF to JPG</a> on the DoItSwift blog.
+          Click &quot;Change settings&quot; to select a quality preset. <strong>Maximum</strong> produces the sharpest images (best
+          for presentations and printing). <strong>Balanced</strong> offers good quality at smaller file sizes. <strong>Small file</strong>
+          prioritizes minimal file size — useful for web uploads and messaging.
+        </p>
+
+        <h3>Step 3: Download your images</h3>
+        <p>
+          Each page appears as a separate JPG in the results list. Download pages individually or click &quot;Download All as ZIP&quot;
+          to get everything in one file. Images are named automatically — <code>YourFile-page-1.jpg</code>, <code>YourFile-page-2.jpg</code>, etc.
         </p>
       </section>
 
@@ -248,6 +260,98 @@ const jsonLd = {
           <li><strong>Optional:</strong> Open <strong>Change settings</strong> for Balanced or Small file JPEG quality.</li>
           <li><strong>Download</strong> per page or use <strong>Download All as ZIP</strong> for the full set.</li>
         </ol>
+      </section>
+
+      <section class="pdf-edu-block">
+        <h2 id="jpeg-quality-presets">JPEG Quality Presets: Which to Choose</h2>
+        <div class="pdf-table-wrap">
+          <table class="pdf-compare-table pdf-compare-table--wide">
+            <caption class="sr-only">JPEG quality presets compared</caption>
+            <thead>
+              <tr>
+                <th scope="col">Preset</th>
+                <th scope="col">Typical JPG size per page</th>
+                <th scope="col">Best for</th>
+                <th scope="col">Quality</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Maximum</strong></td>
+                <td>500 KB – 2 MB</td>
+                <td>Printing, presentations, archiving</td>
+                <td>Virtually indistinguishable from PDF</td>
+              </tr>
+              <tr>
+                <td><strong>Balanced</strong></td>
+                <td>200 KB – 800 KB</td>
+                <td>Email, web upload, social media</td>
+                <td>Excellent on screen, slight softening on zoom</td>
+              </tr>
+              <tr>
+                <td><strong>Small file</strong></td>
+                <td>80 KB – 400 KB</td>
+                <td>Thumbnails, messaging, low-bandwidth sharing</td>
+                <td>Visible artifacts on close inspection</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          All presets render pages at <strong>2× viewport scale</strong>, meaning a standard A4 page produces approximately a 1,654 ×
+          2,339 pixel image — sharp enough for most uses including presentations on HD screens. The quality preset controls JPEG
+          compression, not rendering resolution.
+        </p>
+      </section>
+
+      <section class="pdf-edu-block">
+        <h2 id="when-to-convert-pdf-to-jpg">When to Convert PDF to JPG</h2>
+
+        <h3>Presentations and slides</h3>
+        <p>
+          PowerPoint and Google Slides handle images better than embedded PDFs. Convert a PDF chart, infographic, or data table to
+          JPG and paste it directly into any slide — no formatting issues or broken embeds.
+        </p>
+
+        <h3>Social media posting</h3>
+        <p>
+          Instagram, LinkedIn, Twitter, and Facebook don't accept PDF uploads. Convert your portfolio pieces, infographics,
+          flyers, or event posters to JPG for direct posting. Use Maximum quality for sharp images on high-density phone screens.
+        </p>
+
+        <h3>Document previews and thumbnails</h3>
+        <p>
+          Building a document library or portfolio website? Convert each PDF's first page to JPG for visual thumbnails. Users see
+          what each document looks like before downloading the full PDF.
+        </p>
+
+        <h3>Platform upload restrictions</h3>
+        <p>
+          Job portals, government forms, e-commerce listings, and forum posts sometimes accept only image uploads (JPG, PNG), not
+          PDFs. Converting the relevant page to JPG solves this immediately.
+        </p>
+
+        <h3>WhatsApp and messaging</h3>
+        <p>
+          Images display inline in chat — the recipient sees content immediately without opening a separate viewer. For
+          single-page documents like receipts, tickets, or confirmations, JPG is more convenient than PDF for messaging.
+        </p>
+
+        <h3>Study materials and flashcards</h3>
+        <p>
+          Students convert textbook pages to images for flashcard apps (Anki, Quizlet), annotation tools, or note-taking apps that
+          handle images better than embedded PDFs.
+        </p>
+
+        <h3>Extracting specific visuals</h3>
+        <p>
+          Need a chart from page 23 of a 50-page report for a blog post? Convert that page to JPG, crop the chart, and use it.
+          Faster than trying to copy from a PDF viewer. For extracting just a few pages, <a href="/pdf/split-pdf/">split the PDF first</a>, then convert.
+        </p>
+        <p>
+          For a longer walkthrough — use cases, quality trade-offs, and privacy — see{' '}
+          <a href="/blog/how-to-convert-pdf-to-jpg/">how to convert PDF to JPG</a> on the DoItSwift blog.
+        </p>
       </section>
 
       <section class="pdf-edu-block">
@@ -285,6 +389,122 @@ const jsonLd = {
       </section>
 
       <section class="pdf-edu-block">
+        <h2 id="doitswift-vs-competitors">DoItSwift vs Other PDF to JPG Converters</h2>
+        <div class="pdf-table-wrap">
+          <table class="pdf-compare-table pdf-compare-table--competitors">
+            <caption class="sr-only">DoItSwift compared to other PDF to JPG tools</caption>
+            <thead>
+              <tr>
+                <th scope="col">Feature</th>
+                <th scope="col">DoItSwift</th>
+                <th scope="col">iLovePDF</th>
+                <th scope="col">Smallpdf</th>
+                <th scope="col">Adobe Acrobat</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Files stay on device</td>
+                <td><strong>Yes — never uploaded</strong></td>
+                <td>No — server processed</td>
+                <td>No — server processed</td>
+                <td>No — cloud processed</td>
+              </tr>
+              <tr>
+                <td>Quality control</td>
+                <td><strong>3 presets (Max/Balanced/Small)</strong></td>
+                <td>1 level only</td>
+                <td>No choice</td>
+                <td>Multiple options</td>
+              </tr>
+              <tr>
+                <td>Batch PDFs</td>
+                <td><strong>Yes — unlimited files</strong></td>
+                <td>Limited (free)</td>
+                <td>2/day free</td>
+                <td>Requires subscription</td>
+              </tr>
+              <tr>
+                <td>ZIP download</td>
+                <td><strong>Yes</strong></td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Rendering quality</td>
+                <td><strong>2× scale (sharp)</strong></td>
+                <td>Standard</td>
+                <td>Standard</td>
+                <td>High (desktop app)</td>
+              </tr>
+              <tr>
+                <td>Works offline</td>
+                <td><strong>Yes</strong></td>
+                <td>No</td>
+                <td>No</td>
+                <td>Desktop app only</td>
+              </tr>
+              <tr>
+                <td>Signup required</td>
+                <td><strong>No</strong></td>
+                <td>No (limited)</td>
+                <td>Yes (after limit)</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Watermarks</td>
+                <td><strong>Never</strong></td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <strong>Where DoItSwift wins:</strong> Privacy (no upload), quality presets (most converters give you no choice), and
+          unlimited batch processing. The 2× rendering produces noticeably sharper output than standard-resolution converters.
+        </p>
+        <p>
+          <strong>Where others win:</strong> Adobe Acrobat's desktop app offers the highest quality and most options (DPI control,
+          color profile management). Server-based tools handle 100+ page PDFs faster on slower devices. For everyday conversion of
+          documents under 50 pages, DoItSwift matches or exceeds the quality of any free tool.
+        </p>
+      </section>
+
+      <section class="pdf-edu-block">
+        <h2 id="after-converting">What to Do After Converting</h2>
+
+        <h3>Compress the images</h3>
+        <p>
+          Converted JPGs at Maximum quality can be large. Run them through our <a href="/image/image-compressor/">Image Compressor</a> at
+          75-85% quality for 50-70% file size reduction with minimal visible difference. This is especially useful before uploading
+          to social media or embedding in presentations.
+        </p>
+
+        <h3>Resize for specific dimensions</h3>
+        <p>
+          Need images at exact pixel dimensions (e.g., 1080×1080 for Instagram or 1920×1080 for presentations)? Use our{' '}
+          <a href="/image/image-resizer/">Image Resizer</a> to set precise width and height.
+        </p>
+
+        <h3>Convert back to PDF</h3>
+        <p>
+          Need to go the other direction — combine JPGs into a PDF? Use our <a href="/pdf/image-to-pdf/">Image to PDF</a> tool. Common
+          workflow: convert PDF to JPG → annotate/edit in an image editor → convert back to PDF.
+        </p>
+
+        <h3>The complete workflow</h3>
+        <ol class="pdf-steps">
+          <li><strong>Extract pages you need:</strong> <a href="/pdf/split-pdf/">Split PDF</a> to get specific pages</li>
+          <li><strong>Convert to images:</strong> PDF to JPG (this tool)</li>
+          <li><strong>Compress:</strong> <a href="/image/image-compressor/">Image Compressor</a> to reduce file size</li>
+          <li><strong>Share:</strong> Upload, email, or post your optimized images</li>
+        </ol>
+      </section>
+
+      <section class="pdf-edu-block">
         <h2 id="large-pdfs">Large PDFs and performance</h2>
         <p>
           Multi-hundred-page PDFs or files over about <strong>50 MB</strong> can stress CPU and RAM. The tool warns before
@@ -305,12 +525,16 @@ const jsonLd = {
         <li><a href="/pdf/split-pdf/">Split PDF</a></li>
         <li><a href="/pdf/unlock-pdf/">Unlock PDF</a></li>
         <li><a href="/pdf/merge-pdf/">Merge PDF</a></li>
+        <li><a href="/image/image-compressor/">Image Compressor</a> — Compress converted JPGs before sharing</li>
+        <li><a href="/image/image-resizer/">Image Resizer</a> — Resize converted images to exact dimensions</li>
       </ul>
       <h2 class="section-title section-title-sub">Related guides</h2>
       <ul class="pdf-related-grid pdf-related-guides">
         <li><a href="/blog/how-to-convert-pdf-to-jpg/">How to convert PDF to JPG</a></li>
         <li><a href="/blog/how-to-compress-pdf/">How to compress a PDF</a></li>
         <li><a href="/blog/how-to-split-pdf/">How to split a PDF</a></li>
+        <li><a href="/blog/best-image-format-for-web/">Best Image Format for Websites 2026</a></li>
+        <li><a href="/blog/how-to-merge-pdf/">How to Merge PDF Files</a></li>
       </ul>
     </div>
   </section>
@@ -320,62 +544,106 @@ const jsonLd = {
       <h2 class="section-title">Frequently Asked Questions</h2>
       <div class="faq-list">
         <div class="faq-item">
-          <h4>Is PDF to JPG free and unlimited?</h4>
-          <p>Yes. Export as many pages as your device can handle with no signup, watermarks, or usage quotas.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Are PDFs uploaded to DoItSwift servers?</h4>
-          <p>No. PDF.js and the canvas run entirely in your browser. Your PDF bytes stay on your device.</p>
-        </div>
-        <div class="faq-item">
-          <h4>What resolution or sharpness do the JPG images have?</h4>
+          <h3>Is PDF to JPG free and unlimited?</h3>
           <p>
-            Each page is rendered to a canvas at 2× the PDF page viewport scale for sharper output. JPEG compression is
-            controlled by the quality preset you choose (Maximum, Balanced, or Small file).
+            Yes. DoItSwift does not charge for this tool or cap how many pages you export in a single session. The only
+            practical limits come from your device’s CPU, RAM, and browser stability when you work with very large documents.
+            There is no signup wall, no payment step, and no premium tier that unlocks more conversions.
           </p>
         </div>
         <div class="faq-item">
-          <h4>Can I convert multiple PDFs at once?</h4>
+          <h3>Are PDFs uploaded to DoItSwift servers?</h3>
           <p>
-            Yes. Drop or select several PDFs; the tool processes each file in order and exports every page. You can download
-            JPGs individually or all at once as a ZIP archive.
+            No. PDF.js runs in your browser tab, and each page is drawn to a local HTML canvas before being encoded as a JPEG on
+            your machine. Your PDF bytes are not sent to DoItSwift for storage or scanning. That local-only model matters for
+            confidential contracts, medical paperwork, and financial statements you would not want on a third-party server.
           </p>
         </div>
         <div class="faq-item">
-          <h4>How are output JPG files named?</h4>
+          <h3>What resolution or sharpness do the JPG images have?</h3>
           <p>
-            Files use the original PDF filename stem plus <code>-page-</code> and the page number, for example
-            <code>report-page-1.jpg</code>. Multiple PDFs keep separate stems so batches stay organized.
+            Each page is rasterized at 2× the PDF page viewport scale so edges and small text stay sharper than typical
+            single-scale exports. After rendering, JPEG compression is applied according to your preset: Maximum, Balanced, or
+            Small file. The preset changes file size and visible compression artifacts, not the base pixel dimensions produced by
+            the 2× render.
           </p>
         </div>
         <div class="faq-item">
-          <h4>Can I get PNG instead of JPG?</h4>
+          <h3>Can I convert multiple PDFs at once?</h3>
           <p>
-            This tool outputs JPEG for smaller files. If you need lossless PNG, export JPG here and convert with an image
-            tool, or use a workflow that rasterizes to PNG elsewhere.
+            Yes. Drop or select several PDFs and the tool processes each file in order, exporting every page from every document.
+            You can download JPGs one at a time from the results list or use Download All as ZIP to fetch everything in one
+            archive. Filenames keep each PDF stem plus <code>-page-N</code> so batches stay organized and easy to sort.
           </p>
         </div>
         <div class="faq-item">
-          <h4>Do password-protected PDFs work?</h4>
+          <h3>How are output JPG files named?</h3>
           <p>
-            Encrypted PDFs must be unlocked before conversion. Use{' '}
-            <a href="/pdf/unlock-pdf/">Unlock PDF</a> with the correct password, then convert the unlocked file to JPG.
+            Names follow the pattern: original PDF filename stem, then <code>-page-</code>, then the 1-based page number, for
+            example <code>report-page-1.jpg</code>. If you convert several PDFs in one session, each document keeps its own stem
+            so names do not collide inside the ZIP. You can batch-rename files afterward in your file manager if your workflow
+            needs a different naming pattern.
           </p>
         </div>
         <div class="faq-item">
-          <h4>Does PDF to JPG work on mobile?</h4>
-          <p>Yes for moderate file sizes. Very large PDFs or hundreds of pages may exhaust memory on phones or older tablets.</p>
-        </div>
-        <div class="faq-item">
-          <h4>What about very large PDFs?</h4>
+          <h3>Can I get PNG instead of JPG?</h3>
           <p>
-            The tool asks for confirmation when a single PDF is over 50 MB. Huge documents or many pages use significant CPU
-            and RAM; keep the tab active until export finishes.
+            This tool outputs JPEG only, which keeps file sizes smaller for photos, scans, and typical document pages. If you need
+            lossless PNG for graphics with flat colors and hard edges, use a separate image converter after export or a workflow
+            that rasterizes directly to PNG. JPEG is usually the better default for slides, scans, and web uploads where smaller
+            files matter most.
           </p>
         </div>
         <div class="faq-item">
-          <h4>Is there a monthly limit or account required?</h4>
-          <p>No accounts, no quotas, and no premium tier.</p>
+          <h3>Do password-protected PDFs work?</h3>
+          <p>
+            Encrypted PDFs cannot be rendered until they are unlocked with the correct password. Use{' '}
+            <a href="/pdf/unlock-pdf/">Unlock PDF</a> in your browser, save the unlocked copy locally, then convert that file to
+            JPG here. Unlocking follows the same privacy model as this converter: processing stays in your tab and files are not
+            uploaded to DoItSwift servers.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Does PDF to JPG work on mobile?</h3>
+          <p>
+            Yes for typical documents and moderate page counts on modern phones and tablets. Very large PDFs or hundreds of pages
+            can exhaust device memory or make the browser tab sluggish because rendering runs entirely on your device. If export
+            fails on mobile, try splitting the PDF first or switch to a desktop browser for especially heavy jobs.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>What about very large PDFs?</h3>
+          <p>
+            When a single PDF exceeds about 50 MB, the tool asks you to confirm before processing so you are not surprised by wait
+            time or memory use. Huge documents stress CPU and RAM; keep the tab in the foreground until every page finishes
+            exporting. Splitting a very long file with <a href="/pdf/split-pdf/">Split PDF</a> first often improves reliability on
+            low-memory machines.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Is there a monthly limit or account required?</h3>
+          <p>
+            No accounts are required and there are no monthly quotas or free-tier resets. You can open the tool whenever you need
+            it without signing in. The only real constraints are your hardware performance and normal browser limits for extremely
+            large files.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>How do I convert just one page of a PDF to JPG?</h3>
+          <p>
+            Two approaches: (1) Convert the entire PDF, then download only the page you need from the results list. (2) First
+            extract the specific page using our <a href="/pdf/split-pdf/">Split PDF</a> tool, then convert the single-page PDF
+            here. Method 2 is faster for large PDFs because it avoids rendering pages you don't need.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>What resolution are the output images?</h3>
+          <p>
+            Pages are rendered at 2× the PDF viewport scale. For a standard A4 page, this produces approximately 1,654 × 2,339
+            pixels — equivalent to roughly 200 DPI. This is sharp enough for screen viewing, presentations, and most web uses.
+            For professional printing (300 DPI+), the output may need to be upscaled or you should use Adobe Acrobat's desktop
+            application with explicit DPI control.
+          </p>
         </div>
       </div>
     </div>
@@ -777,6 +1045,15 @@ const jsonLd = {
       margin: 0 0 1rem;
       color: var(--text);
     }
+    .pdf-edu h3 {
+      font-size: 1.05rem;
+      line-height: 1.35;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--text);
+    }
+    .pdf-edu h2 + h3 {
+      margin-top: 0.5rem;
+    }
     .pdf-edu p {
       font-size: 16px;
       line-height: 1.75;
@@ -843,6 +1120,12 @@ const jsonLd = {
     .pdf-compare-table tbody tr:last-child td {
       border-bottom: none;
     }
+    .pdf-compare-table--wide {
+      min-width: 640px;
+    }
+    .pdf-compare-table--competitors {
+      min-width: 720px;
+    }
 
     .pdf-related {
       padding: 8px 0 48px;
@@ -907,7 +1190,7 @@ const jsonLd = {
       margin-bottom: 12px;
       box-shadow: var(--shadow-sm);
     }
-    .faq-item h4 {
+    .faq-item h3 {
       font-size: 16px;
       margin-bottom: 6px;
     }

@@ -1,58 +1,159 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+
+const schemaSoftwareApplication = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Image Resizer',
+  applicationCategory: 'MultimediaApplication',
+  operatingSystem: 'Web Browser',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  description:
+    'Free online image resizer. Resize JPG, PNG, and WebP to exact pixel dimensions with aspect ratio lock. Batch resize, quality presets, ZIP download. Browser-based, images never uploaded.',
+  url: 'https://doitswift.com/image/image-resizer/',
+};
+
+const schemaFaqPage = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Is this image resizer free and unlimited?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Resize as many images as you want with no signup, watermarks, or subscription. Each batch uses the same width, height, aspect lock, and JPEG quality you set. Processing runs entirely in your browser, so there are no server-side usage caps or paid tiers.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Are my images uploaded to your servers?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. Files never leave your device. Decoding, canvas scaling, and JPEG encoding happen locally with the HTML5 Canvas API. DoItSwift cannot view, log, or retain your images. That matters for client work, family photos, and any sensitive screenshots.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What does maintain aspect ratio and fit inside width × height mean?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'When Maintain aspect ratio is enabled, each image scales uniformly to fit inside your target width and height without cropping or stretching. Output dimensions are often smaller than the box so the full image stays visible. Images larger than the box shrink down; smaller images are not upscaled past their original pixels, which avoids blurry enlargement.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What if I turn off maintain aspect ratio?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Each image is stretched or squeezed to exactly the width and height you entered, even if that changes proportions. Use this when you need a precise pixel canvas and accept possible distortion. For photos of people or products, keeping aspect ratio on is usually safer.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Why is the download a JPG file?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Exports use JPEG for universal compatibility and sensible file size after resizing. Download names end with -resized.jpg. Open Change settings to pick Maximum, Balanced, or Small file JPEG quality. If you need PNG or WebP output, use a different workflow after resizing.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What happens to PNG or WebP transparency?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'JPEG cannot store an alpha channel. Transparent pixels are flattened onto a white background before export, similar to many social and print pipelines. If you must keep transparency, resize in an editor that exports PNG instead of using JPEG export here.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does it work on mobile phones and tablets?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes on modern mobile browsers that support Canvas. Pick images from your gallery or files app the same way as desktop. Very large originals or huge target dimensions may be slow or hit RAM limits; reduce output size or process fewer files at once if the tab becomes sluggish.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What are the width and height limits?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'You can enter dimensions from 1 up to 16384 pixels per side. Extremely large canvases can exhaust browser memory or take a long time to encode. If export fails, try smaller targets, fewer simultaneous images, or close other heavy tabs before retrying.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I resize many photos at once?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Drag or select multiple JPG, PNG, or WebP files; each is resized with the same settings. Download files one by one from the list or use Download All as ZIP for the full batch. There is no artificial limit on how many files you queue beyond device performance.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is there a monthly limit or account required?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No accounts, no monthly quotas, and no premium tier. Open the tool whenever you need it without signing in. The only practical limits are your hardware and browser stability for very large images.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do I resize an image to a specific file size (e.g., under 100 KB)?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'This resizer controls pixel dimensions, not byte size directly. Resize to reasonable display dimensions first because fewer pixels usually mean smaller files. Then use the DoItSwift Image Compressor and adjust JPEG quality until the file meets your portal limit. Combining resize plus compression is the standard way to hit strict KB caps.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What size should I resize images for Instagram / Facebook / LinkedIn?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Common targets include Instagram square 1080 by 1080, Instagram story 1080 by 1920, Facebook post 1200 by 630, LinkedIn post 1200 by 627, Twitter or X post 1600 by 900, and YouTube thumbnail 1280 by 720. Enter those numbers in the width and height fields. Use Maintain aspect ratio off only when you need exact platform boxes; otherwise keep it on to avoid unintended stretching. Always confirm current official specs because platforms change crop rules over time.',
+      },
+    },
+  ],
+};
+
+const schemaBreadcrumbList = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: 'Image Tools', item: new URL('/image/', Astro.site).href },
+    { '@type': 'ListItem', position: 3, name: 'Image Resizer', item: canonical },
+  ],
+};
 ---
 
 <MainLayout
-  title="Free Image Resizer Online — JPG, PNG & WebP | Pixel Width, Height & Aspect Ratio | DoItSwift"
-  description="Resize JPG, PNG, and WebP images in your browser — set width and height, lock aspect ratio to fit without stretching, or stretch to exact pixels. JPEG export with quality presets, batch ZIP, no uploads. Private and unlimited."
-  keywords="image resizer, resize image online, resize photo, change image dimensions, resize jpg, resize png, resize webp, batch resize images, aspect ratio resize, fit image to width height, pixel dimensions, free image resizer, private photo resizer"
-  canonical={new URL(Astro.url.pathname, Astro.site).toString()}
+  title="Resize Images Online Free — Exact Pixels, Batch, No Upload | DoItSwift"
+  description="Free online image resizer. Resize JPG, PNG, and WebP to exact pixel dimensions with aspect ratio lock. Batch resize, 3 quality presets, ZIP download. 100% browser-based — your images are never uploaded. No signup, no watermarks."
+  keywords="resize image, image resizer, resize image online, resize photo, resize image to specific size, resize image pixels, image resizer online free, resize jpg, resize png, reduce image dimensions"
+  canonical={canonical}
 >
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "DoItSwift Image Resizer",
-    "description": "Free browser-based image resizer for JPG, PNG, and WebP. Set target dimensions, optional aspect ratio lock, JPEG quality presets, batch download as ZIP. Files are processed locally with no upload.",
-    "url": "https://doitswift.com/image/image-resizer/",
-    "applicationCategory": "MultimediaApplication",
-    "operatingSystem": "Web browser",
-    "browserRequirements": "Requires HTML5 Canvas and JavaScript",
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "featureList": [
-      "Resize JPG, PNG, and WebP to target width and height",
-      "Maintain aspect ratio — fit inside dimensions without stretching",
-      "Optional exact width × height (may stretch image)",
-      "JPEG export with maximum, balanced, or small-file quality",
-      "Batch processing and ZIP download",
-      "100% client-side — files never leave your device"
-    ]
-  })} />
-
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      { "@type": "Question", "name": "Is this image resizer free and unlimited?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Resize as many images as you want with no signup, watermarks, or fees. Processing runs in your browser." }},
-      { "@type": "Question", "name": "Are my images uploaded to your servers?", "acceptedAnswer": { "@type": "Answer", "text": "No. Files never leave your device. Resizing uses the HTML5 Canvas API locally — we cannot see or store your photos." }},
-      { "@type": "Question", "name": "What does “maintain aspect ratio” and fit inside width × height mean?", "acceptedAnswer": { "@type": "Answer", "text": "When enabled, each image scales uniformly to fit inside your target box without cropping or stretching. The output dimensions may be smaller than the box so the whole image remains visible. Images larger than the box are scaled down; smaller images are not enlarged." }},
-      { "@type": "Question", "name": "What if I turn off maintain aspect ratio?", "acceptedAnswer": { "@type": "Answer", "text": "Each image is stretched or squeezed to exactly the width and height you entered. Use this only when you want a precise pixel box and accept possible distortion." }},
-      { "@type": "Question", "name": "Why is the download a JPG file?", "acceptedAnswer": { "@type": "Answer", "text": "Exports use JPEG for broad compatibility and reasonable file size after resizing. Filenames end with -resized.jpg. Use Advanced options to change JPEG quality." }},
-      { "@type": "Question", "name": "What happens to PNG or WebP transparency?", "acceptedAnswer": { "@type": "Answer", "text": "JPEG does not support transparency. Transparent areas are composited on a white background before export." }},
-      { "@type": "Question", "name": "Does it work on mobile phones and tablets?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, on modern mobile browsers that support Canvas. Very large images may be slower or hit device memory limits." }},
-      { "@type": "Question", "name": "What are the width and height limits?", "acceptedAnswer": { "@type": "Answer", "text": "You can enter dimensions from 1 up to 16384 pixels. Extremely large outputs may fail if the browser runs out of memory — try smaller targets if that happens." }},
-      { "@type": "Question", "name": "Can I resize many photos at once?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Select or drag multiple files; each is processed with the same settings. Download individually or as one ZIP archive." }},
-      { "@type": "Question", "name": "Is there a monthly limit or account required?", "acceptedAnswer": { "@type": "Answer", "text": "No accounts, no quotas, and no premium tier. Use the tool as often as you need." }}
-    ]
-  })} />
+  <script type="application/ld+json" set:html={JSON.stringify(schemaSoftwareApplication)} />
+  <script type="application/ld+json" set:html={JSON.stringify(schemaFaqPage)} />
+  <script type="application/ld+json" set:html={JSON.stringify(schemaBreadcrumbList)} />
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" is:inline></script>
 
   <section class="hero">
     <div class="container">
       <div class="badge">🔒 100% Private — Files Never Leave Your Device</div>
-      <h1>Image Resizer</h1>
+      <h1>Resize Images Online Free — Exact Pixels, No Upload</h1>
       <p class="subtitle">
-        Resize JPG, PNG, or WebP to exact pixels — lock aspect ratio to fit inside your box without stretching, or fill width × height exactly. JPEG export, quality presets, batch ZIP. 100% private.
+        Resize JPG, PNG, and WebP images to exact pixel dimensions — set width and height, lock aspect ratio to prevent distortion,
+        and export as JPEG at your chosen quality. Batch resize unlimited images and download individually or as ZIP. Unlike most
+        image resizers, your files are never uploaded to any server — all processing runs locally in your browser using the Canvas
+        API. No signup, no watermarks, no file limits.
+      </p>
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+        Uses the HTML5 Canvas API for browser-based image scaling. Anti-upscale protection prevents blurry enlargement. No server
+        uploads, no data retention. Last updated: April 2026.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> Unlimited files</span>
@@ -165,9 +266,56 @@ import MainLayout from '../../layouts/MainLayout.astro';
       </section>
 
       <section class="resize-edu-block">
+        <h2 id="resize-vs-compress">Resize vs Compress: What's the Difference?</h2>
+        <p>These are two different operations that people often confuse:</p>
+        <div class="resize-table-wrap">
+          <table class="resize-compare-table resize-compare-table--wide">
+            <caption class="sr-only">Resize versus compress</caption>
+            <thead>
+              <tr>
+                <th scope="col">Operation</th>
+                <th scope="col">What changes</th>
+                <th scope="col">What stays the same</th>
+                <th scope="col">Tool</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Resize</strong></td>
+                <td>Pixel dimensions (width × height)</td>
+                <td>Compression level (quality)</td>
+                <td>This tool (Image Resizer)</td>
+              </tr>
+              <tr>
+                <td><strong>Compress</strong></td>
+                <td>JPEG quality / compression level</td>
+                <td>Pixel dimensions unchanged</td>
+                <td><a href="/image/image-compressor/">Image Compressor</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>The optimal workflow: resize first, then compress</h3>
+        <p>For maximum file size reduction, do both in sequence:</p>
+        <ol class="resize-steps">
+          <li>
+            <strong>Resize</strong> to your target display dimensions (don't serve 4000 px images in 800 px containers — this removes
+            unnecessary pixels)
+          </li>
+          <li><strong>Compress</strong> at 75-85% quality (this reduces data within those pixels)</li>
+        </ol>
+        <p>
+          A 4000×3000 smartphone photo (4-6 MB) resized to 1200×900, then compressed to 80% quality, typically becomes 80-150 KB — a{' '}
+          <strong>95%+ reduction</strong> from the original. This single workflow handles 90% of image optimization needs for websites.
+        </p>
+      </section>
+
+      <section class="resize-edu-block">
         <h2 id="jpeg-quality-output">JPEG quality and why downloads are .jpg</h2>
         <p>
-          Exports are <strong>JPEG</strong> for universal compatibility and sensible size after resize. Open <strong>Advanced options</strong> to pick <strong>Maximum (100%)</strong>, <strong>Balanced (85%)</strong>, or <strong>Small file (70%)</strong>. Downloads use names like <code>filename-resized.jpg</code>.
+          Exports are <strong>JPEG</strong> for universal compatibility and sensible size after resize. Click <strong>Change settings</strong> to pick{' '}
+          <strong>Maximum (100%)</strong>, <strong>Balanced (85%)</strong>, or <strong>Small file (70%)</strong>. Downloads use names like <code>filename-resized.jpg</code>.
         </p>
         <p>
           <strong>PNG and WebP with transparency:</strong> JPEG cannot store an alpha channel — transparent areas are composited on a <strong>white</strong> background, same idea as our <a href="/image/image-compressor/">compressor</a> and WebP converter.
@@ -175,26 +323,220 @@ import MainLayout from '../../layouts/MainLayout.astro';
       </section>
 
       <section class="resize-edu-block">
-        <h2 id="common-image-sizes">Common target sizes (reference — check each platform’s current specs)</h2>
+        <h2 id="platform-image-sizes">Image Sizes for Every Platform (2026 Reference)</h2>
+        <p>
+          Use these dimensions when resizing images for social media, websites, or print. Enter the width and height from this
+          table into the resizer above.
+        </p>
+
+        <h3>Social media image sizes</h3>
         <div class="resize-table-wrap">
           <table class="resize-compare-table">
-            <caption class="sr-only">Typical image dimension ranges by use case</caption>
+            <caption class="sr-only">Social media image dimensions</caption>
             <thead>
               <tr>
+                <th scope="col">Platform</th>
                 <th scope="col">Use case</th>
-                <th scope="col">Typical width / notes</th>
+                <th scope="col">Recommended size (px)</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td>Blog / article inline images</td><td>Often 600–1200 px wide</td></tr>
-              <tr><td>Full-width web banners</td><td>Often 1200–1920 px wide (depends on theme)</td></tr>
-              <tr><td>Thumbnail / gallery</td><td>Often 150–400 px on the long edge</td></tr>
-              <tr><td>Email-friendly attachments</td><td>Many clients render well under ~1200 px wide</td></tr>
+              <tr><td>Instagram</td><td>Square post</td><td>1080 × 1080</td></tr>
+              <tr><td>Instagram</td><td>Portrait post</td><td>1080 × 1350</td></tr>
+              <tr><td>Instagram</td><td>Story / Reel</td><td>1080 × 1920</td></tr>
+              <tr><td>Instagram</td><td>Profile photo</td><td>320 × 320</td></tr>
+              <tr><td>Facebook</td><td>Post image</td><td>1200 × 630</td></tr>
+              <tr><td>Facebook</td><td>Cover photo</td><td>820 × 312</td></tr>
+              <tr><td>Facebook</td><td>Profile photo</td><td>170 × 170</td></tr>
+              <tr><td>Twitter / X</td><td>Post image</td><td>1600 × 900</td></tr>
+              <tr><td>Twitter / X</td><td>Header</td><td>1500 × 500</td></tr>
+              <tr><td>Twitter / X</td><td>Profile photo</td><td>400 × 400</td></tr>
+              <tr><td>LinkedIn</td><td>Post image</td><td>1200 × 627</td></tr>
+              <tr><td>LinkedIn</td><td>Cover image</td><td>1584 × 396</td></tr>
+              <tr><td>LinkedIn</td><td>Profile photo</td><td>400 × 400</td></tr>
+              <tr><td>YouTube</td><td>Thumbnail</td><td>1280 × 720</td></tr>
+              <tr><td>YouTube</td><td>Channel banner</td><td>2560 × 1440</td></tr>
+              <tr><td>Pinterest</td><td>Pin</td><td>1000 × 1500</td></tr>
+              <tr><td>TikTok</td><td>Video cover</td><td>1080 × 1920</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Website image sizes</h3>
+        <div class="resize-table-wrap">
+          <table class="resize-compare-table">
+            <caption class="sr-only">Website image dimensions</caption>
+            <thead>
+              <tr>
+                <th scope="col">Use case</th>
+                <th scope="col">Recommended width</th>
+                <th scope="col">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Hero / banner image</td><td>1920 px wide</td><td>Full-width on most screens, crop height to design</td></tr>
+              <tr><td>Blog post image</td><td>800-1200 px wide</td><td>Matches most content widths</td></tr>
+              <tr><td>Thumbnail / card</td><td>300-400 px wide</td><td>Grid layouts, galleries</td></tr>
+              <tr><td>Product photo (e-commerce)</td><td>1000-2000 px (square)</td><td>Zoom functionality needs high resolution</td></tr>
+              <tr>
+                <td>Favicon source</td>
+                <td>512 × 512 px</td>
+                <td>Use our <a href="/image/favicon-generator/">Favicon Generator</a> after resizing</td>
+              </tr>
+              <tr><td>Email header</td><td>600 px wide</td><td>Most email clients max at 600 px content width</td></tr>
+              <tr><td>OG / social share image</td><td>1200 × 630 px</td><td>Standard across Facebook, LinkedIn, Slack, Discord</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Document and upload sizes</h3>
+        <div class="resize-table-wrap">
+          <table class="resize-compare-table">
+            <caption class="sr-only">Document and upload image sizes</caption>
+            <thead>
+              <tr>
+                <th scope="col">Use case</th>
+                <th scope="col">Common requirement</th>
+                <th scope="col">Tip</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Passport / visa photo</td>
+                <td>600 × 600 px (varies by country)</td>
+                <td>Check your country's exact spec — US is 2×2 inches at 300 DPI</td>
+              </tr>
+              <tr>
+                <td>Government portal upload</td>
+                <td>Max 200 KB, 200-500 px</td>
+                <td>Resize, then <a href="/image/image-compressor/">compress</a> to meet file size limit</td>
+              </tr>
+              <tr><td>Resume headshot</td><td>300 × 400 px</td><td>Portrait orientation, professional look</td></tr>
+              <tr><td>ID card photo</td><td>Varies — often 150-350 px</td><td>Check portal requirements before resizing</td></tr>
             </tbody>
           </table>
         </div>
         <p>
-          Always verify dimensions for your CMS, ad platform, or social network — requirements change. For choosing between WebP, AVIF, and JPG on sites, read <a href="/blog/best-image-format-for-web/">best image format for websites</a>.
+          <strong>Note:</strong> Platform specs change periodically — always verify with the latest official guidelines. These dimensions are
+          accurate as of April 2026.
+        </p>
+        <p>
+          For choosing between WebP, AVIF, and JPG on sites, read <a href="/blog/best-image-format-for-web/">best image format for websites</a>.
+        </p>
+      </section>
+
+      <section class="resize-edu-block">
+        <h2 id="browser-resize">How Browser-Based Image Resizing Works</h2>
+        <p>
+          Most online image resizers (Canva, Adobe Express, Pixlr, BeFunky) upload your images to cloud servers for processing.
+          Your photos travel across the internet and are processed on remote infrastructure.
+        </p>
+        <p>DoItSwift resizes images entirely in your browser:</p>
+        <ol class="resize-steps">
+          <li><strong>File read:</strong> Your browser reads the image using the FileReader API — no network request</li>
+          <li><strong>Decode:</strong> The image is decoded to pixel data in memory</li>
+          <li>
+            <strong>Canvas resize:</strong> A new HTML Canvas element is created at your target dimensions. The image is drawn onto this canvas,
+            which performs the pixel interpolation (scaling)
+          </li>
+          <li><strong>Re-encode:</strong> The canvas exports the resized image as JPEG at your selected quality</li>
+          <li><strong>Download:</strong> The resized file is offered for download — no server involved at any point</li>
+        </ol>
+        <p>
+          <strong>Privacy proof:</strong> Disconnect your internet, then try resizing an image. It works — because no server communication is
+          needed.
+        </p>
+      </section>
+
+      <section class="resize-edu-block">
+        <h2 id="doitswift-vs-competitors">DoItSwift vs Other Image Resizers</h2>
+        <div class="resize-table-wrap">
+          <table class="resize-compare-table resize-compare-table--competitors">
+            <caption class="sr-only">DoItSwift compared to other image resizers</caption>
+            <thead>
+              <tr>
+                <th scope="col">Feature</th>
+                <th scope="col">DoItSwift</th>
+                <th scope="col">Canva Resize</th>
+                <th scope="col">Adobe Express</th>
+                <th scope="col">Simple Image Resizer</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Images stay on device</td>
+                <td><strong>Yes — never uploaded</strong></td>
+                <td>No — cloud processed</td>
+                <td>No — cloud processed</td>
+                <td>No — server processed</td>
+              </tr>
+              <tr>
+                <td>Exact pixel control</td>
+                <td><strong>Yes — W×H input</strong></td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Aspect ratio lock</td>
+                <td><strong>Yes</strong></td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Quality presets</td>
+                <td><strong>3 presets</strong></td>
+                <td>No control</td>
+                <td>Limited</td>
+                <td>Quality slider</td>
+              </tr>
+              <tr>
+                <td>Batch resize</td>
+                <td><strong>Yes — unlimited</strong></td>
+                <td>1 at a time (free)</td>
+                <td>1 at a time</td>
+                <td>1 at a time</td>
+              </tr>
+              <tr>
+                <td>ZIP download</td>
+                <td><strong>Yes</strong></td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td>Signup required</td>
+                <td><strong>No</strong></td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td>Works offline</td>
+                <td><strong>Yes</strong></td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td>Anti-upscale protection</td>
+                <td><strong>Yes — won't enlarge past original</strong></td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <strong>Where DoItSwift wins:</strong> Privacy (no upload), unlimited batch resizing with ZIP download, and anti-upscale protection that
+          prevents accidentally enlarging low-resolution images. Canva and Adobe Express are powerful design tools but require accounts
+          and process images on their servers.
+        </p>
+        <p>
+          <strong>Where others win:</strong> Canva and Adobe Express offer cropping, filters, text overlays, and design templates alongside resizing.
+          If you need pure resizing without editing features, DoItSwift is faster, more private, and handles batches better.
         </p>
       </section>
 
@@ -228,16 +570,103 @@ import MainLayout from '../../layouts/MainLayout.astro';
     <div class="container">
       <h2 class="section-title">Frequently Asked Questions</h2>
       <div class="faq-list">
-        <div class="faq-item"><h4>Is this image resizer free and unlimited?</h4><p>Yes. Resize as many images as you want with no signup, watermarks, or fees. Processing runs in your browser.</p></div>
-        <div class="faq-item"><h4>Are my images uploaded to your servers?</h4><p>No. Files never leave your device. Resizing uses the HTML5 Canvas API locally — we cannot see or store your photos.</p></div>
-        <div class="faq-item"><h4>What does “maintain aspect ratio” and fit inside width × height mean?</h4><p>When enabled, each image scales uniformly to fit inside your target box without cropping or stretching. The output dimensions may be smaller than the box so the whole image stays visible. Images larger than the box are scaled down; smaller images are not enlarged.</p></div>
-        <div class="faq-item"><h4>What if I turn off maintain aspect ratio?</h4><p>Each image is stretched or squeezed to exactly the width and height you entered. Use this only when you want a precise pixel box and accept possible distortion.</p></div>
-        <div class="faq-item"><h4>Why is the download a JPG file?</h4><p>Exports use JPEG for broad compatibility and reasonable file size after resizing. Filenames end with -resized.jpg. Use Advanced options to change JPEG quality.</p></div>
-        <div class="faq-item"><h4>What happens to PNG or WebP transparency?</h4><p>JPEG does not support transparency. Transparent areas are composited on a white background before export.</p></div>
-        <div class="faq-item"><h4>Does it work on mobile phones and tablets?</h4><p>Yes, on modern mobile browsers that support Canvas. Very large images may be slower or hit device memory limits.</p></div>
-        <div class="faq-item"><h4>What are the width and height limits?</h4><p>You can enter dimensions from 1 up to 16384 pixels. Extremely large outputs may fail if the browser runs out of memory — try smaller targets if that happens.</p></div>
-        <div class="faq-item"><h4>Can I resize many photos at once?</h4><p>Yes. Select or drag multiple files; each is processed with the same settings. Download individually or as one ZIP archive.</p></div>
-        <div class="faq-item"><h4>Is there a monthly limit or account required?</h4><p>No accounts, no quotas, and no premium tier. Use the tool as often as you need.</p></div>
+        <div class="faq-item">
+          <h3>Is this image resizer free and unlimited?</h3>
+          <p>
+            Yes. Resize as many images as you want with no signup, watermarks, or subscription. Each batch uses the same width,
+            height, aspect lock, and JPEG quality you set. Processing runs entirely in your browser, so there are no server-side
+            usage caps or paid tiers.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Are my images uploaded to your servers?</h3>
+          <p>
+            No. Files never leave your device. Decoding, canvas scaling, and JPEG encoding happen locally with the HTML5 Canvas
+            API. DoItSwift cannot view, log, or retain your images. That matters for client work, family photos, and any sensitive
+            screenshots.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>What does &quot;maintain aspect ratio&quot; and fit inside width × height mean?</h3>
+          <p>
+            When Maintain aspect ratio is enabled, each image scales uniformly to fit inside your target width and height without
+            cropping or stretching. Output dimensions are often smaller than the box so the full image stays visible. Images larger
+            than the box shrink down; smaller images are not upscaled past their original pixels, which avoids blurry enlargement.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>What if I turn off maintain aspect ratio?</h3>
+          <p>
+            Each image is stretched or squeezed to exactly the width and height you entered, even if that changes proportions. Use
+            this when you need a precise pixel canvas and accept possible distortion. For photos of people or products, keeping
+            aspect ratio on is usually safer.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Why is the download a JPG file?</h3>
+          <p>
+            Exports use JPEG for universal compatibility and sensible file size after resizing. Download names end with{' '}
+            <code>-resized.jpg</code>. Click <strong>Change settings</strong> to pick Maximum, Balanced, or Small file JPEG quality. If you need PNG or
+            WebP output, use a different workflow after resizing.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>What happens to PNG or WebP transparency?</h3>
+          <p>
+            JPEG cannot store an alpha channel. Transparent pixels are flattened onto a white background before export, similar to
+            many social and print pipelines. If you must keep transparency, resize in an editor that exports PNG instead of using
+            JPEG export here.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Does it work on mobile phones and tablets?</h3>
+          <p>
+            Yes on modern mobile browsers that support Canvas. Pick images from your gallery or files app the same way as desktop.
+            Very large originals or huge target dimensions may be slow or hit RAM limits; reduce output size or process fewer files
+            at once if the tab becomes sluggish.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>What are the width and height limits?</h3>
+          <p>
+            You can enter dimensions from 1 up to 16384 pixels per side. Extremely large canvases can exhaust browser memory or take
+            a long time to encode. If export fails, try smaller targets, fewer simultaneous images, or close other heavy tabs before
+            retrying.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Can I resize many photos at once?</h3>
+          <p>
+            Yes. Drag or select multiple JPG, PNG, or WebP files; each is resized with the same settings. Download files one by one
+            from the list or use Download All as ZIP for the full batch. There is no artificial limit on how many files you queue
+            beyond device performance.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Is there a monthly limit or account required?</h3>
+          <p>
+            No accounts, no monthly quotas, and no premium tier. Open the tool whenever you need it without signing in. The only
+            practical limits are your hardware and browser stability for very large images.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>How do I resize an image to a specific file size (e.g., under 100 KB)?</h3>
+          <p>
+            This resizer controls pixel dimensions, not file size directly. To hit a specific file size target: first resize to
+            appropriate dimensions (smaller images = smaller files), then use our <a href="/image/image-compressor/">Image Compressor</a> with the
+            quality slider to fine-tune the file size. For example, a 1200×800 image at 75% quality typically lands around 100-200
+            KB. Reducing to 800×600 at 70% quality often achieves under 100 KB.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>What size should I resize images for Instagram / Facebook / LinkedIn?</h3>
+          <p>
+            Instagram square: 1080×1080 px. Instagram story: 1080×1920 px. Facebook post: 1200×630 px. LinkedIn post: 1200×627 px.
+            Twitter/X: 1600×900 px. YouTube thumbnail: 1280×720 px. Enter these dimensions in the width and height fields above with
+            &quot;Maintain aspect ratio&quot; unchecked for exact sizing, or checked to fit within those bounds without distortion. See the full
+            reference table above for all platforms.
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -250,12 +679,18 @@ import MainLayout from '../../layouts/MainLayout.astro';
         <li><a href="/image/webp-to-jpg/">WebP to JPG Converter</a></li>
         <li><a href="/image/heic-to-jpg/">HEIC to JPG Converter</a></li>
         <li><a href="/image/avif-to-jpg/">AVIF to JPG Converter</a></li>
+        <li><a href="/image/svg-to-png/">SVG to PNG Converter</a> — Rasterize vectors at specific pixel dimensions</li>
+        <li><a href="/image/favicon-generator/">Favicon Generator</a> — Create favicons from resized images</li>
+        <li><a href="/image/image-to-base64/">Image to Base64</a> — Embed small resized images in HTML</li>
+        <li><a href="/pdf/image-to-pdf/">Image to PDF</a> — Combine resized images into a document</li>
       </ul>
       <h2 class="section-title section-title-sub">Related guides</h2>
       <ul class="resize-related-grid resize-related-guides">
         <li><a href="/blog/best-image-format-for-web/">Best Image Format for Websites (WebP vs AVIF vs JPG)</a></li>
         <li><a href="/blog/heic-vs-jpg/">HEIC vs JPG: Complete Comparison</a></li>
         <li><a href="/blog/convert-iphone-photos-to-jpg/">Convert iPhone Photos to JPG</a></li>
+        <li><a href="/blog/how-to-compress-pdf/">How to Compress PDF Without Losing Quality</a></li>
+        <li><a href="/blog/open-heic-windows-11/">How to Open HEIC on Windows 11</a></li>
       </ul>
     </div>
   </section>
@@ -769,8 +1204,26 @@ import MainLayout from '../../layouts/MainLayout.astro';
       margin-bottom: 12px;
       box-shadow: var(--shadow);
     }
-    .faq-item h4 { font-size: 16px; margin-bottom: 6px; }
-    .faq-item p { font-size: 14px; color: var(--text-muted); }
+    .faq-item h3 { font-size: 16px; margin-bottom: 6px; }
+    .faq-item p { font-size: 14px; color: var(--text-muted); line-height: 1.55; margin: 0; }
+    .faq-item a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .faq-item a:hover {
+      color: var(--blue-dark);
+    }
+    .faq-item code {
+      font-size: 0.92em;
+      padding: 2px 6px;
+      background: var(--gray-100);
+      border-radius: 4px;
+    }
+    [data-theme='dark'] .faq-item code {
+      background: rgba(255, 255, 255, 0.08);
+    }
 
     .sr-only {
       position: absolute;
@@ -801,6 +1254,28 @@ import MainLayout from '../../layouts/MainLayout.astro';
       line-height: 1.3;
       margin: 0 0 1rem;
       color: var(--text);
+    }
+    .resize-edu h3 {
+      font-size: 1.05rem;
+      line-height: 1.35;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--text);
+    }
+    .resize-edu h2 + h3 {
+      margin-top: 0.5rem;
+    }
+    .resize-steps {
+      margin: 0 0 1rem;
+      padding-left: 1.35rem;
+    }
+    .resize-steps li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--text);
+      margin-bottom: 0.85rem;
+    }
+    .resize-steps li:last-child {
+      margin-bottom: 0;
     }
     .resize-edu p {
       font-size: 16px;
@@ -854,6 +1329,12 @@ import MainLayout from '../../layouts/MainLayout.astro';
     }
     .resize-compare-table tbody tr:last-child td {
       border-bottom: none;
+    }
+    .resize-compare-table--wide {
+      min-width: 640px;
+    }
+    .resize-compare-table--competitors {
+      min-width: 900px;
     }
     .resize-audience-list {
       margin: 0;

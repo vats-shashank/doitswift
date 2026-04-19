@@ -3,152 +3,141 @@ import MainLayout from '../../layouts/MainLayout.astro';
 
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 
-const pageDescription =
-  'Split a PDF in your browser: extract every page as its own file, or export one PDF for a page range. PDF.js thumbnails, pdf-lib splitting, optional ZIP. Private — no upload. 50 MB warning on very large files.';
-
-const jsonLd = {
+const schemaSoftwareApplication = {
   '@context': 'https://schema.org',
-  '@graph': [
+  '@type': 'SoftwareApplication',
+  name: 'Split PDF',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web Browser',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  description:
+    'Free PDF splitter. Extract specific pages, page ranges, or every page as separate files. Page thumbnails, ZIP download. Browser-based, files never uploaded.',
+  url: 'https://doitswift.com/pdf/split-pdf/',
+};
+
+const schemaFaqPage = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
     {
-      '@type': 'WebApplication',
-      name: 'DoItSwift Split PDF',
-      url: canonical,
-      applicationCategory: 'UtilitiesApplication',
-      operatingSystem: 'Web browser',
-      browserRequirements: 'Requires JavaScript, pdf-lib, PDF.js for previews, and JSZip for batch ZIP (loaded from CDN)',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-      description:
-        'Split one PDF per session using pdf-lib in the browser. Choose to export each page as a separate PDF or a single PDF for a contiguous page range. Thumbnail previews via PDF.js. Optional ZIP of per-page PDFs. No server upload.',
-      featureList: [
-        'Single input PDF per session — page-focused splitting with clear numbering',
-        'Mode: every page as its own PDF, or one PDF for a start–end page range (inclusive)',
-        'Thumbnail strip previews up to 48 pages; all pages remain exportable when the document is longer',
-        'Page numbers are 1-based in the UI and range fields',
-        'Output names: Filename-page-N.pdf per page, or Filename-pages-X-Y.pdf for range; ZIP named Filename-split-pages.zip for per-page export',
-        'Optional confirmation when the source PDF exceeds about 50 MB',
-        'Client-side processing with pdf-lib — PDF bytes are not uploaded to DoItSwift',
-        'Password-protected PDFs may fail unless unlocked first',
-      ],
+      '@type': 'Question',
+      name: 'Is Split PDF free and unlimited?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. You can split as many documents as you need with no signup, watermarks, or usage quotas. Each session uses one source PDF at a time so page numbers and thumbnails stay unambiguous. There is no paid tier or daily cap — the only limits are your device performance and browser memory for very large files.',
+      },
     },
     {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'Is Split PDF free and unlimited?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes. Split as many documents as you need with no signup, watermarks, or usage quotas. Each run uses one source PDF at a time.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Are my PDFs uploaded to DoItSwift servers?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'No. PDF.js renders thumbnails and pdf-lib performs the split in your browser tab only.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Why can I only load one PDF at a time?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Splitting is page-focused; multiple sources would confuse numbering. Combine files first with Merge PDF if you need one document to split.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Are page numbers 1-based?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes — the first page is 1, matching the labels on thumbnails and the range inputs.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'What is the difference between each page and range mode?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Each page mode creates one PDF per page and can download all as a ZIP. Range mode creates a single PDF containing only pages from the start through end numbers you enter, inclusive.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Do password-protected or encrypted PDFs work?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'They may fail to load. Unlock with the correct password using DoItSwift Unlock PDF, then split the unlocked file.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'What about very large PDFs?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'The tool warns above about 50 MB. Huge files may take time or stress memory — close other tabs and wait for processing to finish.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Why do I only see 48 thumbnails?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Previews show the first 48 pages for performance. All pages can still be split or included in range export when the PDF has more than 48 pages.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'What are the output filenames?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Per-page exports use the original name stem plus -page- and the page number. Range export uses the stem plus -pages- and the start and end numbers. Per-page mode can also download a ZIP named with the stem plus -split-pages.zip.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Is there a monthly limit or account required?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'No accounts, no quotas, and no premium tier.',
-          },
-        },
-      ],
+      '@type': 'Question',
+      name: 'Are my PDFs uploaded to DoItSwift servers?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. PDF.js renders thumbnail previews and pdf-lib reads and writes PDF structure entirely inside your browser tab. Your file bytes are not transmitted to DoItSwift for processing or storage. That client-side design is important when splitting contracts, tax documents, or anything you would not want on a third-party server.',
+      },
     },
     {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        {
-          '@type': 'ListItem',
-          position: 1,
-          name: 'Home',
-          item: new URL('/', Astro.site).href,
-        },
-        {
-          '@type': 'ListItem',
-          position: 2,
-          name: 'PDF Tools',
-          item: new URL('/pdf/', Astro.site).href,
-        },
-        {
-          '@type': 'ListItem',
-          position: 3,
-          name: 'Split PDF',
-          item: canonical,
-        },
-      ],
+      '@type': 'Question',
+      name: 'Why can I only load one PDF at a time?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Splitting is page-focused: thumbnails, range inputs, and export naming all assume a single document. Loading several PDFs at once would make it unclear which pages belong to which file. If you need one combined document to split, merge sources first with DoItSwift Merge PDF, then split the merged PDF here.',
+      },
     },
+    {
+      '@type': 'Question',
+      name: 'Are page numbers 1-based?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. The first page of your PDF is page 1, matching the numbers shown on thumbnails and the start/end fields in range mode. That matches how most PDF viewers and print dialogs label pages, so you can trust the same numbers you see elsewhere.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the difference between each page and range mode?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'In each-page mode, the tool creates one separate PDF file for every page and you can download them individually or all at once as a ZIP archive. In range mode, you enter a start and end page and get exactly one new PDF containing that inclusive contiguous slice. Range mode is best for chapters or contiguous sections; each-page mode is best when you need every page as its own attachment.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do password-protected or encrypted PDFs work?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Encrypted PDFs may fail to load or split until they are decrypted with the correct password. Use DoItSwift Unlock PDF in your browser, save the unlocked file locally, then open it in this splitter. Unlocking uses the same local-only model: your password and file contents are not uploaded for server-side unlocking.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What about very large PDFs?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'When a single PDF is over about 50 MB, the tool asks you to confirm before loading because processing can take a long time or use a lot of memory. Close unnecessary tabs and keep this tab active until export finishes. On low-memory devices, splitting after compressing the source or splitting very long files in smaller ranges can help.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Why do I only see 48 thumbnails?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The thumbnail strip renders the first 48 pages only so the page stays responsive on typical laptops and phones. All pages in the document remain available for export: each-page mode still outputs every page, and range mode accepts any valid start and end within the total page count.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What are the output filenames?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Per-page exports use your PDF name stem plus -page- and the page number, for example Report-page-3.pdf. A range export uses the stem plus -pages- and the start and end numbers, for example Report-pages-5-12.pdf. In each-page mode, Download all as ZIP names the archive with your stem plus -split-pages.zip.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is there a monthly limit or account required?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No account is required and there are no monthly quotas or free-tier resets. You can use the splitter whenever you need it without signing in. DoItSwift does not gate basic PDF splitting behind registration.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do I extract specific pages from a PDF?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Choose Extract a range of pages mode, enter the start and end page numbers, and click Export. You get one new PDF containing only that inclusive contiguous range — for example pages 5 through 12 yields an eight-page PDF. For non-contiguous pages such as 1, 5, and 9, export each needed page or range in separate runs, then combine the results with DoItSwift Merge PDF.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do I remove pages from a PDF?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Think of removal as keeping everything except the unwanted pages. For example, to drop pages 4 through 6 from a ten-page PDF, export range 1-3 and range 7-10 as two PDFs, then merge those two files with Merge PDF. The merged document is your new ten-minus-three-page PDF. This split-then-merge pattern works for any combination of pages the tool can express as one or more contiguous ranges.',
+      },
+    },
+  ],
+};
+
+const schemaBreadcrumbList = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: 'PDF Tools', item: new URL('/pdf/', Astro.site).href },
+    { '@type': 'ListItem', position: 3, name: 'Split PDF', item: canonical },
   ],
 };
 ---
 
 <MainLayout
-  title="Split PDF — Extract Pages or Range, Thumbnails, ZIP | DoItSwift"
-  description={pageDescription}
-  keywords="split pdf, extract pdf pages, pdf page range, separate pdf pages, split pdf online free, browser split pdf, pdf.js split, extract pdf zip, one pdf per page, private split pdf, no upload split pdf"
+  title="Split PDF Online Free — Extract Pages or Break Into Parts (No Upload) | DoItSwift"
+  description="Split PDF files for free — extract specific pages, page ranges, or every page as a separate file. Page thumbnails, ZIP download. 100% browser-based — your PDFs are never uploaded. No signup, no watermarks, no limits."
+  keywords="split pdf, split pdf online, pdf splitter, extract pages from pdf, split pdf free, separate pdf pages, remove pages from pdf, pdf page extractor, split pdf into pages, extract pdf pages online"
   canonical={canonical}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(schemaSoftwareApplication)} />
+  <script type="application/ld+json" set:html={JSON.stringify(schemaFaqPage)} />
+  <script type="application/ld+json" set:html={JSON.stringify(schemaBreadcrumbList)} />
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" is:inline></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" is:inline></script>
 
@@ -159,10 +148,16 @@ const jsonLd = {
   <section class="hero">
     <div class="container">
       <div class="badge">🔒 100% Private — Files Never Leave Your Device</div>
-      <h1>Split PDF</h1>
+      <h1>Split PDF Online — Extract Pages or Separate Into Files Free</h1>
       <p class="subtitle">
-        Split one PDF with pdf-lib — <strong>every page as its own file</strong> (ZIP optional) or <strong>one export for a
-        page range</strong>. PDF.js thumbnails (first 48 shown; all pages export). Local only; no upload.
+        Split any PDF into separate pages or extract a specific page range — all in your browser. Choose between two modes:
+        extract every page as its own PDF file, or export a range of pages (e.g., pages 3-10) as one new PDF. See page
+        thumbnails before splitting, download files individually, or get everything in a single ZIP. Your PDF is never
+        uploaded — splitting uses pdf-lib locally on your device. No signup, no watermarks, no limits.
+      </p>
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+        Uses pdf-lib (open-source) for splitting and PDF.js for thumbnails. No server uploads, no file retention. Last updated:
+        April 2026.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> Unlimited</span>
@@ -213,6 +208,33 @@ const jsonLd = {
   <article class="split-edu" aria-label="Guide: splitting PDF files">
     <div class="container split-edu-inner">
       <section class="split-edu-block">
+        <h2 id="how-to-split-pdf">How to Split a PDF (Step by Step)</h2>
+
+        <h3>Step 1: Upload your PDF</h3>
+        <p>
+          Drag and drop your PDF onto the drop zone or click to browse. The tool reads your file locally and displays page
+          thumbnails (up to 48 pages shown for performance — all pages are still available for splitting). Your file is NOT
+          uploaded to any server.
+        </p>
+
+        <h3>Step 2: Choose your split mode</h3>
+        <p>
+          <strong>Every page as a separate PDF:</strong> Creates one PDF file per page. A 20-page document produces 20 individual
+          PDFs. Download each separately or all as ZIP.
+        </p>
+        <p>
+          <strong>Extract a range of pages:</strong> Enter a start and end page number. The tool exports one new PDF containing
+          only those pages. For example, entering 5-12 creates an 8-page PDF from pages 5 through 12.
+        </p>
+
+        <h3>Step 3: Download</h3>
+        <p>
+          Click Export. In per-page mode, each page appears as a downloadable file — click individual downloads or &quot;Download
+          all as ZIP.&quot; In range mode, one PDF downloads immediately. The original file remains unchanged on your device.
+        </p>
+      </section>
+
+      <section class="split-edu-block">
         <h2 id="split-vs-merge">Split vs merge: when to use each</h2>
         <p>
           <strong>Split</strong> when you need one chapter, a single signed page, or smaller attachments. <strong>Merge</strong>{' '}
@@ -255,6 +277,192 @@ const jsonLd = {
       </section>
 
       <section class="split-edu-block">
+        <h2 id="when-to-split">When You Need to Split a PDF</h2>
+
+        <h3>Extracting a chapter from a textbook</h3>
+        <p>
+          Your professor shared a 500-page textbook PDF but you only need chapter 7 (pages 142-168). Extract those 27 pages into
+          a small, focused file that loads quickly on your phone.
+        </p>
+
+        <h3>Uploading one page to a portal</h3>
+        <p>
+          Government portals, visa applications, and university admissions often need specific pages — the first page of your
+          passport, a particular form from a multi-page bundle, or your signature page. Split out just the required page, then{' '}
+          <a href="/pdf/compress-pdf/">compress it</a> if the portal has a file size limit.
+        </p>
+
+        <h3>Sending a contract's signature page</h3>
+        <p>
+          A 40-page contract needs only the signed last page sent to the counterparty. Extract page 40 instead of emailing the
+          entire sensitive document — share only what's needed.
+        </p>
+
+        <h3>Breaking a large file for email</h3>
+        <p>
+          Your report is 60 MB but email limits attachments to 25 MB. Split it into three parts (pages 1-30, 31-60, 61-90), each
+          fitting within the email limit. Alternatively, <a href="/pdf/compress-pdf/">compress the full file</a> first — that
+          might bring it under 25 MB without splitting.
+        </p>
+
+        <h3>Removing blank or unwanted pages</h3>
+        <p>
+          Scanned documents often have blank pages interspersed. Export the ranges that contain real content in separate runs
+          (for example pages 1-15, then 17-30), then <a href="/pdf/merge-pdf/">merge the results</a> into one PDF without the
+          blank page in between. Each range export is one contiguous slice — use multiple exports plus merge for gaps.
+        </p>
+
+        <h3>Distributing sections to team members</h3>
+        <p>
+          A 100-page project report needs review from 4 people. Split into sections: pages 1-25 to Reviewer A, 26-50 to Reviewer
+          B, and so on. Each reviewer downloads only their section.
+        </p>
+
+        <h3>Separating bank statements by month</h3>
+        <p>
+          Banks often provide combined annual statements as one PDF. Extract just March's statement (pages 5-8) for a loan
+          application. Similarly useful for separating invoices, credit card statements, and investment reports.
+        </p>
+      </section>
+
+      <section class="split-edu-block">
+        <h2 id="browser-splitting">How Browser-Based PDF Splitting Works</h2>
+        <p>
+          Most PDF splitters (iLovePDF, Smallpdf, Adobe Online) upload your document to cloud servers. Your contracts, financial
+          records, and identity documents travel across the internet for processing. For sensitive files, this is a privacy
+          risk.
+        </p>
+        <p>DoItSwift splits PDFs entirely in your browser:</p>
+        <ol class="split-steps">
+          <li><strong>PDF.js</strong> renders page thumbnails so you can preview content before splitting</li>
+          <li><strong>pdf-lib</strong> reads the document structure and copies selected pages into a new PDF</li>
+          <li>Text, fonts, images, and vector graphics are preserved — text remains selectable and searchable</li>
+          <li>The new PDF is offered as a download via a local blob URL — no network traffic</li>
+        </ol>
+        <p>
+          <strong>Privacy proof:</strong> Disconnect your internet, then try splitting a PDF. It works — because no server
+          communication is needed.
+        </p>
+      </section>
+
+      <section class="split-edu-block">
+        <h2 id="doitswift-vs-competitors">DoItSwift vs Other PDF Splitters</h2>
+        <div class="split-table-wrap">
+          <table class="split-compare-table split-compare-table--competitors">
+            <caption class="sr-only">DoItSwift compared to other PDF splitters</caption>
+            <thead>
+              <tr>
+                <th scope="col">Feature</th>
+                <th scope="col">DoItSwift</th>
+                <th scope="col">iLovePDF</th>
+                <th scope="col">Smallpdf</th>
+                <th scope="col">Adobe Acrobat Online</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Files stay on device</td>
+                <td><strong>Yes — never uploaded</strong></td>
+                <td>No — server processed</td>
+                <td>No — server processed</td>
+                <td>No — Adobe cloud</td>
+              </tr>
+              <tr>
+                <td>Page thumbnails</td>
+                <td><strong>Yes — preview before splitting</strong></td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Extract every page</td>
+                <td><strong>Yes</strong></td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Extract page range</td>
+                <td><strong>Yes</strong></td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>ZIP download</td>
+                <td><strong>Yes</strong></td>
+                <td>Yes</td>
+                <td>Limited</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td>Free splits</td>
+                <td><strong>Unlimited</strong></td>
+                <td>Limited/day</td>
+                <td>2/day free</td>
+                <td>Requires login</td>
+              </tr>
+              <tr>
+                <td>Works offline</td>
+                <td><strong>Yes</strong></td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td>Text preserved</td>
+                <td><strong>Yes — exact copy</strong></td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Yes</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <strong>Where DoItSwift wins:</strong> Privacy and unlimited usage. No other popular splitter combines browser-only
+          processing with zero daily limits. Ideal for splitting sensitive documents like contracts, legal filings, and financial
+          records.
+        </p>
+        <p>
+          <strong>Where others win:</strong> Server-based tools can split very large files (100+ MB) faster and offer advanced
+          features like splitting by bookmarks or at every N pages. Adobe Acrobat's desktop app supports the most split
+          options. For everyday splitting of documents under 50 MB, DoItSwift is faster, more private, and fully free.
+        </p>
+      </section>
+
+      <section class="split-edu-block">
+        <h2 id="after-splitting">What to Do After Splitting</h2>
+
+        <h3>Compress extracted pages</h3>
+        <p>
+          Even a few extracted pages might be large if the source had high-resolution images. Run the split output through our{' '}
+          <a href="/pdf/compress-pdf/">PDF Compressor</a> — especially useful before uploading to portals with tight size limits.
+        </p>
+
+        <h3>Merge split parts with other documents</h3>
+        <p>
+          Extracted a chapter? Merge it with your notes using <a href="/pdf/merge-pdf/">Merge PDF</a>. The typical workflow:
+          split to extract → merge with other materials → compress the final document.
+        </p>
+
+        <h3>Convert pages to images</h3>
+        <p>
+          Need a specific page as a JPG for a presentation or social post? Use <a href="/pdf/pdf-to-jpg/">PDF to JPG</a> on the
+          extracted file. Each page becomes a separate image.
+        </p>
+
+        <h3>The complete PDF workflow</h3>
+        <ol class="split-steps">
+          <li><strong>Split:</strong> Extract the pages you need (this tool)</li>
+          <li><strong>Merge:</strong> Combine with other documents (<a href="/pdf/merge-pdf/">Merge PDF</a>)</li>
+          <li><strong>Compress:</strong> Reduce file size (<a href="/pdf/compress-pdf/">Compress PDF</a>)</li>
+          <li><strong>Convert:</strong> Turn into images if needed (<a href="/pdf/pdf-to-jpg/">PDF to JPG</a>)</li>
+        </ol>
+        <p>All four steps happen in your browser. No account needed.</p>
+      </section>
+
+      <section class="split-edu-block">
         <h2 id="filenames">Output filenames</h2>
         <p>
           Per-page files look like <code>MyDoc-page-1.pdf</code>. A range export looks like{' '}
@@ -275,12 +483,16 @@ const jsonLd = {
         <li><a href="/pdf/pdf-to-jpg/">PDF to JPG</a></li>
         <li><a href="/pdf/image-to-pdf/">Image to PDF</a></li>
         <li><a href="/pdf/jpg-to-pdf/">JPG to PDF</a></li>
+        <li><a href="/image/image-compressor/">Image Compressor</a> — Compress images extracted from PDFs</li>
+        <li><a href="/image/image-resizer/">Image Resizer</a> — Resize extracted page images</li>
       </ul>
       <h2 class="section-title section-title-sub">Related guides</h2>
       <ul class="split-related-grid split-related-guides">
         <li><a href="/blog/how-to-split-pdf/">How to split a PDF</a></li>
         <li><a href="/blog/how-to-merge-pdf/">How to merge PDFs</a></li>
         <li><a href="/blog/how-to-compress-pdf/">How to compress a PDF</a></li>
+        <li><a href="/blog/how-to-convert-pdf-to-jpg/">How to Convert PDF to JPG</a></li>
+        <li><a href="/blog/best-image-format-for-web/">Best Image Format for Websites 2026</a></li>
       </ul>
     </div>
   </section>
@@ -290,60 +502,102 @@ const jsonLd = {
       <h2 class="section-title">Frequently Asked Questions</h2>
       <div class="faq-list">
         <div class="faq-item">
-          <h4>Is Split PDF free and unlimited?</h4>
-          <p>Yes. Split as many documents as you need with no signup, watermarks, or usage quotas. Each run uses one source PDF.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Are my PDFs uploaded to DoItSwift servers?</h4>
-          <p>No. PDF.js renders thumbnails and pdf-lib performs the split in your browser tab only.</p>
-        </div>
-        <div class="faq-item">
-          <h4>Why can I only load one PDF at a time?</h4>
+          <h3>Is Split PDF free and unlimited?</h3>
           <p>
-            Splitting is page-focused; multiple sources would confuse numbering. Combine files first with{' '}
-            <a href="/pdf/merge-pdf/">Merge PDF</a> if you need one document to split.
+            Yes. You can split as many documents as you need with no signup, watermarks, or usage quotas. Each session uses one
+            source PDF at a time so page numbers and thumbnails stay unambiguous. There is no paid tier or daily cap — the only
+            limits are your device performance and browser memory for very large files.
           </p>
         </div>
         <div class="faq-item">
-          <h4>Are page numbers 1-based?</h4>
-          <p>Yes — the first page is 1, matching the labels on thumbnails and the range inputs.</p>
-        </div>
-        <div class="faq-item">
-          <h4>What is the difference between each page and range mode?</h4>
+          <h3>Are my PDFs uploaded to DoItSwift servers?</h3>
           <p>
-            Each page mode creates one PDF per page and can download all as a ZIP. Range mode creates a single PDF containing
-            only pages from the start through end numbers you enter, inclusive.
+            No. PDF.js renders thumbnail previews and pdf-lib reads and writes PDF structure entirely inside your browser tab.
+            Your file bytes are not transmitted to DoItSwift for processing or storage. That client-side design matters when you
+            split contracts, tax documents, or anything you would not want on a third-party server.
           </p>
         </div>
         <div class="faq-item">
-          <h4>Do password-protected or encrypted PDFs work?</h4>
+          <h3>Why can I only load one PDF at a time?</h3>
           <p>
-            They may fail to load. Unlock with the correct password using <a href="/pdf/unlock-pdf/">Unlock PDF</a>, then split
-            the unlocked file.
+            Splitting is page-focused: thumbnails, range inputs, and export naming all assume a single document. Loading several
+            PDFs at once would make it unclear which pages belong to which file. If you need one combined document to split,
+            merge sources first with <a href="/pdf/merge-pdf/">Merge PDF</a>, then split the merged PDF here.
           </p>
         </div>
         <div class="faq-item">
-          <h4>What about very large PDFs?</h4>
+          <h3>Are page numbers 1-based?</h3>
           <p>
-            The tool warns above about 50 MB. Huge files may take time or stress memory — close other tabs and wait for
-            processing to finish.
+            Yes. The first page of your PDF is page 1, matching the numbers shown on thumbnails and the start/end fields in
+            range mode. That matches how most PDF viewers and print dialogs label pages, so you can use the same numbers you see
+            elsewhere.
           </p>
         </div>
         <div class="faq-item">
-          <h4>Why do I only see 48 thumbnails?</h4>
-          <p>Previews show the first 48 pages for performance. All pages can still be split or included in range export.</p>
-        </div>
-        <div class="faq-item">
-          <h4>What are the output filenames?</h4>
+          <h3>What is the difference between each page and range mode?</h3>
           <p>
-            Per-page exports use the original name stem plus <code>-page-</code> and the page number. Range export uses the
-            stem plus <code>-pages-</code> and start–end. Per-page mode can also download a ZIP named with the stem plus{' '}
-            <code>-split-pages.zip</code>.
+            In each-page mode, the tool creates one separate PDF file for every page and you can download them individually or
+            all at once as a ZIP archive. In range mode, you enter a start and end page and get exactly one new PDF containing
+            that inclusive contiguous slice. Range mode is best for chapters or contiguous sections; each-page mode is best when
+            you need every page as its own attachment.
           </p>
         </div>
         <div class="faq-item">
-          <h4>Is there a monthly limit or account required?</h4>
-          <p>No accounts, no quotas, and no premium tier.</p>
+          <h3>Do password-protected or encrypted PDFs work?</h3>
+          <p>
+            Encrypted PDFs may fail to load or split until they are decrypted with the correct password. Use{' '}
+            <a href="/pdf/unlock-pdf/">Unlock PDF</a> in your browser, save the unlocked file locally, then open it in this
+            splitter. Unlocking follows the same local-only privacy model as splitting.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>What about very large PDFs?</h3>
+          <p>
+            When a single PDF is over about 50 MB, the tool asks you to confirm before loading because processing can take a long
+            time or use a lot of memory. Close unnecessary tabs and keep this tab active until export finishes. On low-memory
+            devices, compressing the source first or splitting in smaller page ranges can help reliability.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Why do I only see 48 thumbnails?</h3>
+          <p>
+            The thumbnail strip renders the first 48 pages only so the page stays responsive on typical devices. All pages in
+            the document remain available for export: each-page mode still outputs every page, and range mode accepts any valid
+            start and end within the total page count.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>What are the output filenames?</h3>
+          <p>
+            Per-page exports use your PDF name stem plus <code>-page-</code> and the page number, for example{' '}
+            <code>Report-page-3.pdf</code>. A range export uses the stem plus <code>-pages-</code> and the start and end numbers.
+            In each-page mode, Download all as ZIP names the archive with your stem plus <code>-split-pages.zip</code>.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Is there a monthly limit or account required?</h3>
+          <p>
+            No account is required and there are no monthly quotas or free-tier resets. You can use the splitter whenever you
+            need it without signing in. DoItSwift does not gate basic PDF splitting behind registration.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>How do I extract specific pages from a PDF?</h3>
+          <p>
+            Select &quot;Extract a range of pages&quot; mode, enter the start and end page numbers, and click Export. The tool creates a
+            new PDF containing only those pages. For example, entering pages 5-12 produces an 8-page PDF. For non-contiguous
+            pages (like pages 1, 5, and 9), extract each page or range separately, then use{' '}
+            <a href="/pdf/merge-pdf/">Merge PDF</a> to combine the extracted results.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>How do I remove pages from a PDF?</h3>
+          <p>
+            Removing pages is the inverse of extracting. If you want to remove pages 4-6 from a 10-page PDF, extract pages 1-3
+            and 7-10 as separate ranges, then <a href="/pdf/merge-pdf/">merge them</a> into one file. The result is a new PDF
+            without pages 4-6. This two-step approach (split + merge) works with any splitter and gives you complete control over
+            which pages to keep.
+          </p>
         </div>
       </div>
     </div>
@@ -757,6 +1011,28 @@ const jsonLd = {
       margin: 0 0 1rem;
       color: var(--text);
     }
+    .split-edu h3 {
+      font-size: 1.05rem;
+      line-height: 1.35;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--text);
+    }
+    .split-edu h2 + h3 {
+      margin-top: 0.5rem;
+    }
+    .split-steps {
+      margin: 0 0 1rem;
+      padding-left: 1.35rem;
+    }
+    .split-steps li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--text);
+      margin-bottom: 0.85rem;
+    }
+    .split-steps li:last-child {
+      margin-bottom: 0;
+    }
     .split-edu p {
       font-size: 16px;
       line-height: 1.75;
@@ -812,6 +1088,9 @@ const jsonLd = {
     }
     .split-compare-table tbody tr:last-child td {
       border-bottom: none;
+    }
+    .split-compare-table--competitors {
+      min-width: 720px;
     }
 
     .split-related {
@@ -877,7 +1156,7 @@ const jsonLd = {
       margin-bottom: 12px;
       box-shadow: var(--shadow-sm);
     }
-    .faq-item h4 {
+    .faq-item h3 {
       font-size: 16px;
       margin-bottom: 6px;
     }
