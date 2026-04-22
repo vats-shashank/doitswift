@@ -116,6 +116,7 @@ const breadcrumbLd = {
   <script type="application/ld+json" set:html={JSON.stringify(softwareApplicationLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(faqPageLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+  <script slot="head" src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
   <nav class="breadcrumb container" aria-label="Breadcrumb">
     <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>SIP Calculator</span>
@@ -169,6 +170,14 @@ const breadcrumbLd = {
           <input type="range" id="sipYearsRange" min="1" max="40" step="1" value="10" aria-hidden="true" />
           <input type="number" id="sipYears" min="1" max="40" step="1" value="10" inputmode="numeric" />
         </div>
+        <div class="field">
+          <label for="sipStepUp">Annual SIP step-up (%)</label>
+          <input type="range" id="sipStepUpRange" min="0" max="25" step="1" value="10" aria-hidden="true" />
+          <input type="number" id="sipStepUp" min="0" max="25" step="1" value="10" inputmode="numeric" aria-describedby="sipStepUp-hint" />
+          <p id="sipStepUp-hint" class="field-hint">
+            Increase SIP by this % every year (e.g., with salary hike). Used in the Step-Up chart and wealth callout.
+          </p>
+        </div>
       </div>
 
       <div class="calc-results" aria-live="polite">
@@ -185,21 +194,177 @@ const breadcrumbLd = {
             <div class="result-caption">Est. returns</div>
           </div>
         </div>
-        <div class="bar-chart" id="sipBar" role="img" aria-label="Invested versus returns bar comparison">
-          <div class="bar-row"><span class="bar-label">Invested</span><div class="bar-track"><div class="bar-fill bar-fill--inv" id="sipBarInv"></div></div></div>
-          <div class="bar-row"><span class="bar-label">Returns</span><div class="bar-track"><div class="bar-fill bar-fill--ret" id="sipBarRet"></div></div></div>
-        </div>
         <details class="calc-details">
           <summary>Year-by-year breakdown</summary>
           <div class="table-wrap">
-            <table>
+            <table class="sip-yearly-table">
               <caption class="sr-only">Year-by-year cumulative SIP invested and estimated corpus</caption>
-              <thead><tr><th>Year</th><th>Cumulative invested</th><th>Est. value</th></tr></thead>
+              <thead>
+                <tr>
+                  <th scope="col" class="col-left">Year</th>
+                  <th scope="col" class="col-right">Cumulative invested</th>
+                  <th scope="col" class="col-right">Est. value</th>
+                </tr>
+              </thead>
               <tbody id="sipTable"></tbody>
             </table>
           </div>
         </details>
+        <div class="sip-result-donut-wrap">
+          <h3 class="sip-result-donut-title">Your Wealth Multiplier</h3>
+          <div class="sip-result-donut-canvas-wrap">
+            <canvas id="sipResultDonut" width="200" height="200" aria-label="Investment versus wealth gained donut chart"></canvas>
+            <div class="sip-result-donut-center" aria-hidden="true">
+              <div class="sip-result-donut-multiplier" id="sipResultMultiplier">—</div>
+              <div class="sip-result-donut-sublabel">your investment</div>
+            </div>
+          </div>
+          <div class="sip-result-donut-legend">
+            <div class="sip-result-donut-legend-item">
+              <span class="sip-result-donut-dot" style="background: #3b82f6;"></span>
+              <span class="sip-result-donut-label">Invested</span>
+              <span class="sip-result-donut-value" id="sipDonutInvested">—</span>
+            </div>
+            <div class="sip-result-donut-legend-item">
+              <span class="sip-result-donut-dot" style="background: #22c55e;"></span>
+              <span class="sip-result-donut-label">Wealth gained</span>
+              <span class="sip-result-donut-value" id="sipDonutWealth">—</span>
+            </div>
+          </div>
+          <a href="#sip-viz-heading" class="sip-result-donut-cta" id="sipResultDonutCta">See 5 interactive charts ↓</a>
+        </div>
       </div>
+    </div>
+  </section>
+
+  <section class="sip-viz-section" aria-labelledby="sip-viz-heading">
+    <div class="container sip-viz-inner">
+      <h2 id="sip-viz-heading" class="sip-viz-heading">Visualize Your Wealth Journey</h2>
+      <p class="sip-viz-sub">
+        See how your SIP grows over time, compare scenarios, and factor in inflation.
+      </p>
+
+      <div class="sip-goal-row">
+        <div class="field sip-goal-field">
+          <label for="sipGoal">My goal amount (₹)</label>
+          <input type="number" id="sipGoal" min="0" step="100000" value="10000000" inputmode="numeric" aria-describedby="sipGoal-hint" />
+          <p id="sipGoal-hint" class="field-hint">Optional — progress bar shows how close your projected corpus is to this target.</p>
+        </div>
+        <div class="field sip-inflation-field">
+          <label for="sipInflation">Expected inflation rate (%)</label>
+          <input type="range" id="sipInflationRange" min="3" max="10" step="0.5" value="6" aria-hidden="true" />
+          <input type="number" id="sipInflation" min="3" max="10" step="0.1" value="6" inputmode="decimal" />
+          <p class="field-hint">Used in the Inflation tab for real purchasing power (India long-run average ~6%).</p>
+        </div>
+      </div>
+
+      <div class="sip-goal-gauge" aria-live="polite" id="sipGoalGaugeWrap">
+        <div class="sip-goal-gauge-label" id="sipGoalGaugeLabel">—</div>
+        <div class="sip-goal-gauge-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="sipGoalGaugeBar" aria-labelledby="sipGoalGaugeLabel">
+          <div class="sip-goal-gauge-fill" id="sipGoalGaugeFill"></div>
+        </div>
+      </div>
+
+      <div class="sip-chart-tabs-wrap">
+        <div class="sip-chart-tabs" role="tablist" aria-label="SIP chart views" id="sipChartTabs">
+          <button type="button" class="sip-chart-tab sip-chart-tab--active" role="tab" id="sipTab0" aria-selected="true" aria-controls="sipPanel0" data-tab="0" tabindex="0">Growth</button>
+          <button type="button" class="sip-chart-tab" role="tab" id="sipTab1" aria-selected="false" aria-controls="sipPanel1" data-tab="1" tabindex="-1">Yearly</button>
+          <button type="button" class="sip-chart-tab" role="tab" id="sipTab2" aria-selected="false" aria-controls="sipPanel2" data-tab="2" tabindex="-1">Step-Up</button>
+          <button type="button" class="sip-chart-tab" role="tab" id="sipTab3" aria-selected="false" aria-controls="sipPanel3" data-tab="3" tabindex="-1">Compare</button>
+          <button type="button" class="sip-chart-tab" role="tab" id="sipTab4" aria-selected="false" aria-controls="sipPanel4" data-tab="4" tabindex="-1">Inflation</button>
+        </div>
+      </div>
+
+      <div class="sip-chart-panels">
+        <div class="sip-chart-panel sip-chart-panel--active" role="tabpanel" id="sipPanel0" aria-labelledby="sipTab0" data-panel="0">
+          <p class="sip-chart-empty" id="sipChartEmpty" hidden>Enter your SIP details above to see interactive charts.</p>
+          <div class="sip-chart-canvas-wrap" id="sipChartCanvasWrap">
+            <canvas id="sipVizCanvas" width="400" height="320" aria-label="Your portfolio growth: invested versus total value by year"></canvas>
+          </div>
+          <p class="sip-chart-callout" id="sipChartCallout" aria-live="polite"></p>
+        </div>
+        <div class="sip-chart-panel" role="tabpanel" id="sipPanel1" aria-labelledby="sipTab1" data-panel="1" hidden>
+          <div class="sip-chart-canvas-wrap">
+            <canvas id="sipVizCanvas1" width="400" height="320" aria-label="Yearly contribution versus returns generated each year"></canvas>
+          </div>
+          <p class="sip-chart-callout" id="sipChartCallout1" aria-live="polite"></p>
+        </div>
+        <div class="sip-chart-panel" role="tabpanel" id="sipPanel2" aria-labelledby="sipTab2" data-panel="2" hidden>
+          <div class="sip-chart-canvas-wrap">
+            <canvas id="sipVizCanvas2" width="400" height="320" aria-label="Fixed SIP versus annual step-up SIP portfolio value"></canvas>
+          </div>
+          <p class="sip-chart-callout" id="sipChartCallout2" aria-live="polite"></p>
+        </div>
+        <div class="sip-chart-panel" role="tabpanel" id="sipPanel3" aria-labelledby="sipTab3" data-panel="3" hidden>
+          <div class="sip-compare-inputs">
+            <div class="sip-compare-col">
+              <h3 class="sip-compare-title">Scenario A (your inputs)</h3>
+              <div class="sip-compare-readonly">
+                <div class="sip-compare-readonly-row">
+                  <span class="sip-compare-readonly-label">Monthly:</span>
+                  <span class="sip-compare-readonly-value" id="sipAMonthlyEcho">₹5,000</span>
+                </div>
+                <div class="sip-compare-readonly-row">
+                  <span class="sip-compare-readonly-label">Return:</span>
+                  <span class="sip-compare-readonly-value" id="sipARateEcho">12%</span>
+                </div>
+                <div class="sip-compare-readonly-row">
+                  <span class="sip-compare-readonly-label">Years:</span>
+                  <span class="sip-compare-readonly-value" id="sipAYearsEcho">10</span>
+                </div>
+              </div>
+              <p class="sip-compare-note">Edit values in the main Inputs section above to change Scenario A.</p>
+            </div>
+            <div class="sip-compare-col">
+              <h3 class="sip-compare-title">Scenario B</h3>
+              <button type="button" class="sip-compare-copy" id="sipCompareLoadA">Load from Scenario A</button>
+              <div class="field">
+                <label for="sipBMonthly">Monthly (₹)</label>
+                <input type="number" id="sipBMonthly" min="500" max="100000" step="500" value="" placeholder="Same as A" inputmode="numeric" />
+              </div>
+              <div class="field">
+                <label for="sipBRate">Return (%)</label>
+                <input type="number" id="sipBRate" min="1" max="30" step="0.1" value="" placeholder="Same as A" inputmode="decimal" />
+              </div>
+              <div class="field">
+                <label for="sipBYears">Years</label>
+                <input type="number" id="sipBYears" min="1" max="40" step="1" value="" placeholder="Same as A" inputmode="numeric" />
+              </div>
+            </div>
+          </div>
+          <div class="sip-chart-canvas-wrap">
+            <canvas id="sipVizCanvas3" width="400" height="320" aria-label="Scenario A versus scenario B portfolio growth"></canvas>
+          </div>
+          <p class="sip-compare-hint" id="sipCompareHint" aria-live="polite"></p>
+          <div class="table-wrap sip-compare-table-wrap">
+            <table class="sip-compare-metrics" id="sipCompareTable" aria-label="Scenario comparison summary">
+              <thead>
+                <tr>
+                  <th scope="col">Metric</th>
+                  <th scope="col">Scenario A</th>
+                  <th scope="col">Scenario B</th>
+                  <th scope="col">Difference</th>
+                </tr>
+              </thead>
+              <tbody id="sipCompareTbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="sip-chart-panel" role="tabpanel" id="sipPanel4" aria-labelledby="sipTab4" data-panel="4" hidden>
+          <div class="sip-chart-canvas-wrap">
+            <canvas id="sipVizCanvas4" width="400" height="320" aria-label="Nominal portfolio value versus inflation-adjusted real value"></canvas>
+          </div>
+          <p class="sip-chart-callout" id="sipChartCallout4" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <table class="sr-only" id="sipChartSrTable" aria-label="Numeric data for the active chart">
+        <caption>Chart data for screen readers</caption>
+        <thead>
+          <tr><th scope="col">Point</th><th scope="col">Value 1</th><th scope="col">Value 2</th></tr>
+        </thead>
+        <tbody id="sipChartSrTbody"></tbody>
+      </table>
     </div>
   </section>
 
@@ -497,20 +662,99 @@ const breadcrumbLd = {
         if (r === 0) return P * n;
         return P * ((Math.pow(1 + r, n) - 1) / r) * (1 + r);
       }
+      var sipDonutChart = null;
+      var sipDonutLast = { invested: 0, wealth: 0 };
+      function formatIndianFullDonut(num) {
+        var n = Math.round(Math.abs(num));
+        var s = n.toString();
+        var last = s.substring(s.length - 3);
+        var rest = s.length > 3 ? s.substring(0, s.length - 3) : '';
+        if (rest) rest = rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',');
+        return (num < 0 ? '-' : '') + '₹' + (rest ? rest + ',' : '') + last;
+      }
+      function formatIndianShortDonut(num) {
+        var x = Math.abs(num);
+        if (x >= 1e7) return '₹' + (num / 1e7).toFixed(x >= 1e8 ? 0 : 2).replace(/\.?0+$/, '') + ' Cr';
+        if (x >= 1e5) return '₹' + (num / 1e5).toFixed(num >= 1e6 ? 1 : 2).replace(/\.?0+$/, '') + 'L';
+        if (x >= 1e3) return '₹' + (num / 1e3).toFixed(0) + 'k';
+        return '₹' + Math.round(num);
+      }
+      function isDonutDark() {
+        return document.documentElement.getAttribute('data-theme') === 'dark';
+      }
+      function updateResultDonut(invested, wealth) {
+        sipDonutLast.invested = invested;
+        sipDonutLast.wealth = wealth;
+        var canvas = document.getElementById('sipResultDonut');
+        if (!canvas || typeof Chart === 'undefined') return;
+        var data = [invested, Math.max(0, wealth)];
+        var colors = isDonutDark() ? ['#60a5fa', '#34d399'] : ['#3b82f6', '#22c55e'];
+        var ctx2d = canvas.getContext('2d');
+        if (!sipDonutChart) {
+          sipDonutChart = new Chart(ctx2d, {
+            type: 'doughnut',
+            data: {
+              labels: ['Invested', 'Wealth gained'],
+              datasets: [
+                {
+                  data: data,
+                  backgroundColor: colors,
+                  borderWidth: 0,
+                  hoverOffset: 4,
+                },
+              ],
+            },
+            options: {
+              responsive: false,
+              maintainAspectRatio: false,
+              cutout: '72%',
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: function (ctx) {
+                      var val = ctx.dataset.data[ctx.dataIndex];
+                      var total = ctx.dataset.data.reduce(function (a, b) {
+                        return a + b;
+                      }, 0);
+                      var pct = total > 0 ? ((val / total) * 100).toFixed(1) : '0';
+                      return ctx.label + ': ' + formatIndianFullDonut(val) + ' (' + pct + '%)';
+                    },
+                  },
+                },
+              },
+              animation: { duration: 400 },
+            },
+          });
+        } else {
+          sipDonutChart.data.datasets[0].data = data;
+          sipDonutChart.data.datasets[0].backgroundColor = colors;
+          sipDonutChart.update();
+        }
+      }
       function syncRange(inp, rng) {
-        rng.value = inp.value;
+        if (rng && inp) rng.value = inp.value;
       }
       function run() {
         const fmt = makeFmt();
         const P = Math.min(100000, Math.max(500, parseFloat(document.getElementById('sipMonthly').value) || 0));
         const rate = Math.min(30, Math.max(1, parseFloat(document.getElementById('sipRate').value) || 0));
         const yrs = Math.min(40, Math.max(1, parseFloat(document.getElementById('sipYears').value) || 0));
+        const stepUp = Math.min(25, Math.max(0, parseFloat(document.getElementById('sipStepUp').value) || 0));
         document.getElementById('sipMonthly').value = P;
         document.getElementById('sipRate').value = rate;
         document.getElementById('sipYears').value = yrs;
+        document.getElementById('sipStepUp').value = stepUp;
         syncRange(document.getElementById('sipMonthly'), document.getElementById('sipMonthlyRange'));
         syncRange(document.getElementById('sipRate'), document.getElementById('sipRateRange'));
         syncRange(document.getElementById('sipYears'), document.getElementById('sipYearsRange'));
+        syncRange(document.getElementById('sipStepUp'), document.getElementById('sipStepUpRange'));
+        const inflEl = document.getElementById('sipInflation');
+        if (inflEl) {
+          const inf = Math.min(10, Math.max(3, parseFloat(inflEl.value) || 6));
+          inflEl.value = inf;
+          syncRange(inflEl, document.getElementById('sipInflationRange'));
+        }
         const months = Math.round(yrs * 12);
         const invested = P * months;
         const maturity = sipFV(P, rate, yrs);
@@ -518,9 +762,16 @@ const breadcrumbLd = {
         document.getElementById('sipMaturity').textContent = fmt.format(Math.round(maturity));
         document.getElementById('sipInvested').textContent = fmt.format(Math.round(invested));
         document.getElementById('sipReturns').textContent = fmt.format(Math.round(ret));
-        const maxBar = Math.max(invested, ret, 1);
-        document.getElementById('sipBarInv').style.width = (invested / maxBar) * 100 + '%';
-        document.getElementById('sipBarRet').style.width = (ret / maxBar) * 100 + '%';
+        var multiplier = invested > 0 ? maturity / invested : 0;
+        var multEl = document.getElementById('sipResultMultiplier');
+        if (multEl) {
+          multEl.textContent = invested > 0 ? multiplier.toFixed(1) + '×' : '—';
+        }
+        var invEl = document.getElementById('sipDonutInvested');
+        var wealthEl = document.getElementById('sipDonutWealth');
+        if (invEl) invEl.textContent = formatIndianShortDonut(Math.round(invested));
+        if (wealthEl) wealthEl.textContent = formatIndianShortDonut(Math.round(ret));
+        updateResultDonut(Math.round(invested), Math.round(ret));
         const tbody = document.getElementById('sipTable');
         tbody.innerHTML = '';
         for (let y = 1; y <= yrs; y++) {
@@ -530,19 +781,624 @@ const breadcrumbLd = {
           tr.innerHTML = '<td>' + y + '</td><td>' + fmt.format(Math.round(invY)) + '</td><td>' + fmt.format(Math.round(valY)) + '</td>';
           tbody.appendChild(tr);
         }
+        window.__sipState = { P: P, rate: rate, yrs: yrs, invested: invested, maturity: maturity, months: months, fmt: fmt, stepUp: stepUp };
+        if (typeof window.__sipChartDebounced === 'function') window.__sipChartDebounced();
       }
       const debRun = debounce(run, 80);
       document.getElementById('sipCur').addEventListener('change', debRun);
-      ['sipMonthly', 'sipRate', 'sipYears'].forEach((id) => {
-        document.getElementById(id).addEventListener('input', debRun);
+      ['sipMonthly', 'sipRate', 'sipYears', 'sipStepUp'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.addEventListener('input', debRun);
       });
-      [['sipMonthlyRange', 'sipMonthly'], ['sipRateRange', 'sipRate'], ['sipYearsRange', 'sipYears']].forEach(function (pair) {
-        document.getElementById(pair[0]).addEventListener('input', function () {
-          document.getElementById(pair[1]).value = this.value;
-          debRun();
+      [['sipMonthlyRange', 'sipMonthly'], ['sipRateRange', 'sipRate'], ['sipYearsRange', 'sipYears'], ['sipStepUpRange', 'sipStepUp']].forEach(function (pair) {
+        var rng = document.getElementById(pair[0]);
+        var inp = document.getElementById(pair[1]);
+        if (rng && inp) {
+          rng.addEventListener('input', function () {
+            inp.value = this.value;
+            debRun();
+          });
+        }
+      });
+      if (typeof MutationObserver !== 'undefined') {
+        new MutationObserver(function () {
+          updateResultDonut(sipDonutLast.invested, sipDonutLast.wealth);
+        }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      }
+      var sipDonutCta = document.getElementById('sipResultDonutCta');
+      if (sipDonutCta) {
+        sipDonutCta.addEventListener('click', function (e) {
+          var heading = document.getElementById('sip-viz-heading');
+          if (heading && 'scrollBehavior' in document.documentElement.style) {
+            e.preventDefault();
+            heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
         });
-      });
+      }
       run();
+    })();
+  </script>
+
+  <script is:inline>
+    (function () {
+      function formatIndianFull(num) {
+        var n = Math.round(Math.abs(num));
+        var s = n.toString();
+        var last = s.substring(s.length - 3);
+        var rest = s.length > 3 ? s.substring(0, s.length - 3) : '';
+        if (rest) rest = rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',');
+        return (num < 0 ? '-' : '') + '₹' + (rest ? rest + ',' : '') + last;
+      }
+      function formatIndianShort(num) {
+        var x = Math.abs(num);
+        if (x >= 1e7) return '₹' + (num / 1e7).toFixed(x >= 1e8 ? 0 : 2).replace(/\.?0+$/, '') + ' Cr';
+        if (x >= 1e5) return '₹' + (num / 1e5).toFixed(num >= 1e6 ? 1 : 2).replace(/\.?0+$/, '') + 'L';
+        if (x >= 1e3) return '₹' + (num / 1e3).toFixed(0) + 'k';
+        return '₹' + Math.round(num);
+      }
+      function sampleYears(total) {
+        var y = Math.max(1, Math.min(40, Math.round(total)));
+        if (y <= 50) {
+          var arr = [];
+          for (var i = 1; i <= y; i++) arr.push(i);
+          return arr;
+        }
+        var out = [1];
+        var step = (y - 1) / 49;
+        for (var j = 1; j < 49; j++) out.push(Math.min(y, Math.max(1, Math.round(1 + j * step))));
+        out.push(y);
+        return out.filter(function (v, idx, a) { return a.indexOf(v) === idx; }).sort(function (a, b) { return a - b; });
+      }
+      function isDark() {
+        return document.documentElement.getAttribute('data-theme') === 'dark';
+      }
+      function pal() {
+        if (isDark()) {
+          return { grid: 'rgba(255,255,255,0.1)', text: '#e5e7eb', invFill: 'rgba(96,165,250,0.35)', invBorder: '#60a5fa', wgFill: 'rgba(52,211,153,0.35)', wgBorder: '#34d399', blue: '#60a5fa', green: '#34d399', orange: '#fb923c', red: '#f87171', redD: '#f87171' };
+        }
+        return { grid: 'rgba(0,0,0,0.08)', text: '#374151', invFill: 'rgba(59,130,246,0.3)', invBorder: '#3b82f6', wgFill: 'rgba(34,197,94,0.3)', wgBorder: '#22c55e', blue: '#2563eb', green: '#16a34a', orange: '#ea580c', red: '#dc2626', redD: '#dc2626' };
+      }
+      function sipFV(P, annualPct, years) {
+        var r = annualPct / 100 / 12;
+        var n = Math.round(years * 12);
+        if (n <= 0) return 0;
+        if (r === 0) return P * n;
+        return P * ((Math.pow(1 + r, n) - 1) / r) * (1 + r);
+      }
+      function fvStepUpEndOfYear(P, annualPct, years, stepAnnualPct) {
+        var r = annualPct / 100 / 12;
+        var totalM = Math.round(years * 12);
+        var step = stepAnnualPct / 100;
+        var v = 0;
+        for (var m = 1; m <= totalM; m++) {
+          var yIdx = Math.floor((m - 1) / 12);
+          var Pm = P * Math.pow(1 + step, yIdx);
+          v = (v + Pm) * (1 + r);
+        }
+        return v;
+      }
+      function getBVal(idA, idB, min, max, defVal) {
+        var b = document.getElementById(idB);
+        var a = document.getElementById(idA);
+        if (!b || !a) return defVal;
+        var raw = parseFloat(b.value);
+        if (b.value === '' || isNaN(raw)) return defVal;
+        return Math.min(max, Math.max(min, raw));
+      }
+      var chartInstance = null;
+      var activeTab = 0;
+      var rafPending = null;
+      function destroyChart() {
+        if (chartInstance) {
+          chartInstance.destroy();
+          chartInstance = null;
+        }
+      }
+      function chartJsCommonH() {
+        return window.innerWidth < 768 ? 280 : 400;
+      }
+      function baseOpts(title, c) {
+        return {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 0 },
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            title: { display: !!title, text: title || '', color: c.text, font: { size: 14, weight: '600' } },
+            legend: {
+              display: true,
+              position: window.innerWidth < 768 ? 'bottom' : 'right',
+              labels: { color: c.text },
+            },
+            tooltip: {
+              callbacks: {
+                label: function (ctx) {
+                  var v = ctx.parsed.y != null ? ctx.parsed.y : ctx.parsed;
+                  if (typeof v !== 'number') v = ctx.raw;
+                  return ctx.dataset.label + ': ' + formatIndianFull(v);
+                },
+              },
+            },
+          },
+          scales: {
+            x: { ticks: { color: c.text, maxRotation: 45 }, grid: { color: c.grid } },
+            y: {
+              stacked: undefined,
+              ticks: {
+                color: c.text,
+                callback: function (v) { return formatIndianShort(v); },
+              },
+              grid: { color: c.grid },
+            },
+          },
+        };
+      }
+      function updateGoalGauge() {
+        var st = window.__sipState;
+        if (!st) return;
+        var goalRaw = parseFloat(document.getElementById('sipGoal').value);
+        var goal = isNaN(goalRaw) || goalRaw <= 0 ? 10000000 : goalRaw;
+        var mat = st.maturity;
+        var pct = goal > 0 ? Math.min(150, (mat / goal) * 100) : 0;
+        var fill = document.getElementById('sipGoalGaugeFill');
+        var bar = document.getElementById('sipGoalGaugeBar');
+        var lab = document.getElementById('sipGoalGaugeLabel');
+        if (!fill || !bar || !lab) return;
+        bar.setAttribute('aria-valuenow', String(Math.min(100, Math.round(pct))));
+        fill.style.width = Math.min(100, pct) + '%';
+        fill.classList.remove('sip-goal-gauge-fill--warn', 'sip-goal-gauge-fill--ok', 'sip-goal-gauge-fill--bad');
+        if (pct >= 100) {
+          fill.classList.add('sip-goal-gauge-fill--ok');
+          var extra = mat - goal;
+          lab.textContent =
+            extra >= 0
+              ? "You'll exceed your goal by " + formatIndianShort(extra) + " — consider aiming higher!"
+              : "You'll reach " + Math.round(Math.min(100, pct)) + '% of your ' + formatIndianFull(goal) + ' goal';
+        } else if (pct >= 50) {
+          fill.classList.add('sip-goal-gauge-fill--warn');
+          lab.textContent = "You'll reach " + Math.round(pct) + '% of your ' + formatIndianFull(goal) + ' goal';
+        } else {
+          fill.classList.add('sip-goal-gauge-fill--bad');
+          lab.textContent = "You'll reach " + Math.round(pct) + '% of your ' + formatIndianFull(goal) + ' goal';
+        }
+      }
+      function growthCallout(yearsArr, invested, portfolio, wealth) {
+        var lines = [];
+        var breakeven = -1;
+        var croreY = -1;
+        var twoXY = -1;
+        for (var i = 0; i < yearsArr.length; i++) {
+          var w = wealth[i];
+          var inv = invested[i];
+          var yr = yearsArr[i];
+          if (breakeven < 0 && inv > 0 && w > 0.5 * inv) breakeven = yr;
+          if (croreY < 0 && portfolio[i] >= 1e7) croreY = yr;
+          if (twoXY < 0 && portfolio[i] >= 2 * inv) twoXY = yr;
+        }
+        if (breakeven > 0) lines.push('Break-even style year (wealth exceeds half of invested): Year ' + breakeven);
+        if (croreY > 0) lines.push('First ₹1 Cr portfolio (nominal): Year ' + croreY);
+        if (twoXY > 0) lines.push('2× invested (portfolio ≥ twice cumulative SIP): Year ' + twoXY);
+        return lines.join(' · ');
+      }
+      function buildOrUpdateChart() {
+        if (typeof Chart === 'undefined') return;
+        var st = window.__sipState;
+        if (!st) return;
+        var P = st.P;
+        var rate = st.rate;
+        var yrs = st.yrs;
+        var stepUp = st.stepUp;
+        var c = pal();
+        var yearsArr = sampleYears(yrs);
+        var labels = yearsArr.map(function (y) { return 'Y' + y; });
+        var invested = yearsArr.map(function (y) { return P * 12 * y; });
+        var portfolio = yearsArr.map(function (y) { return sipFV(P, rate, y); });
+        var wealth = yearsArr.map(function (i, idx) { return portfolio[idx] - invested[idx]; });
+        var infl = Math.min(10, Math.max(3, parseFloat(document.getElementById('sipInflation').value) || 6)) / 100;
+        var canvasId = ['sipVizCanvas', 'sipVizCanvas1', 'sipVizCanvas2', 'sipVizCanvas3', 'sipVizCanvas4'][activeTab];
+        var canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        var chartPanel = canvas.closest('.sip-chart-panel');
+        if (chartPanel && chartPanel.hidden) return;
+        var ctx = canvas.getContext('2d');
+        var emptyEl = document.getElementById('sipChartEmpty');
+        if (yrs < 1 || P < 500) {
+          if (emptyEl) emptyEl.hidden = false;
+          destroyChart();
+          updateGoalGauge();
+          return;
+        }
+        if (emptyEl) emptyEl.hidden = true;
+        var opts = baseOpts(activeTab === 0 ? 'Your Portfolio Growth' : '', c);
+        if (activeTab === 0) {
+          opts.scales.y.stacked = true;
+          opts.scales.x.stacked = true;
+          opts.plugins.tooltip.callbacks.afterBody = function (items) {
+            if (!items || !items.length) return [];
+            var idx = items[0].dataIndex;
+            var port = portfolio[idx];
+            var inv = invested[idx];
+            var pct = inv > 0 ? (((port - inv) / inv) * 100).toFixed(2) : '0.00';
+            return ['Portfolio value: ' + formatIndianFull(port), 'Returns on invested: ' + pct + '%'];
+          };
+          var ds = [
+            {
+              label: 'Total invested',
+              data: invested,
+              fill: true,
+              backgroundColor: c.invFill,
+              borderColor: c.invBorder,
+              borderWidth: 1,
+              stack: 'grow',
+              tension: 0.25,
+              pointRadius: 0,
+            },
+            {
+              label: 'Wealth gained',
+              data: wealth.map(function (w) { return Math.max(0, w); }),
+              fill: true,
+              backgroundColor: c.wgFill,
+              borderColor: c.wgBorder,
+              borderWidth: 1,
+              stack: 'grow',
+              tension: 0.25,
+              pointRadius: 0,
+            },
+          ];
+          if (!chartInstance || !chartInstance.config || chartInstance.config.type !== 'line' || chartInstance.canvas.id !== canvasId) {
+            destroyChart();
+            chartInstance = new Chart(ctx, {
+              type: 'line',
+              data: { labels: labels, datasets: ds },
+              options: opts,
+            });
+          } else {
+            chartInstance.data.labels = labels;
+            chartInstance.data.datasets[0].data = invested;
+            chartInstance.data.datasets[1].data = ds[1].data;
+            chartInstance.data.datasets[0].backgroundColor = c.invFill;
+            chartInstance.data.datasets[0].borderColor = c.invBorder;
+            chartInstance.data.datasets[1].backgroundColor = c.wgFill;
+            chartInstance.data.datasets[1].borderColor = c.wgBorder;
+            chartInstance.options.plugins.title.color = c.text;
+            chartInstance.options.scales.x.ticks.color = c.text;
+            chartInstance.options.scales.y.ticks.color = c.text;
+            var portRef = portfolio;
+            var invRef = invested;
+            chartInstance.options.plugins.tooltip.callbacks.afterBody = function (items) {
+              if (!items || !items.length) return [];
+              var idx = items[0].dataIndex;
+              var port = portRef[idx];
+              var inv = invRef[idx];
+              var pct = inv > 0 ? (((port - inv) / inv) * 100).toFixed(2) : '0.00';
+              return ['Portfolio value: ' + formatIndianFull(port), 'Returns on invested: ' + pct + '%'];
+            };
+            chartInstance.update('none');
+          }
+          document.getElementById('sipChartCallout').textContent = growthCallout(yearsArr, invested, portfolio, wealth);
+          updateSrTable(labels, [invested, portfolio]);
+        } else if (activeTab === 1) {
+          var contribs = [];
+          var retsY = [];
+          var crossover = -1;
+          for (var yi = 0; yi < yearsArr.length; yi++) {
+            var y = yearsArr[yi];
+            var cY = P * 12;
+            var v0 = y <= 1 ? 0 : sipFV(P, rate, y - 1);
+            var v1 = sipFV(P, rate, y);
+            var retThis = v1 - v0 - cY;
+            contribs.push(cY);
+            retsY.push(Math.max(0, retThis));
+            if (crossover < 0 && retThis > cY) crossover = y;
+          }
+          opts.scales.y.stacked = true;
+          opts.scales.x.stacked = true;
+          var dsBar = [
+            { label: 'Contribution this year', data: contribs, backgroundColor: c.blue, stack: 'y' },
+            { label: 'Returns this year', data: retsY, backgroundColor: c.green, stack: 'y' },
+          ];
+          if (!chartInstance || !chartInstance.config || chartInstance.config.type !== 'bar' || chartInstance.canvas.id !== canvasId) {
+            destroyChart();
+            chartInstance = new Chart(ctx, { type: 'bar', data: { labels: labels, datasets: dsBar }, options: opts });
+          } else {
+            chartInstance.data.labels = labels;
+            chartInstance.data.datasets[0].data = contribs;
+            chartInstance.data.datasets[1].data = retsY;
+            chartInstance.data.datasets[0].backgroundColor = c.blue;
+            chartInstance.data.datasets[1].backgroundColor = c.green;
+            chartInstance.update('none');
+          }
+          document.getElementById('sipChartCallout1').textContent =
+            crossover > 0 ? 'Crossover year (annual returns first exceed annual contributions): Year ' + crossover : 'No crossover in range — returns stay below contributions each year in this sample.';
+          updateSrTable(labels, [contribs, retsY]);
+        } else if (activeTab === 2) {
+          var fixedLine = yearsArr.map(function (y) { return sipFV(P, rate, y); });
+          var stepLine = yearsArr.map(function (y) {
+            return fvStepUpEndOfYear(P, rate, y, stepUp);
+          });
+          if (stepUp <= 0) {
+            document.getElementById('sipChartCallout2').textContent = 'Increase the step-up % above to see the impact.';
+          } else {
+            var finalF = sipFV(P, rate, yrs);
+            var finalS = fvStepUpEndOfYear(P, rate, yrs, stepUp);
+            var diff = finalS - finalF;
+            document.getElementById('sipChartCallout2').textContent =
+              'With ' +
+              stepUp +
+              '% annual step-up, your final corpus is ' +
+              formatIndianShort(finalS) +
+              ' vs ' +
+              formatIndianShort(finalF) +
+              ' — an extra ' +
+              formatIndianShort(diff) +
+              '!';
+          }
+          opts.scales.y.stacked = false;
+          opts.scales.x.stacked = false;
+          var dsStep = [
+            { label: 'Fixed SIP', data: fixedLine, borderColor: c.red, backgroundColor: 'transparent', tension: 0.2, fill: false, pointRadius: 0 },
+            { label: 'Step-up SIP', data: stepLine, borderColor: c.green, backgroundColor: 'transparent', tension: 0.2, fill: false, pointRadius: 0 },
+          ];
+          if (!chartInstance || chartInstance.canvas.id !== canvasId || !chartInstance.config || chartInstance.config.type !== 'line') {
+            destroyChart();
+            chartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: dsStep }, options: opts });
+          } else {
+            chartInstance.data.labels = labels;
+            chartInstance.data.datasets[0].data = fixedLine;
+            chartInstance.data.datasets[1].data = stepLine;
+            chartInstance.data.datasets[0].borderColor = c.red;
+            chartInstance.data.datasets[1].borderColor = c.green;
+            chartInstance.update('none');
+          }
+          updateSrTable(labels, [fixedLine, stepLine]);
+        } else if (activeTab === 3) {
+          var PA = P;
+          var rA = rate;
+          var yA = yrs;
+          var PB = getBVal('sipMonthly', 'sipBMonthly', 500, 100000, PA);
+          var rB = getBVal('sipRate', 'sipBRate', 1, 30, rA);
+          var yB = Math.round(getBVal('sipYears', 'sipBYears', 1, 40, yA));
+          var aMonthlyEcho = document.getElementById('sipAMonthlyEcho');
+          var aRateEcho = document.getElementById('sipARateEcho');
+          var aYearsEcho = document.getElementById('sipAYearsEcho');
+          if (aMonthlyEcho) aMonthlyEcho.textContent = '₹' + PA.toLocaleString('en-IN');
+          if (aRateEcho) aRateEcho.textContent = rA + '%';
+          if (aYearsEcho) aYearsEcho.textContent = yA + (yA === 1 ? ' year' : ' years');
+          var maxY = Math.max(yA, yB);
+          var yArr = sampleYears(maxY);
+          var lab2 = yArr.map(function (y) { return 'Y' + y; });
+          var lineA = yArr.map(function (y) { return y <= yA ? sipFV(PA, rA, y) : null; });
+          var lineB = yArr.map(function (y) { return y <= yB ? sipFV(PB, rB, y) : null; });
+          var isIdentical = PA === PB && rA === rB && yA === yB;
+          var hintEl = document.getElementById('sipCompareHint');
+          if (hintEl) {
+            if (isIdentical) {
+              hintEl.textContent =
+                '💡 Scenarios A and B are identical. Edit Scenario B fields to compare different investment plans.';
+              hintEl.style.display = 'block';
+            } else {
+              hintEl.textContent = '';
+              hintEl.style.display = 'none';
+            }
+          }
+          opts.scales.y.stacked = false;
+          opts.scales.x.stacked = false;
+          if (!chartInstance || chartInstance.canvas.id !== canvasId || !chartInstance.config || chartInstance.config.type !== 'line') {
+            destroyChart();
+            chartInstance = new Chart(ctx, {
+              type: 'line',
+              data: {
+                labels: lab2,
+                datasets: [
+                  { label: 'Scenario A', data: lineA, borderColor: c.blue, spanGaps: true, tension: 0.2, pointRadius: 0, fill: false },
+                  {
+                    label: 'Scenario B',
+                    data: lineB,
+                    borderColor: c.orange,
+                    borderDash: [6, 4],
+                    spanGaps: true,
+                    tension: 0.2,
+                    pointRadius: 0,
+                    fill: false,
+                  },
+                ],
+              },
+              options: opts,
+            });
+          } else {
+            chartInstance.data.labels = lab2;
+            chartInstance.data.datasets[0].data = lineA;
+            chartInstance.data.datasets[1].data = lineB;
+            chartInstance.data.datasets[0].borderColor = c.blue;
+            chartInstance.data.datasets[1].borderColor = c.orange;
+            chartInstance.data.datasets[1].borderDash = [6, 4];
+            chartInstance.update('none');
+          }
+          var invA = PA * (yA * 12);
+          var invB = PB * (yB * 12);
+          var matA = sipFV(PA, rA, yA);
+          var matB = sipFV(PB, rB, yB);
+          var retPA = invA > 0 ? ((matA - invA) / invA) * 100 : 0;
+          var retPB = invB > 0 ? ((matB - invB) / invB) * 100 : 0;
+          var winner = matB > matA ? 'B wins by ' + formatIndianShort(matB - matA) : matA > matB ? 'A wins by ' + formatIndianShort(matA - matB) : 'Tie';
+          var tb = document.getElementById('sipCompareTbody');
+          tb.innerHTML =
+            '<tr><th scope="row">Invested</th><td>' +
+            formatIndianFull(invA) +
+            '</td><td>' +
+            formatIndianFull(invB) +
+            '</td><td>' +
+            formatIndianFull(invB - invA) +
+            '</td></tr>' +
+            '<tr><th scope="row">Portfolio</th><td>' +
+            formatIndianFull(matA) +
+            '</td><td>' +
+            formatIndianFull(matB) +
+            '</td><td>' +
+            formatIndianFull(matB - matA) +
+            '</td></tr>' +
+            '<tr><th scope="row">Returns %</th><td>' +
+            retPA.toFixed(2) +
+            '%</td><td>' +
+            retPB.toFixed(2) +
+            '%</td><td>—</td></tr>' +
+            '<tr><th scope="row">Winner</th><td>—</td><td>—</td><td>' +
+            winner +
+            '</td></tr>';
+          var lineAsr = lineA.map(function (v) { return v == null ? 0 : v; });
+          var lineBsr = lineB.map(function (v) { return v == null ? 0 : v; });
+          updateSrTable(lab2, [lineAsr, lineBsr]);
+        } else if (activeTab === 4) {
+          var nominal = yearsArr.map(function (y) { return sipFV(P, rate, y); });
+          var realV = yearsArr.map(function (y, i) { return nominal[i] / Math.pow(1 + infl, y); });
+          opts.scales.y.stacked = false;
+          var dsInfl = [
+            { label: 'Nominal portfolio value', data: nominal, borderColor: c.blue, borderWidth: 2, fill: false, tension: 0.2, pointRadius: 0 },
+            { label: 'Real purchasing power', data: realV, borderColor: c.redD, borderDash: [6, 4], borderWidth: 2, fill: false, tension: 0.2, pointRadius: 0 },
+          ];
+          if (!chartInstance || chartInstance.canvas.id !== canvasId || !chartInstance.config || chartInstance.config.type !== 'line') {
+            destroyChart();
+            chartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: dsInfl }, options: opts });
+          } else {
+            chartInstance.data.labels = labels;
+            chartInstance.data.datasets[0].data = nominal;
+            chartInstance.data.datasets[1].data = realV;
+            chartInstance.data.datasets[0].borderColor = c.blue;
+            chartInstance.data.datasets[1].borderColor = c.redD;
+            chartInstance.update('none');
+          }
+          var finalN = nominal[nominal.length - 1];
+          var finalR = realV[realV.length - 1];
+          document.getElementById('sipChartCallout4').textContent =
+            'Your ' +
+            formatIndianShort(finalN) +
+            ' in Year ' +
+            yrs +
+            " will have the buying power of about " +
+            formatIndianShort(finalR) +
+            " in today's money (at " +
+            (infl * 100).toFixed(1) +
+            '% inflation).';
+          updateSrTable(labels, [nominal, realV]);
+        }
+        updateGoalGauge();
+      }
+      function updateSrTable(labels, series) {
+        var tb = document.getElementById('sipChartSrTbody');
+        if (!tb || !series[0]) return;
+        tb.innerHTML = '';
+        for (var i = 0; i < Math.min(labels.length, 20); i++) {
+          var tr = document.createElement('tr');
+          tr.innerHTML =
+            '<th scope="row">' +
+            labels[i] +
+            '</th><td>' +
+            formatIndianFull(series[0][i] || 0) +
+            '</td><td>' +
+            formatIndianFull((series[1] && series[1][i]) || 0) +
+            '</td>';
+          tb.appendChild(tr);
+        }
+      }
+      function selectTab(idx) {
+        var tabs = document.querySelectorAll('.sip-chart-tab');
+        var panels = document.querySelectorAll('.sip-chart-panel');
+        for (var i = 0; i < tabs.length; i++) {
+          var on = i === idx;
+          tabs[i].classList.toggle('sip-chart-tab--active', on);
+          tabs[i].setAttribute('aria-selected', on ? 'true' : 'false');
+          tabs[i].tabIndex = on ? 0 : -1;
+          panels[i].hidden = !on;
+          panels[i].classList.toggle('sip-chart-panel--active', on);
+        }
+        activeTab = idx;
+        destroyChart();
+        requestAnimationFrame(function () {
+          var wrap = document.querySelector('.sip-chart-panel:not([hidden]) .sip-chart-canvas-wrap');
+          if (wrap) wrap.style.height = chartJsCommonH() + 'px';
+          requestAnimationFrame(function () {
+            buildOrUpdateChart();
+          });
+        });
+      }
+      function scheduleChart() {
+        if (rafPending) cancelAnimationFrame(rafPending);
+        rafPending = requestAnimationFrame(function () {
+          rafPending = null;
+          buildOrUpdateChart();
+        });
+      }
+      var debChart = debounce(scheduleChart, 50);
+      window.__sipChartDebounced = debChart;
+      function debounce(fn, ms) {
+        var t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      function wireTabs() {
+        var tabs = document.querySelectorAll('.sip-chart-tab');
+        tabs.forEach(function (tab, idx) {
+          tab.addEventListener('click', function () {
+            selectTab(idx);
+          });
+        });
+        document.getElementById('sipChartTabs').addEventListener('keydown', function (e) {
+          if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+          e.preventDefault();
+          var n = (activeTab + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+          selectTab(n);
+          tabs[n].focus();
+        });
+      }
+      function wireCompare() {
+        var loadBtn = document.getElementById('sipCompareLoadA');
+        if (!loadBtn) return;
+        loadBtn.addEventListener('click', function () {
+          document.getElementById('sipBMonthly').value = document.getElementById('sipMonthly').value;
+          document.getElementById('sipBRate').value = document.getElementById('sipRate').value;
+          document.getElementById('sipBYears').value = document.getElementById('sipYears').value;
+          debChart();
+        });
+        ['sipBMonthly', 'sipBRate', 'sipBYears'].forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el) el.addEventListener('input', debChart);
+        });
+      }
+      window.addEventListener('load', function () {
+        if (typeof Chart === 'undefined') return;
+        wireTabs();
+        wireCompare();
+        document.getElementById('sipGoal').addEventListener('input', debChart);
+        document.getElementById('sipInflation').addEventListener('input', function () {
+          syncInflRange();
+          debChart();
+        });
+        document.getElementById('sipInflationRange').addEventListener('input', function () {
+          document.getElementById('sipInflation').value = this.value;
+          debChart();
+        });
+        var obs = new MutationObserver(function () {
+          debChart();
+        });
+        obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+        document.querySelectorAll('.sip-chart-canvas-wrap').forEach(function (w) {
+          w.style.height = chartJsCommonH() + 'px';
+        });
+        window.addEventListener('resize', debounce(function () {
+          document.querySelectorAll('.sip-chart-canvas-wrap').forEach(function (w) {
+            w.style.height = chartJsCommonH() + 'px';
+          });
+          if (chartInstance) chartInstance.resize();
+        }, 150));
+        if (window.__sipState) debChart();
+      });
+      function syncInflRange() {
+        var el = document.getElementById('sipInflation');
+        var rng = document.getElementById('sipInflationRange');
+        if (rng && el) rng.value = el.value;
+      }
     })();
   </script>
 
@@ -604,10 +1460,163 @@ const breadcrumbLd = {
     .bar-fill--ret { background: var(--green); }
     .calc-details { margin-top: 12px; font-size: 14px; }
     .calc-details summary { cursor: pointer; font-weight: 600; padding: 8px 0; }
+    .sip-result-donut-wrap {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .sip-result-donut-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted, #64748b);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin: 0 0 12px 0;
+    }
+    .sip-result-donut-canvas-wrap {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin-bottom: 16px;
+    }
+    .sip-result-donut-canvas-wrap canvas {
+      display: block;
+    }
+    .sip-result-donut-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      pointer-events: none;
+    }
+    .sip-result-donut-multiplier {
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1;
+      color: #22c55e;
+      font-variant-numeric: tabular-nums;
+    }
+    :global([data-theme='dark']) .sip-result-donut-multiplier {
+      color: #4ade80;
+    }
+    .sip-result-donut-sublabel {
+      font-size: 11px;
+      color: var(--muted, #64748b);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .sip-result-donut-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      margin-bottom: 12px;
+    }
+    .sip-result-donut-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+    }
+    .sip-result-donut-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex: 0 0 auto;
+    }
+    .sip-result-donut-label {
+      color: var(--muted, #64748b);
+      flex: 1;
+    }
+    .sip-result-donut-value {
+      font-weight: 600;
+      color: var(--text, #0f172a);
+      font-variant-numeric: tabular-nums;
+    }
+    :global([data-theme='dark']) .sip-result-donut-value {
+      color: #e5e7eb;
+    }
+    .sip-result-donut-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #3b82f6;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: background 0.15s;
+    }
+    .sip-result-donut-cta:hover {
+      background: rgba(59, 130, 246, 0.08);
+      text-decoration: none;
+    }
+    :global([data-theme='dark']) .sip-result-donut-cta:hover {
+      background: rgba(59, 130, 246, 0.15);
+    }
     .table-wrap { overflow-x: auto; max-height: 280px; overflow-y: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     th, td { padding: 8px 10px; border-bottom: 1px solid var(--border); text-align: right; }
     th:first-child, td:first-child { text-align: left; }
+    /* Year-by-year table — bordered, centered content */
+    .sip-yearly-table {
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: collapse;
+      border: 1px solid var(--border);
+    }
+    .sip-yearly-table thead th {
+      background: var(--gray-100, #f1f5f9);
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--text, #0f172a);
+      text-align: center !important;
+    }
+    :global([data-theme='dark']) .sip-yearly-table thead th {
+      background: rgba(255, 255, 255, 0.06);
+      color: #e5e7eb;
+    }
+    /* :global(tbody …) — rows are created via innerHTML and lack scoped data attributes */
+    .sip-yearly-table :global(tbody td) {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      font-size: 13px;
+      text-align: center !important;
+      font-variant-numeric: tabular-nums;
+    }
+    .sip-yearly-table :global(tbody tr:nth-child(even) td) {
+      background: var(--gray-50, #f9fafb);
+    }
+    :global([data-theme='dark']) .sip-yearly-table :global(tbody tr:nth-child(even) td) {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .sip-yearly-table :global(tbody tr:hover td) {
+      background: rgba(59, 130, 246, 0.06);
+    }
+    :global([data-theme='dark']) .sip-yearly-table :global(tbody tr:hover td) {
+      background: rgba(59, 130, 246, 0.12);
+    }
+    /* Column widths */
+    .sip-yearly-table thead th:nth-child(1),
+    .sip-yearly-table :global(tbody td:nth-child(1)) {
+      width: 15%;
+    }
+    .sip-yearly-table thead th:nth-child(2),
+    .sip-yearly-table :global(tbody td:nth-child(2)) {
+      width: 45%;
+    }
+    .sip-yearly-table thead th:nth-child(3),
+    .sip-yearly-table :global(tbody td:nth-child(3)) {
+      width: 40%;
+    }
     .sr-only {
       position: absolute;
       width: 1px;
@@ -722,6 +1731,314 @@ const breadcrumbLd = {
     }
     .sip-related-links a:hover {
       text-decoration: underline;
+    }
+
+    /* SIP interactive charts */
+    .sip-viz-section {
+      padding: 8px 0 48px;
+      border-top: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--card) 0%, transparent 120px);
+    }
+    .sip-viz-inner {
+      max-width: 960px;
+    }
+    .sip-viz-heading {
+      text-align: center;
+      font-size: 1.35rem;
+      margin: 0 0 8px;
+      color: var(--text);
+    }
+    .sip-viz-sub {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 15px;
+      margin: 0 0 24px;
+      line-height: 1.55;
+      max-width: 640px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .sip-goal-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 24px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 640px) {
+      .sip-goal-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .sip-goal-field .field,
+    .sip-inflation-field .field {
+      margin-bottom: 0;
+    }
+    .sip-goal-gauge {
+      margin-bottom: 20px;
+    }
+    .sip-goal-gauge-label {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .sip-goal-gauge-track {
+      height: 14px;
+      border-radius: 999px;
+      background: var(--gray-100);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    :global([data-theme='dark']) .sip-goal-gauge-track {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .sip-goal-gauge-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      transition: width 0.25s ease, background 0.2s ease;
+      background: #ef4444;
+    }
+    .sip-goal-gauge-fill--warn {
+      background: #eab308;
+    }
+    .sip-goal-gauge-fill--ok {
+      background: #22c55e;
+    }
+    .sip-goal-gauge-fill--bad {
+      background: #ef4444;
+    }
+    .sip-chart-tabs-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 12px;
+      padding-bottom: 4px;
+    }
+    .sip-chart-tabs {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 6px;
+      min-width: min-content;
+    }
+    .sip-chart-tab {
+      flex: 0 0 auto;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--gray-100);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+    :global([data-theme='dark']) .sip-chart-tab {
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .sip-chart-tab:hover {
+      background: var(--gray-200);
+      border-color: var(--text-muted);
+    }
+    .sip-chart-tab:focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: 2px;
+    }
+    .sip-chart-tab--active {
+      background: #3b82f6;
+      border-color: #3b82f6;
+      color: #fff;
+    }
+    :global([data-theme='dark']) .sip-chart-tab--active {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #fff;
+    }
+    .sip-chart-panels {
+      position: relative;
+    }
+    .sip-chart-panel[hidden] {
+      display: none !important;
+    }
+    .sip-chart-panel:not([hidden]) {
+      animation: sipVizFade 0.2s ease;
+    }
+    @keyframes sipVizFade {
+      from {
+        opacity: 0.6;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    .sip-chart-canvas-wrap {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      margin-bottom: 12px;
+    }
+    .sip-chart-canvas-wrap canvas {
+      max-width: 100%;
+    }
+    @media (max-width: 767px) {
+      .sip-chart-canvas-wrap {
+        height: 280px;
+      }
+    }
+    .sip-chart-callout {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin: 0 0 8px;
+      min-height: 2.5em;
+    }
+    .sip-chart-empty {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 12px 0;
+    }
+    .sip-compare-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 767px) {
+      .sip-compare-inputs {
+        grid-template-columns: 1fr;
+      }
+    }
+    .sip-compare-title {
+      font-size: 1rem;
+      margin: 0 0 8px;
+      color: var(--text);
+    }
+    .sip-compare-note {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+    .sip-compare-readonly {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--gray-50, #f9fafb);
+      border: 1px solid var(--border, #e5e7eb);
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+    :global([data-theme='dark']) .sip-compare-readonly {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    .sip-compare-readonly-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+    .sip-compare-readonly-label {
+      color: var(--muted, #64748b);
+    }
+    .sip-compare-readonly-value {
+      font-weight: 600;
+      color: var(--text, #0f172a);
+    }
+    :global([data-theme='dark']) .sip-compare-readonly-value {
+      color: #e5e7eb;
+    }
+    .sip-compare-hint {
+      display: none;
+      margin: 12px 0;
+      padding: 12px 16px;
+      background: rgba(59, 130, 246, 0.08);
+      border-left: 3px solid #3b82f6;
+      border-radius: 6px;
+      font-size: 14px;
+      color: var(--text, #0f172a);
+    }
+    :global([data-theme='dark']) .sip-compare-hint {
+      background: rgba(59, 130, 246, 0.12);
+      color: #e5e7eb;
+    }
+    .sip-compare-copy {
+      margin-bottom: 12px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--blue);
+    }
+    .sip-compare-copy:hover {
+      border-color: var(--blue);
+    }
+    .sip-compare-table-wrap {
+      margin-top: 16px;
+      max-height: none;
+    }
+    /* Scenario comparison table — bordered, centered content */
+    .sip-compare-metrics {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--border);
+      font-size: 14px;
+      table-layout: fixed;
+    }
+    .sip-compare-metrics thead th {
+      background: var(--gray-100, #f1f5f9);
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      font-weight: 600;
+      color: var(--text, #0f172a);
+      text-align: center !important;
+    }
+    :global([data-theme='dark']) .sip-compare-metrics thead th {
+      background: rgba(255, 255, 255, 0.06);
+      color: #e5e7eb;
+    }
+    /* :global(tbody …) — rows are injected via innerHTML without scoped data attributes */
+    .sip-compare-metrics :global(tbody th),
+    .sip-compare-metrics :global(tbody td) {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: center !important;
+      font-variant-numeric: tabular-nums;
+    }
+    .sip-compare-metrics :global(tbody th) {
+      font-weight: 600;
+    }
+    .sip-compare-metrics :global(tbody tr:nth-child(even) th),
+    .sip-compare-metrics :global(tbody tr:nth-child(even) td) {
+      background: var(--gray-50, #f9fafb);
+    }
+    :global([data-theme='dark']) .sip-compare-metrics :global(tbody tr:nth-child(even) th),
+    :global([data-theme='dark']) .sip-compare-metrics :global(tbody tr:nth-child(even) td) {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .sip-compare-metrics :global(tbody tr:hover th),
+    .sip-compare-metrics :global(tbody tr:hover td) {
+      background: rgba(59, 130, 246, 0.06);
+    }
+    :global([data-theme='dark']) .sip-compare-metrics :global(tbody tr:hover th),
+    :global([data-theme='dark']) .sip-compare-metrics :global(tbody tr:hover td) {
+      background: rgba(59, 130, 246, 0.12);
+    }
+    /* Column widths */
+    .sip-compare-metrics thead th:nth-child(1),
+    .sip-compare-metrics :global(tbody th:nth-child(1)),
+    .sip-compare-metrics :global(tbody td:nth-child(1)) {
+      width: 22%;
+    }
+    .sip-compare-metrics thead th:nth-child(2),
+    .sip-compare-metrics :global(tbody td:nth-child(2)),
+    .sip-compare-metrics thead th:nth-child(3),
+    .sip-compare-metrics :global(tbody td:nth-child(3)),
+    .sip-compare-metrics thead th:nth-child(4),
+    .sip-compare-metrics :global(tbody td:nth-child(4)) {
+      width: 26%;
     }
   </style>
 </MainLayout>
