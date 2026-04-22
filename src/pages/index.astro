@@ -2,7 +2,7 @@
 // Homepage — DoItSwift
 import MainLayout from '../layouts/MainLayout.astro';
 
-/** Homepage-only structured data (head). Logo: public/images/doitswift-logo.png */
+/** Homepage-only WebSite structured data (head). */
 const websiteSchemaLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
@@ -17,34 +17,6 @@ const websiteSchemaLd = {
     name: 'DoItSwift',
     url: 'https://doitswift.com/',
   },
-};
-
-const organizationSchemaLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: 'DoItSwift',
-  alternateName: 'DoItSwift Tools',
-  url: 'https://doitswift.com/',
-  logo: {
-    '@type': 'ImageObject',
-    url: 'https://doitswift.com/images/doitswift-logo.png',
-    caption: 'DoItSwift logo',
-  },
-  description:
-    "DoItSwift provides free privacy-first utility tools — image converters (HEIC, WEBP, AVIF to JPG), PDF utilities (merge, split, compress, unlock), and 40 calculators for finance, health, math, time, and everyday use. All tools run in the browser; files never leave the user's device.",
-  foundingDate: '2026',
-  slogan: 'Free online tools. Zero friction.',
-  knowsAbout: [
-    'Image format conversion',
-    'PDF document processing',
-    'Financial calculators',
-    'Indian tax calculators',
-    'Health and fitness calculators',
-    'Browser-based file processing',
-    'Privacy-first web utilities',
-  ],
-  areaServed: 'Worldwide',
-  sameAs: [],
 };
 
 const categories = [
@@ -177,7 +149,6 @@ const popularToolGroups = [
   canonical={new URL(Astro.url.pathname, Astro.site).toString()}
 >
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(websiteSchemaLd)} />
-  <script slot="head" type="application/ld+json" set:html={JSON.stringify(organizationSchemaLd)} />
   <!-- HERO -->
   <section class="hero">
     <div class="container">
