@@ -15,82 +15,6 @@ const tools = [
 const pageDescription =
   'Free browser-based image tools: HEIC, WebP, AVIF to JPG; SVG to PNG; image compressor and resizer; favicon ICO generator; Base64 encoder. All run locally — no upload, no signup. Batch and ZIP where supported.';
 
-const collectionJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'CollectionPage',
-  name: 'Free Online Image Tools',
-  description: pageDescription,
-  url: new URL(Astro.url.pathname, Astro.site).href,
-  isPartOf: {
-    '@type': 'WebSite',
-    name: 'DoItSwift',
-    url: new URL('/', Astro.site).href,
-  },
-  mainEntity: {
-    '@type': 'ItemList',
-    numberOfItems: tools.length,
-    itemListElement: tools.map((t, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      name: t.title,
-      url: new URL(t.href, Astro.site).href,
-      description: t.desc,
-    })),
-  },
-};
-
-const faqJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: 'Which format should I use for my website?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text:
-          'For photos, modern sites often serve WebP or AVIF with a JPG fallback. For logos with transparency, PNG or SVG is typical. Use compress and resize tools to keep file sizes small without visible quality loss. DoItSwift\'s blog guide "Best Image Format for Websites" compares formats in more detail.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Are my images uploaded to DoItSwift?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text:
-          'No. These tools run in your browser; your files stay on your device unless you explicitly use a future feature that says otherwise. Disconnect from the internet after the page loads and conversions still work.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Will converting reduce quality?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text:
-          'JPG and lossy compression always trade size for quality. Use higher quality settings when you need crisp output; use stronger compression for thumbnails and social previews.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Can I process many files at once?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text:
-          'Yes. Most tools support batch selection or drag-and-drop of multiple files, with ZIP download where it makes sense. There are no artificial batch limits.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Do these tools work on mobile?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text:
-          'Yes. Use Safari on iPhone, Chrome on Android, or any modern mobile browser. Very large files may be slower on older phones.',
-      },
-    },
-  ],
-};
-
 // Head JSON-LD only (slot="head"). FAQ answers match visible FAQ on this page.
 const imageHubBreadcrumbLd = {
   '@context': 'https://schema.org',
@@ -232,8 +156,6 @@ const imageHubFaqPageLd = {
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(imageHubBreadcrumbLd)} />
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(imageHubItemListLd)} />
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(imageHubFaqPageLd)} />
-  <script type="application/ld+json" set:html={JSON.stringify(collectionJsonLd)} />
-  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
 
   <section class="hero">
     <div class="container">

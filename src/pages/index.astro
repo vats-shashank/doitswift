@@ -2,30 +2,6 @@
 // Homepage — DoItSwift
 import MainLayout from '../layouts/MainLayout.astro';
 
-const siteOrigin = Astro.site?.origin ?? 'https://doitswift.com';
-const homeJsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebSite',
-      '@id': `${siteOrigin}/#website`,
-      url: `${siteOrigin}/`,
-      name: 'DoItSwift',
-      description:
-        'Free online utility tools in your browser — image and PDF converters, calculators. Privacy-first: file processing stays on your device when tools run locally.',
-      publisher: { '@id': `${siteOrigin}/#organization` },
-      inLanguage: 'en',
-    },
-    {
-      '@type': 'Organization',
-      '@id': `${siteOrigin}/#organization`,
-      name: 'DoItSwift',
-      url: `${siteOrigin}/`,
-      logo: { '@type': 'ImageObject', url: `${siteOrigin}/og-default.svg` },
-    },
-  ],
-};
-
 /** Homepage-only structured data (head). Logo: public/images/doitswift-logo.png */
 const websiteSchemaLd = {
   '@context': 'https://schema.org',
@@ -202,7 +178,6 @@ const popularToolGroups = [
 >
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(websiteSchemaLd)} />
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(organizationSchemaLd)} />
-  <script type="application/ld+json" set:html={JSON.stringify(homeJsonLd)} />
   <!-- HERO -->
   <section class="hero">
     <div class="container">

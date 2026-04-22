@@ -171,6 +171,7 @@ const calcHubFaqPageLd = {
 
 const siteRoot = Astro.site ? new URL('/', Astro.site).href : undefined;
 
+// Body JSON-LD: WebPage + CollectionPage only (FAQ, ItemList, BreadcrumbList live in <head> via calcHub*).
 const collectionJsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -190,37 +191,7 @@ const collectionJsonLd = {
       name: 'Free Online Calculators',
       description: pageDescription,
       ...(siteRoot ? { isPartOf: { '@type': 'WebSite', name: 'DoItSwift', url: siteRoot } } : {}),
-      mainEntity: {
-        '@type': 'ItemList',
-        numberOfItems: allTools.length,
-        itemListElement: allTools.map((t, i) => ({
-          '@type': 'ListItem',
-          position: i + 1,
-          name: t.title,
-          url: Astro.site ? new URL(t.href, Astro.site).href : t.href,
-          description: t.desc,
-        })),
-      },
     },
-    {
-      '@type': 'FAQPage',
-      mainEntity: indexFaqs.map((f) => ({
-        '@type': 'Question',
-        name: f.question,
-        acceptedAnswer: { '@type': 'Answer', text: f.answer },
-      })),
-    },
-    ...(Astro.site
-      ? [
-          {
-            '@type': 'BreadcrumbList',
-            itemListElement: [
-              { '@type': 'ListItem', position: 1, name: 'Home', item: siteRoot },
-              { '@type': 'ListItem', position: 2, name: 'Calculators', item: new URL('/calculator/', Astro.site).href },
-            ],
-          },
-        ]
-      : []),
   ],
 };
 ---

@@ -14,126 +14,6 @@ const tools = [
 const pageDescription =
   'Free browser-based PDF tools: merge, split, compress, PDF to JPG, image to PDF, JPG to PDF, unlock with password. pdf-lib and PDF.js — all run locally. No upload, no signup, batch and ZIP where supported.';
 
-const collectionJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'CollectionPage',
-  name: 'Free Online PDF Tools',
-  description: pageDescription,
-  url: new URL(Astro.url.pathname, Astro.site).href,
-  isPartOf: {
-    '@type': 'WebSite',
-    name: 'DoItSwift',
-    url: new URL('/', Astro.site).href,
-  },
-  mainEntity: {
-    '@type': 'ItemList',
-    numberOfItems: tools.length,
-    itemListElement: tools.map((t, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      name: t.title,
-      url: new URL(t.href, Astro.site).href,
-      description: t.desc,
-    })),
-  },
-};
-
-const faqJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: 'Is there a file size limit for DoItSwift PDF tools?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text:
-          'There is no fixed cap from DoItSwift — limits come from your device RAM and browser. PDFs above about 50 MB may take a noticeable time; very large files can fail on low-memory mobile browsers.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Are my PDFs uploaded to DoItSwift?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text:
-          'No. Tools load libraries from CDNs, but your document bytes stay in the browser unless you download a result. You can verify by going offline after the page loads.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Can I process multiple PDFs in one session?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text:
-          'Yes — merge, compress, PDF to JPG, unlock, and related flows support batches where the tool allows. Split focuses on one document at a time for clear page numbering. Image to PDF and JPG to PDF accept many images with reordering before export.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Will PDF compression always make files smaller?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text:
-          'Usually, but not always. Light modes mostly re-save and strip metadata. Heavier modes may rasterize pages, trading smaller size against sharp text — pick the level that fits your document.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Do DoItSwift PDF tools add watermarks?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'No. Output is whatever the conversion produces — no DoItSwift branding on your files.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Which browsers work best for PDF tools?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text:
-          'Latest Chrome, Edge, Firefox, or Safari on desktop. Mobile Safari and Chrome work for moderate file sizes.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Are these PDF tools free? Is there a monthly limit?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text:
-          'Yes, they are free to use with no signup. There are no monthly quotas, accounts, or premium tiers.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'What if my PDF is password-protected?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text:
-          'Use Unlock PDF with the correct password first, then merge, split, compress, or convert as needed. DoItSwift does not crack forgotten passwords.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Can I export PDF pages as images?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text:
-          'Yes — use the PDF to JPG tool to export pages as JPEG images in your browser.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Can I create a PDF from photos or scans?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text:
-          'Yes. Image to PDF accepts many image formats with reorder; JPG to PDF is optimized for JPEG photo workflows.',
-      },
-    },
-  ],
-};
-
 // Head JSON-LD only (slot="head"). FAQ answers match visible FAQ on this page.
 const pdfHubBreadcrumbLd = {
   '@context': 'https://schema.org',
@@ -311,8 +191,6 @@ const pdfHubFaqPageLd = {
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(pdfHubBreadcrumbLd)} />
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(pdfHubItemListLd)} />
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(pdfHubFaqPageLd)} />
-  <script type="application/ld+json" set:html={JSON.stringify(collectionJsonLd)} />
-  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
 
   <section class="hero">
     <div class="container">
