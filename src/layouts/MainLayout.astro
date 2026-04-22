@@ -107,6 +107,7 @@ const organizationWebSchema = site
     {organizationWebSchema && (
       <script type="application/ld+json" set:html={JSON.stringify(organizationWebSchema)} />
     )}
+    <slot name="head" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/styles/global.css" />
     {needsPendingTransfer && <script src="/pending-transfer.js" defer />}

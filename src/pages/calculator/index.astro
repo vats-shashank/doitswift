@@ -88,6 +88,87 @@ const indexFaqs: CalculatorFaqItem[] = [
   },
 ];
 
+// Head-only JSON-LD (slot="head"). ItemList URLs verified against src/pages/calculator/*.astro.
+const calcHubBreadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://doitswift.com/' },
+    { '@type': 'ListItem', position: 2, name: 'Calculators', item: 'https://doitswift.com/calculator/' },
+  ],
+};
+
+const calcHubItemListLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Free Online Calculators',
+  description:
+    '40 browser-based calculators covering finance, health, math and education, time and date, and everyday tasks. All calculations run locally; no data is sent to any server.',
+  numberOfItems: 40,
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, url: 'https://doitswift.com/calculator/sip/', name: 'SIP Calculator' },
+    { '@type': 'ListItem', position: 2, url: 'https://doitswift.com/calculator/emi/', name: 'EMI Calculator' },
+    { '@type': 'ListItem', position: 3, url: 'https://doitswift.com/calculator/home-loan/', name: 'Home Loan Calculator' },
+    { '@type': 'ListItem', position: 4, url: 'https://doitswift.com/calculator/income-tax/', name: 'Income Tax Calculator' },
+    { '@type': 'ListItem', position: 5, url: 'https://doitswift.com/calculator/fd/', name: 'FD Calculator' },
+    { '@type': 'ListItem', position: 6, url: 'https://doitswift.com/calculator/gst/', name: 'GST Calculator' },
+    { '@type': 'ListItem', position: 7, url: 'https://doitswift.com/calculator/ppf/', name: 'PPF Calculator' },
+    { '@type': 'ListItem', position: 8, url: 'https://doitswift.com/calculator/lumpsum/', name: 'Lumpsum Calculator' },
+    { '@type': 'ListItem', position: 9, url: 'https://doitswift.com/calculator/hra/', name: 'HRA Calculator' },
+    { '@type': 'ListItem', position: 10, url: 'https://doitswift.com/calculator/retirement/', name: 'Retirement Calculator' },
+    { '@type': 'ListItem', position: 11, url: 'https://doitswift.com/calculator/rd/', name: 'RD Calculator' },
+    { '@type': 'ListItem', position: 12, url: 'https://doitswift.com/calculator/salary/', name: 'Salary Calculator' },
+    { '@type': 'ListItem', position: 13, url: 'https://doitswift.com/calculator/nps/', name: 'NPS Calculator' },
+    { '@type': 'ListItem', position: 14, url: 'https://doitswift.com/calculator/compound-interest/', name: 'Compound Interest Calculator' },
+    { '@type': 'ListItem', position: 15, url: 'https://doitswift.com/calculator/swp/', name: 'SWP Calculator' },
+    { '@type': 'ListItem', position: 16, url: 'https://doitswift.com/calculator/personal-loan/', name: 'Personal Loan EMI Calculator' },
+    { '@type': 'ListItem', position: 17, url: 'https://doitswift.com/calculator/mortgage/', name: 'Mortgage Calculator' },
+    { '@type': 'ListItem', position: 18, url: 'https://doitswift.com/calculator/stock-average/', name: 'Stock Average Calculator' },
+    { '@type': 'ListItem', position: 19, url: 'https://doitswift.com/calculator/bmi/', name: 'BMI Calculator' },
+    { '@type': 'ListItem', position: 20, url: 'https://doitswift.com/calculator/calorie/', name: 'Calorie Calculator' },
+    { '@type': 'ListItem', position: 21, url: 'https://doitswift.com/calculator/ideal-weight/', name: 'Ideal Weight Calculator' },
+    { '@type': 'ListItem', position: 22, url: 'https://doitswift.com/calculator/body-fat/', name: 'Body Fat Calculator' },
+    {
+      '@type': 'ListItem',
+      position: 23,
+      url: 'https://doitswift.com/calculator/pregnancy-due-date/',
+      name: 'Pregnancy Due Date Calculator',
+    },
+    { '@type': 'ListItem', position: 24, url: 'https://doitswift.com/calculator/water-intake/', name: 'Water Intake Calculator' },
+    { '@type': 'ListItem', position: 25, url: 'https://doitswift.com/calculator/macro/', name: 'Macro Calculator' },
+    {
+      '@type': 'ListItem',
+      position: 26,
+      url: 'https://doitswift.com/calculator/period-ovulation/',
+      name: 'Period & Ovulation Calculator',
+    },
+    { '@type': 'ListItem', position: 27, url: 'https://doitswift.com/calculator/heart-rate/', name: 'Heart Rate Zones Calculator' },
+    { '@type': 'ListItem', position: 28, url: 'https://doitswift.com/calculator/percentage/', name: 'Percentage Calculator' },
+    { '@type': 'ListItem', position: 29, url: 'https://doitswift.com/calculator/scientific/', name: 'Scientific Calculator' },
+    { '@type': 'ListItem', position: 30, url: 'https://doitswift.com/calculator/gpa/', name: 'GPA Calculator' },
+    { '@type': 'ListItem', position: 31, url: 'https://doitswift.com/calculator/fraction/', name: 'Fraction Calculator' },
+    { '@type': 'ListItem', position: 32, url: 'https://doitswift.com/calculator/statistics/', name: 'Statistics Calculator' },
+    { '@type': 'ListItem', position: 33, url: 'https://doitswift.com/calculator/age/', name: 'Age Calculator' },
+    { '@type': 'ListItem', position: 34, url: 'https://doitswift.com/calculator/date-difference/', name: 'Date Difference Calculator' },
+    { '@type': 'ListItem', position: 35, url: 'https://doitswift.com/calculator/time/', name: 'Time Math Calculator' },
+    { '@type': 'ListItem', position: 36, url: 'https://doitswift.com/calculator/tip/', name: 'Tip Calculator' },
+    { '@type': 'ListItem', position: 37, url: 'https://doitswift.com/calculator/discount/', name: 'Discount Calculator' },
+    { '@type': 'ListItem', position: 38, url: 'https://doitswift.com/calculator/unit-converter/', name: 'Unit Converter' },
+    { '@type': 'ListItem', position: 39, url: 'https://doitswift.com/calculator/emi-vs-rent/', name: 'Buy vs Rent Calculator' },
+    { '@type': 'ListItem', position: 40, url: 'https://doitswift.com/calculator/markup-margin/', name: 'Markup and Margin Calculator' },
+  ],
+};
+
+const calcHubFaqPageLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: indexFaqs.map((f) => ({
+    '@type': 'Question',
+    name: f.question,
+    acceptedAnswer: { '@type': 'Answer', text: f.answer },
+  })),
+};
+
 const siteRoot = Astro.site ? new URL('/', Astro.site).href : undefined;
 
 const collectionJsonLd = {
@@ -150,6 +231,9 @@ const collectionJsonLd = {
   keywords="free online calculators, SIP EMI income tax calculator India, mortgage PITI calculator US, BMI TDEE calculator, GPA fraction statistics calculator, period ovulation calculator, unit converter tip discount markup, buy vs rent calculator, browser calculators no signup"
   canonical={canonical}
 >
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(calcHubBreadcrumbLd)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(calcHubItemListLd)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(calcHubFaqPageLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(collectionJsonLd)} />
 
   <section class="hero">

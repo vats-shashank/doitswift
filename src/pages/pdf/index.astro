@@ -133,6 +133,173 @@ const faqJsonLd = {
     },
   ],
 };
+
+// Head JSON-LD only (slot="head"). FAQ answers match visible FAQ on this page.
+const pdfHubBreadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: 'https://doitswift.com/',
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'PDF Tools',
+      item: 'https://doitswift.com/pdf/',
+    },
+  ],
+};
+
+const pdfHubItemListLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Free Online PDF Tools',
+  description:
+    'Browser-based PDF utilities — merge, split, compress, convert, unlock. All processing happens locally with PDF-lib and PDF.js; files never leave your device.',
+  numberOfItems: 7,
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      url: 'https://doitswift.com/pdf/pdf-to-jpg/',
+      name: 'PDF to JPG Converter',
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      url: 'https://doitswift.com/pdf/image-to-pdf/',
+      name: 'Image to PDF Converter',
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      url: 'https://doitswift.com/pdf/jpg-to-pdf/',
+      name: 'JPG to PDF Converter',
+    },
+    {
+      '@type': 'ListItem',
+      position: 4,
+      url: 'https://doitswift.com/pdf/merge-pdf/',
+      name: 'Merge PDFs',
+    },
+    {
+      '@type': 'ListItem',
+      position: 5,
+      url: 'https://doitswift.com/pdf/split-pdf/',
+      name: 'Split PDF',
+    },
+    {
+      '@type': 'ListItem',
+      position: 6,
+      url: 'https://doitswift.com/pdf/compress-pdf/',
+      name: 'Compress PDF',
+    },
+    {
+      '@type': 'ListItem',
+      position: 7,
+      url: 'https://doitswift.com/pdf/unlock-pdf/',
+      name: 'Unlock PDF',
+    },
+  ],
+};
+
+const pdfHubFaqPageLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Is there a file size limit?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'We do not impose a fixed cap — limits come from your device RAM and browser. PDFs above ~50MB may take a noticeable time to process; very large files can fail on low-memory mobile browsers.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Are my PDFs uploaded to DoItSwift?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'No. Tools load PDF-lib and related code from CDNs, but your document bytes stay in the browser unless you choose to download the result. You can verify by going offline after the page loads.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I process multiple PDFs in one session?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Yes — merge, compress, and PDF-to-JPG support batches. Split focuses on one document at a time for clarity. JPG-to-PDF accepts many images at once with reordering before export.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Will compression always make files smaller?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Usually, but not always. “Light” modes mostly re-save and strip metadata. Heavier modes may rasterize pages, which trades smaller size against sharp text — pick the level that fits your document type.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do these tools add watermarks?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. Output is whatever the conversion produces — no DoItSwift branding on your files.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Which browsers work best?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Latest Chrome, Edge, Firefox, or Safari on desktop. Mobile Safari and Chrome work for moderate file sizes.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Are these PDF tools free? Is there a monthly limit?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes — free to use with no signup. There are no monthly quotas, accounts, or premium tiers.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What if my PDF is password-protected?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Use Unlock PDF with the correct password first, then merge, split, compress, or convert. DoItSwift does not recover forgotten passwords.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I export PDF pages as images?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes — PDF to JPG exports pages as JPEG files in your browser.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I create a PDF from photos or scans?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Yes. Image to PDF combines many image formats with reorder; JPG to PDF fits JPEG-heavy photo workflows.',
+      },
+    },
+  ],
+};
 ---
 
 <MainLayout
@@ -141,6 +308,9 @@ const faqJsonLd = {
   keywords="free pdf tools online, merge pdf, split pdf, compress pdf, pdf to jpg, image to pdf, jpg to pdf, unlock pdf, browser pdf tools, private pdf no upload, batch pdf, pdf-lib, pdf.js, doitswift"
   canonical={new URL(Astro.url.pathname, Astro.site).toString()}
 >
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(pdfHubBreadcrumbLd)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(pdfHubItemListLd)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(pdfHubFaqPageLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(collectionJsonLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
 

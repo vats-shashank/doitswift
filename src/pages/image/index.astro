@@ -90,6 +90,137 @@ const faqJsonLd = {
     },
   ],
 };
+
+// Head JSON-LD only (slot="head"). FAQ answers match visible FAQ on this page.
+const imageHubBreadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: 'https://doitswift.com/',
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Image Tools',
+      item: 'https://doitswift.com/image/',
+    },
+  ],
+};
+
+const imageHubItemListLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Free Online Image Tools',
+  description:
+    'Browser-based image conversion, compression, and editing tools. All processing happens locally — files never leave your device.',
+  numberOfItems: 8,
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      url: 'https://doitswift.com/image/heic-to-jpg/',
+      name: 'HEIC to JPG Converter',
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      url: 'https://doitswift.com/image/webp-to-jpg/',
+      name: 'WEBP to JPG Converter',
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      url: 'https://doitswift.com/image/image-compressor/',
+      name: 'Image Compressor',
+    },
+    {
+      '@type': 'ListItem',
+      position: 4,
+      url: 'https://doitswift.com/image/image-resizer/',
+      name: 'Image Resizer',
+    },
+    {
+      '@type': 'ListItem',
+      position: 5,
+      url: 'https://doitswift.com/image/svg-to-png/',
+      name: 'SVG to PNG Converter',
+    },
+    {
+      '@type': 'ListItem',
+      position: 6,
+      url: 'https://doitswift.com/image/favicon-generator/',
+      name: 'Favicon Generator',
+    },
+    {
+      '@type': 'ListItem',
+      position: 7,
+      url: 'https://doitswift.com/image/avif-to-jpg/',
+      name: 'AVIF to JPG Converter',
+    },
+    {
+      '@type': 'ListItem',
+      position: 8,
+      url: 'https://doitswift.com/image/image-to-base64/',
+      name: 'Image to Base64 Encoder',
+    },
+  ],
+};
+
+const imageHubFaqPageLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Which format should I use for my website?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'For photos, modern sites often serve WebP or AVIF with a JPG fallback. For logos with transparency, PNG or SVG is typical. Use our compress and resize tools to keep file sizes small without visible quality loss. For a deeper comparison, read best image format for websites.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Are my images uploaded to DoItSwift?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'No. These tools run in your browser; your files stay on your device unless you explicitly use a future feature that says otherwise. Disconnect from the internet after the page loads and conversions still work.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Will converting reduce quality?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'JPG and lossy compression always trade size for quality. Use higher quality settings when you need crisp output; use stronger compression for thumbnails and social previews.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I process many files at once?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Yes. Most tools support batch selection or drag-and-drop of multiple files, with ZIP download where it makes sense. There are no artificial batch limits.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do these tools work on mobile?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Yes. Use Safari on iPhone, Chrome on Android, or any modern mobile browser. Very large files may be slower on older phones.',
+      },
+    },
+  ],
+};
 ---
 
 <MainLayout
@@ -98,6 +229,9 @@ const faqJsonLd = {
   keywords="free image tools online, browser image converter, heic to jpg, webp to jpg, avif to jpg, svg to png, image compressor online, image resizer, favicon generator, image to base64, data url, ico favicon, private image converter, no upload image tools, batch image converter, doitswift"
   canonical={new URL(Astro.url.pathname, Astro.site).toString()}
 >
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(imageHubBreadcrumbLd)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(imageHubItemListLd)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(imageHubFaqPageLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(collectionJsonLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
 

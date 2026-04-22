@@ -102,6 +102,16 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         </p>
       </header>
 
+      <div class="tool-cta-top" style="background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%); border-left: 4px solid #3b82f6; padding: 20px 24px; border-radius: 12px; margin: 32px 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+        <div style="flex: 1; min-width: 280px;">
+          <p style="margin: 0 0 6px 0; font-weight: 600; color: #1e40af; font-size: 15px;">Skip the reading — use the tool directly</p>
+          <p style="margin: 0; color: #475569; font-size: 14px;">Our free BMI Calculator runs entirely in your browser. No signup, no uploads, no watermarks.</p>
+        </div>
+        <a href="/calculator/bmi/" style="display: inline-block; background: #3b82f6; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; white-space: nowrap; font-size: 14px;">
+          Try BMI Calculator →
+        </a>
+      </div>
+
       <div class="toc card">
         <strong>In this guide:</strong>
         <ul>
@@ -740,6 +750,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 
       <ShareButtons title={title} url={canonical} />
 
+      <div class="tool-cta-bottom cta-section" style="margin: 48px 0 32px 0;">
+        <h2 style="margin-bottom: 16px;">Ready to calculate your BMI?</h2>
+        <p style="margin-bottom: 24px;">Use our free BMI Calculator — browser-based, private, and unlimited. No account needed, no watermarks, works offline.</p>
+        <a href="/calculator/bmi/" class="cta-button" style="display: inline-block; background: #3b82f6; color: white; padding: 14px 32px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 16px;">
+          Open BMI Calculator →
+        </a>
+      </div>
+
       <section class="cta-section">
         <h2>Check your BMI now — takes 10 seconds</h2>
         <p>
@@ -845,6 +863,17 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       font-size: 15px;
     }
     [data-theme="dark"] .callout { background: rgba(0, 102, 255, .1); }
+
+    [data-theme="dark"] .tool-cta-top {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%) !important;
+      border-left-color: #60a5fa !important;
+    }
+    [data-theme="dark"] .tool-cta-top p:first-child {
+      color: #93c5fd !important;
+    }
+    [data-theme="dark"] .tool-cta-top p:last-child {
+      color: #cbd5e1 !important;
+    }
 
     .formula-callout {
       background: #f0fdf4;

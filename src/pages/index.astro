@@ -26,6 +26,51 @@ const homeJsonLd = {
   ],
 };
 
+/** Homepage-only structured data (head). Logo: public/images/doitswift-logo.png */
+const websiteSchemaLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'DoItSwift',
+  alternateName: 'DoItSwift Free Online Tools',
+  url: 'https://doitswift.com/',
+  description:
+    'Free online utility tools — image converters, PDF utilities, and 40 calculators. Browser-based, private, unlimited.',
+  inLanguage: 'en-US',
+  publisher: {
+    '@type': 'Organization',
+    name: 'DoItSwift',
+    url: 'https://doitswift.com/',
+  },
+};
+
+const organizationSchemaLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'DoItSwift',
+  alternateName: 'DoItSwift Tools',
+  url: 'https://doitswift.com/',
+  logo: {
+    '@type': 'ImageObject',
+    url: 'https://doitswift.com/images/doitswift-logo.png',
+    caption: 'DoItSwift logo',
+  },
+  description:
+    "DoItSwift provides free privacy-first utility tools — image converters (HEIC, WEBP, AVIF to JPG), PDF utilities (merge, split, compress, unlock), and 40 calculators for finance, health, math, time, and everyday use. All tools run in the browser; files never leave the user's device.",
+  foundingDate: '2026',
+  slogan: 'Free online tools. Zero friction.',
+  knowsAbout: [
+    'Image format conversion',
+    'PDF document processing',
+    'Financial calculators',
+    'Indian tax calculators',
+    'Health and fitness calculators',
+    'Browser-based file processing',
+    'Privacy-first web utilities',
+  ],
+  areaServed: 'Worldwide',
+  sameAs: [],
+};
+
 const categories = [
   {
     emoji: '🖼️',
@@ -85,18 +130,67 @@ const categories = [
   },
 ];
 
-const tools = [
-  { href: '/calculator/sip/', icon: '📈', title: 'SIP Calculator', desc: 'Mutual fund SIP maturity & returns', live: true },
-  { href: '/calculator/emi/', icon: '🏦', title: 'EMI Calculator', desc: 'Loan EMI, interest & amortization', live: true },
-  { href: '/calculator/bmi/', icon: '⚖️', title: 'BMI Calculator', desc: 'Body mass index & categories', live: true },
-  { href: '/image/heic-to-jpg/', icon: '📱', title: 'HEIC to JPG', desc: 'Convert iPhone photos to JPG', live: true },
-  { href: '/image/webp-to-jpg/', icon: '🖼️', title: 'WEBP to JPG', desc: 'Convert WebP images instantly', live: true },
-  { href: '/image/image-compressor/', icon: '🗜️', title: 'Image Compressor', desc: 'Shrink files up to 80%', live: true },
-  { href: '/image/image-resizer/', icon: '📐', title: 'Image Resizer', desc: 'Resize for web or print', live: true },
-  { href: '/image/svg-to-png/', icon: '🎨', title: 'SVG to PNG', desc: 'Convert vectors to raster', live: true },
-  { href: '/image/favicon-generator/', icon: '⭐', title: 'Favicon Generator', desc: 'Create ICO files for sites', live: true },
-  { href: '/image/avif-to-jpg/', icon: '✨', title: 'AVIF to JPG', desc: 'Convert next-gen formats', live: true },
-  { href: '/image/image-to-base64/', icon: '🔢', title: 'Image to Base64', desc: 'Encode images for code', live: true },
+const popularToolGroups = [
+  {
+    title: 'Image Tools',
+    tools: [
+      { href: '/image/heic-to-jpg/', icon: '📱', title: 'HEIC to JPG', desc: 'Convert iPhone photos to JPG', live: true },
+      {
+        href: '/image/image-compressor/',
+        icon: '🗜️',
+        title: 'Image Compressor',
+        desc: 'Reduce JPG & PNG file size up to 80%',
+        live: true,
+      },
+      { href: '/image/image-resizer/', icon: '📐', title: 'Image Resizer', desc: 'Resize images to exact pixels', live: true },
+    ],
+  },
+  {
+    title: 'PDF Tools',
+    tools: [
+      { href: '/pdf/merge-pdf/', icon: '🔗', title: 'Merge PDF', desc: 'Combine PDF files into one', live: true },
+      { href: '/pdf/compress-pdf/', icon: '📦', title: 'Compress PDF', desc: 'Reduce PDF size up to 90%', live: true },
+      { href: '/pdf/pdf-to-jpg/', icon: '🖼️', title: 'PDF to JPG', desc: 'Convert PDF pages to images', live: true },
+      { href: '/pdf/split-pdf/', icon: '✂️', title: 'Split PDF', desc: 'Extract pages or break into parts', live: true },
+    ],
+  },
+  {
+    title: 'Calculators',
+    tools: [
+      {
+        href: '/calculator/mortgage/',
+        icon: '🏠',
+        title: 'Mortgage Calculator',
+        desc: 'Monthly payment with PITI & PMI',
+        live: true,
+      },
+      { href: '/calculator/emi/', icon: '🏦', title: 'EMI Calculator', desc: 'Loan EMI, interest & amortization', live: true },
+      { href: '/calculator/sip/', icon: '📈', title: 'SIP Calculator', desc: 'Mutual fund SIP maturity & returns', live: true },
+      {
+        href: '/calculator/home-loan/',
+        icon: '🔑',
+        title: 'Home Loan Calculator',
+        desc: 'EMI with prepayment simulation',
+        live: true,
+      },
+      {
+        href: '/calculator/income-tax/',
+        icon: '🧾',
+        title: 'Income Tax Calculator',
+        desc: 'New vs Old regime FY 2026-27',
+        live: true,
+      },
+      { href: '/calculator/bmi/', icon: '⚖️', title: 'BMI Calculator', desc: 'Body Mass Index & categories', live: true },
+      { href: '/calculator/calorie/', icon: '🍎', title: 'Calorie Calculator', desc: 'Daily calories, TDEE & BMR', live: true },
+      {
+        href: '/calculator/period-ovulation/',
+        icon: '📅',
+        title: 'Period & Ovulation',
+        desc: 'Cycle calendar & fertile window',
+        live: true,
+      },
+    ],
+  },
 ];
 ---
 
@@ -106,6 +200,8 @@ const tools = [
   keywords="doitswift, free online tools, browser utilities, image converter, privacy tools, file converter"
   canonical={new URL(Astro.url.pathname, Astro.site).toString()}
 >
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(websiteSchemaLd)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(organizationSchemaLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(homeJsonLd)} />
   <!-- HERO -->
   <section class="hero">
@@ -184,13 +280,23 @@ const tools = [
     <div class="container">
       <h2 class="section-title">Popular Right Now</h2>
       <p class="section-sub">Every tool runs in your browser. Your files stay yours.</p>
-      <div class="grid">
-        {tools.map((tool) => (
-          <a href={tool.live ? tool.href : '#'} class={`tool-card ${!tool.live ? 'soon' : ''}`}>
-            <span class="icon">{tool.icon}</span>
-            <h3>{tool.title}{!tool.live && <span class="coming">SOON</span>}</h3>
-            <p>{tool.desc}</p>
-          </a>
+      <div class="popular-groups">
+        {popularToolGroups.map((group) => (
+          <div class="popular-group">
+            <h3 class="popular-group-title">{group.title}</h3>
+            <div class="grid">
+              {group.tools.map((tool) => (
+                <a href={tool.live ? tool.href : '#'} class={`tool-card ${!tool.live ? 'soon' : ''}`}>
+                  <span class="icon">{tool.icon}</span>
+                  <h3>
+                    {tool.title}
+                    {!tool.live && <span class="coming">SOON</span>}
+                  </h3>
+                  <p>{tool.desc}</p>
+                </a>
+              ))}
+            </div>
+          </div>
         ))}
       </div>
     </div>
@@ -495,6 +601,19 @@ const tools = [
 
     .tools-section {
       padding: 40px 0 60px;
+    }
+    .popular-groups {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .popular-group-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin: 0 0 12px;
     }
     .grid {
       display: grid;
