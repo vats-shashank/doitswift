@@ -290,6 +290,43 @@ const breadcrumbLd = {
           <p class="sip-chart-callout" id="sipChartCallout1" aria-live="polite"></p>
         </div>
         <div class="sip-chart-panel" role="tabpanel" id="sipPanel2" aria-labelledby="sipTab2" data-panel="2" hidden>
+          <div class="sip-stepup-controls" role="group" aria-label="Step-up SIP percentage">
+            <div class="sip-stepup-header">
+              <div class="sip-stepup-heading-group">
+                <h3 class="sip-stepup-heading">Annual SIP Step-Up</h3>
+                <p class="sip-stepup-desc">Your monthly SIP increases by this % every year (e.g., with a salary hike).</p>
+              </div>
+              <div class="sip-stepup-current" aria-live="polite">
+                <span class="sip-stepup-current-label">Current:</span>
+                <span class="sip-stepup-current-value" id="sipStepUpCurrentVal">10%</span>
+              </div>
+            </div>
+            <div class="sip-stepup-presets" role="radiogroup" aria-label="Step-up presets">
+              <button type="button" class="sip-stepup-preset" data-stepup="0" role="radio" aria-checked="false">
+                <span class="sip-stepup-preset-value">0%</span>
+                <span class="sip-stepup-preset-label">No increase</span>
+              </button>
+              <button type="button" class="sip-stepup-preset" data-stepup="5" role="radio" aria-checked="false">
+                <span class="sip-stepup-preset-value">5%</span>
+                <span class="sip-stepup-preset-label">Inflation match</span>
+              </button>
+              <button type="button" class="sip-stepup-preset" data-stepup="10" role="radio" aria-checked="true">
+                <span class="sip-stepup-preset-value">10%</span>
+                <span class="sip-stepup-preset-label">Typical hike</span>
+              </button>
+              <button type="button" class="sip-stepup-preset" data-stepup="15" role="radio" aria-checked="false">
+                <span class="sip-stepup-preset-value">15%</span>
+                <span class="sip-stepup-preset-label">Aggressive</span>
+              </button>
+              <button type="button" class="sip-stepup-preset" data-stepup="20" role="radio" aria-checked="false">
+                <span class="sip-stepup-preset-value">20%</span>
+                <span class="sip-stepup-preset-label">Very aggressive</span>
+              </button>
+            </div>
+            <p class="sip-stepup-note">
+              Need a custom value? Use the "Annual SIP step-up" field in the main Inputs section above.
+            </p>
+          </div>
           <div class="sip-chart-canvas-wrap">
             <canvas id="sipVizCanvas2" width="400" height="320" aria-label="Fixed SIP versus annual step-up SIP portfolio value"></canvas>
           </div>
@@ -1370,6 +1407,7 @@ const breadcrumbLd = {
         if (typeof Chart === 'undefined') return;
         wireTabs();
         wireCompare();
+        wireStepUpPresets();
         document.getElementById('sipGoal').addEventListener('input', debChart);
         document.getElementById('sipInflation').addEventListener('input', function () {
           syncInflRange();
@@ -1398,6 +1436,50 @@ const breadcrumbLd = {
         var el = document.getElementById('sipInflation');
         var rng = document.getElementById('sipInflationRange');
         if (rng && el) rng.value = el.value;
+      }
+      // Step-Up preset control — two-way sync with main sipStepUp input
+      function updateStepUpDisplay(val) {
+        var currentEl = document.getElementById('sipStepUpCurrentVal');
+        if (currentEl) currentEl.textContent = val + '%';
+        var presets = document.querySelectorAll('.sip-stepup-preset');
+        presets.forEach(function (btn) {
+          var btnVal = parseInt(btn.getAttribute('data-stepup'), 10);
+          var isActive = btnVal === Math.round(val);
+          btn.setAttribute('aria-checked', isActive ? 'true' : 'false');
+        });
+      }
+      function wireStepUpPresets() {
+        var presets = document.querySelectorAll('.sip-stepup-preset');
+        var mainInput = document.getElementById('sipStepUp');
+        var mainRange = document.getElementById('sipStepUpRange');
+        presets.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var val = parseInt(btn.getAttribute('data-stepup'), 10);
+            if (mainInput) {
+              mainInput.value = val;
+              mainInput.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+            if (mainRange) {
+              mainRange.value = val;
+            }
+            updateStepUpDisplay(val);
+          });
+        });
+        function syncFromMain() {
+          if (!mainInput) return;
+          var val = parseFloat(mainInput.value) || 0;
+          updateStepUpDisplay(val);
+        }
+        if (mainInput) {
+          mainInput.addEventListener('input', syncFromMain);
+        }
+        if (mainRange) {
+          mainRange.addEventListener('input', syncFromMain);
+        }
+        if (mainInput) {
+          var initVal = parseFloat(mainInput.value) || 10;
+          updateStepUpDisplay(initVal);
+        }
       }
     })();
   </script>
@@ -1895,6 +1977,154 @@ const breadcrumbLd = {
       font-size: 14px;
       color: var(--text-muted);
       margin: 12px 0;
+    }
+    /* Step-Up control panel */
+    .sip-stepup-controls {
+      margin-bottom: 20px;
+      padding: 16px;
+      background: var(--gray-50, #f9fafb);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    :global([data-theme='dark']) .sip-stepup-controls {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    .sip-stepup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+    .sip-stepup-heading-group {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+    .sip-stepup-heading {
+      margin: 0 0 4px 0;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text, #0f172a);
+    }
+    :global([data-theme='dark']) .sip-stepup-heading {
+      color: #e5e7eb;
+    }
+    .sip-stepup-desc {
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted, #64748b);
+      line-height: 1.4;
+    }
+    .sip-stepup-current {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+      padding: 8px 12px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      min-width: 90px;
+    }
+    :global([data-theme='dark']) .sip-stepup-current {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    .sip-stepup-current-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted, #64748b);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .sip-stepup-current-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: #22c55e;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    :global([data-theme='dark']) .sip-stepup-current-value {
+      color: #4ade80;
+    }
+    .sip-stepup-presets {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .sip-stepup-preset {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 8px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    :global([data-theme='dark']) .sip-stepup-preset {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    .sip-stepup-preset:hover {
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.04);
+    }
+    :global([data-theme='dark']) .sip-stepup-preset:hover {
+      background: rgba(59, 130, 246, 0.1);
+    }
+    .sip-stepup-preset[aria-checked="true"] {
+      background: #3b82f6;
+      border-color: #3b82f6;
+    }
+    .sip-stepup-preset[aria-checked="true"] .sip-stepup-preset-value,
+    .sip-stepup-preset[aria-checked="true"] .sip-stepup-preset-label {
+      color: white;
+    }
+    .sip-stepup-preset-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text, #0f172a);
+      font-variant-numeric: tabular-nums;
+    }
+    :global([data-theme='dark']) .sip-stepup-preset-value {
+      color: #e5e7eb;
+    }
+    .sip-stepup-preset-label {
+      font-size: 11px;
+      color: var(--muted, #64748b);
+      text-align: center;
+      line-height: 1.2;
+    }
+    .sip-stepup-note {
+      margin: 0;
+      font-size: 12px;
+      color: var(--muted, #64748b);
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      .sip-stepup-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .sip-stepup-current {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .sip-stepup-presets {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .sip-stepup-preset-label {
+        font-size: 10px;
+      }
     }
     .sip-compare-inputs {
       display: grid;
