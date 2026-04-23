@@ -1,0 +1,884 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+---
+
+<MainLayout
+  title="How Much House Can I Afford? The 28/36 Rule Explained (2026)"
+  description="Calculate how much house you can afford using the 28/36 rule. Real salary examples from $50K to $200K with exact home price ranges, monthly payments, and hidden costs most calculators miss."
+  canonical="https://doitswift.com/blog/how-much-house-can-i-afford/"
+>
+
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://doitswift.com/blog/how-much-house-can-i-afford/#article",
+      "headline": "How Much House Can I Afford? The 28/36 Rule Explained",
+      "description": "Calculate how much house you can afford using the 28/36 rule. Real salary examples from $50K to $200K with exact home price ranges, monthly payments, and hidden costs most calculators miss.",
+      "datePublished": "2026-04-23",
+      "dateModified": "2026-04-23",
+      "author": {
+        "@type": "Organization",
+        "name": "DoItSwift",
+        "url": "https://doitswift.com"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "DoItSwift",
+        "url": "https://doitswift.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://doitswift.com/favicon.svg"
+        }
+      },
+      "mainEntityOfPage": "https://doitswift.com/blog/how-much-house-can-i-afford/"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How much house can I afford on a $50,000 salary?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "With a $50,000 annual salary ($4,167/month gross), the 28% rule caps your housing payment at about $1,167/month. Assuming 10% down and 6.5% interest, this translates to a home price of approximately $175,000 to $200,000. If you have other debts, your affordability drops further — aim for the lower end. Consider FHA loans (31% front-end limit) which allow slightly higher home prices around $195,000 to $220,000 with a lower 3.5% down payment."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How much house can I afford on a $75,000 salary?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A $75,000 salary ($6,250/month gross) allows a max housing payment of $1,750/month under the 28% rule. With 10% down at 6.5% interest and typical property taxes and insurance, this fits a home price range of $270,000 to $310,000. A 20% down payment increases affordability to around $335,000 because you eliminate PMI and qualify for better rates."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How much house can I afford on a $100,000 salary?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A $100,000 salary ($8,333/month gross) supports a max housing payment of $2,333/month under the 28% rule. With 10% down at 6.5% interest, this equates to a home price of about $370,000 to $425,000. With 20% down, you can stretch to $450,000 or more by eliminating PMI and locking a better interest rate. The exact number depends on local property tax rates (0.3% to 2.5%) and insurance costs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How much house can I afford on a $150,000 salary?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A $150,000 salary ($12,500/month gross) allows a housing budget up to $3,500/month at 28% of income. This supports a home price of $555,000 to $640,000 with 10% down, or up to $680,000 with 20% down. However, if you live in high-cost areas like California or New York, property taxes and insurance can significantly reduce this range."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the 28/36 rule too strict in today's market?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The 28/36 rule was created when home prices were more aligned with incomes. In today's high-cost markets, many buyers exceed 28% of income on housing and still remain financially stable — especially in expensive metros where rent is comparably high. However, the rule remains a useful guardrail against becoming house-poor. Going up to 30-35% of gross income can work if you have no other debts and stable income. Exceeding 40% is risky territory."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Should I buy the max my lender approves me for?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Lenders often approve borrowers for 43-50% DTI, but qualifying for that amount doesn't mean you can afford it comfortably. The pre-approval number is based on your income and debts but ignores retirement savings, kids, lifestyle, and emergencies. Most financial advisors suggest targeting 25-30% of gross income on housing, which leaves room for life. Many first-time buyers who max out their approval regret it within 2 years."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does my credit score affect home affordability?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Credit score directly affects your interest rate, which dramatically changes what you can afford. A borrower with a 780+ credit score might qualify for a 6.3% rate, while a 640 credit score might get 7.3% — a 1 percentage point difference. On a $300,000 loan, that 1% costs an extra $200/month or $72,000 over 30 years. Improving your credit score before applying can increase affordability by 10-15% or more."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I afford a home with student loans?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, but student loans reduce your buying power. Under the 36% back-end rule, every $100/month in student loan payments reduces your affordable housing budget by about $278/month (which equals approximately $40,000 less in home price at current rates). Consider income-driven repayment plans to lower your monthly student loan obligation before applying for a mortgage, or pay down high-balance loans to reduce monthly payments."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What's the difference between DTI and the 28/36 rule?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "DTI (Debt-to-Income) is the broader lender metric: your total monthly debt divided by gross monthly income. The 28/36 rule is a specific application of DTI: 28% for front-end (housing only) and 36% for back-end (all debt). Lenders often allow higher DTIs — 43% for conventional, 50% for FHA — but the 28/36 rule is a conservative affordability guideline that prioritizes comfort over maximum borrowing."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the 28/36 rule apply in countries outside the US?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The 28/36 rule is primarily a US framework. Other countries use different affordability metrics: UK lenders typically cap at 4-4.5x annual income; Canada uses GDS (Gross Debt Service, ~32%) and TDS (Total Debt Service, ~40%) ratios; Australia applies stress tests at 3% above current rates. Despite different frameworks, all use the same underlying principle: your housing payment should leave enough room for other expenses and financial goals."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://doitswift.com/"},
+        {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://doitswift.com/blog/"},
+        {"@type": "ListItem", "position": 3, "name": "How Much House Can I Afford?", "item": "https://doitswift.com/blog/how-much-house-can-i-afford/"}
+      ]
+    }
+  ]
+})} />
+
+<!-- Breadcrumb -->
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a> ›</li>
+    <li><a href="/blog/">Blog</a> ›</li>
+    <li>How Much House Can I Afford?</li>
+  </ol>
+</nav>
+
+<article class="post">
+  <div class="post-container">
+
+    <!-- Header -->
+    <header class="post-header">
+      <div class="category-badge finance">Finance</div>
+      <h1>How Much House Can I Afford? The 28/36 Rule Explained (2026 Edition)</h1>
+      <div class="post-meta">
+        <span>📅 April 23, 2026</span>
+        <span>⏱ 12 min read</span>
+        <span>🏷 Mortgage, Home Buying, Affordability</span>
+      </div>
+      <p class="post-intro">
+        The median American household now spends nearly 48% of income on housing — well above the healthy 28% threshold. If you're wondering how much house you can actually afford, this guide gives you exact numbers for every salary from $50,000 to $200,000 — plus the hidden costs most affordability calculators miss, and why you probably shouldn't buy the max your lender approves.
+      </p>
+    </header>
+
+    <!-- Table of Contents -->
+    <div class="card toc">
+      <h2>📋 Table of Contents</h2>
+      <ol>
+        <li><a href="#the-2836-rule">The 28/36 Rule Explained</a></li>
+        <li><a href="#salary-examples">Exact Affordability by Salary ($50K to $200K)</a></li>
+        <li><a href="#calculator-cta">See Your Exact Numbers with Our Calculator</a></li>
+        <li><a href="#beyond-2836">Beyond the 28/36 Rule: Other Factors</a></li>
+        <li><a href="#hidden-costs">The Hidden Costs Most Calculators Miss</a></li>
+        <li><a href="#approved-vs-afford">Approved vs Actually Affordable</a></li>
+        <li><a href="#afford-more">How to Afford More House</a></li>
+        <li><a href="#country-rules">Affordability Rules by Country</a></li>
+        <li><a href="#faq">Frequently Asked Questions</a></li>
+      </ol>
+    </div>
+
+    <!-- CTA -->
+    <div class="callout-cta">
+      <div class="cta-icon">🏡</div>
+      <div>
+        <strong>Check your exact affordability in 30 seconds</strong>
+        <p>Enter your income and our mortgage calculator shows the 28/36 rule gauge live — comfortable, stretched, or over the limit.</p>
+      </div>
+      <a href="/calculator/mortgage/" class="btn-primary">Open Mortgage Calculator →</a>
+    </div>
+
+    <!-- Section 1 -->
+    <section id="the-2836-rule">
+      <h2>The 28/36 Rule Explained</h2>
+      <p>
+        The 28/36 rule is the single most widely-used affordability guideline in home buying. It's been standard in mortgage lending for decades because it works — it balances what you can technically borrow against what leaves room for a sustainable life.
+      </p>
+      <p>
+        The rule has two parts. Both apply at the same time.
+      </p>
+
+      <h3>The 28% Front-End Ratio (Housing Only)</h3>
+      <p>
+        Your total monthly housing payment — principal, interest, property taxes, homeowners insurance, PMI if applicable, and HOA fees — should not exceed <strong>28% of your gross monthly income</strong> (before taxes).
+      </p>
+      <p>
+        Example: If you earn $6,000/month gross, your maximum housing payment is 28% × $6,000 = $1,680/month.
+      </p>
+      <p>
+        This is sometimes called PITI (Principal, Interest, Taxes, Insurance). It's the full cost of owning your home, not just the loan payment most quick calculators show.
+      </p>
+
+      <h3>The 36% Back-End Ratio (All Debt)</h3>
+      <p>
+        Your total monthly debt — housing plus car loans, student loans, credit card minimums, child support, and any other recurring obligations — should not exceed <strong>36% of gross monthly income</strong>.
+      </p>
+      <p>
+        Example: With $6,000/month gross income, your maximum total debt is 36% × $6,000 = $2,160/month. If you have a $500 car payment and $300 in student loans ($800 existing debt), your housing budget drops to $2,160 − $800 = $1,360/month — lower than the 28% front-end limit would suggest.
+      </p>
+      <p>
+        The more other debt you carry, the less house you can afford. This is why paying down a car loan or student loans before applying for a mortgage can significantly increase your buying power.
+      </p>
+
+      <h3>Gross Income, Not Take-Home</h3>
+      <p>
+        Both ratios use <strong>gross income — before taxes, before retirement contributions, before health insurance</strong>. This is an important caveat. On a $100,000 salary, you might only take home around $70,000 after federal taxes, state taxes, and 401(k) contributions. The 28/36 rule calculates against the full $100,000, which means the actual burden on your take-home pay is higher than it appears.
+      </p>
+      <p>
+        This is one reason many housing experts now recommend targeting 25-30% of gross income (or roughly 35-40% of take-home) rather than the full 28% — especially in high-tax states.
+      </p>
+    </section>
+
+    <!-- Section 2 -->
+    <section id="salary-examples">
+      <h2>Exact Affordability by Salary</h2>
+      <p>
+        Below are realistic home price ranges for common salary levels, using current market assumptions:
+      </p>
+      <ul>
+        <li><strong>Interest rate:</strong> 6.5% (average 30-year fixed, early 2026)</li>
+        <li><strong>Loan term:</strong> 30 years</li>
+        <li><strong>Property tax:</strong> 1.2% of home value per year</li>
+        <li><strong>Home insurance:</strong> $1,200 per year</li>
+        <li><strong>PMI:</strong> 0.5% per year (applies if less than 20% down)</li>
+        <li><strong>No other debts</strong> (student loans, car payments, etc. will reduce these figures)</li>
+      </ul>
+
+      <h3>$50,000 Salary</h3>
+      <p>
+        Monthly gross: $4,167 → Max housing under 28%: <strong>$1,167/month</strong>
+      </p>
+      <ul>
+        <li>With 10% down: Home price around <strong>$175,000 – $200,000</strong></li>
+        <li>With 20% down: Home price around <strong>$200,000 – $225,000</strong></li>
+        <li>With FHA loan (3.5% down, 31% limit): Home price around <strong>$195,000 – $220,000</strong></li>
+      </ul>
+      <p>
+        At this income level, you'll likely need to look at condos, townhomes, or homes in lower-cost metros. Only about 21% of homes currently listed in the US are affordable at this salary level — a stark drop from 49% in 2019.
+      </p>
+
+      <h3>$75,000 Salary</h3>
+      <p>
+        Monthly gross: $6,250 → Max housing under 28%: <strong>$1,750/month</strong>
+      </p>
+      <ul>
+        <li>With 10% down: Home price around <strong>$270,000 – $310,000</strong></li>
+        <li>With 20% down: Home price around <strong>$310,000 – $355,000</strong></li>
+      </ul>
+      <p>
+        This is the sweet spot for many mid-market US cities — suburbs of Dallas, Austin, Charlotte, or Raleigh. Still challenging in Seattle, Boston, or the Bay Area.
+      </p>
+
+      <h3>$100,000 Salary</h3>
+      <p>
+        Monthly gross: $8,333 → Max housing under 28%: <strong>$2,333/month</strong>
+      </p>
+      <ul>
+        <li>With 10% down: Home price around <strong>$370,000 – $425,000</strong></li>
+        <li>With 20% down: Home price around <strong>$425,000 – $490,000</strong></li>
+      </ul>
+      <p>
+        A $100K salary is often considered the "American middle-class income," but buying power varies dramatically by location. A $400,000 home is a mansion in Ohio and a fixer-upper in San Jose.
+      </p>
+
+      <h3>$125,000 Salary</h3>
+      <p>
+        Monthly gross: $10,417 → Max housing under 28%: <strong>$2,917/month</strong>
+      </p>
+      <ul>
+        <li>With 10% down: Home price around <strong>$465,000 – $530,000</strong></li>
+        <li>With 20% down: Home price around <strong>$530,000 – $610,000</strong></li>
+      </ul>
+
+      <h3>$150,000 Salary</h3>
+      <p>
+        Monthly gross: $12,500 → Max housing under 28%: <strong>$3,500/month</strong>
+      </p>
+      <ul>
+        <li>With 10% down: Home price around <strong>$555,000 – $640,000</strong></li>
+        <li>With 20% down: Home price around <strong>$640,000 – $730,000</strong></li>
+      </ul>
+
+      <h3>$200,000 Salary</h3>
+      <p>
+        Monthly gross: $16,667 → Max housing under 28%: <strong>$4,667/month</strong>
+      </p>
+      <ul>
+        <li>With 10% down: Home price around <strong>$745,000 – $860,000</strong></li>
+        <li>With 20% down: Home price around <strong>$860,000 – $980,000</strong></li>
+      </ul>
+      <p>
+        At this income level, you have flexibility even in high-cost markets. However, the jump from $150K to $200K doesn't proportionally double your buying power because the 28% ceiling scales linearly with income — it's still 28% either way.
+      </p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Salary</th>
+              <th>Max Housing (28%)</th>
+              <th>Home Price (10% Down)</th>
+              <th>Home Price (20% Down)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>$50,000</td><td>$1,167</td><td>$175K – $200K</td><td>$200K – $225K</td></tr>
+            <tr><td>$75,000</td><td>$1,750</td><td>$270K – $310K</td><td>$310K – $355K</td></tr>
+            <tr><td>$100,000</td><td>$2,333</td><td>$370K – $425K</td><td>$425K – $490K</td></tr>
+            <tr><td>$125,000</td><td>$2,917</td><td>$465K – $530K</td><td>$530K – $610K</td></tr>
+            <tr><td>$150,000</td><td>$3,500</td><td>$555K – $640K</td><td>$640K – $730K</td></tr>
+            <tr><td>$200,000</td><td>$4,667</td><td>$745K – $860K</td><td>$860K – $980K</td></tr>
+          </tbody>
+        </table>
+        <p class="table-note">Assumes 6.5% interest, 30-year fixed, 1.2% property tax, $1,200/year insurance, 0.5% PMI when applicable. Your exact range varies based on local tax rates, insurance, HOA fees, and other debts.</p>
+      </div>
+    </section>
+
+    <!-- Section 3 - Calculator CTA -->
+    <section id="calculator-cta">
+      <h2>See Your Exact Numbers with Our Calculator</h2>
+      <p>
+        The table above uses national averages. Your real affordability depends on specifics — your actual credit score, the property tax rate in your zip code, your HOA fees if applicable, and your existing debts. Plugging these into a calculator gives you accurate numbers in 30 seconds.
+      </p>
+      <p>
+        Our <a href="/calculator/mortgage/">mortgage calculator</a> has a dedicated Affordability tab that shows a live 28/36 gauge. Enter your income and current housing target — the gauge fills green if you're under 28%, yellow if you're between 28-36%, and red if you're over. You see instant visual feedback on whether your target home price fits the comfort zone.
+      </p>
+
+      <div class="callout-cta">
+        <div class="cta-icon">📊</div>
+        <div>
+          <strong>Get your exact affordability number</strong>
+          <p>Click the "Affordability" tab in our mortgage calculator. Enter your income and see where your housing costs fall on the 28/36 scale — with color-coded feedback.</p>
+        </div>
+        <a href="/calculator/mortgage/" class="btn-primary">Try the Affordability Tab →</a>
+      </div>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="beyond-2836">
+      <h2>Beyond the 28/36 Rule: Other Factors That Matter</h2>
+      <p>
+        The 28/36 rule is a starting point, not the full story. Five other factors can meaningfully change what you should pay — sometimes raising it, often lowering it.
+      </p>
+
+      <h3>1. Credit Score Impact</h3>
+      <p>
+        Your credit score directly determines your interest rate, and rate changes have dramatic effects. A borrower with a 780+ score might lock a 6.3% rate, while a borrower at 640 might get 7.3% — a full percentage point higher.
+      </p>
+      <p>
+        On a $300,000 30-year loan, that 1% rate difference costs an extra $200/month and $72,000 over the life of the loan. Improving your score from 680 to 740 before applying can increase your affordability by 10-15% or more.
+      </p>
+
+      <h3>2. Down Payment Size</h3>
+      <p>
+        A larger down payment has three compounding effects on affordability:
+      </p>
+      <ul>
+        <li><strong>Lower loan amount</strong> → lower monthly payment</li>
+        <li><strong>No PMI at 20%+</strong> → save $100-400/month</li>
+        <li><strong>Better interest rate</strong> → lenders offer best rates to 20%+ down borrowers</li>
+      </ul>
+      <p>
+        Combining these effects, moving from 5% down to 20% down on a $400,000 home can reduce your monthly payment by roughly $650/month — or let you afford a $450,000 home at the same monthly cost.
+      </p>
+
+      <h3>3. Interest Rate Sensitivity</h3>
+      <p>
+        Every 1% change in mortgage rates changes affordability by approximately 10%. At 6% on a $300,000 home, your P&I is $1,799. At 7%, the same loan costs $1,996 — $197/month more. Rates move based on Fed policy and economic conditions, so timing matters.
+      </p>
+
+      <h3>4. Location (Property Taxes)</h3>
+      <p>
+        Property taxes vary dramatically by state. New Jersey residents pay roughly 2.5% of home value annually, while Hawaii residents pay about 0.3%. On a $400,000 home, that's the difference between $10,000/year and $1,200/year in taxes — a $733/month swing.
+      </p>
+      <p>
+        Example: a $400,000 home affordable in Texas at $50,000 salary might be unreachable in Illinois at the same salary due to property tax differences.
+      </p>
+
+      <h3>5. HOA Fees and Condo Assessments</h3>
+      <p>
+        HOA fees often surprise first-time buyers. Condos and townhomes can have HOA fees of $300-$1,000+/month. A condo listed at $350,000 with $600/month HOA is effectively equivalent to a $400,000 single-family home when factoring HOA into the 28% calculation.
+      </p>
+      <p>
+        Always ask for HOA fees upfront and include them in your affordability math.
+      </p>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="hidden-costs">
+      <h2>The Hidden Costs Most Calculators Miss</h2>
+      <p>
+        Here's an uncomfortable truth: even a full PITI calculation understates the true cost of homeownership. The 28/36 rule was designed for housing payment to lender — but homeownership has other costs you'll absorb regardless.
+      </p>
+
+      <h3>Maintenance: The Silent Budget-Killer</h3>
+      <p>
+        Experts suggest budgeting <strong>1-2% of home value annually</strong> for maintenance. On a $400,000 home, that's $4,000-$8,000/year, or $333-$667/month. This includes HVAC maintenance, plumbing repairs, roof replacement (eventually), appliance replacement, yard care, and the 1,001 small repairs every home requires.
+      </p>
+      <p>
+        The average homeowner severely underestimates this. Many families find that in years when a major repair hits (new roof, HVAC replacement), they spend $15,000-$25,000 in a single year. This is why a robust emergency fund matters more for homeowners than renters.
+      </p>
+
+      <h3>Utilities (Higher Than Renting)</h3>
+      <p>
+        Homes are typically larger than rental units and have more square footage to heat, cool, and light. Expect utilities of $250-$500/month depending on home size and climate — more than most apartment utilities.
+      </p>
+
+      <h3>Closing Costs (One-Time, But Huge)</h3>
+      <p>
+        Closing costs typically run <strong>2-5% of the purchase price</strong>. On a $400,000 home, that's $8,000-$20,000 upfront — in addition to your down payment. These fees include lender fees, title insurance, appraisal, inspection, prepaid taxes and insurance, and attorney fees (in some states).
+      </p>
+      <p>
+        If you're stretching to reach 20% down payment, don't forget you also need several thousand more on top for closing.
+      </p>
+
+      <h3>Furniture and Setup</h3>
+      <p>
+        First-time buyers routinely spend $5,000-$20,000 in the first year on furniture, appliances, window treatments, tools, and initial repairs. Build this into your budget, not just your mortgage math.
+      </p>
+
+      <h3>The 25-30% Reality Rule</h3>
+      <p>
+        When you add up maintenance, utilities, and reserves for major repairs, a home "affordable" at 28% of gross income often costs closer to 35-40% of gross income once you include everything. This is why many financial planners now suggest targeting <strong>25% of gross income on PITI</strong> rather than 28% — it leaves room for the true costs of ownership.
+      </p>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="approved-vs-afford">
+      <h2>Approved vs Actually Affordable: A Critical Distinction</h2>
+      <p>
+        Here's a common and expensive mistake: equating "how much a lender will approve me for" with "how much house I can afford."
+      </p>
+      <p>
+        Lenders are in the business of lending money. Their risk models cap borrowers at 43-50% DTI for conventional loans — not because 43% is comfortable, but because that's roughly the statistical boundary where default rates rise sharply. Qualifying at 43% DTI isn't a recommendation; it's a ceiling.
+      </p>
+
+      <h3>What Your Lender Sees</h3>
+      <p>Lenders calculate based on:</p>
+      <ul>
+        <li>Gross monthly income</li>
+        <li>Reported monthly debts (from credit report)</li>
+        <li>Credit score</li>
+      </ul>
+      <p>That's it. Their model assumes your other expenses — food, childcare, health insurance, transportation, savings, entertainment, vacations, emergencies — can fit into the remaining 57-72% of your gross income after debt payments.</p>
+
+      <h3>What Your Lender Ignores</h3>
+      <p>Your lender doesn't factor in:</p>
+      <ul>
+        <li><strong>Childcare costs</strong> — $1,500-$3,000+/month in many metros</li>
+        <li><strong>Retirement savings</strong> — you should save 15-20% of income, not zero</li>
+        <li><strong>Emergency fund contributions</strong> — 3-6 months expenses minimum</li>
+        <li><strong>Healthcare costs</strong> — deductibles, out-of-pocket maxes</li>
+        <li><strong>Lifestyle expectations</strong> — hobbies, dining out, travel</li>
+        <li><strong>Planned major expenses</strong> — car replacement, kids' education</li>
+      </ul>
+
+      <h3>The Real Math</h3>
+      <p>
+        If you earn $100,000/year, that's $8,333/month gross but only around $6,000-$6,500/month take-home after federal tax, state tax, Social Security, Medicare, and health insurance. If your lender approves you at 43% DTI ($3,583/month in housing + debt), you're spending <strong>55-60% of your actual take-home pay</strong> on debt — leaving little room for anything else.
+      </p>
+      <p>
+        The aggressive approval feels great when you're house-shopping. It feels terrible when you're three years in, a roof repair hits, and you realize you have no savings buffer.
+      </p>
+    </section>
+
+    <!-- Section 7 -->
+    <section id="afford-more">
+      <h2>How to Afford More House (Strategically)</h2>
+      <p>
+        If the affordability ranges above feel disappointing, there are legitimate ways to increase your buying power without taking on reckless debt.
+      </p>
+
+      <h3>1. Save a Larger Down Payment</h3>
+      <p>
+        Every dollar of down payment removes a dollar from your loan. But the effects go beyond that: 20% down eliminates PMI ($100-$400/month), often secures a lower interest rate (saving $100-$200/month), and reduces total monthly payment. Combined, moving from 10% to 20% down can increase your affordable home price by 15-20%.
+      </p>
+
+      <h3>2. Pay Off High-Interest Debt First</h3>
+      <p>
+        Every $100/month in minimum debt payments reduces your housing budget by about $278/month under the 36% back-end rule — which equals roughly $40,000 less in affordable home price at current rates. Paying off a $5,000 credit card with a $150/month minimum frees up about $60,000 in buying power.
+      </p>
+
+      <h3>3. Improve Your Credit Score</h3>
+      <p>
+        As shown earlier, a 60-point credit score improvement can save 0.5-1% on your interest rate. Strategies that work in 3-6 months:
+      </p>
+      <ul>
+        <li>Pay down credit cards to under 30% utilization (ideally under 10%)</li>
+        <li>Don't apply for new credit in the 6 months before a mortgage</li>
+        <li>Dispute any errors on your credit report</li>
+        <li>Become an authorized user on a responsible family member's old credit card</li>
+      </ul>
+
+      <h3>4. Increase Your Down Payment with First-Time Buyer Programs</h3>
+      <p>
+        Many states and cities offer down payment assistance for first-time buyers — typically $5,000-$25,000. These programs can unlock the 20% down threshold that dramatically improves affordability. Research programs through your state housing authority.
+      </p>
+
+      <h3>5. Consider a Smaller Starter Home</h3>
+      <p>
+        A common mistake: buying the "forever home" before you can actually afford it. A smaller starter home that fits comfortably at 22-25% of income lets you build equity, improve your credit through consistent payments, and upgrade in 5-7 years with significantly more buying power.
+      </p>
+
+      <h3>6. Add a Co-Borrower</h3>
+      <p>
+        If you're buying with a spouse or partner, combining incomes can substantially increase affordability. Just make sure both names go on the mortgage — which has implications for both credit scores and both being liable.
+      </p>
+
+      <h3>7. Look at 15-Year Mortgages (Counterintuitively)</h3>
+      <p>
+        Shorter loans often have lower rates (0.25-0.5% lower). While the monthly payment is higher, the rate difference can mean you qualify for a similar home at a slightly better rate. This is niche advice — only relevant if you have income stability and can comfortably afford the higher monthly payment. Read more in our <a href="/blog/15-vs-30-year-mortgage/">15 vs 30 year mortgage guide</a>.
+      </p>
+    </section>
+
+    <!-- Section 8 -->
+    <section id="country-rules">
+      <h2>Affordability Rules by Country</h2>
+      <p>
+        The 28/36 rule is US-specific. Buyers in other countries use different frameworks, but the principle — housing shouldn't crowd out the rest of your financial life — is universal.
+      </p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Country</th>
+              <th>Affordability Metric</th>
+              <th>Typical Ceiling</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>USA (Conventional)</td><td>28/36 rule</td><td>28% housing, 36% total debt</td></tr>
+            <tr><td>USA (FHA)</td><td>31/43 rule</td><td>31% housing, 43% total debt</td></tr>
+            <tr><td>UK</td><td>Income multiplier</td><td>4-4.5× annual income</td></tr>
+            <tr><td>Canada</td><td>GDS/TDS ratios</td><td>32% housing (GDS), 40% total (TDS)</td></tr>
+            <tr><td>Australia</td><td>Stress test</td><td>Must qualify at 3% above current rate</td></tr>
+            <tr><td>India</td><td>FOIR ratio</td><td>40-50% of monthly income (all debt)</td></tr>
+          </tbody>
+        </table>
+        <p class="table-note">Indian buyers should also check our <a href="/calculator/home-loan/">Home Loan Calculator</a> which is tailored to Indian banking practices and prepayment rules.</p>
+      </div>
+
+      <p>
+        The <a href="/calculator/mortgage/">DoItSwift mortgage calculator</a> supports 35 currencies, so regardless of your country, you can calculate affordability in your own currency with appropriate local rates.
+      </p>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="faq-section">
+      <h2>Frequently Asked Questions</h2>
+
+      <div class="faq-item">
+        <h3>How much house can I afford on a $50,000 salary?</h3>
+        <p>With a $50,000 annual salary ($4,167/month gross), the 28% rule caps your housing payment at about $1,167/month. Assuming 10% down and 6.5% interest, this translates to a home price of approximately $175,000 to $200,000. If you have other debts, your affordability drops further — aim for the lower end. Consider FHA loans (31% front-end limit) which allow slightly higher home prices around $195,000 to $220,000 with a lower 3.5% down payment.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>How much house can I afford on a $75,000 salary?</h3>
+        <p>A $75,000 salary ($6,250/month gross) allows a max housing payment of $1,750/month under the 28% rule. With 10% down at 6.5% interest and typical property taxes and insurance, this fits a home price range of $270,000 to $310,000. A 20% down payment increases affordability to around $335,000 because you eliminate PMI and qualify for better rates.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>How much house can I afford on a $100,000 salary?</h3>
+        <p>A $100,000 salary ($8,333/month gross) supports a max housing payment of $2,333/month under the 28% rule. With 10% down at 6.5% interest, this equates to a home price of about $370,000 to $425,000. With 20% down, you can stretch to $450,000 or more by eliminating PMI and locking a better interest rate. The exact number depends on local property tax rates (0.3% to 2.5%) and insurance costs.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>How much house can I afford on a $150,000 salary?</h3>
+        <p>A $150,000 salary ($12,500/month gross) allows a housing budget up to $3,500/month at 28% of income. This supports a home price of $555,000 to $640,000 with 10% down, or up to $680,000 with 20% down. However, if you live in high-cost areas like California or New York, property taxes and insurance can significantly reduce this range.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Is the 28/36 rule too strict in today's market?</h3>
+        <p>The 28/36 rule was created when home prices were more aligned with incomes. In today's high-cost markets, many buyers exceed 28% of income on housing and still remain financially stable — especially in expensive metros where rent is comparably high. However, the rule remains a useful guardrail against becoming house-poor. Going up to 30-35% of gross income can work if you have no other debts and stable income. Exceeding 40% is risky territory.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Should I buy the max my lender approves me for?</h3>
+        <p>No. Lenders often approve borrowers for 43-50% DTI, but qualifying for that amount doesn't mean you can afford it comfortably. The pre-approval number is based on your income and debts but ignores retirement savings, kids, lifestyle, and emergencies. Most financial advisors suggest targeting 25-30% of gross income on housing, which leaves room for life. Many first-time buyers who max out their approval regret it within 2 years.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>How does my credit score affect home affordability?</h3>
+        <p>Credit score directly affects your interest rate, which dramatically changes what you can afford. A borrower with a 780+ credit score might qualify for a 6.3% rate, while a 640 credit score might get 7.3% — a 1 percentage point difference. On a $300,000 loan, that 1% costs an extra $200/month or $72,000 over 30 years. Improving your credit score before applying can increase affordability by 10-15% or more.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Can I afford a home with student loans?</h3>
+        <p>Yes, but student loans reduce your buying power. Under the 36% back-end rule, every $100/month in student loan payments reduces your affordable housing budget by about $278/month (which equals approximately $40,000 less in home price at current rates). Consider income-driven repayment plans to lower your monthly student loan obligation before applying for a mortgage, or pay down high-balance loans to reduce monthly payments.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>What's the difference between DTI and the 28/36 rule?</h3>
+        <p>DTI (Debt-to-Income) is the broader lender metric: your total monthly debt divided by gross monthly income. The 28/36 rule is a specific application of DTI: 28% for front-end (housing only) and 36% for back-end (all debt). Lenders often allow higher DTIs — 43% for conventional, 50% for FHA — but the 28/36 rule is a conservative affordability guideline that prioritizes comfort over maximum borrowing.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Does the 28/36 rule apply in countries outside the US?</h3>
+        <p>The 28/36 rule is primarily a US framework. Other countries use different affordability metrics: UK lenders typically cap at 4-4.5x annual income; Canada uses GDS (Gross Debt Service, ~32%) and TDS (Total Debt Service, ~40%) ratios; Australia applies stress tests at 3% above current rates. Despite different frameworks, all use the same underlying principle: your housing payment should leave enough room for other expenses and financial goals.</p>
+      </div>
+    </section>
+
+    <!-- Related -->
+    <section class="related-tools">
+      <h2>Related Guides</h2>
+      <div class="tools-grid">
+        <a href="/calculator/mortgage/" class="tool-link">🏠 Mortgage Calculator</a>
+        <a href="/blog/when-does-pmi-drop-off/" class="tool-link">💡 When Does PMI Drop Off?</a>
+        <a href="/blog/15-vs-30-year-mortgage/" class="tool-link">📅 15 vs 30 Year Mortgage</a>
+        <a href="/blog/extra-mortgage-payments/" class="tool-link">⚡ Extra Mortgage Payments</a>
+        <a href="/blog/buy-vs-rent-india/" class="tool-link">🏘 Buy vs Rent Analysis</a>
+        <a href="/calculator/home-loan/" class="tool-link">🇮🇳 Home Loan (India)</a>
+      </div>
+    </section>
+
+    <!-- Footer note -->
+    <p class="footer-note">
+      This guide is for educational purposes. Actual mortgage affordability depends on your specific credit score, debts, down payment, location, and current market rates. Consult a mortgage professional for personalized advice. Calculations use assumptions typical as of early 2026 (6.5% interest rate, 1.2% property tax, $1,200/year insurance, 0.5% PMI). Data last reviewed April 2026.
+    </p>
+
+  </div>
+</article>
+
+</MainLayout>
+
+<style>
+  .post {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 1rem 1.25rem 4rem;
+    color: var(--text, #111827);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+  .post-container { max-width: 780px; margin: 0 auto; }
+
+  section { margin: 2.5rem 0; }
+  section h2 {
+    font-size: 1.5rem;
+    margin: 0 0 1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid var(--border, #e5e7eb);
+  }
+  section h3 { font-size: 1.15rem; margin: 1.5rem 0 0.5rem; }
+  p { line-height: 1.75; margin: 0 0 1rem; }
+  ul, ol { padding-left: 1.5rem; line-height: 2; }
+  li { margin-bottom: 0.2rem; }
+  a { color: var(--accent, #2563eb); }
+
+  /* Formula Box */
+  .formula-box {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-left: 4px solid #0284c7;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0 1.5rem;
+    font-size: 0.95rem;
+  }
+  .formula-box p { margin: 0.3rem 0; }
+
+  /* Tables */
+  .table-wrapper {
+    overflow-x: auto;
+    margin: 1.25rem 0;
+    border-radius: 8px;
+    border: 1px solid var(--border, #e5e7eb);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+  }
+  thead { background: #f1f5f9; }
+  th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    color: #374151;
+    border-bottom: 1px solid var(--border, #e5e7eb);
+  }
+  td {
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--border, #e5e7eb);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) { background: #f9fafb; }
+  .table-note {
+    font-size: 0.82rem;
+    color: var(--text-muted, #6b7280);
+    margin-top: 0.5rem;
+  }
+
+  /* Related Tools */
+  .related-tools { margin: 2.5rem 0; }
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  .tool-link {
+    display: block;
+    background: var(--card-bg, #f9fafb);
+    border: 1px solid var(--border, #e5e7eb);
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    text-decoration: none;
+    color: var(--text, #111827);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+  .tool-link:hover {
+    border-color: var(--accent, #2563eb);
+    background: #eff6ff;
+    color: var(--accent, #2563eb);
+  }
+
+  /* FAQ */
+  .faq-section h2 { margin-bottom: 1.25rem; }
+  .faq-item {
+    border: 1px solid var(--border, #e5e7eb);
+    border-radius: 8px;
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 0.8rem;
+    background: var(--card-bg, #f9fafb);
+  }
+  .faq-item h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.02rem;
+    color: var(--text, #111827);
+  }
+  .faq-item p {
+    margin: 0;
+    color: var(--text-secondary, #374151);
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  /* Footer note */
+  .footer-note {
+    font-size: 0.85rem;
+    color: var(--text-muted, #6b7280);
+    font-style: italic;
+    border-top: 1px solid var(--border, #e5e7eb);
+    padding-top: 1rem;
+    margin-top: 2rem;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb {
+    max-width: 780px;
+    margin: 1.5rem auto 0;
+    padding: 0 1.25rem;
+  }
+  .breadcrumb ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.85rem;
+    color: var(--text-muted, #6b7280);
+  }
+  .breadcrumb a {
+    color: var(--accent, #2563eb);
+    text-decoration: none;
+  }
+  .breadcrumb a:hover { text-decoration: underline; }
+
+  /* Header */
+  .post-header { margin-bottom: 2rem; }
+  .category-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+  }
+  .category-badge.finance { background: #dbeafe; color: #1d4ed8; }
+  .post-header h1 {
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    line-height: 1.25;
+    margin: 0 0 0.75rem;
+  }
+  .post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #6b7280);
+    margin-bottom: 1.25rem;
+  }
+  .post-intro {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-secondary, #374151);
+    border-left: 3px solid var(--accent, #2563eb);
+    padding-left: 1rem;
+    margin: 0;
+  }
+
+  /* Card / TOC */
+  .card {
+    background: var(--card-bg, #f9fafb);
+    border: 1px solid var(--border, #e5e7eb);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+  .toc h2 { margin: 0 0 0.75rem; font-size: 1rem; }
+  .toc ol {
+    margin: 0;
+    padding-left: 1.25rem;
+    line-height: 2;
+    font-size: 0.95rem;
+  }
+  .toc a { color: var(--accent, #2563eb); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+
+  /* CTA Callout */
+  .callout-cta {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    border: 1px solid #bfdbfe;
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+  }
+  .callout-cta.compact { padding: 1rem 1.25rem; margin: 1.5rem 0; }
+  .cta-icon { font-size: 2rem; flex-shrink: 0; }
+  .callout-cta strong { display: block; font-size: 1rem; margin-bottom: 0.2rem; }
+  .callout-cta p { margin: 0; font-size: 0.9rem; color: #374151; }
+  .btn-primary {
+    display: inline-block;
+    background: var(--accent, #2563eb);
+    color: #fff;
+    padding: 0.6rem 1.25rem;
+    border-radius: 7px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+  .btn-primary:hover { background: #1d4ed8; }
+  .btn-secondary {
+    display: inline-block;
+    background: transparent;
+    color: var(--accent, #2563eb);
+    padding: 0.55rem 1.1rem;
+    border: 1.5px solid var(--accent, #2563eb);
+    border-radius: 7px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .btn-secondary:hover { background: #eff6ff; }
+</style>
