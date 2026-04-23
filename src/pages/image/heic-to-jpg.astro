@@ -144,7 +144,7 @@ const schemaBreadcrumbList = {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" is:inline></script>
 
   <!-- HERO -->
-  <section class="hero">
+  <section class="hero tool-hero">
     <div class="container">
       <div class="badge">🔒 100% Private — Files Never Leave Your Device</div>
       <h1>HEIC to JPG Converter — Convert iPhone Photos Free</h1>
@@ -169,8 +169,8 @@ const schemaBreadcrumbList = {
   </section>
 
   <!-- CONVERTER -->
-  <section class="converter-section">
-    <div class="container">
+  <section class="converter-section tool-section">
+    <div class="container container--tool">
       <div id="successBanner" class="banner" style="display:none">
         <span id="bannerText">Ready</span>
       </div>
@@ -228,7 +228,7 @@ const schemaBreadcrumbList = {
 
   <!-- Educational content (SEO) -->
   <article class="heic-edu" aria-label="Guide: HEIC format and converting to JPG">
-    <div class="container heic-edu-inner">
+    <div class="container container--tool heic-edu-inner">
       <section class="heic-edu-block">
         <h2 id="how-to-convert-heic">How to Convert HEIC to JPG (Step by Step)</h2>
 
@@ -666,8 +666,8 @@ const schemaBreadcrumbList = {
     </div>
   </section>
 
-  <section class="heic-related" aria-label="Related image tools and guides">
-    <div class="container">
+  <section class="heic-related tool-related" aria-label="Related image tools and guides">
+    <div class="container container--tool">
       <h2 class="section-title">Related Image Tools</h2>
       <ul class="heic-related-grid">
         <li><a href="/image/image-compressor/">Image Compressor</a> — Compress converted JPGs for email or web upload</li>
@@ -932,12 +932,6 @@ const schemaBreadcrumbList = {
   </script>
 
   <style>
-    .hero { padding: 60px 0 20px; text-align: center; }
-    .subtitle { font-size: 19px; color: var(--text-muted); max-width: 620px; margin: 0 auto 28px; }
-
-    .converter-section { padding: 30px 0; }
-    .converter-section .container { max-width: 820px; }
-
     .banner {
       padding: 14px 20px;
       border-radius: var(--radius-sm);
@@ -1048,9 +1042,6 @@ const schemaBreadcrumbList = {
       line-height: 1.45;
     }
 
-    .faq { padding: 60px 0; }
-    .faq .container { max-width: 820px; }
-    .section-title { text-align: center; margin-bottom: 32px; }
     .faq-item {
       background: var(--card);
       border: 1px solid var(--border);
@@ -1085,9 +1076,6 @@ const schemaBreadcrumbList = {
 
     .heic-edu {
       padding: 20px 0 8px;
-    }
-    .heic-edu-inner {
-      max-width: 820px;
     }
     .heic-edu-block {
       margin-bottom: 2.75rem;
@@ -1196,12 +1184,6 @@ const schemaBreadcrumbList = {
       margin-bottom: 0;
     }
 
-    .heic-related {
-      padding: 24px 0 56px;
-    }
-    .heic-related .container {
-      max-width: 820px;
-    }
     .section-title-sub {
       margin-top: 2.25rem;
       margin-bottom: 1rem;

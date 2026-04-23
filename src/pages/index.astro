@@ -10,7 +10,7 @@ const websiteSchemaLd = {
   alternateName: 'DoItSwift Free Online Tools',
   url: 'https://doitswift.com/',
   description:
-    'Free online utility tools — image converters, PDF utilities, and 40 calculators. Browser-based, private, unlimited.',
+    'Free online utility tools — image converters, PDF utilities, text tools, and 40 calculators. Browser-based, private, unlimited.',
   inLanguage: 'en-US',
   publisher: {
     '@type': 'Organization',
@@ -44,14 +44,16 @@ const categories = [
   {
     emoji: '📝',
     title: 'Text Tools',
-    live: false,
-    desc: 'Word count, case convert, JSON format, Lorem ipsum.',
+    href: '/text/',
+    live: true,
+    desc: 'Count words, format text, generate content. Word Counter live now — more tools coming.',
   },
   {
     emoji: '🎨',
     title: 'Generators',
-    live: false,
-    desc: 'QR codes, barcodes, passwords, UUIDs, invoices.',
+    href: '/generator/',
+    live: true,
+    desc: 'Password Generator live. QR codes, barcodes, UUIDs, and invoices coming soon.',
   },
   {
     emoji: '🔊',
@@ -134,6 +136,30 @@ const popularToolGroups = [
       },
     ],
   },
+  {
+    title: 'Text Tools',
+    tools: [
+      {
+        href: '/text/word-counter/',
+        icon: '📝',
+        title: 'Word Counter',
+        desc: 'Words, characters, reading time — in your browser',
+        live: true,
+      },
+    ],
+  },
+  {
+    title: 'Generators',
+    tools: [
+      {
+        href: '/generator/password-generator/',
+        icon: '🔐',
+        title: 'Password Generator',
+        desc: 'Secure passwords & passphrases — runs only in your browser',
+        live: true,
+      },
+    ],
+  },
 ];
 ---
 
@@ -185,7 +211,7 @@ const popularToolGroups = [
   <section class="category-section" id="categories">
     <div class="container">
       <h2 class="section-title">Browse by Category</h2>
-      <p class="section-sub">Image, PDF, and calculator tools are live — more categories are on the way.</p>
+      <p class="section-sub">Image, PDF, text, calculator, and generator tools are live — more categories are on the way.</p>
       <div class="category-grid">
         {categories.map((cat) =>
           cat.live ? (

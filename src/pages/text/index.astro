@@ -1,0 +1,615 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const siteRoot = Astro.site ? new URL('/', Astro.site).href : undefined;
+
+const tools = [
+  {
+    href: '/text/word-counter/',
+    icon: '📝',
+    title: 'Word Counter',
+    desc: 'Count words, characters, sentences, and paragraphs. Estimate reading time. Perfect for essays, articles, and social media.',
+    live: true,
+    coming: false,
+  },
+  {
+    href: '/text/case-converter/',
+    icon: '🔤',
+    title: 'Case Converter',
+    desc: 'Convert between UPPERCASE, lowercase, Title Case, camelCase, snake_case, and more. Real-time and private.',
+    live: true,
+    coming: false,
+  },
+  {
+    href: null,
+    icon: '📃',
+    title: 'Lorem Ipsum Generator',
+    desc: 'Generate placeholder text for design mockups. Customize length, paragraphs, or specific word counts.',
+    live: false,
+    coming: true,
+  },
+  {
+    href: null,
+    icon: '🔧',
+    title: 'JSON Formatter',
+    desc: 'Format, validate, and minify JSON. Syntax highlighting and tree view for developers.',
+    live: false,
+    coming: true,
+  },
+  {
+    href: null,
+    icon: '⚖️',
+    title: 'Text Diff Checker',
+    desc: 'Compare two text blocks side-by-side. Highlights additions, deletions, and changes.',
+    live: false,
+    coming: true,
+  },
+  {
+    href: null,
+    icon: '📋',
+    title: 'Markdown Preview',
+    desc: 'Write in Markdown, see the rendered HTML preview in real-time. Export to HTML or PDF.',
+    live: false,
+    coming: true,
+  },
+];
+
+const pageDescription =
+  'Free online text tools that run entirely in your browser. Count words, convert case between 17+ formats, format JSON, generate placeholder text. No signup, no data upload, completely private.';
+
+// Head JSON-LD (slot="head"). FAQ answers match visible FAQ on this page.
+const textHubBreadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: 'https://doitswift.com/',
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Text Tools',
+      item: 'https://doitswift.com/text/',
+    },
+  ],
+};
+
+const textHubItemListLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Free Online Text Tools',
+  description: pageDescription,
+  numberOfItems: 6,
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      url: 'https://doitswift.com/text/word-counter/',
+      name: 'Word Counter',
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      url: 'https://doitswift.com/text/case-converter/',
+      name: 'Case Converter',
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      url: 'https://doitswift.com/text/lorem-ipsum-generator/',
+      name: 'Lorem Ipsum Generator',
+    },
+    {
+      '@type': 'ListItem',
+      position: 4,
+      url: 'https://doitswift.com/text/json-formatter/',
+      name: 'JSON Formatter',
+    },
+    {
+      '@type': 'ListItem',
+      position: 5,
+      url: 'https://doitswift.com/text/text-diff/',
+      name: 'Text Diff Checker',
+    },
+    {
+      '@type': 'ListItem',
+      position: 6,
+      url: 'https://doitswift.com/text/markdown-preview/',
+      name: 'Markdown Preview',
+    },
+  ],
+};
+
+const textHubFaqPageLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Are these text tools free?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Yes. DoItSwift text tools are free to use in your browser with no signup, no paywall, and no monthly limit. We may add more tools over time; what you use today remains free.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is my text stored or sent to a server?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'No. Tools are built to run locally in JavaScript in your tab. Your characters are not uploaded to DoItSwift for normal operation — you can go offline after the page loads and keep working, same as our image and PDF tools.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do these tools work offline?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'After the first load, the page and scripts are cached by your browser. You can disconnect from the internet and still use the tools, unless a specific feature clearly requires a network call.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I use these on mobile?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Yes. DoItSwift text tools work in Safari on iPhone, Chrome on Android, and other modern mobile browsers. Very large pasted documents may be slower on older devices.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do I suggest a new text tool?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Use the contact form on the site to describe the workflow you need. We prioritize privacy-first, in-browser ideas that help writers, students, and developers every day.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Are the tools limited in how much text I can process?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'There is no artificial character cap for most tools. Practical limits come from your device memory and tab performance. Pastes of very large documents (e.g. hundreds of pages) may slow or freeze on low-end phones; split work into chunks if that happens.',
+      },
+    },
+  ],
+};
+
+// WebPage + CollectionPage (body), aligned with /calculator/ hub pattern.
+const textCollectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      '@id': `${canonical}#webpage`,
+      url: canonical,
+      name: 'Free Text Tools — Word Counter, Case Converter, JSON Formatter | DoItSwift',
+      description: pageDescription,
+      about: { '@id': `${canonical}#collection` },
+      ...(siteRoot ? { isPartOf: { '@type': 'WebSite', name: 'DoItSwift', url: siteRoot } } : {}),
+    },
+    {
+      '@type': 'CollectionPage',
+      '@id': `${canonical}#collection`,
+      url: canonical,
+      name: 'Free Text Tools',
+      description: pageDescription,
+      numberOfItems: 6,
+      ...(siteRoot ? { isPartOf: { '@type': 'WebSite', name: 'DoItSwift', url: siteRoot } } : {}),
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Free Text Tools — Word Counter, Case Converter, JSON Formatter | DoItSwift"
+  description={pageDescription}
+  keywords="free text tools, online text utilities, text converter, word counter, text formatter, browser text tools, privacy text tools, doitswift"
+  canonical={canonical}
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(textHubBreadcrumbLd)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(textHubItemListLd)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(textHubFaqPageLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(textCollectionJsonLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <span>Text Tools</span>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">📝 Text Tools</div>
+      <h1>Free Text Tools</h1>
+      <p class="subtitle">
+        Convert, format, count, and generate text — all in your browser. No signup, no uploads, no tracking.
+      </p>
+    </div>
+  </section>
+
+  <section class="tools-section">
+    <div class="container">
+      <h2 class="section-title">All text tools</h2>
+      <p class="section-sub">
+        Pick a tool — your text stays on your device. <strong>Two tools are live</strong> (Word Counter and Case
+        Converter); four more text utilities are in development.
+      </p>
+      <div class="grid">
+        {tools.map((tool) =>
+          tool.coming ? (
+            <div class="tool-card tool-card--coming" aria-disabled="true">
+              <div class="tool-card__meta">
+                <span class="tool-card__badge tool-card__badge--soon">Coming soon</span>
+              </div>
+              <span class="icon">{tool.icon}</span>
+              <h3>{tool.title}</h3>
+              <p>{tool.desc}</p>
+            </div>
+          ) : (
+            <a href={tool.href} class="tool-card">
+              {tool.live ? (
+                <div class="tool-card__meta">
+                  <span class="tool-card__badge tool-card__badge--live">Live</span>
+                </div>
+              ) : null}
+              <span class="icon">{tool.icon}</span>
+              <h3>{tool.title}</h3>
+              <p>{tool.desc}</p>
+            </a>
+          )
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="formats">
+    <div class="container">
+      <h2 class="section-title">Why Use Browser-Based Text Tools?</h2>
+      <p class="section-sub">Privacy and speed, without a separate app install.</p>
+      <div class="formats-prose">
+        <p>
+          Many “free” text tools upload your content to a remote server to process. That is fine for public snippets but risky for draft emails, client copy, or anything confidential. <strong>DoItSwift text utilities run in your browser</strong>: the page loads once, and your keystrokes and pasted text are handled by JavaScript on your device, not sent to us for standard features.
+        </p>
+        <p>
+          That means you get <strong>near-instant feedback</strong> (no network round trip for every keystroke) and a consistent experience on planes, in cafés, or behind strict firewalls. You can also disconnect after the first load and keep editing — a simple check that server-dependent sites cannot pass.
+        </p>
+        <p>
+          Reliability is another reason teams reach for in-browser tools: the same build works in Chrome, Edge, Firefox, and Safari, desktop or phone, with no version skew across machines. We focus on the essentials — counting, case changes, diffing, formatting — so you can work without another subscription or sign-up wall.
+        </p>
+        <p>
+          Compared to extension stores or marketplaces, an open page on DoItSwift leaves <strong>no new permissions</strong> to approve on your system; just bookmark the tool you use most. This hub will grow: word counting and case conversion are live; lorem text, JSON formatting, and more are on the way.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="text-categories" aria-label="More categories on DoItSwift">
+    <div class="container">
+      <h2 class="section-title">Explore more categories</h2>
+      <p class="section-sub">Image, PDF, and calculator hubs — all privacy-first, free, and in-browser.</p>
+      <ul class="text-cat-grid">
+        <li>
+          <a href="/image/">Image tools</a>
+          <span>Convert, compress, resize, Base64, favicons, and more.</span>
+        </li>
+        <li>
+          <a href="/pdf/">PDF tools</a>
+          <span>Merge, split, compress, convert, unlock — locally in your tab.</span>
+        </li>
+        <li>
+          <a href="/calculator/">Calculators</a>
+          <span>Finance, health, math, time, and daily helpers — dozens of free tools.</span>
+        </li>
+      </ul>
+      <p class="text-cat-note">A dedicated generators section may be added later; check back for new hubs.</p>
+    </div>
+  </section>
+
+  <section class="faq" id="faq">
+    <div class="container">
+      <h2 class="section-title">Text tools FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <h4>Are these text tools free?</h4>
+          <p>
+            Yes. DoItSwift text tools are free to use in your browser with no signup, no paywall, and no monthly limit. We may add more tools over time; what you use today remains free.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Is my text stored or sent to a server?</h4>
+          <p>
+            No. Tools are built to run locally in JavaScript in your tab. Your characters are not uploaded to DoItSwift
+            for normal operation — you can go offline after the page loads and keep working, same as our image and PDF
+            tools.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Do these tools work offline?</h4>
+          <p>
+            After the first load, the page and scripts are cached by your browser. You can disconnect from the internet
+            and still use the tools, unless a specific feature clearly requires a network call.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Can I use these on mobile?</h4>
+          <p>
+            Yes. DoItSwift text tools work in Safari on iPhone, Chrome on Android, and other modern mobile browsers. Very
+            large pasted documents may be slower on older devices.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>How do I suggest a new text tool?</h4>
+          <p>
+            Use the <a href="/contact/">contact</a> page to describe the workflow you need. We prioritize privacy-first,
+            in-browser ideas that help writers, students, and developers every day.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Are the tools limited in how much text I can process?</h4>
+          <p>
+            There is no artificial character cap for most tools. Practical limits come from your device memory and tab
+            performance. Pastes of very large documents (e.g. hundreds of pages) may slow or freeze on low-end phones;
+            split work into chunks if that happens.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <p class="back-wrap container">
+    <a href="/" class="link-back">← Back to home</a>
+  </p>
+
+  <style>
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 16px 0 0;
+      max-width: 960px;
+    }
+    .breadcrumb a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+    .hero {
+      padding: 36px 0 16px;
+      text-align: center;
+    }
+    .subtitle {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      margin: 0 auto 24px;
+      line-height: 1.55;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .section-sub {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      font-size: 16px;
+    }
+    .tools-section {
+      padding: 40px 0 56px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .tool-card {
+      position: relative;
+      background: var(--card);
+      padding: 22px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+      box-shadow: var(--shadow);
+    }
+    a.tool-card {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    a.tool-card:hover {
+      border-color: #2563eb;
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+    :global([data-theme='dark']) a.tool-card:hover {
+      border-color: #3b82f6;
+    }
+    .tool-card--coming {
+      cursor: not-allowed;
+      pointer-events: none;
+      opacity: 0.72;
+      background: var(--card);
+    }
+    :global([data-theme='dark']) .tool-card--coming {
+      opacity: 0.78;
+    }
+    .tool-card__meta {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+    }
+    .tool-card__badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+    .tool-card__badge--live {
+      background: rgba(37, 99, 235, 0.12);
+      color: #2563eb;
+      border: 1px solid rgba(37, 99, 235, 0.35);
+    }
+    :global([data-theme='dark']) .tool-card__badge--live {
+      background: rgba(59, 130, 246, 0.2);
+      color: #93c5fd;
+      border-color: rgba(59, 130, 246, 0.4);
+    }
+    .tool-card__badge--soon {
+      background: var(--card);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    .tool-card .icon {
+      font-size: 30px;
+      display: block;
+      margin-bottom: 10px;
+      padding-top: 8px;
+    }
+    .tool-card h3 {
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .tool-card p {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .formats {
+      padding: 20px 0 56px;
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .formats-prose {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .formats-prose p {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .text-categories {
+      padding: 40px 0 20px;
+    }
+    .text-categories .container {
+      max-width: 900px;
+    }
+    .text-cat-grid {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 12px;
+    }
+    @media (min-width: 560px) {
+      .text-cat-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (min-width: 900px) {
+      .text-cat-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .text-cat-grid li {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 18px 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+    }
+    .text-cat-grid a {
+      font-size: 16px;
+      font-weight: 700;
+      color: #2563eb;
+      text-decoration: none;
+    }
+    .text-cat-grid a:hover {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    :global([data-theme='dark']) .text-cat-grid a {
+      color: #60a5fa;
+    }
+    .text-cat-grid li span {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .text-cat-note {
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 20px;
+      max-width: 640px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .faq {
+      padding: 40px 0 40px;
+    }
+    .faq .container {
+      max-width: 820px;
+    }
+    .faq-list {
+      margin-top: 28px;
+    }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
+    }
+    .faq-item h4 {
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+    .faq-item p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+    .faq-item a {
+      color: #2563eb;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    :global([data-theme='dark']) .faq-item a {
+      color: #60a5fa;
+    }
+    .faq-item a:hover {
+      text-decoration: underline;
+      color: #1d4ed8;
+    }
+    :global([data-theme='dark']) .faq-item a:hover {
+      color: #93c5fd;
+    }
+    .back-wrap {
+      padding-bottom: 48px;
+      text-align: center;
+    }
+  </style>
+</MainLayout>

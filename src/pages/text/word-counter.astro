@@ -1,0 +1,826 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import WordCounterEducation from '../../components/WordCounterEducation.astro';
+import { calculatorCanonical } from '../../lib/calculatorJsonLd';
+
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageTitle = 'Word Counter — Private, Unlimited, No Signup | DoItSwift';
+const pageDescription =
+  'Count words, characters, sentences, and reading time instantly. Handles unlimited text — no 5,000-character cap like most tools. Runs entirely in your browser, so your writing stays private. No signup. No ads. Works offline.';
+
+const pageKeywords =
+  'word counter, word count, character counter, online word counter, free word counter, private word counter, word counter no signup, word counter unlimited text, reading time calculator, words per page, essay word counter, twitter character counter, sms character counter, word counter offline';
+
+const softwareAppDescription =
+  'Free browser-based word counter supporting unlimited text. Counts words, characters, sentences, paragraphs, reading time, and social media character limits. Privacy-first: text never leaves your browser.';
+
+const faqItems = [
+  {
+    question: 'What is a word counter used for?',
+    answer:
+      "A word counter tells you how many words and characters are in a block of text, and often also sentences, paragraphs, and estimated reading or speaking time. Students use it to stay within essay limits, writers and marketers use it for blog and social character caps, and professionals use it to brief editors or clients. DoItSwift's tool does all counting in your browser, so you get instant numbers without uploading your draft.",
+  },
+  {
+    question: 'Is this word counter free? Is there a word or character limit?',
+    answer:
+      'Yes, it is free: no signup, no paywall, and no ads. We do not impose a 5,000-character or similar cap like many online counters that run on a server. The practical limit is your device memory and tab performance, so very long pastes are only bounded by your machine, not a quota in our app.',
+  },
+  {
+    question: 'Is my text uploaded, stored, or used to train AI models?',
+    answer:
+      'No. Counting runs in JavaScript in your tab; your text is not sent to DoItSwift to be counted, stored in our databases, or sold. Unlike some bundled "writing assistants," we are not a grammar or AI product here—there is no text pipeline to a third-party for analysis. You can use DevTools → Network while typing: no new requests appear for the count itself. Close the tab and, unless you saved a copy, the content is not retained by us.',
+  },
+  {
+    question: 'How does DoItSwift count words, sentences, and paragraphs?',
+    answer:
+      "Words are split on whitespace; empty runs are ignored, so hyphenated terms without spaces (e.g. \"long-term\") count as one word, matching most editors. Sentences use simple punctuation heuristics; paragraphs use blank lines. Character counts include or exclude spaces as labeled. This is transparent and fast, but not identical to every journal system or to Word's handling of text boxes, footers, and tracked changes.",
+  },
+  {
+    question: 'How are reading time and speaking time calculated?',
+    answer:
+      'Reading time uses 200 words per minute of silent reading—common for non-fiction on the web—and rounds to whole minutes, with a "less than 1 min" style label for very short text. Speaking time uses 130 words per minute, a clear pace for presentations. Other products use different WPM (e.g. Medium has often used a higher rate); if you need alignment with a specific platform, use their in-app estimate for that platform.',
+  },
+  {
+    question: 'How is this different from Grammarly, QuillBot, or "AI detection" tools like ZeroGPT?',
+    answer:
+      'This page is only a local word and character counter: it does not call cloud grammar or paraphrase APIs, and it does not score text for "AI" origin. Services like Grammarly and QuillBot require sending your text to their systems for their core features. "AI detector" products analyze content remotely and are optimized for a different job than counting. If you need privacy and a simple count, a browser-based counter like this one is the minimal surface area.',
+  },
+  {
+    question: 'What character limits does the helper on this page show?',
+    answer:
+      "The character limit section compares your draft's length to several common hard caps, including a single SMS segment, a typical meta description cap, a standard X/Twitter post, and an Instagram caption cap. The numbers in the list update as you type. For platforms not listed, compare your total character count from the main stats to that platform's published limit.",
+  },
+  {
+    question: 'Can I use this for essays, SEO drafts, and social media?',
+    answer:
+      'Yes. It is a solid check for essay length, article length, and for staying under 280 characters for a standard X post, or 160 for SMS, because you can see your character total and the quick limit rows together. For graded submissions, always do a final count in the document system your school requires if they specify one; small differences can come from footnotes, headers, or different counting rules.',
+  },
+  {
+    question: 'Why might my count differ from Microsoft Word or Google Docs?',
+    answer:
+      'Full word processors can include headers, footers, footnotes, text boxes, and other regions you did not paste into the box. They may also use slightly different tokenization in edge cases. Pasting from Word can add hidden structure. This tool only counts what is visible in the text area, so for an exact match with a template, use the same file in the same app your assessor will use for the official count.',
+  },
+  {
+    question: 'Can I use the word counter offline?',
+    answer:
+      'After the first load, many browsers can keep the page and scripts in cache, so you can count without a network in many cases. You still need a connection the first time you open the page on a new device or after a full cache clear. The counting itself does not require a server call.',
+  },
+  {
+    question: 'Can I count words in languages other than English?',
+    answer:
+      'Yes for any language that uses spaces between words, you will get a reasonable word and character count. For languages with different word-boundary rules (e.g. Chinese, Japanese) or for publication-grade segmentation, use an editor that supports that language, and treat this as an approximate count.',
+  },
+  {
+    question: 'Is there a grammar, plagiarism, or "AI" checker on this page?',
+    answer:
+      'No. This is intentionally a count-only tool: it keeps your text local to your browser. Grammar checkers, plagiarism checkers, and "AI writing" classifiers that run in the cloud require you to share text with a service, which is a different privacy tradeoff. Use those in dedicated tools if you need them, with eyes open to their terms.',
+  },
+];
+
+const howToLd = {
+  '@type': 'HowTo',
+  name: 'How to Count Words in Text',
+  description: 'Count words, characters, sentences, and reading time in any text using a browser-based word counter.',
+  totalTime: 'PT5S',
+  step: [
+    {
+      '@type': 'HowToStep',
+      position: 1,
+      name: 'Paste or type your text',
+      text: 'Click the text area and paste your content or type directly.',
+    },
+    {
+      '@type': 'HowToStep',
+      position: 2,
+      name: 'View instant counts',
+      text: 'Word count, character count, sentence count, and reading time appear instantly — no button to press.',
+    },
+    {
+      '@type': 'HowToStep',
+      position: 3,
+      name: 'Check limits or copy results',
+      text: "See progress against social media character limits (Twitter 280, SMS 160) or copy the counts for your records.",
+    },
+  ],
+};
+
+const pageJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      name: 'DoItSwift Word Counter',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'Any (Web Browser)',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      description: softwareAppDescription,
+      url: 'https://doitswift.com/text/word-counter/',
+      featureList: [
+        'Word count (with hyphenated words as one)',
+        'Character count (with and without spaces)',
+        'Sentence count',
+        'Paragraph count',
+        'Reading time at 200 WPM',
+        'Speaking time at 130 WPM',
+        'Unique word count',
+        'Longest word detection',
+        'Average words per sentence',
+        'Twitter/X character limit helper (280 chars)',
+        'SMS character limit helper (160 chars)',
+        'Instagram character limit helper (2,200 chars)',
+        'Meta description limit helper (160 chars)',
+        'Browser-based privacy (no data upload)',
+        'Works offline after first load',
+        'Unlimited text length (no 5,000-character cap)',
+        'Real-time counting as you type',
+      ],
+      browserRequirements: 'Requires JavaScript. Supports Chrome, Firefox, Safari, Edge.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faqItems.map((f) => ({
+        '@type': 'Question',
+        name: f.question,
+        acceptedAnswer: { '@type': 'Answer', text: f.answer },
+      })),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://doitswift.com/' },
+        { '@type': 'ListItem', position: 2, name: 'Text Tools', item: 'https://doitswift.com/text/' },
+        { '@type': 'ListItem', position: 3, name: 'Word Counter', item: 'https://doitswift.com/text/word-counter/' },
+      ],
+    },
+    howToLd,
+  ],
+};
+---
+
+<MainLayout
+  title={pageTitle}
+  description={pageDescription}
+  keywords={pageKeywords}
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(pageJsonLd)} />
+
+  <nav class="breadcrumb container container--tool" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/text/">Text Tools</a> › <span>Word Counter</span>
+  </nav>
+
+  <section class="hero tool-hero">
+    <div class="container">
+      <div class="badge">📝 Free Text Tool</div>
+      <h1>Word Counter: Count Words, Characters &amp; Reading Time Instantly</h1>
+      <p class="subtitle">
+        A word counter is a free online tool that counts the number of words, characters, sentences, paragraphs, and
+        reading time in any text. This word counter handles unlimited text — paste 100 words or 100,000 words and it counts
+        them instantly, without uploading your content to any server. Your text stays in your browser, so it works offline
+        after the first page load and your writing remains completely private.
+      </p>
+      <p class="subtitle-secondary">
+        The counter shows your totals in real time as you type or paste. Beyond basic counts, it also shows estimated
+        reading time (at 200 words per minute), speaking time (at 130 WPM for presentations), unique word count, longest
+        word, and progress against common character limits for Twitter/X (280), SMS (160), and meta descriptions (160). No
+        signup, no ads, no usage limits.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> Privacy-first (browser-based)</span>
+        <span><span class="check">✓</span> Real-time counting</span>
+        <span><span class="check">✓</span> Unlimited text (no 5K-char cap)</span>
+        <span><span class="check">✓</span> No signup, no ads, no tracking</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="wc-tool tool-section" aria-label="Word counter">
+    <div class="container container--tool wc-tool-inner">
+      <div class="wc-cols">
+        <div class="wc-col wc-col--input">
+          <label for="wc-text" class="sr-only">Text to count</label>
+          <textarea
+            id="wc-text"
+            class="wc-textarea"
+            rows="12"
+            spellcheck="true"
+            placeholder="Paste or type your text here..."></textarea>
+          <div class="wc-toolbar" role="group" aria-label="Text actions">
+            <button type="button" class="wc-btn" id="wc-clear">Clear</button>
+            <button type="button" class="wc-btn" id="wc-copy">Copy</button>
+            <button type="button" class="wc-btn" id="wc-sample">Sample text</button>
+            <span class="wc-copy-hint" id="wc-copy-feedback" aria-live="polite" role="status"></span>
+          </div>
+        </div>
+        <div class="wc-col wc-col--stats">
+          <div class="wc-stats" id="wc-stats" aria-live="polite" aria-atomic="true" aria-relevant="additions text">
+            <h2 class="wc-stats-heading">Live statistics</h2>
+            <p class="wc-stat-primary"><span class="wc-num" id="wc-words">0</span> <span class="wc-lbl">words</span></p>
+            <p class="wc-stat-primary">
+              <span class="wc-num" id="wc-chars">0</span> <span class="wc-lbl">characters (with spaces)</span>
+            </p>
+            <p class="wc-stat-primary">
+              <span class="wc-num" id="wc-chars-ns">0</span> <span class="wc-lbl">characters (no spaces)</span>
+            </p>
+            <div class="wc-stat-block">
+              <h3 class="wc-subhead">Details</h3>
+              <ul class="wc-stat-list" id="wc-secondary">
+                <li><span id="wc-sent">0</span> sentences</li>
+                <li><span id="wc-paras">0</span> paragraphs</li>
+                <li><span id="wc-avg">—</span> avg. words / sentence</li>
+                <li>Longest word: <span id="wc-long" class="wc-longw">—</span></li>
+                <li><span id="wc-unique">0</span> unique words</li>
+              </ul>
+            </div>
+            <div class="wc-stat-block">
+              <h3 class="wc-subhead">Time</h3>
+              <p class="wc-time">
+                <span class="wc-time-lbl">Reading (200 wpm):</span>
+                <strong id="wc-read">0 min read</strong>
+              </p>
+              <p class="wc-time">
+                <span class="wc-time-lbl">Speaking (130 wpm):</span>
+                <strong id="wc-speak">0 min speech</strong>
+              </p>
+            </div>
+            <div class="wc-limits" aria-labelledby="wc-limits-title">
+              <h3 class="wc-subhead" id="wc-limits-title">Character limit helper</h3>
+              <ul class="wc-limit-list" id="wc-limit-list"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <WordCounterEducation />
+
+  <section class="wc-faq faq tool-faq" id="faq" aria-label="Frequently asked questions">
+    <div class="container container--tool">
+      <h2 class="section-title">Word counter FAQ</h2>
+      <div class="faq-list">
+        {
+          faqItems.map((f) => (
+            <div class="faq-item">
+              <h3>{f.question}</h3>
+              <p>{f.answer}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="wc-related-tools tool-related" aria-label="Related text tools">
+    <div class="container container--tool">
+      <h2 class="section-title">Related Text Tools</h2>
+      <p>Explore more free, browser-based text tools from DoItSwift:</p>
+      <div class="wc-tools-grid">
+        <a href="/text/case-converter/" class="wc-tool-card">
+          <div class="wc-tool-icon">🔠</div>
+          <h3>Case Converter</h3>
+          <p>Convert text between 15 case formats including UPPERCASE, lowercase, camelCase, snake_case.</p>
+        </a>
+        <a href="/text/" class="wc-tool-card">
+          <div class="wc-tool-icon">📝</div>
+          <h3>All Text Tools</h3>
+          <p>Browse all free text tools: counters, converters, generators.</p>
+        </a>
+        <a href="/generator/password-generator/" class="wc-tool-card">
+          <div class="wc-tool-icon">🔐</div>
+          <h3>Password Generator</h3>
+          <p>Generate strong passwords in your browser. Privacy-first, no logging.</p>
+        </a>
+        <a href="/calculator/" class="wc-tool-card">
+          <div class="wc-tool-icon">🧮</div>
+          <h3>Free Calculators</h3>
+          <p>Finance, health, and everyday calculators. 40+ tools, all browser-based.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="tool-editorial">
+    <div class="container container--tool">
+      <p>
+        <strong>About this tool:</strong> The Word Counter is built and maintained by DoItSwift. Word-counting rules
+        follow standard conventions used by major publishing systems (Microsoft Word, Google Docs, academic style
+        guides). Reading time uses 200 words per minute (WPM) for silent reading, based on research from the Nielsen
+        Norman Group and comparable sources. Speaking time uses 130 WPM, the recommended rate for presentations.
+      </p>
+      <p class="tool-editorial-meta">Last reviewed: April 2026 · Next scheduled review: July 2026</p>
+      <p class="tool-editorial-meta">See an error or missing feature? <a href="/contact/">Let us know</a>.</p>
+    </div>
+  </div>
+
+  <p class="back-wrap container container--tool">
+    <a href="/text/" class="link-back">← Text tools hub</a>
+  </p>
+
+  <script is:inline>
+    (function () {
+      var el = document.getElementById('wc-text');
+      if (!el) return;
+
+      var SAMPLE =
+        "The quick brown fox jumps over the lazy dog. " +
+        "In typography and computing, a word count is a count of the number of words in a document — or a passage of text. " +
+        "Students and authors use it to meet assignment and publishing limits.\n\n" +
+        "A second paragraph helps demonstrate paragraph detection. " +
+        "The longest word in this sample might be: internationalization. " +
+        "Final sentence!";
+
+      var limitDefs = [
+        { key: 'SMS (single part)', max: 160 },
+        { key: 'Meta description (typical cap)', max: 160 },
+        { key: 'X / Twitter post', max: 280 },
+        { key: 'Instagram caption', max: 2200 },
+      ];
+
+      function countAll(text) {
+        var t = text || '';
+        var trimmed = t.trim();
+        var words = trimmed ? trimmed.split(/\s+/).filter(function (w) {
+          return w.length > 0;
+        }) : [];
+        var wordCount = words.length;
+        var charWith = t.length;
+        var charNo = t.replace(/\s/g, '').length;
+        var sentenceCount = 0;
+        if (trimmed) {
+          var sParts = t.split(/[.!?]+[\s]+/);
+          sentenceCount = sParts.filter(function (s) {
+            return s.replace(/\s/g, '').length > 0;
+          }).length;
+        }
+        var paraParts = t.split(/\n\s*\n/);
+        var paraCount = paraParts.filter(function (p) {
+          return p.trim().length > 0;
+        }).length;
+        var longest = words.reduce(function (a, b) {
+          return a.length >= b.length ? a : b;
+        }, '');
+        if (words.length === 0) longest = '';
+        var uniques = new Set(words.map(function (w) {
+          return w.toLowerCase();
+        })).size;
+        var avgWps = sentenceCount > 0 && wordCount > 0 ? Math.round((wordCount / sentenceCount) * 10) / 10 : null;
+        var readMin;
+        if (wordCount === 0) readMin = 0;
+        else if (wordCount < 200) readMin = -1;
+        else readMin = Math.ceil(wordCount / 200);
+        var speakMin = wordCount === 0 ? 0 : Math.max(1, Math.ceil(wordCount / 130));
+        if (wordCount < 130 && wordCount > 0) speakMin = 1;
+        if (wordCount === 0) speakMin = 0;
+        return {
+          wordCount: wordCount,
+          charWith: charWith,
+          charNo: charNo,
+          sentenceCount: sentenceCount,
+          paraCount: paraCount,
+          avgWps: avgWps,
+          longest: longest,
+          uniques: uniques,
+          readMin: readMin,
+          speakMin: speakMin,
+        };
+      }
+
+      var fmt = new Intl.NumberFormat('en-IN');
+
+      function setText(id, s) {
+        var n = document.getElementById(id);
+        if (n) n.textContent = s;
+      }
+
+      function renderLimitHelper(charCount) {
+        var list = document.getElementById('wc-limit-list');
+        if (!list) return;
+        var shown = 0;
+        var maxItems = 4;
+        var html = '';
+        for (var i = 0; i < limitDefs.length && shown < maxItems; i++) {
+          var L = limitDefs[i];
+          var over = charCount > L.max;
+          var mark = over ? '×' : '✓';
+          var good = !over;
+          var cls = good ? 'wc-limit-ok' : 'wc-limit-bad';
+          html += '<li class="wc-limit-row ' + cls + '"><span class="wc-limit-mark" aria-hidden="true">' + mark + '</span> ';
+          html += '<span class="wc-limit-name">' + L.key + ':</span> ';
+          html += '<span class="wc-limit-nums">' + fmt.format(charCount) + ' / ' + fmt.format(L.max) + '</span></li>';
+          shown++;
+        }
+        list.innerHTML = html;
+      }
+
+      var debT;
+      function run() {
+        var text = el.value;
+        var c = countAll(text);
+        setText('wc-words', fmt.format(c.wordCount));
+        setText('wc-chars', fmt.format(c.charWith));
+        setText('wc-chars-ns', fmt.format(c.charNo));
+        setText('wc-sent', fmt.format(c.sentenceCount));
+        setText('wc-paras', fmt.format(c.paraCount));
+        setText('wc-unique', fmt.format(c.uniques));
+        setText('wc-long', c.longest || '—');
+        if (c.avgWps == null) setText('wc-avg', '—');
+        else setText('wc-avg', String(c.avgWps));
+        if (c.readMin < 0) setText('wc-read', 'Less than 1 min read');
+        else if (c.readMin === 0) setText('wc-read', '0 min read');
+        else setText('wc-read', c.readMin + (c.readMin === 1 ? ' min read' : ' min read'));
+        if (c.speakMin === 0) setText('wc-speak', '0 min speech');
+        else setText('wc-speak', c.speakMin + (c.speakMin === 1 ? ' min speech' : ' min speech'));
+        renderLimitHelper(c.charWith);
+      }
+      function schedule() {
+        clearTimeout(debT);
+        debT = setTimeout(run, 100);
+      }
+      el.addEventListener('input', schedule);
+      el.addEventListener('paste', schedule);
+      el.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          var v = el.value;
+          if (v.length > 100) {
+            if (!window.confirm('Clear all text?')) return;
+          }
+          el.value = '';
+          el.focus();
+          run();
+        }
+      });
+
+      document.getElementById('wc-clear').addEventListener('click', function () {
+        var v = el.value;
+        if (v.length > 100) {
+          if (!window.confirm('Clear all text?')) return;
+        }
+        el.value = '';
+        el.focus();
+        run();
+      });
+      document.getElementById('wc-copy').addEventListener('click', function () {
+        var t = el.value;
+        if (!t) {
+          setCopyFeedback('Nothing to copy', true);
+          return;
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(t).then(
+            function () {
+              setCopyFeedback('Copied!', false);
+            },
+            function () {
+              setCopyFeedback('Copy failed', true);
+            }
+          );
+        } else {
+          el.select();
+          try {
+            document.execCommand('copy');
+            setCopyFeedback('Copied!', false);
+          } catch (err) {
+            setCopyFeedback('Copy not supported', true);
+          }
+        }
+      });
+      var copyFbT;
+      function setCopyFeedback(msg, isError) {
+        var fb = document.getElementById('wc-copy-feedback');
+        if (!fb) return;
+        fb.textContent = msg;
+        fb.style.color = isError ? 'var(--danger, #b91c1c)' : '';
+        clearTimeout(copyFbT);
+        if (!isError) {
+          copyFbT = setTimeout(function () {
+            if (fb.textContent === 'Copied!') fb.textContent = '';
+          }, 2000);
+        }
+      }
+      document.getElementById('wc-sample').addEventListener('click', function () {
+        el.value = SAMPLE;
+        run();
+        el.focus();
+      });
+
+      function autoResize() {
+        el.style.height = 'auto';
+        el.style.height = Math.max(400, el.scrollHeight) + 'px';
+      }
+      el.addEventListener('input', autoResize);
+      el.addEventListener('paste', function () {
+        setTimeout(function () {
+          autoResize();
+          run();
+        }, 0);
+      });
+      setTimeout(function () {
+        el.focus();
+        run();
+        autoResize();
+      }, 0);
+    })();
+  </script>
+
+  <style>
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 16px 0 0;
+    }
+    .breadcrumb a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+    .tool-hero .hero h1 {
+      font-size: clamp(1.5rem, 4vw, 2.1rem);
+    }
+    .wc-tool.tool-section {
+      padding: 16px 0 40px;
+    }
+    .wc-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    @media (max-width: 767px) {
+      .wc-cols {
+        grid-template-columns: 1fr;
+      }
+    }
+    .wc-textarea {
+      width: 100%;
+      min-height: 400px;
+      padding: 14px 16px;
+      font-size: 15px;
+      line-height: 1.55;
+      font-family: ui-sans-serif, system-ui, Segoe UI, Roboto, sans-serif;
+      border: 1px solid var(--border);
+      border-radius: var(--radius, 8px);
+      background: var(--card);
+      color: var(--text, #0f172a);
+      box-sizing: border-box;
+    }
+    :global([data-theme='dark']) .wc-textarea {
+      color: #e5e7eb;
+    }
+    .wc-textarea:focus {
+      outline: 2px solid #2563eb;
+      outline-offset: 2px;
+    }
+    :global([data-theme='dark']) .wc-textarea:focus {
+      outline-color: #3b82f6;
+    }
+    .wc-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 10px;
+      margin-top: 12px;
+      align-items: center;
+    }
+    .wc-btn {
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text, #0f172a);
+      cursor: pointer;
+    }
+    .wc-btn:hover {
+      border-color: #2563eb;
+      color: #2563eb;
+    }
+    :global([data-theme='dark']) .wc-btn:hover {
+      color: #93c5fd;
+      border-color: #3b82f6;
+    }
+    .wc-btn:focus-visible {
+      outline: 2px solid #2563eb;
+      outline-offset: 2px;
+    }
+    .wc-copy-hint {
+      font-size: 13px;
+      min-height: 1.2em;
+    }
+
+    .wc-stats {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius, 8px);
+      padding: 20px 20px 24px;
+      box-shadow: var(--shadow);
+    }
+    .wc-stats-heading {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin: 0 0 12px;
+    }
+    .wc-stat-primary {
+      margin: 0 0 8px;
+      line-height: 1.2;
+    }
+    .wc-num {
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    :global([data-theme='dark']) .wc-num {
+      color: #f1f5f9;
+    }
+    .wc-lbl {
+      display: block;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+    .wc-stat-block {
+      margin-top: 18px;
+    }
+    .wc-subhead {
+      font-size: 13px;
+      margin: 0 0 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+    }
+    .wc-stat-list {
+      margin: 0;
+      padding-left: 1.1rem;
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .wc-longw {
+      word-break: break-word;
+    }
+    .wc-time {
+      margin: 6px 0;
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+    .wc-time strong {
+      color: #0f172a;
+    }
+    :global([data-theme='dark']) .wc-time strong {
+      color: #e5e7eb;
+    }
+    .wc-time-lbl {
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .wc-limits {
+      margin-top: 20px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .wc-limit-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .wc-limit-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 6px;
+      font-size: 14px;
+      margin-bottom: 6px;
+      padding: 6px 0;
+    }
+    .wc-limit-ok {
+      color: #15803d;
+    }
+    :global([data-theme='dark']) .wc-limit-ok {
+      color: #4ade80;
+    }
+    .wc-limit-bad {
+      color: #b91c1c;
+    }
+    :global([data-theme='dark']) .wc-limit-bad {
+      color: #f87171;
+    }
+    .wc-limit-name {
+      font-weight: 600;
+    }
+    .wc-faq .section-title {
+      font-size: 1.4rem;
+      margin-top: 0;
+    }
+    .faq-list {
+      margin-top: 0;
+    }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius, 8px);
+      padding: 18px 20px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow, 0 1px 2px rgba(0, 0, 0, 0.06));
+    }
+    .faq-item h3,
+    .faq-item h4 {
+      font-size: 16px;
+      margin: 0 0 6px;
+    }
+    .faq-item p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin: 0;
+    }
+    .wc-related-tools > .container > p {
+      text-align: center;
+      color: var(--text-muted);
+      margin: 0 0 0.5rem;
+    }
+    .wc-related-tools.tool-related {
+      background: var(--card-bg, #f9fafb);
+    }
+    .wc-tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .wc-tool-card {
+      display: block;
+      padding: 20px;
+      background: #fff;
+      border: 1px solid var(--border, #e5e7eb);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--text, #111827);
+      transition: all 0.15s;
+    }
+    .wc-tool-card:hover {
+      border-color: var(--blue, #2563eb);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    .wc-tool-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+    .wc-tool-card h3 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+      color: var(--text, #111827);
+    }
+    .wc-tool-card p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--text-muted, #6b7280);
+      line-height: 1.5;
+    }
+    :global([data-theme='dark']) .wc-related-tools {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    :global([data-theme='dark']) .wc-tool-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #e5e7eb;
+    }
+    :global([data-theme='dark']) .wc-tool-card p {
+      color: #9ca3af;
+    }
+    :global([data-theme='dark']) .wc-tool-card h3 {
+      color: #e5e7eb;
+    }
+    .back-wrap a.link-back {
+      color: #2563eb;
+      font-weight: 600;
+    }
+    :global([data-theme='dark']) .back-wrap a.link-back {
+      color: #60a5fa;
+    }
+    .back-wrap {
+      padding-bottom: 48px;
+      text-align: center;
+    }
+  </style>
+</MainLayout>

@@ -1,0 +1,947 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import CaseConverterEducation from '../../components/CaseConverterEducation.astro';
+import { calculatorCanonical } from '../../lib/calculatorJsonLd';
+
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+const pageTitle = 'Case Converter — 15 Formats, Browser-Based & Private | DoItSwift';
+const pageDescription =
+  'Convert text between 15 case formats — UPPERCASE, lowercase, Title Case, camelCase, snake_case, and more. 100% browser-based: your text never leaves your device. No signup, no ads, no limits. Free forever.';
+const pageKeywords =
+  'case converter, text case converter, uppercase converter, lowercase converter, title case converter, camelcase converter, snake case converter, kebab case converter, sentence case converter, case converter online, free case converter, browser case converter, private case converter';
+
+const softwareAppDescription =
+  'Free browser-based case converter supporting 15 text case formats including UPPERCASE, lowercase, Title Case, camelCase, snake_case, and kebab-case. Privacy-first: text never leaves your browser.';
+
+const faqItems = [
+  {
+    question: 'What is a text case converter?',
+    answer:
+      'A text case converter rewrites the same string in different capitalization and naming styles—UPPERCASE, sentence case, Title Case, programming styles like camelCase and snake_case, and more—without retyping. Writers, developers, and SEO specialists use it to fix Caps Lock mistakes, build URL slugs, and match team style guides. DoItSwift’s tool does this in your browser, so you can copy the result in one step.',
+  },
+  {
+    question: 'Is the DoItSwift case converter free? Are there limits?',
+    answer:
+      'Yes. The case converter is free to use with no signup, no paywall, and no ads. There is no character limit imposed by us: your browser holds the text and runs the conversion locally, so very large pastes are only limited by your device memory, not a server cap.',
+  },
+  {
+    question: 'Is my text uploaded to a server or stored in the cloud?',
+    answer:
+      'No. The page is static; conversion runs in JavaScript in your tab. Your text is not uploaded to DoItSwift for this feature, is not written to our databases, and is not used to train models. You can use DevTools → Network to confirm: converting text does not add new requests. Close the tab and the content is gone unless you saved it yourself.',
+  },
+  {
+    question: 'How many case formats does this tool support?',
+    answer:
+      'Fifteen formats: Sentence case, UPPER CASE, lowercase, Capitalize Each Word, Title Case, aLtErNaTiNg cAsE, InVeRsE cAsE, camelCase, PascalCase, snake_case, CONSTANT_CASE, kebab-case, Train-Case, dot.case, and path/case. Optional "Compare all" shows every result at once.',
+  },
+  {
+    question: 'What is the difference between sentence case and title case?',
+    answer:
+      'Sentence case capitalizes the first word of each sentence (and, with smart options, proper nouns) like body copy. Title case follows headline rules: important words are capitalized while short words like "a" and "the" often stay lowercase in the middle, per common style guides. Use sentence case for modern UI and many emails; title case for traditional headlines and some titles of works.',
+  },
+  {
+    question: 'When should I use camelCase instead of snake_case in code?',
+    answer:
+      'Convention depends on the ecosystem. JavaScript, TypeScript, Java, and C# often use camelCase for variables and methods, while Python and Ruby commonly use snake_case. Databases and many APIs use snake_case for column names, while JSON in JavaScript-heavy stacks often uses camelCase. Match your language guide and the codebase you are editing; this tool outputs both from the same input.',
+  },
+  {
+    question: 'Why is kebab-case the standard for URL slugs and SEO-friendly paths?',
+    answer:
+      'Search engines treat hyphens as word separators, while underscores are not always tokenized the same way. Lowercase kebab-case avoids case ambiguity, reads clearly for humans, and is safe in URLs without encoding. That is why blog and product URLs like /my-blog-post are so common. Use this tool to turn a title into a slug in one click.',
+  },
+  {
+    question: 'What is "smart" Title Case compared to capitalizing every word?',
+    answer:
+      'Basic title case can capitalize every word, including "of" and "in," which is wrong for many style guides. Smart title case keeps short prepositions, articles, and conjunctions lowercase in the middle of a title, except the first and last word. This matches expectations closer to Chicago, AP, and other common published standards.',
+  },
+  {
+    question: 'How does the proper noun and acronym dictionary work?',
+    answer:
+      'For sentence and title case, you can enable automatic restoration of well-known acronyms and brand names (e.g. NASA, iPhone, JavaScript) using a large built-in dictionary (hundreds of entries) applied longest match first. Rare names may still need manual editing. You can turn this off in Settings for plain mechanical casing.',
+  },
+  {
+    question: 'What keyboard shortcuts are available?',
+    answer:
+      'With the text area focused, use Ctrl+1 through Ctrl+5 (Cmd+1–5 on Mac) for Sentence, lowercase, UPPER, Capitalize Each Word, and Title case. Ctrl+Z (Cmd+Z) undoes the last in-tool conversion when our undo stack has a step, without blocking normal text editing when the stack is empty. Use the Copy button and standard copy shortcuts for the clipboard.',
+  },
+  {
+    question: 'Can I use the case converter offline?',
+    answer:
+      'After the first load, the app’s scripts and page can be cached by your browser. You can work offline in many browsers once the page is open, with no network needed for conversion itself. A fresh visit still requires a connection to load the site unless your browser already has a cached copy.',
+  },
+  {
+    question: 'Is there a character or word limit?',
+    answer:
+      'We do not impose a cap. Converting ten thousand or a hundred thousand words is handled locally, so the practical limit is your device and tab performance, not a server quota. If something feels slow, try splitting very large jobs or closing other heavy tabs.',
+  },
+];
+
+const howToLd = {
+  '@type': 'HowTo',
+  name: 'How to Convert Text Case Online',
+  description: 'Change text between UPPERCASE, lowercase, Title Case, camelCase, and 12 other formats in your browser.',
+  totalTime: 'PT10S',
+  step: [
+    {
+      '@type': 'HowToStep',
+      position: 1,
+      name: 'Paste or type your text',
+      text: 'Click the text area and paste your content or type directly.',
+    },
+    {
+      '@type': 'HowToStep',
+      position: 2,
+      name: 'Choose a case format',
+      text: 'Click one of the 15 case format buttons below the text area.',
+    },
+    {
+      '@type': 'HowToStep',
+      position: 3,
+      name: 'Copy or download the result',
+      text: "Click 'Copy' to copy to clipboard, or 'Download' to save as a .txt file.",
+    },
+  ],
+};
+
+const pageJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      name: 'DoItSwift Case Converter',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'Any (Web Browser)',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      description: softwareAppDescription,
+      url: 'https://doitswift.com/text/case-converter/',
+      featureList: [
+        'Convert to UPPERCASE',
+        'Convert to lowercase',
+        'Convert to Title Case with smart proper noun detection',
+        'Convert to Sentence case with 200+ proper noun dictionary',
+        'Convert to camelCase',
+        'Convert to PascalCase',
+        'Convert to snake_case',
+        'Convert to CONSTANT_CASE',
+        'Convert to kebab-case',
+        'Convert to Train-Case',
+        'Convert to dot.case',
+        'Convert to path/case',
+        'Convert to aLtErNaTiNg cAsE',
+        'Convert to InVeRsE CaSe',
+        'Browser-based privacy (no data upload)',
+        'Works offline after first load',
+        'Unlimited text length',
+        'Keyboard shortcuts (Ctrl+1 through Ctrl+5)',
+        'Download output as .txt file',
+        'Undo/redo functionality',
+      ],
+      browserRequirements: 'Requires JavaScript. Supports Chrome, Firefox, Safari, Edge.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faqItems.map((f) => ({
+        '@type': 'Question',
+        name: f.question,
+        acceptedAnswer: { '@type': 'Answer', text: f.answer },
+      })),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://doitswift.com/' },
+        { '@type': 'ListItem', position: 2, name: 'Text Tools', item: 'https://doitswift.com/text/' },
+        { '@type': 'ListItem', position: 3, name: 'Case Converter', item: 'https://doitswift.com/text/case-converter/' },
+      ],
+    },
+    howToLd,
+  ],
+};
+---
+
+<MainLayout title={pageTitle} description={pageDescription} keywords={pageKeywords} canonical={canonical}>
+  <script type="application/ld+json" set:html={JSON.stringify(pageJsonLd)} />
+
+  <nav class="breadcrumb container container--tool" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/text/">Text Tools</a> › <span>Case Converter</span>
+  </nav>
+
+  <section class="hero tool-hero">
+    <div class="container">
+      <div class="badge">📝 Free Text Tool</div>
+      <h1>Case Converter: Convert Between 15 Text Formats Instantly</h1>
+      <p class="subtitle">
+        A case converter transforms text between different capitalization styles — UPPERCASE, lowercase, Title Case, Sentence case, camelCase, snake_case, and 10 other formats — without needing to retype anything. This free tool supports 15 case formats and runs entirely in your browser, which means your text never uploads to a server and no one (not even us) can see what you convert.
+      </p>
+      <p class="subtitle-secondary">
+        Whether you left Caps Lock on for a whole paragraph, need camelCase variable names for code, want a kebab-case URL slug, or need to format a blog title correctly, the converter handles it in one click. Works on desktop and mobile. No signup. No character limit. No usage restrictions.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> Privacy-first (browser-based)</span>
+        <span><span class="check">✓</span> Instant conversion (&lt; 5ms)</span>
+        <span><span class="check">✓</span> No character limit</span>
+        <span><span class="check">✓</span> No signup, no ads, no tracking</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="cc-tool tool-section" aria-labelledby="cc-tool-heading">
+    <div class="container container--tool">
+      <h2 id="cc-tool-heading" class="sr-only">Case Converter Tool</h2>
+
+      <div class="cc-toolbar-top" role="toolbar" aria-label="Text actions">
+        <button type="button" id="ccCopyBtn" class="cc-icon-btn" title="Copy to clipboard" aria-label="Copy to clipboard">
+          <span class="cc-icon" aria-hidden="true">📋</span> <span class="cc-btn-label">Copy</span>
+        </button>
+        <button
+          type="button"
+          id="ccDownloadBtn"
+          class="cc-icon-btn"
+          title="Download as .txt file"
+          aria-label="Download as text file"
+        >
+          <span class="cc-icon" aria-hidden="true">⬇</span> <span class="cc-btn-label">Download</span>
+        </button>
+        <button type="button" id="ccUndoBtn" class="cc-icon-btn" title="Undo (Ctrl+Z when history available)" aria-label="Undo last change">
+          <span class="cc-icon" aria-hidden="true">↶</span> <span class="cc-btn-label">Undo</span>
+        </button>
+        <button type="button" id="ccClearBtn" class="cc-icon-btn" title="Clear text" aria-label="Clear text">
+          <span class="cc-icon" aria-hidden="true">✕</span> <span class="cc-btn-label">Clear</span>
+        </button>
+      </div>
+
+      <textarea
+        id="ccTextarea"
+        class="cc-textarea"
+        placeholder="Type or paste your text here, then click a case below to convert it instantly..."
+        aria-label="Text to convert"
+        spellcheck="false"
+      />
+
+      <div class="cc-stats-bar" role="status" aria-live="polite">
+        <span>Characters: <strong id="ccCharCount">0</strong></span>
+        <span>Words: <strong id="ccWordCount">0</strong></span>
+        <span>Lines: <strong id="ccLineCount">0</strong></span>
+        <span class="cc-stats-current"
+          >Current case: <strong id="ccCurrentCase">—</strong></span
+        >
+      </div>
+
+      <div class="cc-tabs-wrap">
+        <div class="cc-tabs" role="tablist" aria-label="Case type selector">
+          <button
+            type="button"
+            class="cc-tab"
+            role="tab"
+            data-case="sentence"
+            title="Sentence case (Ctrl+1)"
+            id="cc-tab-sentence"
+            aria-pressed="false"
+            aria-selected="false"
+            tabindex="0"
+          >
+            <span class="cc-tab-code">Sc</span> <span class="cc-tab-name">Sentence case</span>
+          </button>
+          <button
+            type="button"
+            class="cc-tab"
+            role="tab"
+            data-case="lower"
+            title="lowercase (Ctrl+2)"
+            id="cc-tab-lower"
+            aria-pressed="false"
+            aria-selected="false"
+            tabindex="0"
+          >
+            <span class="cc-tab-code">lc</span> <span class="cc-tab-name">lower case</span>
+          </button>
+          <button
+            type="button"
+            class="cc-tab"
+            role="tab"
+            data-case="upper"
+            title="UPPER CASE (Ctrl+3)"
+            id="cc-tab-upper"
+            aria-pressed="false"
+            aria-selected="false"
+            tabindex="0"
+          >
+            <span class="cc-tab-code">UC</span> <span class="cc-tab-name">UPPER CASE</span>
+          </button>
+          <button
+            type="button"
+            class="cc-tab"
+            role="tab"
+            data-case="capitalized"
+            title="Capitalize Each Word (Ctrl+4)"
+            id="cc-tab-capitalized"
+            aria-pressed="false"
+            aria-selected="false"
+            tabindex="0"
+          >
+            <span class="cc-tab-code">CC</span> <span class="cc-tab-name">Capitalize Each Word</span>
+          </button>
+          <button
+            type="button"
+            class="cc-tab"
+            role="tab"
+            data-case="title"
+            title="Title Case (Ctrl+5)"
+            id="cc-tab-title"
+            aria-pressed="false"
+            aria-selected="false"
+            tabindex="0"
+          >
+            <span class="cc-tab-code">TC</span> <span class="cc-tab-name">Title Case</span>
+          </button>
+          <button
+            type="button"
+            class="cc-tab"
+            role="tab"
+            data-case="alternating"
+            title="aLtErNaTiNg cAsE"
+            id="cc-tab-alternating"
+            aria-pressed="false"
+            aria-selected="false"
+            tabindex="0"
+          >
+            <span class="cc-tab-code">aC</span> <span class="cc-tab-name">aLtErNaTiNg cAsE</span>
+          </button>
+          <button
+            type="button"
+            class="cc-tab"
+            role="tab"
+            data-case="inverse"
+            title="InVeRsE cAsE"
+            id="cc-tab-inverse"
+            aria-pressed="false"
+            aria-selected="false"
+            tabindex="0"
+          >
+            <span class="cc-tab-code">iC</span> <span class="cc-tab-name">InVeRsE cAsE</span>
+          </button>
+
+          <span class="cc-tab-separator" aria-hidden="true" />
+
+          <button
+            type="button"
+            class="cc-tab"
+            role="tab"
+            data-case="camel"
+            title="camelCase"
+            id="cc-tab-camel"
+            aria-pressed="false"
+            aria-selected="false"
+            tabindex="0"
+          >
+            <span class="cc-tab-code">cC</span> <span class="cc-tab-name">camelCase</span>
+          </button>
+          <button
+            type="button"
+            class="cc-tab"
+            role="tab"
+            data-case="pascal"
+            title="PascalCase"
+            id="cc-tab-pascal"
+            aria-pressed="false"
+            aria-selected="false"
+            tabindex="0"
+          >
+            <span class="cc-tab-code">PC</span> <span class="cc-tab-name">PascalCase</span>
+          </button>
+          <button
+            type="button"
+            class="cc-tab"
+            role="tab"
+            data-case="snake"
+            title="snake_case"
+            id="cc-tab-snake"
+            aria-pressed="false"
+            aria-selected="false"
+            tabindex="0"
+          >
+            <span class="cc-tab-code">sn</span> <span class="cc-tab-name">snake_case</span>
+          </button>
+          <button
+            type="button"
+            class="cc-tab"
+            role="tab"
+            data-case="constant"
+            title="CONSTANT_CASE"
+            id="cc-tab-constant"
+            aria-pressed="false"
+            aria-selected="false"
+            tabindex="0"
+          >
+            <span class="cc-tab-code">CO</span> <span class="cc-tab-name">CONSTANT_CASE</span>
+          </button>
+          <button
+            type="button"
+            class="cc-tab"
+            role="tab"
+            data-case="kebab"
+            title="kebab-case"
+            id="cc-tab-kebab"
+            aria-pressed="false"
+            aria-selected="false"
+            tabindex="0"
+          >
+            <span class="cc-tab-code">kb</span> <span class="cc-tab-name">kebab-case</span>
+          </button>
+          <button
+            type="button"
+            class="cc-tab"
+            role="tab"
+            data-case="train"
+            title="Train-Case"
+            id="cc-tab-train"
+            aria-pressed="false"
+            aria-selected="false"
+            tabindex="0"
+          >
+            <span class="cc-tab-code">tr</span> <span class="cc-tab-name">Train-Case</span>
+          </button>
+          <button
+            type="button"
+            class="cc-tab"
+            role="tab"
+            data-case="dot"
+            title="dot.case"
+            id="cc-tab-dot"
+            aria-pressed="false"
+            aria-selected="false"
+            tabindex="0"
+          >
+            <span class="cc-tab-code">dt</span> <span class="cc-tab-name">dot.case</span>
+          </button>
+          <button
+            type="button"
+            class="cc-tab"
+            role="tab"
+            data-case="path"
+            title="path/case"
+            id="cc-tab-path"
+            aria-pressed="false"
+            aria-selected="false"
+            tabindex="0"
+          >
+            <span class="cc-tab-code">pa</span> <span class="cc-tab-name">path/case</span>
+          </button>
+        </div>
+
+        <details class="cc-advanced">
+          <summary>⚙️ Settings & options</summary>
+          <div class="cc-advanced-content">
+            <label class="cc-checkbox">
+              <input type="checkbox" id="ccAutoProperNouns" checked />
+              <span>Auto-correct proper nouns and acronyms (NASA, iPhone, JavaScript, etc.) in sentence and title case</span>
+            </label>
+            <label class="cc-checkbox">
+              <input type="checkbox" id="ccCompareAll" />
+              <span>Show "Compare all" view below (see all conversions at once)</span>
+            </label>
+          </div>
+        </details>
+      </div>
+
+      <div id="ccCompareAllView" class="cc-compare-all" hidden aria-label="All conversions">
+        <h3 class="cc-compare-heading">All conversions</h3>
+        <div class="cc-compare-grid"></div>
+      </div>
+
+      <div id="ccSampleHint" class="cc-sample-hint">
+        <p>
+          💡 New here? Try our
+          <button type="button" id="ccLoadSample" class="cc-sample-btn">sample text</button> to see how it works.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <CaseConverterEducation />
+
+  <section class="cc-faq faq tool-faq" id="faq">
+    <div class="container container--tool">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        {
+          faqItems.map((f) => (
+            <div class="faq-item">
+              <h3>{f.question}</h3>
+              <p>{f.answer}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="cc-related-tools tool-related">
+    <div class="container container--tool">
+      <h2 class="section-title">Related Text Tools</h2>
+      <p>Explore more free, browser-based text tools from DoItSwift:</p>
+      <div class="cc-tools-grid">
+        <a href="/text/word-counter/" class="cc-tool-card">
+          <div class="cc-tool-icon">🔢</div>
+          <h3>Word Counter</h3>
+          <p>Count words, characters, and reading time in any text. Browser-based, no upload.</p>
+        </a>
+        <a href="/text/" class="cc-tool-card">
+          <div class="cc-tool-icon">📝</div>
+          <h3>All Text Tools</h3>
+          <p>Browse all free text tools: counters, converters, generators.</p>
+        </a>
+        <a href="/generator/password-generator/" class="cc-tool-card">
+          <div class="cc-tool-icon">🔐</div>
+          <h3>Password Generator</h3>
+          <p>Generate strong passwords in your browser. Privacy-first, no logging.</p>
+        </a>
+        <a href="/calculator/" class="cc-tool-card">
+          <div class="cc-tool-icon">🧮</div>
+          <h3>Free Calculators</h3>
+          <p>Finance, health, and everyday calculators. 40+ tools, all browser-based.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="tool-editorial">
+    <div class="container container--tool">
+      <p>
+        <strong>About this tool:</strong> The Case Converter is built and maintained by DoItSwift. Conversion algorithms
+        follow standard definitions from programming language specifications (JavaScript ECMA-262, Python PEP 8). Title
+        case rules follow the Chicago Manual of Style. The built-in proper noun dictionary includes 200+ common brand
+        names, acronyms, and technical terms.
+      </p>
+      <p class="tool-editorial-meta">Last reviewed: April 2026 · Next scheduled review: July 2026</p>
+      <p class="tool-editorial-meta">See an error or missing case format? <a href="/contact/">Let us know</a>.</p>
+    </div>
+  </div>
+
+  <p class="back-wrap container container--tool">
+    <a href="/text/" class="link-back">← Text tools hub</a>
+  </p>
+
+  <script>
+    import { initCaseConverterTabs } from '../../lib/case-converter-ui';
+    initCaseConverterTabs();
+  </script>
+
+  <style>
+    .cc-tool.tool-section {
+      padding: 24px 0 40px;
+    }
+    .cc-toolbar-top {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .cc-icon-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: var(--card-bg, var(--card, #fff));
+      border: 1px solid var(--border, #e5e7eb);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      color: var(--text, #111827);
+      transition: all 0.15s;
+    }
+    .cc-icon-btn:hover {
+      border-color: var(--blue, #2563eb);
+      color: var(--blue, #2563eb);
+    }
+    .cc-icon-btn.active {
+      background: var(--blue, #2563eb);
+      color: #fff;
+      border-color: var(--blue, #2563eb);
+    }
+    .cc-icon-btn:focus-visible {
+      outline: 2px solid var(--blue, #2563eb);
+      outline-offset: 2px;
+    }
+    .cc-icon {
+      font-size: 1rem;
+    }
+    .cc-textarea {
+      width: 100%;
+      min-height: 320px;
+      max-height: 70vh;
+      padding: 16px;
+      font-family: -apple-system, 'SF Mono', 'Monaco', 'Consolas', monospace;
+      font-size: 15px;
+      line-height: 1.6;
+      border: 1px solid var(--border, #e5e7eb);
+      border-radius: 8px;
+      resize: vertical;
+      background: var(--card-bg, var(--card, #fff));
+      color: var(--text, #111827);
+      box-sizing: border-box;
+    }
+    .cc-textarea:focus {
+      outline: none;
+      border-color: var(--blue, #2563eb);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .cc-textarea:focus-visible {
+      border-color: var(--blue, #2563eb);
+    }
+    .cc-stats-bar {
+      display: flex;
+      gap: 24px;
+      padding: 10px 0;
+      font-size: 0.85rem;
+      color: var(--text-muted, #6b7280);
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--border, #e5e7eb);
+    }
+    .cc-stats-bar strong {
+      color: var(--text, #111827);
+      font-weight: 600;
+    }
+    .cc-stats-current {
+      margin-left: auto;
+    }
+    .cc-tabs-wrap {
+      margin-top: 20px;
+    }
+    .cc-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 12px 0;
+    }
+    .cc-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: var(--card-bg, #f9fafb);
+      border: 1px solid var(--border, #e5e7eb);
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      color: var(--text, #111827);
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .cc-tab:hover {
+      border-color: var(--blue, #2563eb);
+      background: rgba(37, 99, 235, 0.05);
+    }
+    .cc-tab.active {
+      background: var(--blue, #2563eb);
+      border-color: var(--blue, #2563eb);
+      color: #fff;
+    }
+    .cc-tab:focus-visible {
+      outline: 2px solid var(--blue, #2563eb);
+      outline-offset: 2px;
+    }
+    .cc-tab-code {
+      font-family: 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 3px;
+    }
+    .cc-tab.active .cc-tab-code {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .cc-tab-separator {
+      width: 1px;
+      min-width: 1px;
+      background: var(--border, #e5e7eb);
+      margin: 0 4px;
+      align-self: stretch;
+    }
+    .cc-advanced {
+      margin-top: 16px;
+      padding: 12px 16px;
+      background: var(--card-bg, #f9fafb);
+      border-radius: 8px;
+      border: 1px solid var(--border, #e5e7eb);
+    }
+    .cc-advanced summary {
+      cursor: pointer;
+      user-select: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text, #111827);
+      list-style: none;
+    }
+    .cc-advanced summary::-webkit-details-marker {
+      display: none;
+    }
+    .cc-advanced[open] summary {
+      margin-bottom: 12px;
+    }
+    .cc-advanced-content {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .cc-checkbox {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 0.875rem;
+      color: var(--text, #111827);
+      cursor: pointer;
+    }
+    .cc-checkbox input {
+      cursor: pointer;
+      margin-top: 2px;
+    }
+    .cc-compare-all {
+      margin-top: 32px;
+      padding: 20px;
+      background: var(--card-bg, #f9fafb);
+      border-radius: 8px;
+      border: 1px solid var(--border, #e5e7eb);
+    }
+    .cc-compare-heading {
+      margin: 0 0 16px;
+      font-size: 1.1rem;
+      color: var(--text, #111827);
+    }
+    .cc-compare-grid {
+      display: grid;
+      gap: 10px;
+    }
+    .cc-compare-item {
+      display: grid;
+      grid-template-columns: 140px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 12px;
+      background: #fff;
+      border: 1px solid var(--border, #e5e7eb);
+      border-radius: 6px;
+    }
+    .cc-compare-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted, #6b7280);
+    }
+    .cc-compare-value {
+      font-family: 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+      font-size: 0.9rem;
+      color: var(--text, #111827);
+      word-break: break-word;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      user-select: all;
+    }
+    .cc-compare-copy {
+      background: transparent;
+      border: 1px solid var(--border, #e5e7eb);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      color: var(--text-muted, #6b7280);
+    }
+    .cc-compare-copy:hover {
+      background: var(--blue, #2563eb);
+      color: #fff;
+      border-color: var(--blue, #2563eb);
+    }
+    .cc-compare-copy:focus-visible {
+      outline: 2px solid var(--blue, #2563eb);
+      outline-offset: 2px;
+    }
+    .cc-sample-hint {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: rgba(37, 99, 235, 0.05);
+      border-left: 3px solid var(--blue, #2563eb);
+      border-radius: 4px;
+      font-size: 0.875rem;
+      color: var(--text-secondary, #374151);
+    }
+    .cc-sample-hint p {
+      margin: 0;
+    }
+    .cc-sample-btn {
+      background: none;
+      border: none;
+      color: var(--blue, #2563eb);
+      text-decoration: underline;
+      cursor: pointer;
+      font: inherit;
+      padding: 0;
+    }
+    .cc-sample-btn:focus-visible {
+      outline: 2px solid var(--blue, #2563eb);
+      outline-offset: 2px;
+    }
+    :global([data-theme='dark']) .cc-textarea {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.15);
+      color: #e5e7eb;
+    }
+    :global([data-theme='dark']) .cc-icon-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.12);
+      color: #e5e7eb;
+    }
+    :global([data-theme='dark']) .cc-tab {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.15);
+      color: #e5e7eb;
+    }
+    :global([data-theme='dark']) .cc-tab .cc-tab-code {
+      background: rgba(0, 0, 0, 0.25);
+    }
+    :global([data-theme='dark']) .cc-compare-item {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    :global([data-theme='dark']) .cc-compare-value {
+      color: #e5e7eb;
+    }
+    :global([data-theme='dark']) .cc-advanced {
+      background: rgba(255, 255, 255, 0.04);
+    }
+    :global([data-theme='dark']) .cc-compare-all {
+      background: rgba(255, 255, 255, 0.04);
+    }
+    @media (max-width: 640px) {
+      .cc-toolbar-top {
+        gap: 6px;
+      }
+      .cc-icon-btn .cc-btn-label {
+        display: none;
+      }
+      .cc-icon-btn {
+        padding: 8px 10px;
+      }
+      .cc-stats-bar {
+        gap: 12px;
+        font-size: 0.8rem;
+      }
+      .cc-stats-current {
+        margin-left: 0;
+        width: 100%;
+      }
+      .cc-tab {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+      }
+      .cc-tab-name {
+        display: none;
+      }
+      .cc-tab-code {
+        font-size: 0.85rem;
+      }
+      .cc-compare-item {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .cc-compare-label {
+        font-size: 0.7rem;
+      }
+    }
+    .cc-related-tools.tool-related {
+      background: var(--card-bg, #f9fafb);
+    }
+    .cc-tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .cc-tool-card {
+      display: block;
+      padding: 20px;
+      background: #fff;
+      border: 1px solid var(--border, #e5e7eb);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--text, #111827);
+      transition: all 0.15s;
+    }
+    .cc-tool-card:hover {
+      border-color: var(--blue, #2563eb);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    .cc-tool-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+    .cc-tool-card h3 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+      color: var(--text, #111827);
+    }
+    .cc-tool-card p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--text-muted, #6b7280);
+      line-height: 1.5;
+    }
+    :global([data-theme='dark']) .cc-related-tools {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    :global([data-theme='dark']) .cc-tool-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #e5e7eb;
+    }
+    :global([data-theme='dark']) .cc-tool-card p {
+      color: #9ca3af;
+    }
+    :global([data-theme='dark']) .cc-tool-card h3 {
+      color: #e5e7eb;
+    }
+    .cc-faq .faq-item,
+    .cc-faq h3 {
+      margin: 0;
+    }
+    .cc-faq .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    .cc-faq .section-title {
+      margin-top: 0;
+    }
+    .back-wrap {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 16px 0 0;
+    }
+    .breadcrumb a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+</MainLayout>
