@@ -16,7 +16,7 @@ const softwareAppLd = {
     priceCurrency: 'INR',
   },
   description:
-    'Free income tax calculator for India FY 2026-27. Compare new regime vs old regime, enter deductions (80C, 80D, HRA), and see tax liability under both systems. Browser-based, no data stored.',
+    'Free income tax calculator for India FY 2026-27 with Budget 2025 new regime slabs, ₹12 lakh rebate, and ₹75,000 standard deduction. Compare new vs old regime, enter deductions (80C, 80D, HRA). Browser-based, no data stored.',
   url: 'https://doitswift.com/calculator/income-tax/',
 };
 
@@ -85,7 +85,7 @@ const faqPageLd = {
       name: 'What is the tax-free income limit in India for FY 2026-27?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Under the new regime, income up to ₹7 lakh (after ₹50,000 standard deduction) is effectively tax-free due to the Section 87A rebate — meaning gross salary up to approximately ₹7.5 lakh results in zero tax. Under the old regime, the basic exemption is ₹2.5 lakh (below 60 years), ₹3 lakh (60-80), or ₹5 lakh (above 80), with rebate up to ₹5 lakh taxable income. The exact tax-free limit depends on which regime you choose and your deductions.',
+        text: 'Under the new regime (Budget 2025 / FY 2026-27), income up to ₹12 lakh (after ₹75,000 standard deduction) is effectively tax-free due to the Section 87A rebate — meaning gross salary up to approximately ₹12.75 lakh results in zero tax. Under the old regime, the basic exemption is ₹2.5 lakh (below 60 years), ₹3 lakh (60-80), or ₹5 lakh (above 80), with rebate up to ₹5 lakh taxable income. The exact tax-free limit depends on which regime you choose and your deductions.',
       },
     },
     {
@@ -93,7 +93,7 @@ const faqPageLd = {
       name: 'How much tax do I pay on ₹10 lakh salary?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Under the new regime: ₹10 lakh gross salary − ₹50,000 standard deduction = ₹9.5 lakh taxable. Tax: ₹20,000 (5% on ₹4L) + ₹25,000 (10% on ₹2.5L) = ₹45,000 + ₹1,800 cess = approximately ₹46,800. Under the old regime with ₹2.5 lakh deductions (80C + 80D): taxable income ₹7 lakh, tax approximately ₹52,000. At ₹10 lakh, the new regime typically wins unless old regime deductions exceed ₹3 lakh. Enter your exact numbers above to compare.',
+        text: 'Under the new regime (FY 2026-27): ₹10 lakh gross − ₹75,000 standard deduction = ₹9.25 lakh taxable. Since this is below the ₹12 lakh rebate threshold, tax is ₹0 under the new regime. Under the old regime with ₹2.5 lakh deductions (80C + 80D): taxable income ₹7 lakh, tax approximately ₹52,000 (before cess). At ₹10 lakh salary, the new regime wins decisively after Budget 2025 — the ₹12 lakh rebate effectively covers this income level. Enter your exact numbers above to compare.',
       },
     },
     {
@@ -124,11 +124,12 @@ const breadcrumbLd = {
 ---
 
 <MainLayout
-  title="Income Tax Calculator India FY 2026-27 — New vs Old Regime (Free) | DoItSwift"
-  description="Free income tax calculator for India FY 2026-27. Compare new regime vs old regime side by side. Enter salary, deductions (80C, 80D, HRA), and see tax liability, effective rate, and which regime saves more. Instant, private, no signup."
-  keywords="income tax calculator, income tax calculator india, tax calculator fy 2026-27, new vs old regime, income tax calculator online, salary tax calculator, 80c deduction calculator, old regime vs new regime, tax calculator india free, income tax slab 2026-27"
+  title="Income Tax Calculator India FY 2026-27 | Budget 2025 Old vs New Regime | DoItSwift"
+  description="Free income tax calculator for FY 2026-27 with Budget 2025 rates. Compare new vs old regime, ₹12 lakh rebate, ₹75K standard deduction. Enter salary and deductions to see which regime saves more tax."
+  keywords="income tax calculator, income tax calculator india, tax calculator fy 2026-27, new vs old regime, income tax calculator online, salary tax calculator, 80c deduction calculator, old regime vs new regime, tax calculator india free, income tax slab 2026-27, budget 2025 tax calculator, income tax budget 2025, 12 lakh tax free, fy 2026-27 tax calculator, 75000 standard deduction"
   canonical={canonical}
 >
+  <script slot="head" is:inline src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script type="application/ld+json" set:html={JSON.stringify(softwareAppLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(faqPageLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
@@ -144,6 +145,9 @@ const breadcrumbLd = {
       <p class="subtitle">
         Calculate your Indian income tax for FY 2026-27 and compare the new tax regime with the old regime side by side. Enter your gross annual income, deductions under Section 80C, 80D, and HRA to see which regime saves you more tax. The calculator shows tax liability, effective tax rate, and taxable income under both regimes — helping you make an informed choice before filing. All calculations run in your browser; your salary and tax details are never sent to any server.
       </p>
+      <p>
+        <strong>Updated for Budget 2025:</strong> The new tax regime now offers ₹12 lakh tax-free income (up from ₹7 lakh) thanks to the enhanced Section 87A rebate of ₹60,000. The standard deduction for salaried individuals increased to ₹75,000 (from ₹50,000). These changes make the new regime significantly more attractive for middle-income earners. The old regime rules remain unchanged — it still wins for those with substantial deductions (typically above ₹3.75-4 lakh).
+      </p>
       <div class="trust">
         <span><span class="check">✓</span> No signup</span>
         <span><span class="check">✓</span> Instant results</span>
@@ -156,7 +160,7 @@ const breadcrumbLd = {
   </section>
 
   <p class="disclaimer container">
-    <strong>Disclaimer:</strong> Tax law changes frequently. This tool uses rounded slab math, a 4% health &amp; education cess on tax, standard deduction defaults, and a simplified rebate (new regime: no tax if taxable income ≤ ₹7 lakh after standard deduction, matching common 87A-style relief — confirm eligibility). Always validate against official notifications.
+    <strong>Disclaimer:</strong> Tax law changes frequently. This tool uses rounded slab math, a 4% health &amp; education cess on tax, standard deduction defaults (₹75,000 new / ₹50,000 old), and Budget 2025 rebate rules (new regime: no tax if taxable income ≤ ₹12 lakh). Surcharge on very high incomes is not modeled. Always validate against official Income Tax Department notifications for your assessment year.
   </p>
 
   <section class="calc-section">
@@ -185,8 +189,8 @@ const breadcrumbLd = {
         </div>
         <div class="field">
           <label for="itStd">Standard deduction — salary, new regime (₹)</label>
-          <input type="number" id="itStd" min="0" step="1000" value="50000" aria-describedby="itStd-hint" />
-          <p id="itStd-hint" class="field-hint">Applied to new regime taxable income (default ₹50,000 — verify for your year).</p>
+          <input type="number" id="itStd" min="0" step="1000" value="75000" aria-describedby="itStd-hint" />
+          <p id="itStd-hint" class="field-hint">Applied to new regime taxable income (default ₹75,000 for FY 2026-27 — verify for your year).</p>
         </div>
         <div class="field">
           <label for="itHRA">HRA exemption claimed — old regime (₹)</label>
@@ -231,11 +235,60 @@ const breadcrumbLd = {
     </div>
   </section>
 
+  <section class="it-viz-section" aria-labelledby="it-viz-heading">
+    <div class="container">
+      <h2 id="it-viz-heading" class="it-viz-heading">Visualize Your Tax Calculation</h2>
+      <p class="it-viz-sub">See how each regime taxes your income, exactly when the old regime starts winning, and how deductions change your total tax.</p>
+
+      <div class="it-winner-badge" id="itWinnerBadge" aria-live="polite">
+        <span class="it-winner-icon">🏆</span>
+        <div class="it-winner-text">
+          <strong id="itWinnerLabel">—</strong>
+          <span id="itWinnerSavings">Enter income to compare</span>
+        </div>
+      </div>
+
+      <div class="it-chart-tabs" role="tablist" aria-label="Tax visualizations">
+        <button type="button" class="it-chart-tab it-chart-tab--active" role="tab" aria-selected="true" aria-controls="itPanel0" id="itTab0" data-tab="0">Side-by-Side</button>
+        <button type="button" class="it-chart-tab" role="tab" aria-selected="false" aria-controls="itPanel1" id="itTab1" data-tab="1" tabindex="-1">Slab Breakdown</button>
+        <button type="button" class="it-chart-tab" role="tab" aria-selected="false" aria-controls="itPanel2" id="itTab2" data-tab="2" tabindex="-1">Break-Even</button>
+        <button type="button" class="it-chart-tab" role="tab" aria-selected="false" aria-controls="itPanel3" id="itTab3" data-tab="3" tabindex="-1">Deduction Impact</button>
+      </div>
+
+      <div class="it-chart-panels">
+        <div class="it-chart-panel it-chart-panel--active" role="tabpanel" id="itPanel0" aria-labelledby="itTab0" data-panel="0">
+          <div class="it-chart-canvas-wrap">
+            <canvas id="itVizCanvas0" aria-label="Side-by-side tax comparison between old and new regime"></canvas>
+          </div>
+          <p class="it-chart-callout" id="itChartCallout0" aria-live="polite"></p>
+        </div>
+        <div class="it-chart-panel" role="tabpanel" id="itPanel1" aria-labelledby="itTab1" data-panel="1" hidden>
+          <div class="it-chart-canvas-wrap">
+            <canvas id="itVizCanvas1" aria-label="Tax breakdown by slab showing how each portion of income is taxed"></canvas>
+          </div>
+          <p class="it-chart-callout" id="itChartCallout1" aria-live="polite"></p>
+        </div>
+        <div class="it-chart-panel" role="tabpanel" id="itPanel2" aria-labelledby="itTab2" data-panel="2" hidden>
+          <div class="it-chart-canvas-wrap">
+            <canvas id="itVizCanvas2" aria-label="Break-even chart showing at what income each regime is optimal"></canvas>
+          </div>
+          <p class="it-chart-callout" id="itChartCallout2" aria-live="polite"></p>
+        </div>
+        <div class="it-chart-panel" role="tabpanel" id="itPanel3" aria-labelledby="itTab3" data-panel="3" hidden>
+          <div class="it-chart-canvas-wrap">
+            <canvas id="itVizCanvas3" aria-label="How different deduction amounts affect old regime tax at your income"></canvas>
+          </div>
+          <p class="it-chart-callout" id="itChartCallout3" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="edu">
     <div class="container">
       <h2 class="section-title">How Income Tax Works in India</h2>
       <p>
-        India uses a <strong>progressive tax system</strong> — your income is taxed in slabs, with higher portions taxed at higher rates. You don't pay the highest rate on your entire income; each slab applies only to the income within that range. For example, with a ₹12 lakh taxable income under the new regime, only the portion above ₹10 lakh (₹2 lakh) is taxed at 15% — the rest is taxed at lower rates or exempt.
+        India uses a <strong>progressive tax system</strong> — your income is taxed in slabs, with higher portions taxed at higher rates. You don't pay the highest rate on your entire income; each slab applies only to the income within that range. Under the new regime (post–Budget 2025 slabs for FY 2026-27), the first ₹4 lakh of taxable income is nil, and higher slices are taxed at 5% through 30% in steps — the Section 87A rebate can make tax zero up to ₹12 lakh taxable in many cases.
       </p>
       <p>
         Since FY 2020-21, taxpayers can choose between two systems: the <strong>new tax regime</strong> (lower rates, minimal deductions) and the <strong>old tax regime</strong> (higher rates but allows deductions like 80C, 80D, HRA, home loan interest). The new regime is the default since FY 2023-24, but you can opt for the old regime if it saves you more tax. This calculator helps you compare both instantly.
@@ -247,7 +300,7 @@ const breadcrumbLd = {
     <div class="container">
       <h2 class="section-title">Income Tax Slabs FY 2026-27</h2>
 
-      <h3>New regime tax slabs (default from FY 2023-24)</h3>
+      <h3>New regime tax slabs (Budget 2025 / FY 2026-27)</h3>
       <div class="table-wrap" style="overflow-x: auto; margin: 20px 0;">
         <table>
           <thead>
@@ -257,17 +310,18 @@ const breadcrumbLd = {
             </tr>
           </thead>
           <tbody>
-            <tr><td>Up to ₹3,00,000</td><td>Nil</td></tr>
-            <tr><td>₹3,00,001 – ₹7,00,000</td><td>5%</td></tr>
-            <tr><td>₹7,00,001 – ₹10,00,000</td><td>10%</td></tr>
-            <tr><td>₹10,00,001 – ₹12,00,000</td><td>15%</td></tr>
-            <tr><td>₹12,00,001 – ₹15,00,000</td><td>20%</td></tr>
-            <tr><td>Above ₹15,00,000</td><td>30%</td></tr>
+            <tr><td>Up to ₹4,00,000</td><td>Nil</td></tr>
+            <tr><td>₹4,00,001 – ₹8,00,000</td><td>5%</td></tr>
+            <tr><td>₹8,00,001 – ₹12,00,000</td><td>10%</td></tr>
+            <tr><td>₹12,00,001 – ₹16,00,000</td><td>15%</td></tr>
+            <tr><td>₹16,00,001 – ₹20,00,000</td><td>20%</td></tr>
+            <tr><td>₹20,00,001 – ₹24,00,000</td><td>25%</td></tr>
+            <tr><td>Above ₹24,00,000</td><td>30%</td></tr>
           </tbody>
         </table>
       </div>
       <p>
-        <strong>Rebate under Section 87A:</strong> If taxable income after standard deduction is ₹7 lakh or below, tax is reduced to zero under the new regime. Standard deduction for salaried individuals: ₹50,000 (verify for your assessment year).
+        <strong>Rebate under Section 87A (Budget 2025):</strong> If your taxable income after standard deduction is ₹12 lakh or below, tax is reduced to zero under the new regime. The rebate amount is up to ₹60,000 (increased from ₹25,000 in Budget 2025). Standard deduction for salaried individuals: ₹75,000 (increased from ₹50,000). This means gross salary up to approximately ₹12.75 lakh effectively results in zero tax under the new regime — a significant improvement for middle-income earners.
       </p>
 
       <h3>Old regime tax slabs</h3>
@@ -310,7 +364,7 @@ const breadcrumbLd = {
           <tbody>
             <tr>
               <td>Tax rates</td>
-              <td>Lower (5% to 30% across 6 slabs)</td>
+              <td>Lower (5% to 30% across 7 income brackets)</td>
               <td>Higher (5% to 30% across 3 slabs)</td>
             </tr>
             <tr>
@@ -320,7 +374,7 @@ const breadcrumbLd = {
             </tr>
             <tr>
               <td>Section 87A rebate</td>
-              <td>Full rebate if taxable ≤ ₹7 lakh</td>
+              <td>Full rebate if taxable ≤ ₹12 lakh (up to ₹60,000 tax relief; Budget 2025)</td>
               <td>Full rebate if taxable ≤ ₹5 lakh</td>
             </tr>
             <tr>
@@ -375,7 +429,7 @@ const breadcrumbLd = {
             <tr><td>10(13A)</td><td>HRA exemption (salaried, paying rent)</td><td>Based on formula</td></tr>
             <tr><td>80TTA</td><td>Savings account interest</td><td>₹10,000</td></tr>
             <tr><td>80E</td><td>Education loan interest</td><td>No upper limit</td></tr>
-            <tr><td>Standard</td><td>Standard deduction (salaried)</td><td>₹50,000</td></tr>
+            <tr><td>Standard</td><td>Standard deduction (salaried)</td><td>₹75,000 (new) / ₹50,000 (old)</td></tr>
           </tbody>
         </table>
       </div>
@@ -392,14 +446,14 @@ const breadcrumbLd = {
     <div class="container">
       <h2 class="section-title">Worked Example: ₹15 Lakh Salary Under Both Regimes</h2>
 
-      <h3>New regime calculation</h3>
+      <h3>New regime calculation (Budget 2025 / FY 2026-27)</h3>
       <ul>
         <li>Gross income: ₹15,00,000</li>
-        <li>Standard deduction: −₹50,000</li>
-        <li>Taxable income: ₹14,50,000</li>
-        <li>Tax: Nil on ₹3L + 5% on ₹4L (₹20,000) + 10% on ₹3L (₹30,000) + 15% on ₹2L (₹30,000) + 20% on ₹2.5L (₹50,000) = ₹1,30,000</li>
-        <li>Cess (4%): ₹5,200</li>
-        <li><strong>Total tax: ₹1,35,200</strong></li>
+        <li>Standard deduction: −₹75,000</li>
+        <li>Taxable income: ₹14,25,000</li>
+        <li>Tax: 5% on ₹4L (₹4L–₹8L) + 10% on ₹4L (₹8L–₹12L) + 15% on ₹2.25L (₹12L–₹14.25L) = ₹20,000 + ₹40,000 + ₹33,750 = ₹93,750</li>
+        <li>Cess (4%): ₹3,750</li>
+        <li><strong>Total tax: ₹97,500</strong></li>
       </ul>
 
       <h3>Old regime calculation (with moderate deductions)</h3>
@@ -417,7 +471,7 @@ const breadcrumbLd = {
 
       <h3>Verdict for this example</h3>
       <p>
-        <strong>New regime saves ₹30,160</strong> (₹1,65,360 − ₹1,35,200). With ₹3.45 lakh in old regime deductions, the new regime still wins at ₹15 lakh income. The old regime would need approximately ₹4.5+ lakh in deductions (adding home loan interest, NPS) to break even. Try your exact numbers in the calculator above.
+        <strong>New regime saves ₹67,860</strong> (₹1,65,360 − ₹97,500). With ₹3.45 lakh in old regime deductions, the new post–Budget 2025 regime still wins at ₹15 lakh income because lower slab rates plus the higher standard deduction (₹75,000) outweigh the old regime's Chapter VI-A benefits in this profile. The old regime would need substantially more deductions (e.g. higher HRA, home loan interest, NPS) to pull ahead. Try your exact numbers in the calculator above.
       </p>
     </div>
   </section>
@@ -438,7 +492,7 @@ const breadcrumbLd = {
 
       <h3>What is standard deduction?</h3>
       <p>
-        A flat ₹50,000 deduction available to all salaried individuals and pensioners under both regimes (verify for your assessment year). It's automatically subtracted from gross salary before applying tax slabs. No proof or investment required — it's applied by default.
+        For FY 2026-27, salaried individuals and pensioners typically get ₹75,000 in the <strong>new</strong> tax regime and ₹50,000 in the <strong>old</strong> regime (verify against official notifications for your exact case). It is subtracted from gross salary before tax slabs. No investment proof is required for this component — the calculator above follows these defaults.
       </p>
 
       <h3>How is CTC different from taxable income?</h3>
@@ -509,13 +563,13 @@ const breadcrumbLd = {
         <div class="faq-item">
           <h3>What is the tax-free income limit in India for FY 2026-27?</h3>
           <p>
-            Under the new regime, income up to ₹7 lakh (after ₹50,000 standard deduction) is effectively tax-free due to the Section 87A rebate — meaning gross salary up to approximately ₹7.5 lakh results in zero tax. Under the old regime, the basic exemption is ₹2.5 lakh (below 60 years), ₹3 lakh (60-80), or ₹5 lakh (above 80), with rebate up to ₹5 lakh taxable income. The exact tax-free limit depends on which regime you choose and your deductions.
+            Under the new regime (Budget 2025 / FY 2026-27), income up to ₹12 lakh (after ₹75,000 standard deduction) is effectively tax-free due to the Section 87A rebate — meaning gross salary up to approximately ₹12.75 lakh results in zero tax. Under the old regime, the basic exemption is ₹2.5 lakh (below 60 years), ₹3 lakh (60-80), or ₹5 lakh (above 80), with rebate up to ₹5 lakh taxable income. The exact tax-free limit depends on which regime you choose and your deductions.
           </p>
         </div>
         <div class="faq-item">
           <h3>How much tax do I pay on ₹10 lakh salary?</h3>
           <p>
-            Under the new regime: ₹10 lakh gross salary − ₹50,000 standard deduction = ₹9.5 lakh taxable. Tax: ₹20,000 (5% on ₹4L) + ₹25,000 (10% on ₹2.5L) = ₹45,000 + ₹1,800 cess = approximately ₹46,800. Under the old regime with ₹2.5 lakh deductions (80C + 80D): taxable income ₹7 lakh, tax approximately ₹52,000. At ₹10 lakh, the new regime typically wins unless old regime deductions exceed ₹3 lakh. Enter your exact numbers above to compare.
+            Under the new regime (FY 2026-27): ₹10 lakh gross − ₹75,000 standard deduction = ₹9.25 lakh taxable. Since this is below the ₹12 lakh rebate threshold, tax is ₹0 under the new regime. Under the old regime with ₹2.5 lakh deductions (80C + 80D): taxable income ₹7 lakh, tax approximately ₹52,000 (before cess). At ₹10 lakh salary, the new regime wins decisively after Budget 2025 — the ₹12 lakh rebate effectively covers this income level. Enter your exact numbers above to compare.
           </p>
         </div>
         <div class="faq-item">
@@ -578,15 +632,16 @@ const breadcrumbLd = {
       function taxNewRaw(TI) {
         if (TI <= 0) return 0;
         var t = 0;
-        if (TI > 300000) t += (Math.min(TI, 700000) - 300000) * 0.05;
-        if (TI > 700000) t += (Math.min(TI, 1000000) - 700000) * 0.1;
-        if (TI > 1000000) t += (Math.min(TI, 1200000) - 1000000) * 0.15;
-        if (TI > 1200000) t += (Math.min(TI, 1500000) - 1200000) * 0.2;
-        if (TI > 1500000) t += (TI - 1500000) * 0.3;
+        if (TI > 400000) t += (Math.min(TI, 800000) - 400000) * 0.05;
+        if (TI > 800000) t += (Math.min(TI, 1200000) - 800000) * 0.1;
+        if (TI > 1200000) t += (Math.min(TI, 1600000) - 1200000) * 0.15;
+        if (TI > 1600000) t += (Math.min(TI, 2000000) - 1600000) * 0.2;
+        if (TI > 2000000) t += (Math.min(TI, 2400000) - 2000000) * 0.25;
+        if (TI > 2400000) t += (TI - 2400000) * 0.3;
         return Math.round(t);
       }
       function taxNewFinal(TI) {
-        if (TI <= 700000) return 0;
+        if (TI <= 1200000) return 0;
         return taxNewRaw(TI);
       }
       /** Old regime: slabs per age (resident individual, simplified). */
@@ -650,6 +705,23 @@ const breadcrumbLd = {
           li.textContent = x;
           ul.appendChild(li);
         });
+        window.__itState = {
+          gross: gross,
+          ageKey: ageKey,
+          std: std,
+          hra: hra,
+          c80cap: c80cap,
+          d80: d80,
+          other: other,
+          tiNew: tiNew,
+          tiOld: tiOld,
+          taxN: totalN,
+          taxO: totalO,
+          deductionTotal: 50000 + hra + c80cap + d80 + other
+        };
+        if (typeof window.__itChartDebounced === 'function') {
+          window.__itChartDebounced();
+        }
       }
       var d = debounce(run, 80);
       ['itGross', 'itAge', 'itHRA', 'it80C', 'it80D', 'itOther', 'itStd'].forEach(function (id) {
@@ -911,5 +983,717 @@ const breadcrumbLd = {
       color: var(--blue);
       font-weight: 600;
     }
+
+    .it-viz-section {
+      padding: 40px 0;
+      background: var(--gray-50, #f9fafb);
+      margin-top: 2rem;
+    }
+    :global([data-theme='dark']) .it-viz-section {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .it-viz-heading {
+      font-size: 1.75rem;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .it-viz-sub {
+      text-align: center;
+      color: var(--muted, #64748b);
+      margin-bottom: 24px;
+      font-size: 15px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .it-winner-badge {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      max-width: 520px;
+      margin: 0 auto 24px;
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+      border: 2px solid #22c55e;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .it-winner-badge.old-wins {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border-color: #f59e0b;
+    }
+
+    .it-winner-badge.tie {
+      background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+      border-color: #94a3b8;
+    }
+
+    :global([data-theme='dark']) .it-winner-badge {
+      background: rgba(34, 197, 94, 0.15);
+    }
+    :global([data-theme='dark']) .it-winner-badge.old-wins {
+      background: rgba(245, 158, 11, 0.15);
+    }
+
+    .it-winner-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+
+    .it-winner-text strong {
+      display: block;
+      font-size: 1.1rem;
+      color: #065f46;
+      margin-bottom: 2px;
+    }
+    .it-winner-badge.old-wins .it-winner-text strong {
+      color: #92400e;
+    }
+    .it-winner-badge.tie .it-winner-text strong {
+      color: #475569;
+    }
+
+    :global([data-theme='dark']) .it-winner-text strong,
+    :global([data-theme='dark']) .it-winner-badge.old-wins .it-winner-text strong,
+    :global([data-theme='dark']) .it-winner-badge.tie .it-winner-text strong {
+      color: #e5e7eb;
+    }
+    :global([data-theme='dark']) .it-winner-text span {
+      color: #d1d5db;
+    }
+
+    .it-winner-text span {
+      font-size: 0.9rem;
+      color: var(--text-secondary, #374151);
+    }
+
+    .it-chart-tabs {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .it-chart-tab {
+      padding: 10px 16px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted, #64748b);
+      white-space: nowrap;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+
+    .it-chart-tab:hover {
+      color: var(--text, #0f172a);
+    }
+
+    .it-chart-tab--active {
+      color: #3b82f6;
+      border-bottom-color: #3b82f6;
+      font-weight: 600;
+    }
+
+    :global([data-theme='dark']) .it-chart-tab--active {
+      color: #60a5fa;
+      border-bottom-color: #60a5fa;
+    }
+
+    .it-chart-panels {
+      max-width: 800px;
+      margin: 0 auto;
+      min-height: 340px;
+    }
+
+    .it-chart-panel[hidden] {
+      display: none;
+    }
+
+    .it-chart-canvas-wrap {
+      position: relative;
+      height: 320px;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .it-viz-section .it-winner-badge {
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+      }
+      .it-winner-text {
+        flex: 1 1 100%;
+      }
+      .it-chart-canvas-wrap {
+        height: 260px;
+      }
+    }
+
+    .it-chart-callout {
+      padding: 12px 16px;
+      background: rgba(59, 130, 246, 0.08);
+      border-left: 3px solid #3b82f6;
+      border-radius: 6px;
+      font-size: 14px;
+      color: var(--text, #0f172a);
+      margin: 0;
+    }
+    :global([data-theme='dark']) .it-chart-callout {
+      background: rgba(59, 130, 246, 0.12);
+      color: #e5e7eb;
+    }
   </style>
+
+  <script is:inline>
+    (function () {
+      if (typeof Chart === 'undefined') return;
+
+      var fmt = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 });
+      var activeTab = 0;
+      var chartInstance = null;
+
+      var newSlabs = [
+        { from: 0, to: 400000, rate: 0, color: '#e5e7eb' },
+        { from: 400000, to: 800000, rate: 0.05, color: '#22c55e' },
+        { from: 800000, to: 1200000, rate: 0.1, color: '#84cc16' },
+        { from: 1200000, to: 1600000, rate: 0.15, color: '#eab308' },
+        { from: 1600000, to: 2000000, rate: 0.2, color: '#f97316' },
+        { from: 2000000, to: 2400000, rate: 0.25, color: '#ef4444' },
+        { from: 2400000, to: Infinity, rate: 0.3, color: '#991b1b' }
+      ];
+      var oldSlabs = [
+        { from: 0, to: 250000, rate: 0, color: '#e5e7eb' },
+        { from: 250000, to: 500000, rate: 0.05, color: '#22c55e' },
+        { from: 500000, to: 1000000, rate: 0.2, color: '#f97316' },
+        { from: 1000000, to: Infinity, rate: 0.3, color: '#991b1b' }
+      ];
+
+      function taxNewRawC(TI) {
+        if (TI <= 0) return 0;
+        var t = 0;
+        if (TI > 400000) t += (Math.min(TI, 800000) - 400000) * 0.05;
+        if (TI > 800000) t += (Math.min(TI, 1200000) - 800000) * 0.1;
+        if (TI > 1200000) t += (Math.min(TI, 1600000) - 1200000) * 0.15;
+        if (TI > 1600000) t += (Math.min(TI, 2000000) - 1600000) * 0.2;
+        if (TI > 2000000) t += (Math.min(TI, 2400000) - 2000000) * 0.25;
+        if (TI > 2400000) t += (TI - 2400000) * 0.3;
+        return Math.round(t);
+      }
+      function taxNewWithCess(TI) {
+        if (TI <= 1200000) return 0;
+        return Math.round(taxNewRawC(TI) * 1.04);
+      }
+      function taxOldWithCess(TI, ageKey) {
+        ageKey = ageKey || 'below60';
+        var tr;
+        if (ageKey === 'below60') {
+          if (TI <= 250000) tr = 0;
+          else if (TI <= 500000) tr = Math.round((TI - 250000) * 0.05);
+          else if (TI <= 1000000) tr = Math.round(12500 + (TI - 500000) * 0.2);
+          else tr = Math.round(12500 + 100000 + (TI - 1000000) * 0.3);
+        } else if (ageKey === '60to80') {
+          if (TI <= 300000) tr = 0;
+          else if (TI <= 500000) tr = Math.round((TI - 300000) * 0.05);
+          else if (TI <= 1000000) tr = Math.round(10000 + (TI - 500000) * 0.2);
+          else tr = Math.round(10000 + 100000 + (TI - 1000000) * 0.3);
+        } else {
+          if (TI <= 500000) tr = 0;
+          else if (TI <= 1000000) tr = Math.round((TI - 500000) * 0.2);
+          else tr = Math.round(100000 + (TI - 1000000) * 0.3);
+        }
+        return Math.round(tr * 1.04);
+      }
+
+      function updateWinnerBadge() {
+        var st = window.__itState;
+        if (!st) return;
+        var badge = document.getElementById('itWinnerBadge');
+        var label = document.getElementById('itWinnerLabel');
+        var savings = document.getElementById('itWinnerSavings');
+        if (!badge || !label || !savings) return;
+
+        if (st.gross <= 0) {
+          badge.className = 'it-winner-badge tie';
+          label.textContent = '—';
+          savings.textContent = 'Enter income to compare';
+          return;
+        }
+
+        if (st.taxN < st.taxO) {
+          var diff1 = st.taxO - st.taxN;
+          var pct1 = st.taxO > 0 ? ((diff1 / st.taxO) * 100).toFixed(1) : '0';
+          badge.className = 'it-winner-badge';
+          label.textContent = 'New Regime Wins';
+          savings.textContent = 'Saves ₹' + fmt.format(diff1) + ' (' + pct1 + '% lower tax)';
+        } else if (st.taxO < st.taxN) {
+          var diff2 = st.taxN - st.taxO;
+          var pct2 = st.taxN > 0 ? ((diff2 / st.taxN) * 100).toFixed(1) : '0';
+          badge.className = 'it-winner-badge old-wins';
+          label.textContent = 'Old Regime Wins';
+          savings.textContent = 'Saves ₹' + fmt.format(diff2) + ' (' + pct2 + '% lower) with your deductions';
+        } else {
+          badge.className = 'it-winner-badge tie';
+          label.textContent = 'Both Equal';
+          savings.textContent = 'Tax amount is identical in both regimes';
+        }
+      }
+
+      function destroyChart() {
+        if (chartInstance) {
+          chartInstance.destroy();
+          chartInstance = null;
+        }
+      }
+
+      function renderTab0() {
+        var st = window.__itState;
+        var canvas = document.getElementById('itVizCanvas0');
+        if (!canvas || !st) return;
+        destroyChart();
+        chartInstance = new Chart(canvas, {
+          type: 'bar',
+          data: {
+            labels: ['New Regime', 'Old Regime'],
+            datasets: [
+              {
+                label: 'Total tax (with cess)',
+                data: [st.taxN, st.taxO],
+                backgroundColor: ['#3b82f6', '#f59e0b'],
+                borderRadius: 6
+              }
+            ]
+          },
+          options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: function (ctx) {
+                    return '₹' + fmt.format(ctx.parsed.x);
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                ticks: {
+                  callback: function (v) {
+                    return '₹' + fmt.format(v);
+                  }
+                }
+              }
+            }
+          }
+        });
+
+        var co = document.getElementById('itChartCallout0');
+        if (co) {
+          if (st.gross <= 0) {
+            co.textContent = 'Enter your gross income above to compare tax under both regimes.';
+          } else if (st.taxN < st.taxO) {
+            var d0 = st.taxO - st.taxN;
+            co.textContent = 'New regime saves ₹' + fmt.format(d0) + ' in your scenario — less paperwork, no deduction proofs needed.';
+          } else if (st.taxO < st.taxN) {
+            var d0b = st.taxN - st.taxO;
+            co.textContent = 'Old regime saves ₹' + fmt.format(d0b) + ' thanks to your deductions. Requires maintaining proof of each claimed deduction.';
+          } else {
+            co.textContent = 'Both regimes result in the same tax. New regime is simpler — consider it if you value lower paperwork.';
+          }
+        }
+      }
+
+      function renderTab1() {
+        var st = window.__itState;
+        var canvas = document.getElementById('itVizCanvas1');
+        if (!canvas || !st) return;
+        destroyChart();
+
+        var reg = document.querySelector('input[name="itReg"]:checked');
+        var regVal = reg ? reg.value : 'new';
+        var slabs = regVal === 'new' ? newSlabs : oldSlabs;
+        var TI = regVal === 'new' ? st.tiNew : st.tiOld;
+
+        var slabData = slabs.map(function (s) {
+          if (TI <= s.from) return 0;
+          var amt = Math.min(TI, s.to) - s.from;
+          return amt > 0 ? amt : 0;
+        });
+        var slabLabels = slabs.map(function (s) {
+          var label;
+          if (s.to === Infinity) label = 'Above ₹' + fmt.format(s.from);
+          else label = '₹' + fmt.format(s.from) + ' – ₹' + fmt.format(s.to);
+          return label + ' (' + s.rate * 100 + '%)';
+        });
+
+        chartInstance = new Chart(canvas, {
+          type: 'bar',
+          data: {
+            labels: ['Your taxable income'],
+            datasets: slabs.map(function (s, i) {
+              return {
+                label: slabLabels[i],
+                data: [slabData[i]],
+                backgroundColor: s.color,
+                borderWidth: 0
+              };
+            })
+          },
+          options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            plugins: {
+              legend: { position: 'bottom', labels: { font: { size: 11 } } },
+              tooltip: {
+                callbacks: {
+                  label: function (ctx) {
+                    var slab = slabs[ctx.datasetIndex];
+                    var amt = ctx.parsed.x;
+                    var taxOnSlab = Math.round(amt * slab.rate);
+                    return ctx.dataset.label + ': ₹' + fmt.format(amt) + ' (tax: ₹' + fmt.format(taxOnSlab) + ')';
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                stacked: true,
+                ticks: {
+                  callback: function (v) {
+                    return '₹' + fmt.format(v);
+                  }
+                }
+              },
+              y: { stacked: true }
+            }
+          }
+        });
+
+        var co1 = document.getElementById('itChartCallout1');
+        if (co1) {
+          if (TI <= 0) co1.textContent = 'Enter income to see the slab breakdown.';
+          else {
+            var topSlab = slabs.reduce(
+              function (acc, s) {
+                return TI > s.from && s.rate > acc.rate ? s : acc;
+              },
+              slabs[0]
+            );
+            co1.textContent =
+              'Your ' +
+              (regVal === 'new' ? 'new' : 'old') +
+              ' regime taxable income (₹' +
+              fmt.format(TI) +
+              ') reaches the ' +
+              topSlab.rate * 100 +
+              '% slab. Only the portion in each slab is taxed at that rate — progressive taxation.';
+          }
+        }
+      }
+
+      function renderTab2() {
+        var st = window.__itState;
+        var canvas = document.getElementById('itVizCanvas2');
+        if (!canvas || !st) return;
+        destroyChart();
+
+        var points = 0;
+        var labels = [];
+        var newPts = [];
+        var oldPts = [];
+        var userDeductions = st.deductionTotal;
+        var ageK = st.ageKey || 'below60';
+
+        for (var g = 300000; g <= 5000000; g += 100000) {
+          labels.push('₹' + (g / 100000).toFixed(0) + 'L');
+          var tiN = Math.max(0, g - 75000);
+          var tiO = Math.max(0, g - userDeductions);
+          newPts.push(taxNewWithCess(tiN));
+          oldPts.push(taxOldWithCess(tiO, ageK));
+          points++;
+        }
+
+        var breakEven = null;
+        for (var j = 1; j < points; j++) {
+          if (
+            (newPts[j - 1] < oldPts[j - 1] && newPts[j] >= oldPts[j]) ||
+            (newPts[j - 1] > oldPts[j - 1] && newPts[j] <= oldPts[j])
+          ) {
+            breakEven = 300000 + j * 100000;
+            break;
+          }
+        }
+
+        chartInstance = new Chart(canvas, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: 'New Regime',
+                data: newPts,
+                borderColor: '#3b82f6',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                fill: false,
+                tension: 0.2,
+                pointRadius: 0,
+                borderWidth: 2
+              },
+              {
+                label: 'Old Regime (your deductions)',
+                data: oldPts,
+                borderColor: '#f59e0b',
+                backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                fill: false,
+                tension: 0.2,
+                pointRadius: 0,
+                borderWidth: 2
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            plugins: {
+              legend: { position: 'bottom' },
+              tooltip: {
+                callbacks: {
+                  label: function (ctx) {
+                    return ctx.dataset.label + ': ₹' + fmt.format(ctx.parsed.y);
+                  }
+                }
+              }
+            },
+            scales: {
+              y: {
+                ticks: {
+                  callback: function (v) {
+                    return '₹' + fmt.format(v);
+                  }
+                }
+              },
+              x: { ticks: { maxTicksLimit: 10 } }
+            }
+          }
+        });
+
+        var co2 = document.getElementById('itChartCallout2');
+        if (co2) {
+          if (breakEven) {
+            co2.textContent =
+              'With your current ₹' +
+              fmt.format(userDeductions) +
+              ' old regime deductions, the regimes cross in the shown range around ₹' +
+              fmt.format(breakEven) +
+              ' gross. Compare the lines: where the old regime line is lower, old tax is less at that income.';
+          } else if (newPts[points - 1] < oldPts[points - 1]) {
+            co2.textContent =
+              'In the 3L–50L range shown, new regime tax is lower at the top end with your current deduction amount (₹' +
+              fmt.format(userDeductions) +
+              '). Add more HRA, 80C, or 80D in the form to see the old line shift down.';
+          } else {
+            co2.textContent =
+              'In the 3L–50L range shown, old regime tax is lower or equal at the top end with your deductions (₹' +
+              fmt.format(userDeductions) +
+              ').';
+          }
+        }
+      }
+
+      function renderTab3() {
+        var st = window.__itState;
+        var canvas = document.getElementById('itVizCanvas3');
+        if (!canvas || !st) return;
+        destroyChart();
+
+        if (st.gross <= 0) {
+          var coEmpty = document.getElementById('itChartCallout3');
+          if (coEmpty) {
+            coEmpty.textContent = 'Enter your gross income to see how different deduction amounts affect old regime tax.';
+          }
+          return;
+        }
+
+        var deductionLevels = [50000, 150000, 250000, 350000, 450000, 550000];
+        var labels3 = ['No extra (₹50K std)', '₹1L', '₹2L', '₹3L', '₹4L', '₹5L'];
+        var oldTaxes = deductionLevels.map(function (d) {
+          var ti = Math.max(0, st.gross - d);
+          return taxOldWithCess(ti, st.ageKey || 'below60');
+        });
+
+        var userDed = st.deductionTotal;
+        var userTi = Math.max(0, st.gross - userDed);
+        var userTax = taxOldWithCess(userTi, st.ageKey || 'below60');
+        var labels3b = labels3.slice();
+        var oldTaxesB = oldTaxes.slice();
+        labels3b.push('Your ₹' + fmt.format(userDed));
+        oldTaxesB.push(userTax);
+        var refLine = oldTaxesB.map(function () {
+          return st.taxN;
+        });
+        var colors3 = oldTaxes.map(function () {
+          return '#f59e0b';
+        });
+        colors3.push('#6366f1');
+
+        chartInstance = new Chart(canvas, {
+          type: 'bar',
+          data: {
+            labels: labels3b,
+            datasets: [
+              {
+                type: 'bar',
+                label: 'Old regime tax',
+                data: oldTaxesB,
+                backgroundColor: colors3,
+                borderRadius: 6
+              },
+              {
+                type: 'line',
+                label: 'New regime (reference)',
+                data: refLine,
+                borderColor: '#3b82f6',
+                backgroundColor: 'transparent',
+                borderDash: [4, 4],
+                pointRadius: 0,
+                borderWidth: 2,
+                order: 0
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            plugins: {
+              legend: { position: 'bottom' },
+              tooltip: {
+                callbacks: {
+                  label: function (ctx) {
+                    if (ctx.datasetIndex === 1) {
+                      return ctx.dataset.label + ': ₹' + fmt.format(ctx.parsed.y);
+                    }
+                    return ctx.dataset.label + ': ₹' + fmt.format(ctx.parsed.y);
+                  }
+                }
+              }
+            },
+            scales: {
+              y: {
+                ticks: {
+                  callback: function (v) {
+                    return '₹' + fmt.format(v);
+                  }
+                }
+              }
+            }
+          }
+        });
+
+        var co3 = document.getElementById('itChartCallout3');
+        if (co3) {
+          var savingsVsZero = oldTaxesB[0] - userTax;
+          if (savingsVsZero > 0) {
+            co3.textContent =
+              'Your ₹' +
+              fmt.format(userDed) +
+              ' in total deductions (vs. scenarios on the left) — old tax on the indigo bar is ₹' +
+              fmt.format(userTax) +
+              '. The dashed line is your new regime tax (₹' +
+              fmt.format(st.taxN) +
+              '); lower orange bars are better for old vs that line.';
+          } else {
+            co3.textContent =
+              'The dashed blue line shows your new regime tax. Orange bars are old-regime tax at that gross for different total deduction levels; the indigo bar is your current inputs.';
+          }
+        }
+      }
+
+      function renderActive() {
+        updateWinnerBadge();
+        if (activeTab === 0) renderTab0();
+        else if (activeTab === 1) renderTab1();
+        else if (activeTab === 2) renderTab2();
+        else if (activeTab === 3) renderTab3();
+      }
+
+      function debounceFn(fn, ms) {
+        var t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      var debChart = debounceFn(renderActive, 80);
+      window.__itChartDebounced = debChart;
+
+      function selectTab(idx) {
+        activeTab = idx;
+        var tabs = document.querySelectorAll('.it-chart-tab');
+        var panels = document.querySelectorAll('.it-chart-panel');
+        for (var ti = 0; ti < tabs.length; ti++) {
+          var on = ti === idx;
+          tabs[ti].classList.toggle('it-chart-tab--active', on);
+          tabs[ti].setAttribute('aria-selected', on ? 'true' : 'false');
+          tabs[ti].setAttribute('tabindex', on ? '0' : '-1');
+        }
+        for (var pi = 0; pi < panels.length; pi++) {
+          var pOn = pi === idx;
+          panels[pi].classList.toggle('it-chart-panel--active', pOn);
+          if (pOn) panels[pi].removeAttribute('hidden');
+          else panels[pi].setAttribute('hidden', '');
+        }
+        renderActive();
+      }
+
+      window.addEventListener('load', function () {
+        var tabEls = document.querySelectorAll('.it-chart-tab');
+        tabEls.forEach(function (tab, idx) {
+          tab.addEventListener('click', function () {
+            selectTab(idx);
+          });
+          tab.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+              e.preventDefault();
+              var n = (idx + (e.key === 'ArrowRight' ? 1 : -1) + tabEls.length) % tabEls.length;
+              tabEls[n].focus();
+              selectTab(n);
+            }
+          });
+        });
+        document.querySelectorAll('input[name="itReg"]').forEach(function (r) {
+          r.addEventListener('change', debChart);
+        });
+        var obs = new MutationObserver(debChart);
+        obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+        if (window.__itState) renderActive();
+        else {
+          var tryRun = function () {
+            if (window.__itState) {
+              renderActive();
+            }
+          };
+          setTimeout(tryRun, 0);
+        }
+      });
+    })();
+  </script>
 </MainLayout>
