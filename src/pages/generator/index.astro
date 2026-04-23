@@ -14,12 +14,12 @@ const tools = [
     coming: false,
   },
   {
-    href: null,
+    href: '/generator/qr-code/',
     icon: '📱',
     title: 'QR Code Generator',
     desc: 'Generate QR codes for URLs, WiFi, contacts, or any text. Customize colors and download as PNG/SVG.',
-    live: false,
-    coming: true,
+    live: true,
+    coming: false,
   },
   {
     href: null,
@@ -199,7 +199,8 @@ const genCollectionJsonLd = {
     <div class="container">
       <h2 class="section-title">All generator tools</h2>
       <p class="section-sub">
-        Pick a tool — output stays in your session. <strong>Password Generator</strong> is live; five more are planned.
+        Pick a tool — output stays in your session. <strong>Password</strong> and <strong>QR Code</strong> generators are
+        live; four more are planned.
       </p>
       <div class="grid">
         {tools.map((tool) =>

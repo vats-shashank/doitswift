@@ -9,7 +9,7 @@ const root = path.join(__dirname, '..');
 const dist = path.join(root, 'dist');
 const SITE_ORIGIN = 'https://doitswift.com';
 
-const ASSET_EXT = /\.(svg|png|jpe?g|gif|webp|ico|css|js|mjs|txt|xml|woff2?|map|html|pdf|zip)$/i;
+const ASSET_EXT = /\.(svg|png|jpe?g|gif|webp|ico|css|js|mjs|txt|xml|woff2?|map|html|pdf|zip|csv)$/i;
 
 function fail(msg) {
   console.error('seo-audit FAIL:', msg);

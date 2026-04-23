@@ -1,0 +1,4 @@
+type,content,filename
+url,https://example.com/,example-website
+text,Hello world,hello-text
+wifi,"WIFI:T:WPA;S:Guest;P:mypassword;H:false;;",guest-wifi

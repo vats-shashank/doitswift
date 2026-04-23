@@ -1,0 +1,1716 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import { calculatorCanonical } from '../../lib/calculatorJsonLd';
+
+const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
+
+const pageTitle =
+  'Free QR Code Generator — URL, WiFi, vCard, UPI & More (Private & Unlimited) | DoItSwift';
+const pageDescription =
+  'Free QR code generator with logo, gradients, and custom shapes. Bulk-generate from CSV. 12 types: URL, WiFi, vCard, UPI, WhatsApp, email, SMS, and more. 100% browser-based — nothing uploaded. No signup, no watermarks, unlimited.';
+const pageKeywords =
+  'qr code generator, qr generator, free qr code generator, qr code maker, qr code generator with logo, qr code generator free, custom qr code, qr code generator no signup, wifi qr code generator, vcard qr code, upi qr code generator, whatsapp qr code, qr code generator online, bulk qr code generator, qr code generator csv, qr code generator india, qr code png svg, static qr code, qr code maker free, privacy qr code generator, qr code generator offline, qr code generator no watermark, qr code generator unlimited';
+
+const faqsForSchema: { question: string; answerPlain: string }[] = [
+  {
+    question: 'Are my QR codes really generated in my browser?',
+    answerPlain:
+      'Yes. The qr-code-styling JavaScript library runs in your browser and produces the QR image locally. No content is sent to DoItSwift for generation. You can verify this by opening DevTools → Network, generating a code, and observing that no request carries your input. You can also disconnect from the internet after the page loads and the tool still works — which is impossible for server-based generators.',
+  },
+  {
+    question: 'Will the QR codes I download expire?',
+    answerPlain:
+      'No. These are static QR codes — the data you enter is encoded directly into the black-and-white pattern. There is no redirect through our servers, no short-link layer, and no expiration date. If you encode https://example.com, the QR will always resolve to exactly that URL, forever, regardless of whether DoItSwift exists in 10 years.',
+  },
+  {
+    question: "Why can't I make a dynamic QR code here?",
+    answerPlain:
+      "Dynamic QR codes work by encoding a short redirect URL through a service's server. To edit the destination later, the service has to keep its redirect server running, and your printed codes depend on that service staying online and honoring the link forever. We don't run a backend, so we can't offer dynamic codes. If you need editable URLs or scan analytics, you'll need a paid tool that runs its own servers — that's a different product category. We do static codes only, on purpose, because static codes don't depend on us (or anyone else) staying online.",
+  },
+  {
+    question: 'Are there usage limits, watermarks, or signup requirements?',
+    answerPlain:
+      'None. Generate as many QR codes as your browser can handle in a session. There are no download caps, no "powered by" watermarks, no trial periods, and no account to create. The tool is free to use commercially — the underlying qr-code-styling library is MIT licensed.',
+  },
+  {
+    question: 'How does bulk generation work?',
+    answerPlain:
+      'Upload a CSV with one row per QR code. We parse the CSV in your browser using Papa Parse, render each QR with qr-code-styling, and zip the results with JSZip. The ZIP downloads directly from your browser. No row of your CSV is uploaded anywhere. Very large batches (>500 codes) may take a minute and use significant memory — keep the tab open until it finishes.',
+  },
+  {
+    question: 'What CSV format does bulk mode expect?',
+    answerPlain:
+      'Three columns: type, content, filename. Type is one of the 12 supported types (url, text, email, phone, sms, wifi, vcard, whatsapp, upi, geo, event, app). Content is the value to encode — for simple types it\'s the text or URL; for complex types like vCard or WiFi, supply the fully-formed payload string. Filename is optional. Download the template above to see working examples.',
+  },
+  {
+    question: 'What size and resolution should I export for printing?',
+    answerPlain:
+      'For print, choose SVG (vector, scales to any size without quality loss) or PNG 1024/2048 for raster workflows. Minimum print size is about 2 × 2 cm for URL codes and 3 × 3 cm for data-heavy codes like vCards. Print at 300 DPI or higher. Always scan a test print at the intended size before mass-producing.',
+  },
+  {
+    question: 'Why does my QR code have different pattern density as I type?',
+    answerPlain:
+      'QR codes have 40 "versions" (sizes) and more data requires a higher version with more modules. As you add characters, the code automatically moves to a larger version to fit the data, which looks denser. Lower your error correction level or shorten the content to keep density lower. The version number is shown under the preview.',
+  },
+  {
+    question: 'Can I add a logo? Will it still scan?',
+    answerPlain:
+      'Yes, upload a PNG, JPG, or SVG up to 2 MB. The tool masks the center of the QR so the logo sits cleanly. Scannability is preserved by the QR standard\'s error correction — up to 30% of the code can be obscured at error correction level H and still decode. Keep the logo below 30% of the QR\'s width and use level Q or H if you add a logo.',
+  },
+  {
+    question: 'Are WiFi, vCard, and UPI QR codes safe to share privately?',
+    answerPlain:
+      "A WiFi or vCard QR code contains the credentials or contact details directly — anyone who scans it gets what's inside. That's how the format works. The privacy guarantee here is that DoItSwift never sees those credentials because generation is local; but once you print or publish the QR, anyone who scans it has the content. Treat printed WiFi or vCard QR codes the same as a printed password or business card.",
+  },
+  {
+    question: 'Do UPI QR codes from this tool work with GPay, PhonePe, and Paytm?',
+    answerPlain:
+      'Yes, if the UPI ID you entered is valid. The tool generates the standard NPCI UPI URL format (upi://pay?pa=...&pn=...&am=...&cu=INR) which all major Indian UPI apps support. Test-scan before printing for merchant use. UPI QR codes only work inside India via UPI-registered apps.',
+  },
+  {
+    question: 'Which error correction level should I choose?',
+    answerPlain:
+      'L (7%) makes the smallest code and is fine if the code will be displayed clean on a screen. M (15%) is a sensible default for most print. Q (25%) and H (30%) produce denser codes but tolerate damage, dirt, or a logo overlay. Choose H if you\'re embedding a logo or printing in outdoor/high-wear conditions.',
+  },
+  {
+    question: 'Can I use this tool offline?',
+    answerPlain:
+      'Yes. After the page loads once, your browser caches the scripts. Disconnect from the internet and the tool keeps working — generation, preview, export, and bulk ZIP all happen locally. A first visit on a new device requires a connection to load the page.',
+  },
+  {
+    question: 'Is this tool free for commercial use?',
+    answerPlain:
+      'Yes. Codes generated here are free to use for any purpose, including commercial projects. There is no attribution requirement. The underlying qr-code-styling library is MIT licensed.',
+  },
+];
+
+const pageJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      name: 'DoItSwift QR Code Generator',
+      applicationCategory: 'UtilitiesApplication',
+      operatingSystem: 'Web Browser',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      description:
+        'Free browser-based QR code generator with logo, gradients, and custom dot/eye shapes. Generates 12 content types including URL, WiFi, vCard, UPI, and WhatsApp. Batch-generate from CSV. 100% client-side — no uploads, no signup, no watermarks.',
+      url: canonical,
+      featureList: [
+        '12 content types: URL, Text, Email, Phone, SMS, WiFi, vCard, WhatsApp, UPI payment, Geo location, Calendar event, App Store link',
+        'Logo embedding with transparency',
+        'Custom dot shapes (rounded, dots, classy, square)',
+        'Custom eye frame and eye ball shapes',
+        'Linear and radial color gradients',
+        'Error correction levels L / M / Q / H',
+        'Export as PNG (512/1024/2048 px), SVG, or JPEG',
+        'Bulk generation from CSV with ZIP download',
+        'Works offline after first page load',
+        '100% browser-based processing — no uploads',
+        'No signup, no watermarks, no usage limits',
+      ],
+      browserRequirements: 'Requires JavaScript. Supports Chrome, Firefox, Safari, Edge.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faqsForSchema.map((f) => ({
+        '@type': 'Question',
+        name: f.question,
+        acceptedAnswer: { '@type': 'Answer', text: f.answerPlain },
+      })),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: Astro.site ? new URL('/', Astro.site).href : 'https://doitswift.com/',
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Generators',
+          item: Astro.site ? new URL('/generator/', Astro.site).href : 'https://doitswift.com/generator/',
+        },
+        { '@type': 'ListItem', position: 3, name: 'QR Code Generator', item: canonical },
+      ],
+    },
+  ],
+};
+---
+
+<MainLayout title={pageTitle} description={pageDescription} keywords={pageKeywords} canonical={canonical}>
+  <script
+    slot="head"
+    src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.9.2/lib/qr-code-styling.js"
+    is:inline
+  />
+  <script type="application/ld+json" set:html={JSON.stringify(pageJsonLd)} />
+
+  <nav class="breadcrumb container container--tool" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/generator/">Generators</a> › <span>QR Code Generator</span>
+  </nav>
+
+  <section class="hero tool-hero">
+    <div class="container">
+      <div class="badge">🔒 100% Private — Nothing Leaves Your Browser</div>
+      <h1>QR Code Generator — Create, Customize & Batch Generate QR Codes Privately</h1>
+      <p class="subtitle">
+        Generate static QR codes for URLs, WiFi networks, vCards, UPI payments, WhatsApp chats, and 8 more types — with
+        custom colors, gradients, shapes, and your logo. Bulk-generate hundreds of codes from a CSV spreadsheet and
+        download them as a ZIP. Every QR is rendered in your browser using the open-source qr-code-styling library. Your
+        content, Wi-Fi passwords, and contact details never leave your device. No signup, no watermarks, no usage caps, no
+        expiring codes.
+      </p>
+      <p class="subtitle-secondary">
+        Most "free" QR generators either upload your data to their servers, bury usable features behind a 14-day trial
+        that silently expires your printed codes, or cap your downloads. This tool does none of that. Static QR codes
+        generated here work forever because they encode your data directly — no redirect through our domain, no dependency
+        on our servers staying online.
+      </p>
+      <div class="trust">
+        <span><span class="check">✓</span> 100% browser-based</span>
+        <span><span class="check">✓</span> Works offline</span>
+        <span><span class="check">✓</span> Unlimited & free</span>
+        <span><span class="check">✓</span> No signup, no watermarks</span>
+      </div>
+      <p class="qr-hero-note">
+        Uses qr-code-styling (MIT licensed) for rendering. Error correction per ISO/IEC 18004. Last updated: April 2026.
+      </p>
+    </div>
+  </section>
+
+  <section class="qr-tool tool-section" id="main-content" aria-label="QR Code Generator Tool">
+    <div class="container container--tool">
+      <h2 class="sr-only">QR Code Generator</h2>
+
+      <div class="qr-mode-tabs" role="tablist" aria-label="Generation mode">
+        <button
+          type="button"
+          class="qr-mode-tab qr-mode-tab--active"
+          role="tab"
+          id="qrModeSingle"
+          data-mode="single"
+          aria-selected="true"
+          aria-controls="qrPanelSingle"
+        >
+          Single QR code
+        </button>
+        <button
+          type="button"
+          class="qr-mode-tab"
+          role="tab"
+          id="qrModeBulk"
+          data-mode="bulk"
+          aria-selected="false"
+          aria-controls="qrPanelBulk"
+          tabindex="-1"
+        >
+          Bulk from CSV
+        </button>
+      </div>
+
+      <div
+        class="qr-panel"
+        id="qrPanelSingle"
+        role="tabpanel"
+        aria-labelledby="qrModeSingle"
+        data-qr-mode-panel="single"
+      >
+        <div class="qr-type-tabs" role="tablist" aria-label="Content type">
+          {
+            [
+              { id: 'url', label: 'URL' },
+              { id: 'text', label: 'Text' },
+              { id: 'email', label: 'Email' },
+              { id: 'phone', label: 'Phone' },
+              { id: 'sms', label: 'SMS' },
+              { id: 'wifi', label: 'WiFi' },
+              { id: 'vcard', label: 'vCard' },
+              { id: 'whatsapp', label: 'WhatsApp' },
+              { id: 'upi', label: 'UPI' },
+              { id: 'geo', label: 'Location' },
+              { id: 'event', label: 'Event' },
+              { id: 'app', label: 'App' },
+            ].map((t) => (
+              <button
+                type="button"
+                class:list={['qr-type-tab', { 'qr-type-tab--active': t.id === 'url' }]}
+                role="tab"
+                aria-selected={t.id === 'url'}
+                data-qr-type={t.id}
+                id={`qrTypeTab-${t.id}`}
+                tabindex={t.id === 'url' ? 0 : -1}
+              >
+                {t.label}
+              </button>
+            ))
+          }
+        </div>
+
+        <div class="qr-layout">
+          <div class="qr-input-col">
+            <div id="qrInputArea">
+              <fieldset class="qr-fieldset qr-form-panel" id="qrForm-url">
+                <legend class="sr-only">URL</legend>
+                <label for="qrUrl">Website URL</label>
+                <input
+                  type="url"
+                  id="qrUrl"
+                  name="url"
+                  inputmode="url"
+                  autocomplete="url"
+                  placeholder="https://example.com or example.com"
+                />
+                <p class="qr-hint">Enter a full link or a domain; we add https:// when no protocol is present.</p>
+              </fieldset>
+
+              <fieldset class="qr-fieldset qr-form-panel" id="qrForm-text" hidden>
+                <legend class="sr-only">Plain text</legend>
+                <label for="qrText">Text</label>
+                <textarea id="qrText" name="text" rows="5" maxlength="2000" placeholder="Any text (up to 2000 characters)"></textarea>
+                <p class="qr-hint">Over ~500 characters the QR may become dense and harder to scan.</p>
+              </fieldset>
+
+              <fieldset class="qr-fieldset qr-form-panel" id="qrForm-email" hidden>
+                <legend class="sr-only">Email</legend>
+                <label for="qrEmailTo">To (email) <span class="req">*</span></label>
+                <input type="email" id="qrEmailTo" name="to" autocomplete="email" required placeholder="name@example.com" />
+                <label for="qrEmailSubject">Subject (optional)</label>
+                <input type="text" id="qrEmailSubject" name="subject" />
+                <label for="qrEmailBody">Message (optional)</label>
+                <textarea id="qrEmailBody" name="body" rows="3"></textarea>
+              </fieldset>
+
+              <fieldset class="qr-fieldset qr-form-panel" id="qrForm-phone" hidden>
+                <legend class="sr-only">Phone</legend>
+                <label for="qrPhoneTel">Phone number <span class="req">*</span></label>
+                <input type="tel" id="qrPhoneTel" name="phone" inputmode="tel" placeholder="+911234567890" />
+                <p class="qr-hint">Include country code, e.g. +911234567890</p>
+              </fieldset>
+
+              <fieldset class="qr-fieldset qr-form-panel" id="qrForm-sms" hidden>
+                <legend class="sr-only">SMS</legend>
+                <label for="qrSmsPhone">Phone number <span class="req">*</span></label>
+                <input type="tel" id="qrSmsPhone" name="phone" inputmode="tel" />
+                <label for="qrSmsMessage">Message (optional)</label>
+                <textarea id="qrSmsMessage" name="message" rows="3"></textarea>
+              </fieldset>
+
+              <fieldset class="qr-fieldset qr-form-panel" id="qrForm-wifi" hidden>
+                <legend class="sr-only">WiFi</legend>
+                <label for="qrWifiSsid">Network name (SSID) <span class="req">*</span></label>
+                <input type="text" id="qrWifiSsid" name="ssid" autocomplete="off" />
+                <label for="qrWifiEnc">Security</label>
+                <select id="qrWifiEnc" name="encryption">
+                  <option value="WPA" selected>WPA / WPA2 / WPA3</option>
+                  <option value="WEP">WEP</option>
+                  <option value="None">None (open network)</option>
+                </select>
+                <div class="qr-wifi-row">
+                  <div class="qr-wifi-pw-wrap">
+                    <label for="qrWifiPassword">Password</label>
+                    <input type="password" id="qrWifiPassword" name="password" autocomplete="off" aria-describedby="qrWifiEncHint" />
+                  </div>
+                  <button type="button" class="qr-btn" id="qrWifiShowPwd" aria-pressed="false">Show</button>
+                </div>
+                <p id="qrWifiEncHint" class="qr-hint">Leave password empty for an open network, or if Security is None.</p>
+                <label class="qr-chk">
+                  <input type="checkbox" id="qrWifiHidden" name="hidden" />
+                  Network is hidden (does not broadcast SSID)
+                </label>
+              </fieldset>
+
+              <fieldset class="qr-fieldset qr-form-panel" id="qrForm-vcard" hidden>
+                <legend class="sr-only">vCard 3.0</legend>
+                <div class="qr-two-col">
+                  <div>
+                    <label for="qrVcardFirst">First name <span class="req">*</span></label>
+                    <input type="text" id="qrVcardFirst" autocomplete="given-name" />
+                  </div>
+                  <div>
+                    <label for="qrVcardLast">Last name <span class="req">*</span></label>
+                    <input type="text" id="qrVcardLast" autocomplete="family-name" />
+                  </div>
+                </div>
+                <label for="qrVcardOrg">Organization (optional)</label>
+                <input type="text" id="qrVcardOrg" />
+                <label for="qrVcardTitle">Job title (optional)</label>
+                <input type="text" id="qrVcardTitle" />
+                <div class="qr-two-col">
+                  <div>
+                    <label for="qrVcardPhoneW">Work phone (optional)</label>
+                    <input type="tel" id="qrVcardPhoneW" inputmode="tel" />
+                  </div>
+                  <div>
+                    <label for="qrVcardPhoneM">Mobile (optional)</label>
+                    <input type="tel" id="qrVcardPhoneM" inputmode="tel" />
+                  </div>
+                </div>
+                <label for="qrVcardEmail">Email (optional)</label>
+                <input type="email" id="qrVcardEmail" inputmode="email" />
+                <label for="qrVcardWeb">Website (optional)</label>
+                <input type="url" id="qrVcardWeb" inputmode="url" placeholder="https://example.com" />
+                <label for="qrVcardAdr">Address (optional, one line)</label>
+                <input type="text" id="qrVcardAdr" />
+              </fieldset>
+
+              <fieldset class="qr-fieldset qr-form-panel" id="qrForm-whatsapp" hidden>
+                <legend class="sr-only">WhatsApp</legend>
+                <label for="qrWaPhone">Phone (international, with country code) <span class="req">*</span></label>
+                <input type="tel" id="qrWaPhone" inputmode="tel" placeholder="e.g. 91XXXXXXXXXX" />
+                <label for="qrWaMessage">Message (optional, pre-fills the chat box)</label>
+                <textarea id="qrWaMessage" rows="3"></textarea>
+              </fieldset>
+
+              <fieldset class="qr-fieldset qr-form-panel" id="qrForm-upi" hidden>
+                <legend class="sr-only">UPI (India)</legend>
+                <p class="qr-hint"
+                  >UPI QR codes work in India in UPI-enabled apps (GPay, PhonePe, Paytm, BHIM, bank apps). Test before printing for
+                  stores.</p
+                >
+                <label for="qrUpiId">UPI ID <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="qrUpiId"
+                  inputmode="email"
+                  placeholder="yourname@upi"
+                  pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+"
+                />
+                <label for="qrUpiName">Payee name <span class="req">*</span></label>
+                <input type="text" id="qrUpiName" />
+                <label for="qrUpiAmount">Amount (optional, INR)</label>
+                <input type="number" id="qrUpiAmount" name="amount" min="0" step="0.01" />
+                <label for="qrUpiNote">Note (optional, max 50 characters)</label>
+                <input type="text" id="qrUpiNote" maxlength="50" />
+                <p class="qr-hint"
+                  >Currency: <strong>INR</strong> (UPI is INR-only; always included in the QR per NPCI format).</p
+                >
+              </fieldset>
+
+              <fieldset class="qr-fieldset qr-form-panel" id="qrForm-geo" hidden>
+                <legend class="sr-only">Location</legend>
+                <div class="qr-two-col">
+                  <div>
+                    <label for="qrLat">Latitude <span class="req">*</span></label>
+                    <input type="number" id="qrLat" step="any" min="-90" max="90" placeholder="12.97" />
+                  </div>
+                  <div>
+                    <label for="qrLng">Longitude <span class="req">*</span></label>
+                    <input type="number" id="qrLng" step="any" min="-180" max="180" placeholder="77.59" />
+                  </div>
+                </div>
+                <label for="qrGeoQuery">Map label (optional, opens in maps with this search)</label>
+                <input type="text" id="qrGeoQuery" placeholder="Optional place name" />
+              </fieldset>
+
+              <fieldset class="qr-fieldset qr-form-panel" id="qrForm-event" hidden>
+                <legend class="sr-only">Calendar event</legend>
+                <label for="qrEventTitle">Title <span class="req">*</span></label>
+                <input type="text" id="qrEventTitle" />
+                <label for="qrEventLoc">Location (optional)</label>
+                <input type="text" id="qrEventLoc" />
+                <label for="qrEventStart">Start (local time) <span class="req">*</span></label>
+                <input type="datetime-local" id="qrEventStart" />
+                <label for="qrEventEnd">End (local time) <span class="req">*</span></label>
+                <input type="datetime-local" id="qrEventEnd" />
+                <label for="qrEventDesc">Description (optional)</label>
+                <textarea id="qrEventDesc" rows="3"></textarea>
+                <p class="qr-hint"
+                  >Times you enter are stored as UTC in the vEvent payload (as required for portability).</p
+                >
+              </fieldset>
+
+              <fieldset class="qr-fieldset qr-form-panel" id="qrForm-app" hidden>
+                <legend class="sr-only">App Store link</legend>
+                <p class="qr-hint"
+                  >“Both” does not use a DoItSwift redirect. Enter a link to <strong>your</strong> page that can send iOS and Android
+                  users to the right store.</p
+                >
+                <div class="qr-seg" role="radiogroup" aria-label="App platform">
+                  <label
+                    ><input type="radio" name="qrAppPlatform" value="ios" id="qrAppPlIos" checked />
+                    iOS (App Store)</label
+                  >
+                  <label
+                    ><input type="radio" name="qrAppPlatform" value="android" id="qrAppPlAnd" />
+                    Android (Play or HTTPS)</label
+                  >
+                  <label><input type="radio" name="qrAppPlatform" value="both" id="qrAppPlBoth" /> Both (one landing URL)</label>
+                </div>
+                <div id="qrAppGroupIos">
+                  <label for="qrIosUrl">App Store URL <span class="req">*</span></label>
+                  <input type="url" id="qrIosUrl" inputmode="url" placeholder="https://apps.apple.com/..." />
+                </div>
+                <div id="qrAppGroupAndroid" hidden>
+                  <label for="qrAndroidUrl">App URL <span class="req">*</span></label>
+                  <input type="url" id="qrAndroidUrl" inputmode="url" placeholder="https://play.google.com/... or your HTTPS link" />
+                </div>
+                <div id="qrAppGroupBoth" hidden>
+                  <label for="qrLandingUrl">Landing page URL <span class="req">*</span></label>
+                  <input
+                    type="url"
+                    id="qrLandingUrl"
+                    inputmode="url"
+                    placeholder="https://yoursite.com/app"
+                  />
+                </div>
+              </fieldset>
+            </div>
+
+            <div class="qr-design-accordion" id="qrDesignArea" aria-label="Visual design options">
+              <h3 class="qr-design-heading">Design</h3>
+              <details class="qr-design-block" open>
+                <summary>Colors &amp; gradients</summary>
+                <div class="qr-design-body">
+                  <div class="qr-color-row">
+                    <label for="qrColorFg">Dot color (foreground)</label>
+                    <input type="color" id="qrColorFg" value="#000000" />
+                  </div>
+                  <div class="qr-color-row">
+                    <label for="qrColorBg">Background</label>
+                    <input type="color" id="qrColorBg" value="#ffffff" />
+                  </div>
+                  <label class="qr-chk">
+                    <input type="checkbox" id="qrUseGradient" />
+                    Use gradient for dots
+                  </label>
+                  <div class="qr-design-nested" id="qrGradControls" hidden>
+                    <label for="qrGradType">Gradient type</label>
+                    <select id="qrGradType">
+                      <option value="linear" selected>Linear</option>
+                      <option value="radial">Radial</option>
+                    </select>
+                    <div class="qr-color-row">
+                      <label for="qrGradA">Color stop 1</label>
+                      <input type="color" id="qrGradA" value="#000000" />
+                    </div>
+                    <div class="qr-color-row">
+                      <label for="qrGradB">Color stop 2</label>
+                      <input type="color" id="qrGradB" value="#2563eb" />
+                    </div>
+                    <div id="qrGradAngleRow" class="qr-range-row" hidden>
+                      <label for="qrGradAngle">Angle (linear) <span id="qrAngleValue" class="qr-mono">0°</span></label>
+                      <input type="range" id="qrGradAngle" min="0" max="360" value="0" step="1" />
+                    </div>
+                  </div>
+                </div>
+              </details>
+              <details class="qr-design-block">
+                <summary>Module &amp; eye shapes</summary>
+                <div class="qr-design-body">
+                  <p class="qr-hint qr-hint--tight">Data modules (dot style)</p>
+                  <div class="qr-radio-grid qr-radio-grid--6" role="group" aria-label="Data dot shape">
+                    {
+                      [
+                        ['square', 'Square'],
+                        ['rounded', 'Rounded'],
+                        ['dots', 'Dots'],
+                        ['classy', 'Classy'],
+                        ['classy-rounded', 'Classy Rnd'],
+                        ['extra-rounded', 'Extra Rnd'],
+                      ].map(([val, label], i) => (
+                        <label class="qr-pill">
+                          <input type="radio" name="qrDotType" value={val} checked={i === 0} />
+                          {label}
+                        </label>
+                      ))
+                    }
+                  </div>
+                  <p class="qr-hint">Corner (finder) frame</p>
+                  <div class="qr-radio-grid" role="group" aria-label="Finder frame shape">
+                    {[
+                      ['square', 'Square'],
+                      ['extra-rounded', 'Extra rounded'],
+                      ['dot', 'Dot'],
+                    ].map(([val, label], i) => (
+                      <label class="qr-pill">
+                        <input type="radio" name="qrCornerFrame" value={val} checked={i === 0} />
+                        {label}
+                      </label>
+                    ))}
+                  </div>
+                  <p class="qr-hint">Inner corner dot</p>
+                  <div class="qr-radio-grid" role="group" aria-label="Inner corner shape">
+                    {[
+                      ['square', 'Square'],
+                      ['dot', 'Dot'],
+                    ].map(([val, label], i) => (
+                      <label class="qr-pill">
+                        <input type="radio" name="qrCornerDot" value={val} checked={i === 0} />
+                        {label}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </details>
+              <details class="qr-design-block">
+                <summary>Logo</summary>
+                <div class="qr-design-body">
+                  <label for="qrLogoFile" class="qr-file-label"
+                    >Logo (PNG, JPG, or SVG — read locally, max 2 MB)</label
+                  >
+                  <input
+                    type="file"
+                    id="qrLogoFile"
+                    class="qr-file"
+                    accept="image/png,image/jpeg,image/jpg,image/svg+xml,.png,.jpg,.jpeg,.svg"
+                  />
+                  <p id="qrLogoError" class="qr-err" role="alert" />
+                  <button type="button" class="qr-btn qr-btn--spaced" id="qrLogoClear">Remove logo</button>
+                  <div class="qr-range-row">
+                    <label for="qrLogoSize"
+                      >Logo size (of QR width) <span class="qr-mono" id="qrLogoSizeValue">0.35</span></label
+                    >
+                    <input
+                      type="range"
+                      id="qrLogoSize"
+                      min="0.2"
+                      max="0.5"
+                      value="0.35"
+                      step="0.01"
+                    />
+                  </div>
+                  <label class="qr-chk">
+                    <input type="checkbox" id="qrHideLogoDots" checked />
+                    Hide data dots behind the logo
+                  </label>
+                </div>
+              </details>
+              <details class="qr-design-block">
+                <summary>Advanced</summary>
+                <div class="qr-design-body">
+                  <label for="qrEcc">Error correction (higher = more damage/logo tolerance, denser code)</label>
+                  <select id="qrEcc" class="qr-select-wide">
+                    <option value="L">L (≈7%)</option>
+                    <option value="M" selected>M (≈15%) — default</option>
+                    <option value="Q">Q (≈25%)</option>
+                    <option value="H">H (≈30%)</option>
+                  </select>
+                  <div class="qr-range-row">
+                    <label for="qrCanvasMargin"
+                      >Border around QR in preview/export (0–4 px) <span class="qr-mono" id="qrMarginValue"
+                        >1</span
+                      ></label
+                    >
+                    <input type="range" id="qrCanvasMargin" min="0" max="4" value="1" step="1" />
+                  </div>
+                  <p class="qr-hint">
+                    Larger borders help scannability on busy backgrounds. Live preview: 300×300 px; exports use the size you
+                    choose below.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </div>
+          <div class="qr-preview-col">
+            <div class="qr-preview-box" aria-label="QR preview">
+              <div id="qrPreview" class="qr-preview-inner" />
+            </div>
+            <p id="qrStatus" class="qr-status" aria-live="polite">Enter a URL to see the QR preview.</p>
+            <div class="qr-export-row" id="qrExportRow">
+              <button type="button" class="qr-btn" id="qrExportPng512" title="Export PNG, 512 px"
+                >PNG 512</button
+              >
+              <button type="button" class="qr-btn qr-btn--primary" id="qrExportPng1024" title="Export PNG, 1024 px"
+                >PNG 1024</button
+              >
+              <button type="button" class="qr-btn" id="qrExportPng2048" title="Export PNG, 2048 px"
+                >PNG 2048</button
+              >
+              <button type="button" class="qr-btn" id="qrExportSvg" title="Vector SVG (good for any print size)"
+                >SVG</button
+              >
+              <button type="button" class="qr-btn" id="qrExportJpeg1024" title="Export JPEG, 1024 px"
+                >JPEG 1024</button
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="qr-panel" id="qrPanelBulk" role="tabpanel" aria-labelledby="qrModeBulk" data-qr-mode-panel="bulk" hidden>
+        <p class="qr-bulk-intro">
+          Upload a CSV with one row per QR code. We parse, render, and zip everything in your browser — the file never
+          leaves your device.
+        </p>
+        <p class="qr-bulk-design-note" id="qrBulkDesignNote">
+          <strong>Same design for every code:</strong> all rows use the colors, shapes, and logo you set in Single mode
+          (left column when you switch back).
+        </p>
+        <div class="qr-bulk-toolbar">
+          <a
+            class="qr-btn qr-btn--primary"
+            href="/qr-code-template.csv"
+            download="qr-code-template.csv"
+            id="qrBulkTemplate"
+          >
+            Download template
+          </a>
+        </div>
+        <div
+          class="qr-bulk-dropzone"
+          id="qrBulkDropzone"
+          role="button"
+          tabindex="0"
+          aria-label="Drop a CSV file here or click to choose"
+        >
+          <input
+            type="file"
+            id="qrBulkCsvInput"
+            class="qr-bulk-file-input"
+            accept=".csv,text/csv"
+            aria-label="Choose CSV file"
+          />
+          <p class="qr-bulk-dropzone-text">
+            <strong>Drop a CSV here</strong> or click to choose a <code>.csv</code> file
+          </p>
+          <p class="qr-bulk-hint">Columns: <code>type</code>, <code>content</code>, optional <code>filename</code> (see template).</p>
+        </div>
+        <p id="qrBulkSummary" class="qr-bulk-summary" />
+        <ul class="qr-bulk-errors" id="qrBulkErrorList" role="list" />
+        <div class="qr-table-wrap">
+          <table class="qr-bulk-preview-table" aria-label="First rows preview">
+            <caption class="sr-only">First five valid rows and tiny QR preview</caption>
+            <thead>
+              <tr>
+                <th scope="col">Type</th>
+                <th scope="col">Content</th>
+                <th scope="col">Filename</th>
+                <th scope="col">Preview</th>
+              </tr>
+            </thead>
+            <tbody id="qrBulkTableBody"></tbody>
+          </table>
+        </div>
+        <div class="qr-bulk-zip-row">
+          <label for="qrBulkOutput" class="qr-bulk-zip-label">Output format</label>
+          <select id="qrBulkOutput" class="qr-bulk-select">
+            <option value="png-512">PNG 512</option>
+            <option value="png-1024" selected>PNG 1024</option>
+            <option value="png-2048">PNG 2048</option>
+            <option value="svg-1024">SVG (1024)</option>
+          </select>
+          <button type="button" class="qr-btn qr-btn--primary" id="qrBulkGenerate" disabled>Generate ZIP</button>
+        </div>
+        <p id="qrBulkProgress" class="qr-bulk-progress" role="status" aria-live="polite" />
+        <p class="qr-bulk-safety">
+          Very large batches (over 500 codes) may take a minute and use a lot of memory. Keep this tab open until the
+          download starts.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <article class="qr-edu" aria-label="Guide: how QR codes work, types, and design for print">
+    <div class="container container--tool qr-edu-inner">
+      <section class="qr-edu-block" id="qr-how-codes-work">
+        <h2>How QR codes work (and why &quot;static&quot; matters)</h2>
+        <p>
+          A QR code is a two-dimensional grid of <strong>modules</strong> — the black and white squares you see in the pattern. The camera
+          reads the arrangement of those modules to recover the original data (a URL, contact card, Wi-Fi string, and so on). The ISO
+          standard defines <strong>versions 1 through 40</strong>: each step up uses a larger grid and can store more data. When you add
+          characters, the encoder often moves to a higher version, which is why the same style of code can look &quot;busier&quot; as the payload
+          grows.
+        </p>
+        <p>
+          <strong>Error correction</strong> adds redundant information so a partially damaged, dirty, or covered code can still decode. Levels
+          are often labeled L, M, Q, and H (roughly 7% through 30% recovery). Higher correction makes the pattern denser but tolerates
+          more abuse — including a logo in the middle if you keep the logo size modest.
+        </p>
+        <p>
+          A <strong>static</strong> QR code embeds your destination or payload directly. What you encode is what every scan sees, today or in ten
+          years, with no company in the middle. A <strong>dynamic</strong> code, by contrast, usually encodes a short link that points to
+          someone else&apos;s server; that server decides where to send the user and can log every scan. That is useful for analytics
+          and for changing a destination after print — but it means you depend on that service staying online, honest, and affordable
+          for as long as your stickers and posters last. This tool is static-only: the pattern is the message, not a pointer we can
+          rewrite later.
+        </p>
+      </section>
+
+      <section class="qr-edu-block" id="qr-twelve-types">
+        <h2>The 12 QR code types, explained</h2>
+        <p>
+          <strong>URL</strong> — The most common use: open a website, landing page, or deep link. Put one on a poster, product card, or table tent
+          so people can open your page without typing.
+        </p>
+        <p>
+          <strong>Plain text</strong> — Encodes a short message or code (coupon text, stock ID, instructions). Handy when you do not want a
+          network round trip; the scanner just shows the string.
+        </p>
+        <p>
+          <strong>Email</strong> — Opens the user&apos;s mail app with a pre-filled recipient and optional subject and body. Use for support
+          addresses, press contacts, or feedback lines on packaging.
+        </p>
+        <p>
+          <strong>Phone</strong> — Starts a voice call to the number you specify. Event hotlines, doctor offices, and &quot;call us&quot; campaigns use
+          this to avoid mis-dialed digits.
+        </p>
+        <p>
+          <strong>SMS</strong> — Opens a text to a number, optionally with a pre-written message. Common for short codes, opt-ins, and &quot;text
+          KEYWORD to …&quot; style campaigns.
+        </p>
+        <p>
+          <strong>WiFi</strong> — Joins a network from the scan: guests at cafés, short-term rentals, and small offices use it so visitors never
+          see a password written on a sticky note. The payload follows the standard <code>WIFI:…</code> format.
+        </p>
+        <p>
+          <strong>vCard</strong> — Bundles contact fields (name, org, phone, email) for one-tap &quot;add to contacts.&quot; Networking events, business
+          cards, and lanyard badges are typical use cases.
+        </p>
+        <p>
+          <strong>WhatsApp</strong> — Starts a chat with your business number, optionally with opening text. Widely used for customer support in
+          India, Brazil, and other markets where WhatsApp is the default channel.
+        </p>
+        <p>
+          <strong>UPI (India)</strong> — Encodes the <code>upi://pay</code> link so GPay, PhonePe, Paytm, BHIM, and bank apps can show a pay screen.
+          Street vendors, drivers, and small shops use these for real-time bank transfers.
+        </p>
+        <p>
+          <strong>Location (geo)</strong> — Opens maps at latitude and longitude, sometimes with a label. Useful for venue doors, trailheads, and
+          &quot;we are here&quot; print on event flyers.
+        </p>
+        <p>
+          <strong>Calendar event</strong> — Carries a vEvent block so the phone can add a meeting or party to the calendar in one step. Good for
+          wedding save-the-dates, meetups, and training sessions.
+        </p>
+        <p>
+          <strong>App / store link</strong> — Encodes a direct app store or your own landing URL. Many teams use a single HTTPS landing page that
+          detects iOS vs Android; the QR always points to that one stable link.
+        </p>
+      </section>
+
+      <section class="qr-edu-block" id="qr-why-browser">
+        <h2>Why browser-based generation matters</h2>
+        <p>
+          Government and law-enforcement advisories have repeatedly warned consumers about malicious QR codes: the US Federal Trade
+          Commission (FTC) has published consumer alerts (including in 2023 and 2025) on QR-related scams and &quot;quishing,&quot; and the FBI
+          Internet Crime Complaint Center has highlighted risks from tampered or deceptive codes. These are public warnings about a
+          real attack pattern: a code that looks legitimate but points somewhere harmful.
+        </p>
+        <p>
+          A separate, industry-wide issue affects <em>legitimate</em> free tools: some <strong>dynamic</strong> QR services encode a short redirect
+          that runs on <em>their</em> domain, not yours. The printed code does not point to your final URL; it points to that service. If the
+          company changes pricing, turns off a free tier, is acquired, or shuts down, your physical materials can stop working, send
+          people somewhere else, or break in ways you cannot fix without reprinting. The comparison is structural, not a dig at any one
+          brand — it is how redirect-based products are built.
+        </p>
+        <p>
+          <strong>Browser-based static generation</strong> (what you do here) never sends your Wi-Fi password, vCard, or UPI string to DoItSwift
+          for encoding. The pattern is built from your input on your device. You can load the page once, disconnect from the network
+          in DevTools, and still generate a code: nothing in that workflow requires a server to see your payload. That is the
+          privacy and longevity model static codes are meant to offer.
+        </p>
+      </section>
+
+      <section class="qr-edu-block" id="qr-design-tips">
+        <h2>Design tips: logo size, contrast, and error correction</h2>
+        <p>
+          <strong>Error correction and logos:</strong> At higher levels (especially Q and H), the standard allows roughly a quarter to nearly a
+          third of the code to be obscured and still decode — which is how centered logos are possible. If you add a large image,
+          increase correction and keep the logo small relative to the full square.
+        </p>
+        <p>
+          <strong>Size rule of thumb:</strong> keep the logo under about <strong>30% of the QR width</strong>. Bigger is not always better: scanners
+          need enough module contrast around the eyes and data area.
+        </p>
+        <p>
+          <strong>Contrast:</strong> the foreground (modules) should be clearly darker than the background. Inverting to light-on-dark can
+          fail on many phone cameras. For logos, a light or white box behind a colored mark usually scans more reliably than a
+          full-bleed dark block.
+        </p>
+      </section>
+
+      <section class="qr-edu-block" id="qr-printing-tips">
+        <h2>Printing tips</h2>
+        <p>
+          For a typical marketing URL, aim for a printed code at least <strong>about 2 × 2 cm</strong> (roughly 0.8 in) in quiet conditions; dense
+          payloads (long URLs, vCards) often need <strong>about 3 × 3 cm or larger</strong> to scan comfortably on first try.
+        </p>
+        <p>
+          Export <strong>SVG</strong> or high-resolution <strong>PNG</strong> (e.g. 1024 or 2048 px) and send to print at <strong>300 DPI or higher</strong> for
+          small formats. Before you print 5,000 stickers, print one at final size, walk across the room, and scan with an ordinary
+          phone — that single test saves more money than it costs.
+        </p>
+        <p>
+          Leave a <strong>quiet zone</strong> (blank margin) of at least a few <strong>modules</strong> around the pattern. Glossy lamination, foil, and
+          strong glare from spot lighting are common real-world reasons a perfect on-screen code fails in the wild; matte stock and
+          diffused light help.
+        </p>
+      </section>
+
+      <section class="qr-edu-block" id="qr-comparison">
+        <h2>How this approach compares to typical free QR generators</h2>
+        <p>
+          Free QR generators fall into a few broad categories — server-based generators, freemium dynamic-QR platforms, and
+          browser-based tools like this one. Each involves different trade-offs around privacy, longevity, and cost. The comparison
+          below focuses on the trade-offs themselves, not on any specific product.
+        </p>
+        <div class="qr-table-wrap">
+          <table class="qr-compare-table">
+            <caption class="sr-only"
+              >Comparison of browser-based, server-based, and freemium dynamic QR approaches</caption
+            >
+            <thead>
+              <tr>
+                <th scope="col">Capability</th>
+                <th scope="col">Browser-based generators (like this tool)</th>
+                <th scope="col">Server-based free generators</th>
+                <th scope="col">Freemium dynamic-QR services</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Where generation happens</th>
+                <td>In your browser</td>
+                <td>On the provider&apos;s servers</td>
+                <td>On the provider&apos;s servers</td>
+              </tr>
+              <tr>
+                <th scope="row">Works offline after first load</th>
+                <td>Yes</td>
+                <td>No</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <th scope="row">Your data touches a third party</th>
+                <td>No</td>
+                <td>Yes, during generation</td>
+                <td>Yes, continuously (scan traffic redirects through the provider)</td>
+              </tr>
+              <tr>
+                <th scope="row">Codes expire after a trial period</th>
+                <td>No — static codes are permanent</td>
+                <td>Usually no</td>
+                <td>Often yes (14-day trials are common)</td>
+              </tr>
+              <tr>
+                <th scope="row">Signup required for full features</th>
+                <td>No</td>
+                <td>Usually no</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <th scope="row">Bulk CSV import with full design customization</th>
+                <td>Yes (here)</td>
+                <td>Rarely on free tiers</td>
+                <td>Usually paid</td>
+              </tr>
+              <tr>
+                <th scope="row">Dynamic URL editing and scan analytics</th>
+                <td>No — static only, by design</td>
+                <td>Usually no</td>
+                <td>Yes (paid)</td>
+              </tr>
+              <tr>
+                <th scope="row">Logo embedding on the free tier</th>
+                <td>Yes</td>
+                <td>Varies</td>
+                <td>Varies</td>
+              </tr>
+              <tr>
+                <th scope="row">Shape and gradient customization</th>
+                <td>Yes</td>
+                <td>Varies</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <th scope="row">SVG / print-quality vector export</th>
+                <td>Yes</td>
+                <td>Varies</td>
+                <td>Usually paid</td>
+              </tr>
+              <tr>
+                <th scope="row">On-page ads</th>
+                <td>None</td>
+                <td>Often</td>
+                <td>Often</td>
+              </tr>
+              <tr>
+                <th scope="row">Tracking and analytics on the tool page</th>
+                <td>Minimal (page analytics only)</td>
+                <td>Varies</td>
+                <td>Varies</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          This comparison describes common trade-offs across broad categories of free QR tools. Policies, pricing, and feature
+          sets change; try any tool yourself before committing to production print runs.
+        </p>
+      </section>
+
+      <section class="qr-edu-block" id="qr-static-purpose">
+        <h2>Static-only, on purpose</h2>
+        <p>
+          If you need to <strong>change the destination</strong> after a poster is live, or you need <strong>scan counts and funnels</strong> per campaign,
+          you are asking for a hosted redirect product with a real backend. Those products exist, many are paid, and that is
+          <em>not</em> a failing — it is a different architecture. This page does not try to be that.
+        </p>
+        <p>
+          What we do instead: <strong>static</strong> codes. The data you type (or your CSV) is what gets encoded. The PNG, SVG, or ZIP you
+          download is yours. No middle layer has to keep working for your museum label or shop window to stay valid. For many use
+          cases — Wi-Fi at a rental, a menu link, a vCard, a UPI payee, a one-off event — that simplicity is the whole point.
+        </p>
+      </section>
+
+      <div class="tool-editorial">
+        <p>
+          <strong>Reviewed by DoItSwift Editorial.</strong> This tool uses the open-source <code>qr-code-styling</code> library
+          (MIT license) for all rendering. All generation happens in your browser; no QR content is transmitted to DoItSwift
+          or any third party. Information on QR code security risks references public warnings from the
+          <a
+            href="https://consumer.ftc.gov/consumer-alerts/2023/12/scammers-hide-harmful-links-qr-codes-steal-your-information"
+            rel="noopener"
+            target="_blank">US Federal Trade Commission</a
+          >
+          and the
+          <a href="https://www.ic3.gov/" rel="noopener" target="_blank">FBI Internet Crime Complaint Center</a>.
+        </p>
+        <p class="tool-editorial-meta">
+          Last reviewed: April 2026 · Static QR codes — no data stored, no analytics, no dependencies after download.
+        </p>
+      </div>
+    </div>
+  </article>
+
+  <section class="qr-faq faq tool-faq" id="faq" aria-label="Frequently asked questions">
+    <div class="container container--tool">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        {
+          faqsForSchema.map((f) => (
+            <div class="faq-item">
+              <h3>{f.question}</h3>
+              <p>{f.answerPlain}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="tool-related" aria-label="Related tools">
+    <div class="container container--tool">
+      <h2 class="section-title">Related tools</h2>
+      <ul class="qr-related-list">
+        <li>
+          <a href="/generator/password-generator/">Password Generator</a> — strong random passwords in your browser
+        </li>
+        <li>
+          <a href="/image/favicon-generator/">Favicon Generator</a> — site icons from an image
+        </li>
+        <li>
+          <a href="/image/image-compressor/">Image Compressor</a> — shrink the logo you want to embed
+        </li>
+        <li>
+          <a href="/image/svg-to-png/">SVG to PNG</a> — convert a logo SVG to PNG before embedding
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <p class="back-wrap container container--tool">
+    <a href="/generator/" class="link-back">← Generators hub</a>
+  </p>
+
+  <script>
+    import { initQrGeneratorUI } from '../../lib/qr-generator-ui';
+    initQrGeneratorUI();
+  </script>
+
+  <style>
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .qr-hero-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 16px 0 0;
+    }
+    .breadcrumb a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+    .qr-faq .faq-item h3 {
+      font-size: 1rem;
+      margin: 0 0 0.4rem;
+    }
+    .qr-faq .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius, 8px);
+      padding: 1rem 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    .qr-faq .faq-item p {
+      margin: 0;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .qr-faq .section-title {
+      margin-top: 0;
+    }
+    .qr-related-list {
+      list-style: disc;
+      padding-left: 1.25rem;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .qr-related-list li {
+      margin-bottom: 0.5rem;
+      color: var(--text-muted);
+    }
+    .qr-related-list a {
+      color: var(--blue);
+      font-weight: 600;
+    }
+    :global([data-theme='dark']) .qr-related-list a {
+      color: #60a5fa;
+    }
+    .back-wrap {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .back-wrap a.link-back {
+      color: #2563eb;
+      font-weight: 600;
+    }
+    :global([data-theme='dark']) .back-wrap a.link-back {
+      color: #60a5fa;
+    }
+    .qr-mode-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin: 0 0 1.25rem;
+    }
+    .qr-mode-tab {
+      font: inherit;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      cursor: pointer;
+    }
+    .qr-mode-tab--active {
+      background: #2563eb;
+      color: #fff;
+      border-color: #2563eb;
+    }
+    .qr-mode-tab:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    :global([data-theme='dark']) .qr-mode-tab:disabled {
+      opacity: 0.55;
+    }
+    :global([data-theme='dark']) .qr-mode-tab--active {
+      background: #3b82f6;
+      border-color: #3b82f6;
+    }
+    .qr-type-tabs {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 0 12px;
+      margin: 0 0 1rem;
+      -webkit-overflow-scrolling: touch;
+    }
+    .qr-type-tab {
+      flex: 0 0 auto;
+      font: inherit;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 7px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .qr-type-tab--active {
+      border-color: #2563eb;
+      color: #2563eb;
+    }
+    .req {
+      color: var(--red, #ef4444);
+    }
+    .qr-fieldset input,
+    .qr-fieldset select,
+    .qr-fieldset textarea {
+      max-width: 100%;
+    }
+    .qr-fieldset textarea {
+      width: 100%;
+      min-height: 4rem;
+      padding: 0.5rem 0.65rem;
+      font: inherit;
+      font-size: 0.95rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      color: var(--text);
+      box-sizing: border-box;
+    }
+    :global([data-theme='dark']) .qr-fieldset textarea {
+      color: #e5e7eb;
+    }
+    .qr-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    @media (max-width: 640px) {
+      .qr-two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+    .qr-wifi-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: 0.5rem;
+    }
+    .qr-wifi-pw-wrap {
+      flex: 1;
+      min-width: 0;
+    }
+    .qr-wifi-pw-wrap label {
+      display: block;
+    }
+    .qr-wifi-pw-wrap input {
+      width: 100%;
+    }
+    .qr-chk {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    .qr-seg {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin: 0.5rem 0 0.75rem;
+    }
+    @media (min-width: 480px) {
+      .qr-seg {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.75rem 1.25rem;
+      }
+    }
+    .qr-seg label {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-weight: 500;
+      margin: 0;
+    }
+    .qr-seg input[type='radio'] {
+      width: 1rem;
+      height: 1rem;
+    }
+    :global([data-theme='dark']) .qr-type-tab--active {
+      color: #93c5fd;
+      border-color: #3b82f6;
+    }
+    .qr-layout {
+      display: grid;
+      gap: 1.5rem;
+    }
+    @media (min-width: 900px) {
+      .qr-layout {
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+        align-items: start;
+      }
+    }
+    .qr-input-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .qr-design-heading {
+      font-size: 1.05rem;
+      margin: 0 0 0.5rem;
+      color: var(--text);
+    }
+    .qr-design-accordion {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm, 8px);
+      background: var(--card);
+      padding: 0.75rem 1rem 1rem;
+    }
+    .qr-design-block {
+      border-bottom: 1px solid var(--border);
+      margin: 0;
+      padding: 0.45rem 0 0.75rem;
+    }
+    .qr-design-block:last-of-type {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+    .qr-design-block summary {
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .qr-design-block summary::-webkit-details-marker {
+      display: none;
+    }
+    .qr-design-block summary::before {
+      content: '▶';
+      font-size: 0.65rem;
+      opacity: 0.7;
+    }
+    .qr-design-block[open] summary::before {
+      content: '▼';
+    }
+    .qr-design-body {
+      padding: 0.5rem 0 0.25rem;
+      font-size: 0.9rem;
+    }
+    .qr-design-nested {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.4rem;
+    }
+    .qr-color-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-top: 0.45rem;
+    }
+    .qr-color-row label {
+      font-weight: 500;
+    }
+    .qr-color-row input[type='color'] {
+      width: 3.25rem;
+      height: 2.25rem;
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--card);
+      cursor: pointer;
+    }
+    .qr-select-wide,
+    .qr-design-nested select {
+      width: 100%;
+      max-width: 100%;
+      min-height: 2.4rem;
+      font: inherit;
+      font-size: 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      color: var(--text);
+      padding: 0.35rem 0.5rem;
+    }
+    .qr-range-row {
+      margin-top: 0.6rem;
+    }
+    .qr-range-row label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+    .qr-range-row input[type='range'] {
+      width: 100%;
+    }
+    .qr-mono {
+      font-family: ui-monospace, monospace;
+      font-size: 0.9em;
+    }
+    .qr-file-label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+    }
+    .qr-file {
+      font: inherit;
+      font-size: 0.85rem;
+      max-width: 100%;
+    }
+    .qr-err {
+      color: var(--red, #ef4444);
+      font-size: 0.85rem;
+      margin: 0.35rem 0 0;
+      min-height: 1.2em;
+    }
+    .qr-radio-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin: 0.4rem 0 0.75rem;
+    }
+    .qr-radio-grid--6 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (min-width: 480px) {
+      .qr-radio-grid--6 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .qr-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 0.3rem 0.45rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--background, #f9fafb);
+      margin: 0;
+      cursor: pointer;
+    }
+    :global([data-theme='dark']) .qr-pill {
+      background: var(--card);
+    }
+    .qr-pill input {
+      width: 0.85rem;
+      height: 0.85rem;
+    }
+    @media (min-width: 900px) {
+      .qr-export-row {
+        position: sticky;
+        bottom: 0.5rem;
+        padding-top: 0.25rem;
+        background: linear-gradient(to top, var(--background, #fff) 70%, transparent);
+      }
+    }
+    .qr-fieldset {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm, 8px);
+      padding: 1rem 1.1rem 1.15rem;
+      background: var(--card);
+    }
+    .qr-fieldset label {
+      display: block;
+      font-weight: 600;
+      margin-top: 0.6rem;
+      margin-bottom: 0.35rem;
+      font-size: 0.9rem;
+    }
+    .qr-fieldset > legend + label,
+    .qr-fieldset > legend ~ p + label {
+      margin-top: 0;
+    }
+    .qr-fieldset input:not([type='checkbox']):not([type='radio']):not([type='file']),
+    .qr-fieldset select {
+      width: 100%;
+      min-height: 2.6rem;
+      padding: 0.5rem 0.7rem;
+      font-size: 0.95rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      color: var(--text);
+      box-sizing: border-box;
+    }
+    :global([data-theme='dark']) .qr-fieldset input,
+    :global([data-theme='dark']) .qr-fieldset select {
+      color: #e5e7eb;
+    }
+    .qr-hint {
+      margin: 0.5rem 0 0;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .qr-hint--tight {
+      margin-top: 0;
+    }
+    .qr-preview-box {
+      border: 1px solid var(--border);
+      border-radius: var(--radius, 12px);
+      background: #fff;
+      min-height: 12rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    :global([data-theme='dark']) .qr-preview-box {
+      background: #0f0f0f;
+    }
+    .qr-preview-inner {
+      min-height: 10rem;
+      min-width: 10rem;
+      max-width: 100%;
+    }
+    .qr-preview-inner :global(svg),
+    .qr-preview-inner :global(canvas) {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+    .qr-status {
+      margin: 0.6rem 0 0.75rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+    .qr-export-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .qr-btn {
+      min-height: 2.75rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: var(--card);
+    }
+    .qr-btn--spaced {
+      margin-top: 0.4rem;
+    }
+    .qr-btn--primary {
+      background: #2563eb;
+      color: #fff;
+      border-color: #2563eb;
+    }
+    :global([data-theme='dark']) .qr-btn--primary {
+      background: #3b82f6;
+      border-color: #3b82f6;
+    }
+    .qr-bulk-intro {
+      margin: 0 0 0.5rem;
+      line-height: 1.5;
+      color: var(--text);
+      max-width: 48rem;
+    }
+    .qr-bulk-design-note {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin: 0 0 1rem;
+      max-width: 48rem;
+    }
+    .qr-bulk-toolbar {
+      margin-bottom: 0.5rem;
+    }
+    .qr-bulk-dropzone {
+      position: relative;
+      border: 2px dashed var(--border);
+      border-radius: var(--radius, 8px);
+      padding: 1.25rem 1rem 1.1rem;
+      text-align: center;
+      cursor: pointer;
+      background: var(--card);
+      margin: 0.5rem 0 1rem;
+    }
+    .qr-bulk-dropzone.is-dragover {
+      border-color: #2563eb;
+      background: rgba(37, 99, 235, 0.08);
+    }
+    :global([data-theme='dark']) .qr-bulk-dropzone.is-dragover {
+      background: rgba(59, 130, 246, 0.12);
+    }
+    .qr-bulk-file-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: 0;
+      border: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+    }
+    .qr-bulk-dropzone-text {
+      margin: 0.25rem 0;
+      font-size: 0.95rem;
+    }
+    .qr-bulk-hint {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .qr-bulk-hint code {
+      font-size: 0.85em;
+    }
+    .qr-bulk-summary {
+      min-height: 1.2em;
+      font-size: 0.9rem;
+      color: var(--text);
+      margin: 0 0 0.35rem;
+    }
+    .qr-bulk-errors {
+      list-style: disc;
+      margin: 0.25rem 0 0.75rem 1.25rem;
+      padding: 0;
+      color: var(--red, #ef4444);
+      font-size: 0.88rem;
+    }
+    .qr-table-wrap {
+      overflow-x: auto;
+      margin: 0.5rem 0 1rem;
+    }
+    .qr-bulk-preview-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    .qr-bulk-preview-table th,
+    .qr-bulk-preview-table td {
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      padding: 0.4rem 0.5rem;
+      vertical-align: top;
+    }
+    .qr-bulk-preview-table th {
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .qr-bulk-preview-cell {
+      min-width: 5rem;
+    }
+    .qr-bulk-zip-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 1rem 0 0.35rem;
+    }
+    .qr-bulk-zip-label {
+      font-weight: 600;
+    }
+    .qr-bulk-select {
+      min-height: 2.6rem;
+      padding: 0.35rem 0.5rem;
+      font: inherit;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+    }
+    .qr-bulk-progress {
+      min-height: 1.2em;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin: 0.35rem 0;
+    }
+    .qr-bulk-safety {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin: 0.75rem 0 0.25rem;
+    }
+
+    .hero.tool-hero {
+      overflow-wrap: anywhere;
+      word-wrap: break-word;
+    }
+    .hero.tool-hero h1 {
+      max-width: 100%;
+    }
+
+    .qr-edu {
+      padding: 2.25rem 0 0.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .qr-edu-inner {
+      max-width: 48rem;
+    }
+    .qr-edu-block {
+      margin-bottom: 2.25rem;
+    }
+    .qr-edu-block h2 {
+      font-size: 1.35rem;
+      margin: 0 0 0.85rem;
+      line-height: 1.3;
+      color: var(--text);
+    }
+    .qr-edu-block p {
+      margin: 0 0 0.9rem;
+      line-height: 1.65;
+      color: var(--text);
+    }
+    .qr-edu-block code {
+      font-size: 0.9em;
+    }
+    .qr-edu .tool-editorial {
+      margin-top: 0.5rem;
+    }
+    .qr-compare-table {
+      width: 100%;
+      min-width: 44rem;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    .qr-compare-table th,
+    .qr-compare-table td {
+      border: 1px solid var(--border);
+      padding: 0.5rem 0.6rem;
+      vertical-align: top;
+      text-align: left;
+    }
+    .qr-compare-table thead th {
+      background: var(--card);
+      color: var(--text);
+    }
+    .qr-compare-table tbody th[scope='row'] {
+      font-weight: 600;
+      background: var(--background, #f3f4f6);
+    }
+    :global([data-theme='dark']) .qr-compare-table tbody th[scope='row'] {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    :global([data-theme='dark']) .qr-compare-table th,
+    :global([data-theme='dark']) .qr-compare-table td {
+      border-color: var(--border);
+    }
+
+    .qr-tool :focus-visible,
+    .qr-edu :focus-visible,
+    .qr-faq :focus-visible,
+    .tool-related :focus-visible,
+    .back-wrap :focus-visible,
+    .hero.tool-hero :focus-visible {
+      outline: 2px solid #2563eb;
+      outline-offset: 2px;
+    }
+    :global([data-theme='dark']) .qr-tool :focus-visible,
+    :global([data-theme='dark']) .qr-edu :focus-visible,
+    :global([data-theme='dark']) .qr-faq :focus-visible,
+    :global([data-theme='dark']) .tool-related :focus-visible,
+    :global([data-theme='dark']) .back-wrap :focus-visible,
+    :global([data-theme='dark']) .hero.tool-hero :focus-visible {
+      outline-color: #60a5fa;
+    }
+  </style>
+</MainLayout>

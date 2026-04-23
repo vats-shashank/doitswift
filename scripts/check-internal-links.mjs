@@ -24,7 +24,7 @@ function walk(dir, exts, out = []) {
 function pageOrAssetExists(hrefPath) {
   const rel = hrefPath.replace(/\/$/, '').replace(/^\//, '');
   const low = hrefPath.toLowerCase();
-  if (/\.(svg|png|jpg|jpeg|gif|webp|ico|css|js|mjs|txt|xml|woff2?|map|html)$/.test(low)) {
+  if (/\.(svg|png|jpg|jpeg|gif|webp|ico|css|js|mjs|txt|xml|woff2?|map|html|csv)$/.test(low)) {
     const pub = path.join(root, 'public', rel);
     const d = path.join(dist, rel);
     return fs.existsSync(pub) || fs.existsSync(d);
