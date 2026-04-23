@@ -44,35 +44,30 @@ const categories = [
   {
     emoji: '📝',
     title: 'Text Tools',
-    href: '/pro/',
     live: false,
     desc: 'Word count, case convert, JSON format, Lorem ipsum.',
   },
   {
     emoji: '🎨',
     title: 'Generators',
-    href: '/pro/',
     live: false,
     desc: 'QR codes, barcodes, passwords, UUIDs, invoices.',
   },
   {
     emoji: '🔊',
     title: 'Audio Tools',
-    href: '/pro/',
     live: false,
     desc: 'Convert audio, trim, extract from video.',
   },
   {
     emoji: '🎬',
     title: 'Video Tools',
-    href: '/pro/',
     live: false,
     desc: 'Compress, convert, extract GIFs from video.',
   },
   {
     emoji: '✨',
     title: 'AI Tools',
-    href: '/pro/',
     live: false,
     desc: 'Background remove, upscale, text rewrite.',
   },
@@ -205,7 +200,7 @@ const popularToolGroups = [
               </div>
             </a>
           ) : (
-            <a href={cat.href} class="category-card soon">
+            <div class="category-card category-card--soon">
               <span class="category-icon">{cat.emoji}</span>
               <div class="category-body">
                 <h3>
@@ -214,7 +209,7 @@ const popularToolGroups = [
                 </h3>
                 <p>{cat.desc}</p>
               </div>
-            </a>
+            </div>
           )
         )}
       </div>
@@ -495,17 +490,23 @@ const popularToolGroups = [
       transform: translateY(-4px);
       box-shadow: var(--shadow-lg);
     }
-    .category-card.soon {
+    .category-card--soon {
       opacity: 0.6;
-      cursor: pointer;
-      text-decoration: none;
+      cursor: default;
       color: inherit;
     }
-    .category-card.soon:hover {
-      border-color: rgba(0, 102, 255, 0.35);
-      opacity: 0.88;
-      transform: translateY(-2px);
+    .category-card--soon:hover {
+      transform: none;
       box-shadow: var(--shadow);
+      border-color: var(--border);
+      background: inherit;
+    }
+    .category-card--soon:active,
+    .category-card--soon:focus {
+      outline: none;
+    }
+    .category-card--soon .category-icon {
+      filter: grayscale(0.4);
     }
     .category-icon {
       font-size: 42px;
