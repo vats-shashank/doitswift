@@ -124,6 +124,7 @@ const breadcrumbLd = {
   <script type="application/ld+json" set:html={JSON.stringify(softwareAppLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(faqPageLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+  <script slot="head" is:inline src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
   <nav class="breadcrumb container" aria-label="Breadcrumb">
     <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Mortgage Calculator</span>
@@ -212,6 +213,11 @@ const breadcrumbLd = {
           <div><div class="result-sub" id="mgInt">—</div><div class="result-caption">Total interest (30y)</div></div>
           <div><div class="result-sub" id="mgCost">—</div><div class="result-caption">Total paid (P&amp;I only)</div></div>
         </div>
+        <div class="mg-cost-multiplier">
+          <span class="mg-cost-multiplier-label">You&apos;ll pay</span>
+          <span class="mg-cost-multiplier-value" id="mgCostMultiplier">—</span>
+          <span class="mg-cost-multiplier-label">the home&apos;s price</span>
+        </div>
         <p class="result-note" id="mgPmiNote"></p>
         <div class="bar-stack" role="img" aria-label="Payment breakdown">
           <div class="bar-slice bar-pi" id="mgBarPi"></div>
@@ -231,6 +237,97 @@ const breadcrumbLd = {
           </div>
         </details>
       </div>
+    </div>
+  </section>
+
+  <section class="mg-viz-section" aria-labelledby="mg-viz-heading">
+    <div class="container mg-viz-inner">
+      <h2 id="mg-viz-heading" class="mg-viz-heading">Visualize Your Mortgage Journey</h2>
+      <p class="mg-viz-sub">
+        See how your payment breaks down, when PMI drops off, how extra payments accelerate payoff, and whether your mortgage fits the 28/36 affordability rule.
+      </p>
+
+      <div class="mg-extra-controls">
+        <div class="mg-field">
+          <label for="mgExtraPayment">Extra monthly payment (optional)</label>
+          <input type="number" id="mgExtraPayment" min="0" step="50" value="0" aria-describedby="mgExtraHint" />
+          <p id="mgExtraHint" class="mg-field-hint">
+            <span class="mg-input-badge">Extra Payments tab</span>
+            Extra goes toward principal — see savings when you switch to this tab.
+          </p>
+        </div>
+        <div class="mg-field">
+          <label for="mgIncome">Gross annual income (for affordability)</label>
+          <input type="number" id="mgIncome" min="0" step="1000" value="100000" aria-describedby="mgIncomeHint" />
+          <p id="mgIncomeHint" class="mg-field-hint">
+            <span class="mg-input-badge">Affordability tab</span>
+            Used to check the 28/36 rule when you switch to this tab.
+          </p>
+        </div>
+      </div>
+
+      <div class="mg-chart-tabs-wrap">
+        <div class="mg-chart-tabs" role="tablist" aria-label="Mortgage visualizations" id="mgChartTabs">
+          <button type="button" class="mg-chart-tab mg-chart-tab--active" role="tab" aria-selected="true" aria-controls="mgPanel0" id="mgTab0" data-tab="0" tabindex="0">Breakdown</button>
+          <button type="button" class="mg-chart-tab" role="tab" aria-selected="false" aria-controls="mgPanel1" id="mgTab1" data-tab="1" tabindex="-1">Amortization</button>
+          <button type="button" class="mg-chart-tab" role="tab" aria-selected="false" aria-controls="mgPanel2" id="mgTab2" data-tab="2" tabindex="-1">Extra Payments</button>
+          <button type="button" class="mg-chart-tab" role="tab" aria-selected="false" aria-controls="mgPanel3" id="mgTab3" data-tab="3" tabindex="-1">15 vs 30 Year</button>
+          <button type="button" class="mg-chart-tab" role="tab" aria-selected="false" aria-controls="mgPanel4" id="mgTab4" data-tab="4" tabindex="-1">Affordability</button>
+        </div>
+      </div>
+
+      <div class="mg-chart-panels">
+        <div class="mg-chart-panel mg-chart-panel--active" role="tabpanel" id="mgPanel0" aria-labelledby="mgTab0" data-panel="0">
+          <div class="mg-chart-canvas-wrap">
+            <canvas id="mgVizCanvas0" aria-label="Monthly payment breakdown over loan life showing PMI drop-off"></canvas>
+          </div>
+          <p class="mg-chart-callout" id="mgChartCallout0" aria-live="polite"></p>
+        </div>
+        <div class="mg-chart-panel" role="tabpanel" id="mgPanel1" aria-labelledby="mgTab1" data-panel="1" hidden>
+          <div class="mg-chart-canvas-wrap">
+            <canvas id="mgVizCanvas1" aria-label="Principal vs interest per payment over loan life"></canvas>
+          </div>
+          <p class="mg-chart-callout" id="mgChartCallout1" aria-live="polite"></p>
+        </div>
+        <div class="mg-chart-panel" role="tabpanel" id="mgPanel2" aria-labelledby="mgTab2" data-panel="2" hidden>
+          <div class="mg-chart-canvas-wrap">
+            <canvas id="mgVizCanvas2" aria-label="Loan balance with and without extra monthly payments"></canvas>
+          </div>
+          <p class="mg-chart-callout" id="mgChartCallout2" aria-live="polite"></p>
+        </div>
+        <div class="mg-chart-panel" role="tabpanel" id="mgPanel3" aria-labelledby="mgTab3" data-panel="3" hidden>
+          <div class="mg-chart-canvas-wrap">
+            <canvas id="mgVizCanvas3" aria-label="15 year versus 30 year mortgage balance comparison"></canvas>
+          </div>
+          <p class="mg-chart-callout" id="mgChartCallout3" aria-live="polite"></p>
+        </div>
+        <div class="mg-chart-panel" role="tabpanel" id="mgPanel4" aria-labelledby="mgTab4" data-panel="4" hidden>
+          <div class="mg-affordability-wrap">
+            <div class="mg-affordability-gauge">
+              <div class="mg-affordability-bar">
+                <div class="mg-affordability-fill" id="mgAffordFill" style="width: 0%;" data-status="good"></div>
+                <div class="mg-affordability-marker mg-affordability-marker--28" style="left: 28%;" title="28% — recommended max">28%</div>
+                <div class="mg-affordability-marker mg-affordability-marker--36" style="left: 36%;" title="36% — total debt max">36%</div>
+              </div>
+              <div class="mg-affordability-label" id="mgAffordLabel">Enter income to see affordability</div>
+            </div>
+            <p class="mg-chart-callout" id="mgChartCallout4" aria-live="polite"></p>
+          </div>
+        </div>
+      </div>
+
+      <table class="sr-only" id="mgChartSrTable" aria-label="Chart data for screen readers">
+        <caption class="sr-only">Numeric data for the active mortgage chart</caption>
+        <thead>
+          <tr>
+            <th scope="col">Point</th>
+            <th scope="col">Value 1</th>
+            <th scope="col">Value 2</th>
+            <th scope="col">Value 3</th>
+          </tr>
+        </thead>
+        <tbody id="mgChartSrTbody"></tbody>
+      </table>
     </div>
   </section>
 
@@ -566,6 +663,13 @@ const breadcrumbLd = {
 
   <script is:inline define:vars={{ LOCALE_BY_CURRENCY }}>
     (function () {
+      function debounce(fn, ms) {
+        var t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
       function localeForCurrency(code) {
         return LOCALE_BY_CURRENCY[code] || 'en-US';
       }
@@ -629,14 +733,14 @@ const breadcrumbLd = {
           fmt.format(Math.round(hoa)) +
           '</li>';
         var bal = loan;
-        var r = rate / 100 / 12;
+        var rM = rate / 100 / 12;
         var tbody = document.getElementById('mgTable');
         tbody.innerHTML = '';
         var yPrin = 0,
           yInt = 0,
           y = 1;
         for (var m = 1; m <= n; m++) {
-          var iP = bal * r;
+          var iP = bal * rM;
           var pP = E - iP;
           bal -= pP;
           yPrin += pP;
@@ -659,6 +763,37 @@ const breadcrumbLd = {
             yInt = 0;
           }
         }
+        var curCode = document.getElementById('mgCur').value || 'USD';
+        window.__mgState = {
+          price: price,
+          down: down,
+          loan: loan,
+          n: n,
+          yrs: yrs,
+          rate: rate,
+          E: E,
+          taxM: taxM,
+          insM: insM,
+          pmiM: pmiM,
+          hoa: hoa,
+          needPmi: needPmi,
+          pmiPct: pmiPct,
+          totalInt: totalInt,
+          tot: tot,
+          currency: curCode,
+        };
+        var multEl = document.getElementById('mgCostMultiplier');
+        if (multEl) {
+          if (price > 0) {
+            var mult = (E * n + down) / price;
+            multEl.textContent = mult.toFixed(2) + '×';
+          } else {
+            multEl.textContent = '—';
+          }
+        }
+        if (typeof window.__mgChartDebounced === 'function') {
+          window.__mgChartDebounced();
+        }
       }
       document.querySelectorAll('input[name="mgDpT"]').forEach(function (el) {
         el.addEventListener('change', function () {
@@ -673,6 +808,687 @@ const breadcrumbLd = {
         document.getElementById(id).addEventListener('input', run);
       });
       run();
+    })();
+  </script>
+
+  <script is:inline define:vars={{ LOCALE_BY_CURRENCY }}>
+    (function () {
+      function localeForCurrency(code) {
+        return LOCALE_BY_CURRENCY[code] || 'en-US';
+      }
+      function makeFmtFromState() {
+        var st = window.__mgState;
+        var code = (st && st.currency) || 'USD';
+        return new Intl.NumberFormat(localeForCurrency(code), { style: 'currency', currency: code, maximumFractionDigits: 0 });
+      }
+      function emiLocal(P, annual, months) {
+        var r = annual / 100 / 12;
+        if (months <= 0) return 0;
+        if (r === 0) return P / months;
+        var p = Math.pow(1 + r, months);
+        return (P * r * p) / (p - 1);
+      }
+      function isDark() {
+        return document.documentElement.getAttribute('data-theme') === 'dark';
+      }
+      function pal() {
+        if (isDark()) {
+          return {
+            grid: 'rgba(255,255,255,0.1)',
+            text: '#e5e7eb',
+            blue: '#60a5fa',
+            red: '#f87171',
+            amber: '#fbbf24',
+            purple: '#c084fc',
+            orange: '#fb923c',
+            gray: '#94a3b8',
+            green: '#4ade80',
+          };
+        }
+        return {
+          grid: 'rgba(0,0,0,0.08)',
+          text: '#374151',
+          blue: '#3b82f6',
+          red: '#ef4444',
+          amber: '#f59e0b',
+          purple: '#a855f7',
+          orange: '#f97316',
+          gray: '#94a3b8',
+          green: '#22c55e',
+        };
+      }
+      var chartInstance = null;
+      var activeTab = 0;
+      function destroyChart() {
+        if (chartInstance) {
+          chartInstance.destroy();
+          chartInstance = null;
+        }
+      }
+      function chartHeight() {
+        return window.innerWidth < 768 ? 260 : 320;
+      }
+      function getPmiForBalance(bal, price, needPmi, pmiM) {
+        if (!needPmi) return 0;
+        if (bal <= 0) return 0;
+        if (bal <= 0.78 * price) return 0;
+        return pmiM;
+      }
+      function simulateMonthlySamples(st) {
+        var n = st.n;
+        var loan = st.loan;
+        var E = st.E;
+        var price = st.price;
+        var rM = st.rate / 100 / 12;
+        var taxM = st.taxM;
+        var insM = st.insM;
+        var hoaA = st.hoa;
+        var needPmi = st.needPmi;
+        var pmiM = st.pmiM;
+        var labels = [];
+        var principal = [];
+        var interest = [];
+        var tax = [];
+        var ins = [];
+        var pmi = [];
+        var hoa = [];
+        for (var y = 0; y < st.yrs; y++) {
+          labels.push('Y' + (y + 1));
+          var midM = Math.min(y * 12 + 6, n);
+          if (midM < 1) midM = 1;
+          var bal = loan;
+          var pPart = 0;
+          var iPart = 0;
+          for (var m = 1; m <= midM; m++) {
+            var intP = bal * rM;
+            var prinP = E - intP;
+            if (prinP < 0) prinP = 0;
+            bal -= prinP;
+            if (bal < 0) bal = 0;
+            if (m === midM) {
+              pPart = prinP;
+              iPart = intP;
+            }
+          }
+          var pmiV = getPmiForBalance(bal, price, needPmi, pmiM);
+          principal.push(pPart);
+          interest.push(iPart);
+          tax.push(taxM);
+          ins.push(insM);
+          pmi.push(pmiV);
+          hoa.push(hoaA);
+        }
+        var pmiDropYear = -1;
+        if (needPmi && pmiM > 0) {
+          bal = loan;
+          for (m = 1; m <= n; m++) {
+            intP = bal * rM;
+            prinP = E - intP;
+            bal -= prinP;
+            if (bal < 0) bal = 0;
+            if (bal > 0 && bal <= 0.78 * price) {
+              pmiDropYear = Math.ceil(m / 12);
+              break;
+            }
+          }
+        }
+        return { labels: labels, principal: principal, interest: interest, tax: tax, ins: ins, pmi: pmi, hoa: hoa, pmiDropYear: pmiDropYear };
+      }
+      function buildYearlyPI(st) {
+        var n = st.n;
+        var loan = st.loan;
+        var rM = st.rate / 100 / 12;
+        var E = st.E;
+        var bal = loan;
+        var years = st.yrs;
+        var yPrin = [];
+        var yInt = [];
+        var yBalEnd = [];
+        for (var y = 0; y < years; y++) {
+          var tp = 0;
+          var ti = 0;
+          for (var m = 0; m < 12; m++) {
+            var monthIndex = y * 12 + m + 1;
+            if (monthIndex > n) break;
+            var intP = bal * rM;
+            var prinP = E - intP;
+            if (prinP < 0) prinP = 0;
+            bal -= prinP;
+            if (bal < 0) bal = 0;
+            tp += prinP;
+            ti += intP;
+          }
+          yPrin.push(tp);
+          yInt.push(ti);
+          yBalEnd.push(bal);
+        }
+        var cross = -1;
+        for (var i = 0; i < yPrin.length; i++) {
+          if (yPrin[i] > yInt[i]) {
+            cross = i + 1;
+            break;
+          }
+        }
+        return { yPrin: yPrin, yInt: yInt, yBalEnd: yBalEnd, crossover: cross };
+      }
+      function simPayoffMonth(Epay, extra, maxMonths, loanAmt, rateAnnual) {
+        var rM = rateAnnual / 100 / 12;
+        var bal = loanAmt;
+        var Etot = Epay + extra;
+        for (var m = 1; m <= maxMonths; m++) {
+          var intP = bal * rM;
+          var prinP = Etot - intP;
+          if (prinP < 0) prinP = 0;
+          bal -= prinP;
+          if (bal <= 0) {
+            return m;
+          }
+        }
+        return maxMonths;
+      }
+      function totalInterestUntilPayoff(Epay, extra, loan, rateAnnual, maxMonths) {
+        var rM = rateAnnual / 100 / 12;
+        var bal = loan;
+        var totI = 0;
+        for (var m = 1; m <= maxMonths; m++) {
+          if (bal <= 0) break;
+          var intP = bal * rM;
+          totI += intP;
+          var prinP = Epay + extra - intP;
+          if (prinP < 0) prinP = 0;
+          bal -= prinP;
+        }
+        return totI;
+      }
+      function simBalanceByYearForTerm(loan, rateAnnual, termYears) {
+        var n = termYears * 12;
+        var E = emiLocal(loan, rateAnnual, n);
+        var rM = rateAnnual / 100 / 12;
+        var out = [];
+        for (var iy = 0; iy <= 30; iy++) {
+          var lastM = Math.min(iy * 12, n);
+          var bal = loan;
+          for (var m = 1; m <= lastM; m++) {
+            var intP = bal * rM;
+            var prinP = E - intP;
+            if (prinP < 0) prinP = 0;
+            bal -= prinP;
+            if (bal < 0) bal = 0;
+          }
+          out.push(bal);
+        }
+        return out;
+      }
+      function simBalanceMonthly(Epay, extra, nMax, loanAmt, rateAnnual) {
+        var rM = rateAnnual / 100 / 12;
+        var bal = loanAmt;
+        var Etot = Epay + extra;
+        var monthBal = [loanAmt];
+        for (var m = 1; m <= nMax; m++) {
+          if (bal <= 0) {
+            monthBal.push(0);
+            continue;
+          }
+          var intP = bal * rM;
+          var prinP = Etot - intP;
+          if (prinP < 0) prinP = 0;
+          bal -= prinP;
+          if (bal < 0) bal = 0;
+          monthBal.push(bal);
+        }
+        return monthBal;
+      }
+      function updateAffordability(st, fmt) {
+        destroyChart();
+        var incEl = document.getElementById('mgIncome');
+        var incomeY = incEl ? parseFloat(incEl.value) || 0 : 0;
+        var fill = document.getElementById('mgAffordFill');
+        var lab = document.getElementById('mgAffordLabel');
+        var co4 = document.getElementById('mgChartCallout4');
+        if (incomeY <= 0) {
+          if (fill) {
+            fill.style.width = '0%';
+            fill.setAttribute('data-status', 'good');
+          }
+          if (lab) lab.textContent = 'Enter your annual income above to check affordability.';
+          if (co4) co4.textContent = 'Enter your annual income above to check affordability.';
+          return;
+        }
+        var monthlyInc = incomeY / 12;
+        var ratio = (st.tot / monthlyInc) * 100;
+        var w = Math.min(100, (ratio / 60) * 100);
+        var status = ratio < 28 ? 'good' : ratio < 36 ? 'warning' : 'danger';
+        if (fill) {
+          fill.style.width = w + '%';
+          fill.setAttribute('data-status', status);
+        }
+        if (lab) {
+          var tail =
+            ratio < 28 ? '— comfortable' : ratio < 36 ? '— at the upper limit' : '— stretching your budget';
+          lab.textContent =
+            'Your housing cost is ' + ratio.toFixed(1) + '% of your income ' + tail + ' (PITI + PMI + HOA vs gross monthly).';
+        }
+        if (co4) {
+          if (ratio < 28) {
+            co4.textContent =
+              "Comfortable — you're well within the 28/36 rule. Consider saving the difference or aggressive extra payments.";
+          } else if (ratio < 36) {
+            co4.textContent =
+              'At the upper limit. Affordable but leaves less room for other financial goals.';
+          } else {
+            co4.textContent =
+              'Stretching your budget. Consider a lower home price, larger down payment, or longer term.';
+          }
+        }
+      }
+      function updateSrTable(labels, a, b, c) {
+        var tb = document.getElementById('mgChartSrTbody');
+        if (!tb) return;
+        tb.innerHTML = '';
+        for (var i = 0; i < Math.min(labels.length, 15); i++) {
+          var tr = document.createElement('tr');
+          tr.innerHTML =
+            '<th scope="row">' +
+            labels[i] +
+            '</th><td>' +
+            (a[i] != null ? Math.round(a[i]) : '—') +
+            '</td><td>' +
+            (b && b[i] != null ? Math.round(b[i]) : '—') +
+            '</td><td>' +
+            (c && c[i] != null ? Math.round(c[i]) : '—') +
+            '</td>';
+          tb.appendChild(tr);
+        }
+      }
+      function buildOrUpdateChart() {
+        if (typeof Chart === 'undefined') return;
+        var animD = window.__mgTabAnim ? 400 : 0;
+        window.__mgTabAnim = false;
+        var st = window.__mgState;
+        if (!st || st.loan <= 0) {
+          destroyChart();
+          return;
+        }
+        var fmt = makeFmtFromState();
+        var c = pal();
+        if (activeTab === 4) {
+          updateAffordability(st, fmt);
+          return;
+        }
+        var canvas = document.getElementById(
+          activeTab === 0 ? 'mgVizCanvas0' : activeTab === 1 ? 'mgVizCanvas1' : activeTab === 2 ? 'mgVizCanvas2' : 'mgVizCanvas3'
+        );
+        if (!canvas) return;
+        var ctx = canvas.getContext('2d');
+        var h = chartHeight();
+        var wrap = canvas.parentElement;
+        if (wrap) wrap.style.height = h + 'px';
+        if (activeTab === 0) {
+          var bd = simulateMonthlySamples(st);
+          var labels = bd.labels;
+          var opts0 = {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: animD },
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+              title: { display: true, text: 'Monthly payment components (sampled mid-year)', color: c.text, font: { size: 14, weight: '600' } },
+              legend: { position: 'bottom', labels: { color: c.text, boxWidth: 12, font: { size: 11 } } },
+              tooltip: { mode: 'index' },
+            },
+            scales: {
+              x: { stacked: true, ticks: { color: c.text, maxRotation: 45 }, grid: { color: c.grid } },
+              y: {
+                stacked: true,
+                ticks: { color: c.text, callback: function (v) { return fmt.format(v); } },
+                grid: { color: c.grid },
+              },
+            },
+          };
+          var ds0 = [
+            { label: 'Principal', data: bd.principal, fill: true, backgroundColor: c.blue + 'b3', borderColor: c.blue, borderWidth: 1, pointRadius: 0, stack: 'x', tension: 0.1 },
+            { label: 'Interest', data: bd.interest, fill: true, backgroundColor: c.red + 'b3', borderColor: c.red, borderWidth: 1, pointRadius: 0, stack: 'x', tension: 0.1 },
+            { label: 'Property tax', data: bd.tax, fill: true, backgroundColor: c.amber + 'b3', borderColor: c.amber, borderWidth: 1, pointRadius: 0, stack: 'x', tension: 0.1 },
+            { label: 'Insurance', data: bd.ins, fill: true, backgroundColor: c.purple + 'b3', borderColor: c.purple, borderWidth: 1, pointRadius: 0, stack: 'x', tension: 0.1 },
+            { label: 'PMI', data: bd.pmi, fill: true, backgroundColor: c.orange + 'b3', borderColor: c.orange, borderWidth: 1, pointRadius: 0, stack: 'x', tension: 0.1 },
+            { label: 'HOA', data: bd.hoa, fill: true, backgroundColor: c.gray + 'b3', borderColor: c.gray, borderWidth: 1, pointRadius: 0, stack: 'x', tension: 0.1 },
+          ];
+          if (!chartInstance || chartInstance.canvas.id !== 'mgVizCanvas0' || chartInstance.config.type !== 'line') {
+            destroyChart();
+            chartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: ds0 }, options: opts0 });
+          } else {
+            chartInstance.data.labels = labels;
+            chartInstance.data.datasets = ds0;
+            chartInstance.options = opts0;
+            chartInstance.update(animD > 0 ? 'active' : 'none');
+          }
+          var co0 = document.getElementById('mgChartCallout0');
+          if (co0) {
+            if (st.needPmi && st.pmiM > 0) {
+              if (bd.pmiDropYear > 0) {
+                var saved = st.pmiM;
+                co0.textContent = 'PMI drops off in Year ' + bd.pmiDropYear + ', saving you ' + fmt.format(Math.round(saved)) + '/month after that.';
+              } else {
+                co0.textContent = 'No PMI in this chart period — balance may reach 78% LTV within the loan term. Adjust inputs to see PMI timing.';
+              }
+            } else {
+              co0.textContent = "No PMI in this scenario — you have 20%+ equity from the start (or PMI rate is zero).";
+            }
+          }
+          updateSrTable(
+            labels,
+            bd.principal,
+            bd.interest,
+            bd.pmi
+          );
+        } else if (activeTab === 1) {
+          var ya = buildYearlyPI(st);
+          var lab1 = [];
+          for (var yi = 0; yi < st.yrs; yi++) lab1.push('Y' + (yi + 1));
+          var opts1 = {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: animD },
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+              title: { display: true, text: 'Principal vs interest paid per year', color: c.text, font: { size: 14, weight: '600' } },
+              legend: { position: 'bottom', labels: { color: c.text } },
+            },
+            scales: {
+              x: { ticks: { color: c.text }, grid: { color: c.grid } },
+              y: {
+                type: 'linear',
+                position: 'left',
+                id: 'y',
+                ticks: { color: c.text, callback: function (v) { return fmt.format(v); } },
+                grid: { color: c.grid },
+              },
+              y1: {
+                type: 'linear',
+                position: 'right',
+                id: 'y1',
+                grid: { drawOnChartArea: false },
+                ticks: { color: c.text, callback: function (v) { return fmt.format(v); } },
+              },
+            },
+          };
+          var balLine = ya.yBalEnd;
+          var ds1 = [
+            { label: 'Principal paid (per year)', data: ya.yPrin, borderColor: c.blue, backgroundColor: 'transparent', tension: 0.2, yAxisID: 'y', pointRadius: 0 },
+            { label: 'Interest paid (per year)', data: ya.yInt, borderColor: c.red, backgroundColor: 'transparent', tension: 0.2, yAxisID: 'y', pointRadius: 0 },
+            { label: 'Outstanding balance (end of year)', data: balLine, borderColor: c.gray, backgroundColor: 'transparent', borderDash: [5, 5], tension: 0.2, yAxisID: 'y1', pointRadius: 0 },
+          ];
+          if (!chartInstance || chartInstance.canvas.id !== 'mgVizCanvas1' || chartInstance.config.type !== 'line') {
+            destroyChart();
+            chartInstance = new Chart(ctx, { type: 'line', data: { labels: lab1, datasets: ds1 }, options: opts1 });
+          } else {
+            chartInstance.data.labels = lab1;
+            chartInstance.data.datasets = ds1;
+            chartInstance.options = opts1;
+            chartInstance.update(animD > 0 ? 'active' : 'none');
+          }
+          var co1 = document.getElementById('mgChartCallout1');
+          if (co1) {
+            if (ya.crossover > 0) {
+              co1.textContent =
+                "In Year " +
+                ya.crossover +
+                ", you'll pay more principal than interest for the first time. Before that, most of your payment is interest.";
+            } else {
+              co1.textContent = 'Over this schedule, annual interest stays above principal paid in every full year shown.';
+            }
+          }
+          updateSrTable(lab1, ya.yPrin, ya.yInt, balLine);
+        } else if (activeTab === 2) {
+          var extra = parseFloat(document.getElementById('mgExtraPayment') && document.getElementById('mgExtraPayment').value) || 0;
+          var nMon = st.n;
+          var maxExtra = nMon * 4;
+          var balStd = simBalanceMonthly(st.E, 0, nMon, st.loan, st.rate);
+          var balEx = simBalanceMonthly(st.E, extra, maxExtra, st.loan, st.rate);
+          var yearLabels2 = ['Y0'];
+          for (var yy = 1; yy <= st.yrs; yy++) yearLabels2.push('Y' + yy);
+          var balStdY = [st.loan];
+          var balExY = [st.loan];
+          for (var yi2 = 1; yi2 <= st.yrs; yi2++) {
+            var idx = Math.min(yi2 * 12, balStd.length - 1);
+            var idxE = Math.min(yi2 * 12, balEx.length - 1);
+            balStdY.push(balStd[idx]);
+            balExY.push(balEx[idxE]);
+          }
+          if (extra > 0) {
+            for (var zi = 0; zi < balExY.length; zi++) {
+              if (balExY[zi] <= 0 && zi > 0) {
+                for (var zj = zi; zj < balExY.length; zj++) {
+                  balExY[zj] = 0;
+                }
+                break;
+              }
+            }
+          }
+          var mPay0 = simPayoffMonth(st.E, 0, nMon, st.loan, st.rate);
+          var mPay1 = simPayoffMonth(st.E, extra, maxExtra, st.loan, st.rate);
+          var intSimp = totalInterestUntilPayoff(st.E, 0, st.loan, st.rate, mPay0);
+          var intExtraP = totalInterestUntilPayoff(st.E, extra, st.loan, st.rate, mPay1);
+          var savedI = intSimp - intExtraP;
+          var yearsSaved = Math.floor((mPay0 - mPay1) / 12);
+          var monthsSaved = (mPay0 - mPay1) % 12;
+          var co2 = document.getElementById('mgChartCallout2');
+          if (co2) {
+            if (extra <= 0) {
+              co2.textContent = 'Enter an extra monthly payment above to see the impact. Even ' + fmt.format(100) + '/month can save tens of thousands in interest.';
+            } else if (mPay1 >= mPay0) {
+              co2.textContent =
+                'With ' +
+                fmt.format(Math.round(extra)) +
+                '/month extra, the loan may still use the full ' +
+                st.yrs +
+                '-year term depending on rate; estimated interest difference vs no extra: ' +
+                fmt.format(Math.round(Math.max(0, savedI))) +
+                '.';
+            } else {
+              co2.textContent =
+                'With ' +
+                fmt.format(Math.round(extra)) +
+                '/month extra, you\'ll pay off about ' +
+                yearsSaved +
+                ' yr ' +
+                monthsSaved +
+                ' mo earlier (' +
+                mPay1 +
+                ' mo vs ' +
+                mPay0 +
+                '). Total interest saved: ' +
+                fmt.format(Math.round(Math.max(0, savedI))) +
+                '.';
+            }
+          }
+          var lab2b = yearLabels2.slice(0, st.yrs + 1);
+          var opts2 = {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: animD },
+            plugins: { title: { display: true, text: 'Remaining loan balance', color: c.text, font: { size: 14, weight: '600' } }, legend: { labels: { color: c.text } } },
+            scales: { x: { ticks: { color: c.text } }, y: { ticks: { color: c.text, callback: function (v) { return fmt.format(v); } } } },
+          };
+          var ds2 = [
+            { label: 'Standard payment', data: balStdY, borderColor: c.blue, tension: 0.2, pointRadius: 0 },
+            { label: extra > 0 ? 'With extra ' + fmt.format(Math.round(extra)) + '/mo' : 'With extra payment', data: balExY, borderColor: c.green, tension: 0.2, pointRadius: 0 },
+          ];
+          if (!chartInstance || chartInstance.canvas.id !== 'mgVizCanvas2' || chartInstance.config.type !== 'line') {
+            destroyChart();
+            chartInstance = new Chart(ctx, { type: 'line', data: { labels: lab2b, datasets: ds2 }, options: opts2 });
+          } else {
+            chartInstance.data.labels = lab2b;
+            chartInstance.data.datasets = ds2;
+            chartInstance.options = opts2;
+            chartInstance.update(animD > 0 ? 'active' : 'none');
+          }
+          updateSrTable(lab2b, balStdY, balExY, null);
+        } else if (activeTab === 3) {
+          var E30 = emiLocal(st.loan, st.rate, 360);
+          var E15 = emiLocal(st.loan, st.rate, 180);
+          var s30a = simBalanceByYearForTerm(st.loan, st.rate, 30);
+          var s15a = simBalanceByYearForTerm(st.loan, st.rate, 15);
+          var lab3 = [];
+          for (var iy3 = 0; iy3 <= 30; iy3++) lab3.push('Y' + iy3);
+          var int30t = totalInterestUntilPayoff(E30, 0, st.loan, st.rate, 360);
+          var int15t = totalInterestUntilPayoff(E15, 0, st.loan, st.rate, 180);
+          var intSaved3 = int30t - int15t;
+          var opts3 = {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: animD },
+            plugins: { title: { display: true, text: '15-year vs 30-year remaining balance (same rate & loan)', color: c.text, font: { size: 14, weight: '600' } }, legend: { labels: { color: c.text } } },
+            scales: { x: { ticks: { color: c.text } }, y: { ticks: { color: c.text, callback: function (v) { return fmt.format(v); } } } },
+          };
+          if (!chartInstance || chartInstance.canvas.id !== 'mgVizCanvas3' || chartInstance.config.type !== 'line') {
+            destroyChart();
+            chartInstance = new Chart(ctx, {
+              type: 'line',
+              data: { labels: lab3, datasets: [
+                { label: '30-year mortgage', data: s30a, borderColor: c.blue, tension: 0.2, pointRadius: 0 },
+                { label: '15-year mortgage', data: s15a, borderColor: c.green, tension: 0.2, pointRadius: 0 },
+              ] },
+              options: opts3,
+            });
+          } else {
+            chartInstance.data.labels = lab3;
+            chartInstance.data.datasets[0].data = s30a;
+            chartInstance.data.datasets[0].label = '30-year mortgage';
+            chartInstance.data.datasets[1].data = s15a;
+            chartInstance.data.datasets[1].label = '15-year mortgage';
+            chartInstance.options = opts3;
+            chartInstance.update(animD > 0 ? 'active' : 'none');
+          }
+          var morePerMo = E15 - E30;
+          var co3 = document.getElementById('mgChartCallout3');
+          if (co3) {
+            var pctL = int30t > 0 ? ((intSaved3 / int30t) * 100).toFixed(0) : '0';
+            co3.textContent =
+              '15-year monthly: ' +
+              fmt.format(Math.round(E15)) +
+              ' — ' +
+              fmt.format(Math.abs(Math.round(morePerMo))) +
+              (morePerMo >= 0 ? ' more' : ' less') +
+              ' per month than 30-year (' +
+              fmt.format(Math.round(E30)) +
+              '). Total interest: 30-year ' +
+              fmt.format(Math.round(int30t)) +
+              ', 15-year ' +
+              fmt.format(Math.round(int15t)) +
+              ' — you save ' +
+              fmt.format(Math.round(intSaved3)) +
+              ' in interest. 15-year is ' +
+              pctL +
+              '% less total interest.';
+          }
+          updateSrTable(lab3, s30a, s15a, null);
+        }
+      }
+      var rafPending = null;
+      function scheduleChart() {
+        if (rafPending) cancelAnimationFrame(rafPending);
+        rafPending = requestAnimationFrame(function () {
+          rafPending = null;
+          buildOrUpdateChart();
+        });
+      }
+      function debounce(fn, ms) {
+        var t;
+        return function () {
+          clearTimeout(t);
+          t = setTimeout(fn, ms);
+        };
+      }
+      var debChart = debounce(scheduleChart, 50);
+      window.__mgChartDebounced = debChart;
+      function selectTab(idx) {
+        var tabs = document.querySelectorAll('.mg-chart-tab');
+        var panels = document.querySelectorAll('.mg-chart-panel');
+        for (var i = 0; i < tabs.length; i++) {
+          var on = i === idx;
+          tabs[i].classList.toggle('mg-chart-tab--active', on);
+          tabs[i].setAttribute('aria-selected', on ? 'true' : 'false');
+          tabs[i].tabIndex = on ? 0 : -1;
+          if (panels[i]) {
+            panels[i].hidden = !on;
+            panels[i].classList.toggle('mg-chart-panel--active', on);
+          }
+        }
+        activeTab = idx;
+        window.__mgTabAnim = true;
+        destroyChart();
+        requestAnimationFrame(function () {
+          var wrap = document.querySelector('.mg-chart-panel.mg-chart-panel--active .mg-chart-canvas-wrap');
+          if (wrap) wrap.style.height = chartHeight() + 'px';
+          requestAnimationFrame(function () {
+            buildOrUpdateChart();
+          });
+        });
+      }
+      function wireTabs() {
+        var tablist = document.querySelector('.mg-chart-tabs');
+        var tabs = document.querySelectorAll('.mg-chart-tab');
+        if (!tablist) return;
+        tabs.forEach(function (tab, idx) {
+          tab.addEventListener('click', function () {
+            selectTab(idx);
+          });
+        });
+        tablist.addEventListener('keydown', function (e) {
+          if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+          e.preventDefault();
+          var n = (activeTab + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+          selectTab(n);
+          if (tabs[n]) tabs[n].focus();
+        });
+      }
+      window.addEventListener('load', function () {
+        if (typeof Chart === 'undefined') {
+          return;
+        }
+        wireTabs();
+        ['mgExtraPayment', 'mgIncome'].forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el) {
+            el.addEventListener('input', debChart);
+            el.addEventListener('change', debChart);
+          }
+        });
+        var extraEl = document.getElementById('mgExtraPayment');
+        if (extraEl) {
+          extraEl.addEventListener('focus', function () {
+            selectTab(2);
+          });
+        }
+        var incomeEl = document.getElementById('mgIncome');
+        if (incomeEl) {
+          incomeEl.addEventListener('focus', function () {
+            selectTab(4);
+          });
+        }
+        var obs = new MutationObserver(function () {
+          debChart();
+        });
+        obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+        document.querySelectorAll('.mg-chart-canvas-wrap').forEach(function (w) {
+          w.style.height = chartHeight() + 'px';
+        });
+        window.addEventListener(
+          'resize',
+          debounce(function () {
+            document.querySelectorAll('.mg-chart-canvas-wrap').forEach(function (w) {
+              w.style.height = chartHeight() + 'px';
+            });
+            if (chartInstance) {
+              chartInstance.resize();
+            }
+          }, 150)
+        );
+        if (window.__mgState) {
+          debChart();
+        }
+      });
     })();
   </script>
 
@@ -778,5 +1594,211 @@ const breadcrumbLd = {
     }
     .related-list li { margin-bottom: 10px; padding-left: 0; }
     .related-list a { color: var(--blue); font-weight: 600; }
+    .mg-viz-section {
+      padding: 40px 0;
+      background: var(--gray-50, #f9fafb);
+    }
+    :global([data-theme='dark']) .mg-viz-section {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .mg-viz-inner {
+      max-width: 900px;
+    }
+    .mg-viz-heading {
+      font-size: 1.75rem;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .mg-viz-sub {
+      text-align: center;
+      color: var(--muted, #64748b);
+      margin-bottom: 24px;
+      font-size: 15px;
+    }
+    .mg-extra-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding: 16px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    :global([data-theme='dark']) .mg-extra-controls {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    .mg-field label {
+      display: block;
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+    .mg-field input {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      font-size: 15px;
+    }
+    .mg-field-hint {
+      font-size: 12px;
+      color: var(--muted, #64748b);
+      margin: 4px 0 0 0;
+    }
+    .mg-input-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 2px 8px;
+      background: #3b82f6;
+      color: white;
+      border-radius: 10px;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    .mg-chart-tabs {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0;
+    }
+    .mg-chart-tab {
+      padding: 10px 16px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted, #64748b);
+      white-space: nowrap;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .mg-chart-tab:hover {
+      color: var(--text, #0f172a);
+    }
+    .mg-chart-tab--active {
+      color: #3b82f6;
+      border-bottom-color: #3b82f6;
+      font-weight: 600;
+    }
+    .mg-chart-panels {
+      min-height: 340px;
+    }
+    .mg-chart-panel[hidden] {
+      display: none;
+    }
+    .mg-chart-canvas-wrap {
+      position: relative;
+      height: 320px;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 768px) {
+      .mg-chart-canvas-wrap {
+        height: 260px;
+      }
+      .mg-extra-controls {
+        grid-template-columns: 1fr;
+      }
+    }
+    .mg-chart-callout {
+      padding: 12px 16px;
+      background: rgba(59, 130, 246, 0.08);
+      border-left: 3px solid #3b82f6;
+      border-radius: 6px;
+      font-size: 14px;
+      color: var(--text, #0f172a);
+      margin: 0;
+    }
+    :global([data-theme='dark']) .mg-chart-callout {
+      background: rgba(59, 130, 246, 0.12);
+      color: #e5e7eb;
+    }
+    .mg-affordability-wrap {
+      padding: 20px;
+    }
+    .mg-affordability-bar {
+      position: relative;
+      height: 40px;
+      background: var(--gray-100, #f1f5f9);
+      border-radius: 20px;
+      margin: 40px 0 12px;
+      overflow: visible;
+    }
+    :global([data-theme='dark']) .mg-affordability-bar {
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .mg-affordability-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      border-radius: 20px;
+      transition: width 0.3s ease, background-color 0.3s ease;
+    }
+    .mg-affordability-fill[data-status="good"] {
+      background: #22c55e;
+    }
+    .mg-affordability-fill[data-status="warning"] {
+      background: #eab308;
+    }
+    .mg-affordability-fill[data-status="danger"] {
+      background: #ef4444;
+    }
+    .mg-affordability-marker {
+      position: absolute;
+      top: -28px;
+      transform: translateX(-50%);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted, #64748b);
+    }
+    .mg-affordability-marker::after {
+      content: '';
+      position: absolute;
+      top: 24px;
+      left: 50%;
+      width: 2px;
+      height: 40px;
+      background: var(--muted, #64748b);
+      transform: translateX(-50%);
+    }
+    .mg-affordability-label {
+      text-align: center;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .mg-cost-multiplier {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      justify-content: center;
+      padding: 12px;
+      margin-top: 16px;
+      background: rgba(239, 68, 68, 0.08);
+      border-radius: 8px;
+      border-left: 3px solid #ef4444;
+    }
+    .mg-cost-multiplier-label {
+      font-size: 13px;
+      color: var(--muted, #64748b);
+    }
+    .mg-cost-multiplier-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #ef4444;
+      font-variant-numeric: tabular-nums;
+    }
+    :global([data-theme='dark']) .mg-cost-multiplier-value {
+      color: #f87171;
+    }
   </style>
 </MainLayout>
