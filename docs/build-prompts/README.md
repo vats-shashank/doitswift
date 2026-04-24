@@ -89,7 +89,7 @@ Keep this table updated as prompts are created and builds land on production.
 | Build prompt | Status | Shipped to prod |
 |---|---|---|
 | `qr-code-generator.md` | Shipped | 2026-04-23 |
-| `editorial-infrastructure.md` | Not written | Not yet |
+| `editorial-infrastructure.md` | Shipped | 2026-04-24 |
 | `blog-audit-tier-1.md` | Not written | Not yet |
 | `case-converter-seo.md` | Not written | Not yet |
 | `word-counter-seo.md` | Not written | Not yet |

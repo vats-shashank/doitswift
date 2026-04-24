@@ -1,0 +1,131 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const aboutUrl = new URL('/about/', Astro.site).href;
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: 'About', item: aboutUrl },
+    { '@type': 'ListItem', position: 3, name: 'Editorial policy', item: canonical },
+  ],
+};
+---
+
+<MainLayout
+  title="Editorial Policy — DoItSwift"
+  description="How DoItSwift approaches accuracy, updates, independence, and reader feedback for tools and articles on doitswift.com."
+  keywords="doitswift editorial policy, accuracy, corrections, independence"
+  canonical={canonical}
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/about/">About</a> › <span>Editorial policy</span>
+  </nav>
+
+  <section class="content-page">
+    <div class="container">
+      <h1>Editorial policy</h1>
+      <p class="meta">Last reviewed: April 2026</p>
+      <p class="lead">
+        This policy applies to explanatory articles, in-page guidance, and editorial descriptions of how DoItSwift tools
+        behave. It sits alongside our legal policies; when something is legally binding, the{' '}
+        <a href="/terms/" class="link-back">Terms of Service</a> and <a href="/privacy/" class="link-back">Privacy Policy</a>{' '}
+        control. If you only read one companion page for methodology, pair this policy with{' '}
+        <a href="/about/how-we-research/" class="link-back">How we research</a> and{' '}
+        <a href="/about/fact-checking/" class="link-back">Fact-checking</a>.
+      </p>
+
+      <h2>Purpose and scope</h2>
+      <p>
+        We aim to describe products and workflows accurately, cite limitations clearly, and revise pages when we learn
+        of errors. This site covers many jurisdictions and use cases; we write for a general audience unless a page
+        states a specific context (for example country-specific tax calculators).
+      </p>
+      <p>
+        Scope also includes metadata we emit for search engines: titles and descriptions should reflect on-page content,
+        not clickbait promises the tool cannot keep. When we narrow or broaden what a page claims, we update both the
+        visible copy and the structured data that summarizes it.
+      </p>
+
+      <h2>Accuracy, review, and updates</h2>
+      <p>
+        DoItSwift follows a rolling review policy: content is updated when the primary sources it depends on change, not on a fixed calendar. Triggers include a new Union Budget in India, annual IRS or HMRC revisions, WHO or national health-service guideline updates, new editions of file-format standards, and browser-level changes to how a web technology is implemented. When a trigger fires for a given page, that page is reviewed and updated, and the "Last reviewed" date is revised at the same time.
+      </p>
+      <p>
+        For substantive updates — changes that would alter a reader's understanding of a topic or the output of a calculation — a brief changelog note is added at the bottom of the page. Minor corrections (typos, clarity edits, dead links) may be made silently.
+      </p>
+
+      <h2>Independence</h2>
+      <p>
+        Editorial decisions—what to publish, how to explain risk, and when to recommend an alternative workflow—are
+        made without payment from third parties. If we ever publish sponsored material, it will be labeled according
+        to applicable rules and this policy will be updated to describe the practice.
+      </p>
+      <p>
+        Affiliate or referral links, when present, will not determine ordering in comparison tables, and we will not
+        call a paid placement “editorial pick” without clear labeling. Tools that process files locally are described on
+        their merits for privacy and speed, not because an advertiser asked for favorable copy.
+      </p>
+
+      <h2>YMYL content and professional advice</h2>
+      <p>
+        Content touching on finances, health, legal matters, and safety — categories that search-quality
+        evaluators refer to as "Your Money, Your Life" or YMYL — is held to a stricter standard.
+        DoItSwift does not provide financial advice, tax advice, medical advice, or legal advice.
+        Calculators on these topics are estimators built from public formulas and stated assumptions;
+        guides are educational summaries. Readers should consult a qualified professional in their
+        jurisdiction before making filing, treatment, or legal decisions.
+      </p>
+      <p>
+        Every YMYL tool and guide on DoItSwift carries a matching on-page reminder pointing readers
+        toward qualified professional advice.
+      </p>
+
+      <h2>Sources and attribution</h2>
+      <p>
+        We link to official documentation, standards, or reputable references when they help readers verify a claim.
+        When we summarize a complex topic, we point to primary sources where practical. Calculators encode formulas on
+        the page or in referenced documentation so interested readers can cross-check assumptions.
+      </p>
+      <p>
+        Charts or tables derived from public datasets include the retrieval date and a link to the dataset landing
+        page. When we paraphrase a long statute or manual, we still cite the section anchors readers can search for in
+        the original PDF.
+      </p>
+
+      <h2>Corrections and reader feedback</h2>
+      <p>
+        If you believe factual information on the site is wrong or out of date, email the editorial desk. We prioritize
+        corrections that could change safety, privacy, or financial outcomes. Significant fixes are reflected on the
+        page; see also our <a href="/about/fact-checking/" class="link-back">Fact-checking</a> page for how we handle
+        substantive changes.
+      </p>
+      <p>
+        Feedback that is abusive, vague, or impossible to reproduce may not receive a personal reply. That does not
+        mean it is ignored—patterns in feedback still inform prioritization—but we focus response bandwidth on issues we
+        can verify and fix.
+      </p>
+
+      <h2>Contact the editorial desk</h2>
+      <p>
+        For policy questions, factual concerns, or correction requests, email{' '}
+        <a href="mailto:editorial@doitswift.com" class="link-back">editorial@doitswift.com</a>.
+      </p>
+
+      <nav class="editorial-subnav" aria-label="Editorial and legal">
+        <a href="/about/" class="link-back">About</a>
+        <span class="editorial-subnav-current" aria-current="page">Editorial policy</span>
+        <a href="/about/how-we-research/" class="link-back">How we research</a>
+        <a href="/about/fact-checking/" class="link-back">Fact-checking</a>
+        <a href="/privacy/" class="link-back">Privacy</a>
+      </nav>
+
+      <p class="section-tail"><a href="/" class="link-back">← Back to home</a></p>
+    </div>
+  </section>
+</MainLayout>

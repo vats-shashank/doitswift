@@ -326,6 +326,21 @@ h3 { font-size: 18px; font-weight: 700; }
   margin-bottom: 24px;
   line-height: 1.65;
 }
+/* Links inside the lede use the same weight as body copy (global .link-back is 600). */
+.content-page .lead .link-back {
+  font-weight: inherit;
+  color: var(--blue);
+}
+[data-theme='dark'] .content-page .lead .link-back {
+  color: #7ab8ff;
+}
+/* Optional bridge paragraph after .lead (e.g. fact-checking) — match lede size for one intro column. */
+.content-page .lead + p:not(.meta) {
+  font-size: 18px;
+  line-height: 1.65;
+  max-width: 42rem;
+  color: var(--text-muted);
+}
 .content-page p {
   color: var(--text-muted);
   margin-bottom: 16px;
@@ -363,6 +378,46 @@ h3 { font-size: 18px; font-weight: 700; }
 }
 .content-page .section-tail {
   margin-top: 36px;
+}
+.content-page .breadcrumb {
+  font-size: 13px;
+  color: var(--text-muted);
+  padding: 16px 0 0;
+  margin-bottom: 4px;
+  max-width: 42rem;
+}
+.content-page .breadcrumb a {
+  color: var(--blue);
+  text-decoration: none;
+}
+.content-page .breadcrumb a:hover {
+  text-decoration: underline;
+}
+.editorial-subnav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  max-width: 42rem;
+  font-size: 14px;
+}
+.editorial-subnav-current {
+  font-weight: 700;
+  color: var(--text);
+}
+/* Editorial hub: stronger contrast on dark backgrounds (WCAG-friendly). */
+[data-theme='dark'] .content-page .meta {
+  color: #c8c8c8;
+}
+[data-theme='dark'] .content-page .breadcrumb a,
+[data-theme='dark'] .content-page .link-back {
+  color: #7ab8ff;
+}
+[data-theme='dark'] .content-page .breadcrumb {
+  color: #c4c4c4;
 }
 .link-back {
   color: var(--blue);
@@ -846,4 +901,30 @@ section.converter-section #fileResultsRoot + .actions .btn-lg {
 section.converter-section #fileResultsRoot + .actions .btn-secondary.btn-lg {
   box-shadow: none;
   border: 1px solid var(--border);
+}
+
+/* --------------------------------------------------------------------
+   Blog editorial attribution (minimal block for non-YMYL posts)
+   Added: April 2026
+   -------------------------------------------------------------------- */
+.post-editorial-meta {
+  font-size: 13px;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  margin-top: 32px;
+  line-height: 1.6;
+}
+.post-editorial-meta a {
+  color: var(--text-muted);
+  text-decoration: underline;
+}
+.post-editorial-meta a:hover {
+  color: var(--blue);
+}
+.post-editorial-meta strong {
+  color: var(--text);
+}
+[data-theme='dark'] .post-editorial-meta a:hover {
+  color: #7ab8ff;
 }

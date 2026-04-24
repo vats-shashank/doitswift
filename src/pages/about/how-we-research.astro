@@ -1,0 +1,113 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const aboutUrl = new URL('/about/', Astro.site).href;
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: 'About', item: aboutUrl },
+    { '@type': 'ListItem', position: 3, name: 'How we research', item: canonical },
+  ],
+};
+---
+
+<MainLayout
+  title="How We Research — DoItSwift"
+  description="How DoItSwift researches calculators, tools, and articles: sources, testing, updates, and limits of general-information content."
+  keywords="doitswift research, editorial methodology, sources, accuracy"
+  canonical={canonical}
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/about/">About</a> › <span>How we research</span>
+  </nav>
+
+  <section class="content-page">
+    <div class="container">
+      <h1>How we research</h1>
+      <p class="meta">Last reviewed: April 2026</p>
+      <p class="lead">
+        This page explains how we prepare long-form articles, in-tool help text, and descriptions of behavior for
+        calculators and utilities. It complements our <a href="/about/editorial-policy/" class="link-back">Editorial policy</a>{' '}
+        and <a href="/about/fact-checking/" class="link-back">Fact-checking</a> pages; it is not legal or professional advice.
+        Use it to understand our habits and limits—not as a warranty that every sentence has been litigated in court.
+      </p>
+
+      <h2>What we cover here</h2>
+      <p>
+        We document the kinds of sources we rely on, how we test browser-based tools, and when we revisit a page after
+        publication. Country-specific calculators (for example tax or payroll) follow published rules as of a stated
+        period; always verify results against official guidance or consult a qualified professional when outcomes matter
+        for filing or contracts.
+      </p>
+      <p>
+        We also explain what we do <em>not</em> do: we do not scrape private databases, run hidden server-side models on
+        your inputs without disclosure, or claim real-time feeds where we only snapshot annual parameters. If a page
+        needs live rates, we say how often those rates refresh and where they come from.
+      </p>
+
+      <h2>Sources we use</h2>
+      <p>
+        We prefer primary materials—government portals, standards bodies, vendor documentation, and open
+        specifications—over uncited summaries. For health- or finance-adjacent topics we cite widely used references
+        and spell out simplifying assumptions in the article or on the tool page so you can see what was left out.
+      </p>
+      <p>
+        When two reputable sources disagree, we describe the fork in plain language and, when possible, show both
+        calculations or link to the authority that supersedes the other. We avoid anonymous forum posts as sole
+        evidence for numeric rules; they may illustrate confusion, not settle it.
+      </p>
+
+      <h2>How we test tools</h2>
+      <p>
+        Interactive tools are tested in current desktop browsers with representative inputs before shipping. Where processing is local-only, we state that on the page and re-test when we change decoding or export paths. Network-dependent steps are labeled explicitly so you can decide whether to proceed.
+      </p>
+      <p>
+        We do not maintain a device lab, and we cannot guarantee identical behavior across every browser, OS, and device combination. If a tool fails on a specific browser version, we document the workaround on the affected page rather than silently degrading the experience.
+      </p>
+
+      <h2>Updates after publication</h2>
+      <p>
+        Updates follow a rolling-review pattern — content is revised when the primary sources it depends on change (new tax slabs, updated health guidelines, revised file-format standards, browser-level API changes), not on a fixed calendar. When a page is materially updated, its visible review indicator is refreshed at the same time.
+      </p>
+      <p>
+        Deprecation is part of research hygiene: when we retire a tool or merge two pages, we set up redirects and
+        refresh inbound links from our own blog so readers do not land on dead ends. Broken external citations are
+        fixed when flagged or, where the original source is no longer accessible, replaced with an equivalent authoritative source.
+      </p>
+
+      <h2>Limits of what we publish</h2>
+      <p>
+        Content here is for general education. We do not know your full financial, medical, or legal situation from a
+        web page. Use our tools and articles as a starting point, then confirm with authoritative sources or a licensed
+        adviser when the stakes are high.
+      </p>
+      <p>
+        Language availability is another limit: most pages are written in English first. Numeric rules may still apply
+        in your jurisdiction even when the surrounding prose uses US spelling or USD examples—we repeat locale cues
+        where that ambiguity would confuse outcomes.
+      </p>
+
+      <h2>Contact the editorial desk</h2>
+      <p>
+        Suggestions for sources, reproducible errors in copy, or methodology questions are welcome at{' '}
+        <a href="mailto:editorial@doitswift.com" class="link-back">editorial@doitswift.com</a>.
+      </p>
+
+      <nav class="editorial-subnav" aria-label="Editorial and legal">
+        <a href="/about/" class="link-back">About</a>
+        <a href="/about/editorial-policy/" class="link-back">Editorial policy</a>
+        <span class="editorial-subnav-current" aria-current="page">How we research</span>
+        <a href="/about/fact-checking/" class="link-back">Fact-checking</a>
+        <a href="/privacy/" class="link-back">Privacy</a>
+      </nav>
+
+      <p class="section-tail"><a href="/" class="link-back">← Back to home</a></p>
+    </div>
+  </section>
+</MainLayout>

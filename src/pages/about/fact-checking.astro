@@ -1,0 +1,105 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const aboutUrl = new URL('/about/', Astro.site).href;
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: 'About', item: aboutUrl },
+    { '@type': 'ListItem', position: 3, name: 'Fact-checking', item: canonical },
+  ],
+};
+---
+
+<MainLayout
+  title="Fact-Checking — DoItSwift"
+  description="How DoItSwift verifies factual claims in articles and tool documentation, handles corrections, and accepts reader reports."
+  keywords="doitswift fact checking, corrections, verification, accuracy"
+  canonical={canonical}
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/about/">About</a> › <span>Fact-checking</span>
+  </nav>
+
+  <section class="content-page">
+    <div class="container">
+      <h1>Fact-checking</h1>
+      <p class="meta">Last reviewed: April 2026</p>
+      <p class="lead">
+        DoItSwift publishes calculators, converters, and explanatory articles that many people rely on for quick
+        answers. This page describes how we check factual claims before and after publication, and how we publish
+        fixes. For broader rules, see <a href="/about/editorial-policy/" class="link-back">Editorial policy</a>; for
+        research practice, see <a href="/about/how-we-research/" class="link-back">How we research</a>.
+      </p>
+      <p>
+        Fact-checking here means verifying statements against evidence we can point to—not brand policing or tone
+        editing. We still edit for clarity, but a sentence does not pass review just because it sounds confident; it
+        passes when the links, numbers, and code behind it line up.
+      </p>
+
+      <h2>What we verify</h2>
+      <p>
+        We treat as high priority any statement about money, health, privacy, data leaving your device, or legal
+        obligations. Secondary details—historical anecdotes, illustrative rounded numbers—still get a sanity check, but
+        we prioritize claims that could change decisions or safety outcomes if they were wrong.
+      </p>
+      <p>
+        UI copy is in scope too: if a button says “nothing leaves your device,” that claim is checked against the
+        actual network calls the page makes. If analytics or fonts load from a CDN, we describe that in privacy-facing
+        text rather than implying an air gap that does not exist.
+      </p>
+
+      <h2>How verification works</h2>
+      <p>
+        Quantitative claims are traced to a primary citation or to the code path in the tool that produces the number. Links, arithmetic, and formulas in tables that summarize regulations or rates are verified against the named source before publication.
+      </p>
+      <p>
+        Where automated tests apply — for example, deterministic calculator outputs — we add regression fixtures so future changes cannot silently break them. For content pages, sources consulted at publication are noted internally so subsequent reviews can check them against current versions.
+      </p>
+
+      <h2>Corrections and transparency</h2>
+      <p>
+        When we confirm a material error, we correct the page and note substantive article changes where readers expect
+        to see them. Silent typo fixes may ship without a log. Tool behavior always wins over marketing copy: if the
+        implementation changes, the visible instructions must match.
+      </p>
+      <p>
+        If we cannot verify a reader report quickly, we may add a temporary caution banner rather than leaving a
+        possibly wrong claim live while we investigate. Removing uncertainty is better than looking perfect on a
+        deadline.
+      </p>
+
+      <h2>Reports from readers</h2>
+      <p>
+        If something reads wrong, send the URL, the sentence or result you dispute, and a link to a reliable source
+        when you have one. We cannot respond to every email, but we triage safety- and privacy-related reports first.
+      </p>
+      <p>
+        Screenshots help when the issue is layout or a transient bug, but the strongest reports include repro steps and
+        the environment (browser version, OS, approximate file size). That detail cuts investigation time sharply.
+      </p>
+
+      <h2>Contact the editorial desk</h2>
+      <p>
+        Reach us at <a href="mailto:editorial@doitswift.com" class="link-back">editorial@doitswift.com</a> for
+        fact-checking and correction requests.
+      </p>
+
+      <nav class="editorial-subnav" aria-label="Editorial and legal">
+        <a href="/about/" class="link-back">About</a>
+        <a href="/about/editorial-policy/" class="link-back">Editorial policy</a>
+        <a href="/about/how-we-research/" class="link-back">How we research</a>
+        <span class="editorial-subnav-current" aria-current="page">Fact-checking</span>
+        <a href="/privacy/" class="link-back">Privacy</a>
+      </nav>
+
+      <p class="section-tail"><a href="/" class="link-back">← Back to home</a></p>
+    </div>
+  </section>
+</MainLayout>

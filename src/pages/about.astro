@@ -1,48 +1,96 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: 'About', item: canonical },
+  ],
+};
 ---
 
 <MainLayout
   title="About DoItSwift — Free Online Tools"
-  description="DoItSwift runs utilities in your browser. Learn how we keep your files on your device when possible and why we built these tools."
-  keywords="about doitswift, free online tools, browser utilities, privacy tools"
+  description="DoItSwift offers free browser-based utilities and guides. Learn how we publish content, keep tools local-first when possible, and how to reach the editorial desk."
+  keywords="about doitswift, free online tools, browser utilities, editorial standards"
+  canonical={canonical}
 >
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <span>About</span>
+  </nav>
+
   <section class="content-page">
     <div class="container">
       <h1>About DoItSwift</h1>
+      <p class="meta">Last reviewed: April 2026</p>
       <p class="lead">
-        DoItSwift is a growing collection of free utilities that run in your web browser. Our goal is simple: give you
-        fast, reliable tools without asking you to hand over your files to a server when the work can happen locally.
+        DoItSwift is a collection of free utilities and practical guides that run in your web browser whenever we can
+        keep processing on your device. We publish clear explanations alongside tools so you can understand what a page
+        is doing before you use it. Nothing here replaces advice from a qualified professional when you are making
+        filing, medical, or legal decisions—we summarize public rules and common workflows so you can ask better
+        questions, not so you can skip human review.
       </p>
 
-      <h2>What we believe</h2>
+      <h2>What we publish</h2>
       <p>
-        Your images are yours. Many online converters upload files to the cloud — convenient for the operator, risky for
-        you. DoItSwift is built around <strong>local processing</strong>: when a tool supports it, conversion and
-        compression happen on your device using standard web APIs. We design the experience so you can see what is
-        happening and stay in control.
+        You will find calculators, converters, PDF and image helpers, text utilities, and long-form articles that
+        explain how to use them responsibly. Pages are written for general information; they are not individualized
+        professional, legal, medical, or tax advice.
       </p>
-
-      <h2>How it works</h2>
       <p>
-        You open a tool, choose or drop files, and the page uses your browser’s capabilities (for example canvas and
-        image decoding) to produce new files. You download the result. Nothing has to leave your machine for the core
-        workflow — which is why we can offer generous use without accounts or uploads.
+        When a page targets a specific country or tax year, we say so up front and link to official references where
+        that helps you validate assumptions. If you are unsure whether a calculator applies to your situation, treat the
+        output as a rough check and confirm numbers against notices, circulars, or software from the relevant authority.
       </p>
 
-      <h2>How we sustain the site</h2>
+      <h2>How our tools are built</h2>
       <p>
-        DoItSwift is free to use. We may reference partner services where they genuinely help (for example hosting or
-        design tools), and we may introduce optional paid features in the future. Core browser-based tools are intended
-        to remain accessible without forcing everyone through a paywall.
+        When a tool supports it, we implement workflows with <strong>local, in-browser processing</strong> so your files
+        and inputs often never leave your machine. Where a feature must rely on the network, we describe that plainly
+        on the page. We fix defects when we find them and adjust copy when standards or regulations change.
       </p>
-
-      <h2>Contact</h2>
       <p>
-        Questions, ideas, or partnership inquiries? Reach us on the <a href="/contact/" class="link-back">contact page</a>.
+        Before each deploy we run automated build checks and a site-wide link/schema audit. Browsers evolve quickly, so if you hit an edge case — an unusual file, a very large batch, or a mobile browser with tight memory limits — trying a smaller input often helps. Where we already know about a limitation, we document it beside the control that triggers it.
       </p>
 
-      <p><a href="/" class="link-back">← Back to home</a></p>
+      <h2>Independence and sponsorship</h2>
+      <p>
+        DoItSwift is free to use and currently carries no advertising, sponsored content, or affiliate links on editorial pages. If that ever changes, this page will be updated to describe the practice in line with applicable disclosure rules, and sponsored placements will be labeled as such.
+      </p>
+
+      <h2>Who should use this site</h2>
+      <p>
+        The site is built for people who want quick, private helpers for everyday file and number problems, and for
+        readers who prefer plain-language walkthroughs with citations. Students, small-business owners, and home users
+        are all welcome; enterprises with compliance obligations should run their own reviews before relying on any
+        third-party site in a regulated workflow.
+      </p>
+
+      <h2>Contact the editorial desk</h2>
+      <p>
+        For corrections, factual concerns about an article, or editorial questions only, email{' '}
+        <a href="mailto:editorial@doitswift.com" class="link-back">editorial@doitswift.com</a>.
+      </p>
+      <p>
+        For product ideas, partnerships, or bugs in a specific tool, use the <a href="/contact/" class="link-back">contact page</a>{' '}
+        so we can route your message to the right queue.
+      </p>
+
+      <nav class="editorial-subnav" aria-label="Editorial and legal">
+        <span class="editorial-subnav-current" aria-current="page">About</span>
+        <a href="/about/editorial-policy/" class="link-back">Editorial policy</a>
+        <a href="/about/how-we-research/" class="link-back">How we research</a>
+        <a href="/about/fact-checking/" class="link-back">Fact-checking</a>
+        <a href="/privacy/" class="link-back">Privacy</a>
+      </nav>
+
+      <p class="section-tail"><a href="/" class="link-back">← Back to home</a></p>
     </div>
   </section>
 </MainLayout>
