@@ -4,11 +4,11 @@ import CaseConverterEducation from '../../components/CaseConverterEducation.astr
 import { calculatorCanonical } from '../../lib/calculatorJsonLd';
 
 const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
-const pageTitle = 'Case Converter — 15 Formats, Browser-Based & Private | DoItSwift';
+const pageTitle = 'Free Case Converter — 15 Formats, Browser-Based & Private';
 const pageDescription =
-  'Convert text between 15 case formats — UPPERCASE, lowercase, Title Case, camelCase, snake_case, and more. 100% browser-based: your text never leaves your device. No signup, no ads, no limits. Free forever.';
+  'Convert text between 15 case formats — UPPERCASE, lowercase, Title Case, camelCase, snake_case & more. 100% browser-based. No signup, no ads.';
 const pageKeywords =
-  'case converter, text case converter, uppercase converter, lowercase converter, title case converter, camelcase converter, snake case converter, kebab case converter, sentence case converter, case converter online, free case converter, browser case converter, private case converter';
+  'case converter, text case converter, free case converter, online case converter, case converter online, uppercase converter, lowercase converter, lowercase to uppercase, uppercase to lowercase, title case converter, sentence case converter, capitalize each word, camelcase converter, pascalcase converter, snake case converter, snake_case converter, kebab case converter, kebab-case converter, constant case converter, alternating case converter, inverse case converter, dot case converter, train case converter, slug generator, url slug converter, text formatting tool, change case online, convert to title case, what is camelcase, what is snake case, case converter no signup, private case converter, browser case converter, case converter offline, case converter unlimited';
 
 const softwareAppDescription =
   'Free browser-based case converter supporting 15 text case formats including UPPERCASE, lowercase, Title Case, camelCase, snake_case, and kebab-case. Privacy-first: text never leaves your browser.';
@@ -74,6 +74,21 @@ const faqItems = [
     answer:
       'We do not impose a cap. Converting ten thousand or a hundred thousand words is handled locally, so the practical limit is your device and tab performance, not a server quota. If something feels slow, try splitting very large jobs or closing other heavy tabs.',
   },
+  {
+    question: 'What is the difference between camelCase and PascalCase?',
+    answer:
+      'Both formats remove spaces and capitalize each word, but they differ on the first letter. camelCase keeps the first letter lowercase ("getUserName"), while PascalCase capitalizes the first letter too ("GetUserName"). camelCase is conventional for variables and method names in JavaScript, Java, and C#. PascalCase is conventional for class names, type names, and constructors in those same languages, and for most identifiers in C# and TypeScript. Pick based on what you\'re naming, not personal preference — your codebase\'s existing convention is the right one to follow.',
+  },
+  {
+    question: 'How do I turn a blog post title into a URL slug?',
+    answer:
+      'A clean URL slug uses kebab-case: lowercase letters separated by hyphens, with no special characters. Paste your title into the case converter, choose kebab-case, and the output is your slug. For example, "How to Bake Sourdough Bread" becomes "how-to-bake-sourdough-bread". Search engines treat hyphens as word separators, while underscores are not always tokenized the same way, which is why kebab-case is the standard for SEO-friendly URLs. The DoItSwift Case Converter also strips punctuation and collapses multiple spaces automatically when converting to kebab-case.',
+  },
+  {
+    question: 'Who maintains this tool and how is the methodology checked?',
+    answer:
+      "DoItSwift's tools and educational content are maintained by DoItSwift Editorial under a published editorial standard. Case-conversion algorithms follow standard definitions from programming language specifications (JavaScript ECMA-262, Python PEP 8) and style guides (Chicago Manual of Style for Title Case). The proper noun dictionary is reviewed when widely-recognized brand or technology names emerge or when existing entries need correction. You can read the full editorial policy, research methodology, and fact-checking standards at /about/editorial-policy/, /about/how-we-research/, and /about/fact-checking/.",
+  },
 ];
 
 const howToLd = {
@@ -109,7 +124,7 @@ const pageJsonLd = {
     {
       '@type': 'SoftwareApplication',
       name: 'DoItSwift Case Converter',
-      applicationCategory: 'UtilityApplication',
+      applicationCategory: 'UtilitiesApplication',
       operatingSystem: 'Any (Web Browser)',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
       description: softwareAppDescription,
@@ -169,16 +184,16 @@ const pageJsonLd = {
   <section class="hero tool-hero">
     <div class="container">
       <div class="badge">📝 Free Text Tool</div>
-      <h1>Case Converter: Convert Between 15 Text Formats Instantly</h1>
+      <h1>Free Case Converter — Change Text Between 15 Formats in Your Browser</h1>
       <p class="subtitle">
-        A case converter transforms text between different capitalization styles — UPPERCASE, lowercase, Title Case, Sentence case, camelCase, snake_case, and 10 other formats — without needing to retype anything. This free tool supports 15 case formats and runs entirely in your browser, which means your text never uploads to a server and no one (not even us) can see what you convert.
+        A case converter is a free online tool that changes text between capitalization styles — UPPERCASE, lowercase, Title Case, Sentence case, camelCase, snake_case, kebab-case, and 9 other formats — without retyping. The DoItSwift Case Converter supports all 15 formats with a single click, plus optional smart Title Case rules and a 200+ proper noun dictionary that preserves brand names like iPhone and JavaScript. Conversion runs entirely in your browser, so your text is never uploaded to any server, never stored, and never shared with third parties. The tool is free for personal and commercial use, with no signup, no character limit, and no ads.
       </p>
       <p class="subtitle-secondary">
         Whether you left Caps Lock on for a whole paragraph, need camelCase variable names for code, want a kebab-case URL slug, or need to format a blog title correctly, the converter handles it in one click. Works on desktop and mobile. No signup. No character limit. No usage restrictions.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> Privacy-first (browser-based)</span>
-        <span><span class="check">✓</span> Instant conversion (&lt; 5ms)</span>
+        <span><span class="check">✓</span> Real-time conversion (no server delay)</span>
         <span><span class="check">✓</span> No character limit</span>
         <span><span class="check">✓</span> No signup, no ads, no tracking</span>
       </div>
@@ -508,12 +523,16 @@ const pageJsonLd = {
   <div class="tool-editorial">
     <div class="container container--tool">
       <p>
-        <strong>About this tool:</strong> The Case Converter is built and maintained by DoItSwift. Conversion algorithms
-        follow standard definitions from programming language specifications (JavaScript ECMA-262, Python PEP 8). Title
-        case rules follow the Chicago Manual of Style. The built-in proper noun dictionary includes 200+ common brand
-        names, acronyms, and technical terms.
+        <strong>Reviewed by DoItSwift Editorial.</strong> Conversion algorithms follow standard definitions from
+        programming language specifications (JavaScript ECMA-262, Python PEP 8) and naming convention guides.
+        Title case rules follow the Chicago Manual of Style. The proper noun dictionary includes 200+ common
+        brand names, acronyms, and technical terms, applied longest-match first to handle nested cases (e.g.
+        "iPhone" within "the new iPhone is here"). Read our
+        <a href="/about/editorial-policy/">editorial policy</a>,
+        <a href="/about/how-we-research/">research methodology</a>, and
+        <a href="/about/fact-checking/">fact-checking standards</a>.
       </p>
-      <p class="tool-editorial-meta">Last reviewed: April 2026 · Next scheduled review: July 2026</p>
+      <p class="tool-editorial-meta">Last reviewed: April 2026 · DoItSwift Editorial</p>
       <p class="tool-editorial-meta">See an error or missing case format? <a href="/contact/">Let us know</a>.</p>
     </div>
   </div>
