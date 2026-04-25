@@ -5,12 +5,12 @@ import { calculatorCanonical } from '../../lib/calculatorJsonLd';
 
 const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
 
-const pageTitle = 'Word Counter — Private, Unlimited, No Signup | DoItSwift';
+const pageTitle = 'Free Word Counter — Unlimited Text, Private, No Signup';
 const pageDescription =
-  'Count words, characters, sentences, and reading time instantly. Handles unlimited text — no 5,000-character cap like most tools. Runs entirely in your browser, so your writing stays private. No signup. No ads. Works offline.';
+  'Count words, characters, sentences & reading time. Unlimited text, no 5,000-char cap. 100% browser-based — your writing stays private. No signup.';
 
 const pageKeywords =
-  'word counter, word count, character counter, online word counter, free word counter, private word counter, word counter no signup, word counter unlimited text, reading time calculator, words per page, essay word counter, twitter character counter, sms character counter, word counter offline';
+  'word counter, word count, free word counter, online word counter, word counter free, character counter, character count, character counter online, word and character counter, word counter no signup, word counter unlimited, word counter without signup, private word counter, word counter browser, word counter offline, word counter for essays, essay word counter, word counter for students, word counter for writers, word count for blog, blog post word count, word counter for twitter, twitter character counter, sms character counter, meta description character counter, words to pages, pages to words calculator, how many words per page, reading time calculator, words per minute calculator, word frequency counter, paragraph counter, sentence counter, syllable counter, word counter without ads';
 
 const softwareAppDescription =
   'Free browser-based word counter supporting unlimited text. Counts words, characters, sentences, paragraphs, reading time, and social media character limits. Privacy-first: text never leaves your browser.';
@@ -76,6 +76,21 @@ const faqItems = [
     answer:
       'No. This is intentionally a count-only tool: it keeps your text local to your browser. Grammar checkers, plagiarism checkers, and "AI writing" classifiers that run in the cloud require you to share text with a service, which is a different privacy tradeoff. Use those in dedicated tools if you need them, with eyes open to their terms.',
   },
+  {
+    question: 'How many words is X pages?',
+    answer:
+      'A standard double-spaced page in 12pt Times New Roman holds about 250 words. A single-spaced page of the same font holds about 500 words. So a 5-page double-spaced essay is roughly 1,250 words; a 10-page double-spaced paper is roughly 2,500 words. These are estimates that vary with font, margins, and line spacing — paste your text into the counter for the exact number, then divide by 250 (double-spaced) or 500 (single-spaced) for a quick page estimate.',
+  },
+  {
+    question: 'How long does it take to read 1,000 words?',
+    answer:
+      'At an average silent reading speed of 200 words per minute, 1,000 words takes about 5 minutes to read. At 250 WPM (a faster reader on familiar material), the same text takes 4 minutes. For spoken delivery at a presentation pace of 130 WPM, 1,000 words runs about 7-8 minutes. The DoItSwift Word Counter shows both estimates in real time as you type or paste.',
+  },
+  {
+    question: 'Who maintains this tool and how is the methodology checked?',
+    answer:
+      "DoItSwift's tools and educational content are maintained by DoItSwift Editorial under a published editorial standard. The word-counting methodology — how words are split, how sentences and paragraphs are detected, what WPM rates are used for reading and speaking time — is documented on this page and reviewed when underlying assumptions change. You can read the full editorial policy, research methodology, and fact-checking standards at /about/editorial-policy/, /about/how-we-research/, and /about/fact-checking/.",
+  },
 ];
 
 const howToLd = {
@@ -111,7 +126,7 @@ const pageJsonLd = {
     {
       '@type': 'SoftwareApplication',
       name: 'DoItSwift Word Counter',
-      applicationCategory: 'UtilityApplication',
+      applicationCategory: 'UtilitiesApplication',
       operatingSystem: 'Any (Web Browser)',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
       description: softwareAppDescription,
@@ -130,6 +145,7 @@ const pageJsonLd = {
         'SMS character limit helper (160 chars)',
         'Instagram character limit helper (2,200 chars)',
         'Meta description limit helper (160 chars)',
+        'Words-to-pages estimation reference',
         'Browser-based privacy (no data upload)',
         'Works offline after first load',
         'Unlimited text length (no 5,000-character cap)',
@@ -173,12 +189,9 @@ const pageJsonLd = {
   <section class="hero tool-hero">
     <div class="container">
       <div class="badge">📝 Free Text Tool</div>
-      <h1>Word Counter: Count Words, Characters &amp; Reading Time Instantly</h1>
+      <h1>Free Word Counter — Count Words, Characters &amp; Reading Time in Your Browser</h1>
       <p class="subtitle">
-        A word counter is a free online tool that counts the number of words, characters, sentences, paragraphs, and
-        reading time in any text. This word counter handles unlimited text — paste 100 words or 100,000 words and it counts
-        them instantly, without uploading your content to any server. Your text stays in your browser, so it works offline
-        after the first page load and your writing remains completely private.
+        A word counter is a free online tool that counts the number of words, characters, sentences, paragraphs, and reading time in any block of text. The DoItSwift Word Counter handles unlimited text — paste 100 words or 100,000 words and it counts them in real time, with no 5,000-character cap and no signup. Counting runs entirely in your browser, so your writing is never uploaded, stored, or shared with any third party. The tool works offline after the first page load and is free for personal and commercial use.
       </p>
       <p class="subtitle-secondary">
         The counter shows your totals in real time as you type or paste. Beyond basic counts, it also shows estimated
@@ -304,12 +317,16 @@ const pageJsonLd = {
   <div class="tool-editorial">
     <div class="container container--tool">
       <p>
-        <strong>About this tool:</strong> The Word Counter is built and maintained by DoItSwift. Word-counting rules
-        follow standard conventions used by major publishing systems (Microsoft Word, Google Docs, academic style
-        guides). Reading time uses 200 words per minute (WPM) for silent reading, based on research from the Nielsen
-        Norman Group and comparable sources. Speaking time uses 130 WPM, the recommended rate for presentations.
+        <strong>Reviewed by DoItSwift Editorial.</strong> Word-counting rules on this page follow common conventions
+        used by major publishing systems (treating hyphenated terms as single words, splitting on whitespace, marking
+        sentence boundaries with terminal punctuation). Reading time uses 200 words per minute, a widely cited
+        benchmark for silent reading of non-fiction; speaking time uses 130 words per minute, a standard rate for
+        presentations. Where another platform uses different rules, its in-app count is authoritative for that
+        platform. Read our <a href="/about/editorial-policy/">editorial policy</a>,
+        <a href="/about/how-we-research/">research methodology</a>, and
+        <a href="/about/fact-checking/">fact-checking standards</a>.
       </p>
-      <p class="tool-editorial-meta">Last reviewed: April 2026 · Next scheduled review: July 2026</p>
+      <p class="tool-editorial-meta">Last reviewed: April 2026 · DoItSwift Editorial</p>
       <p class="tool-editorial-meta">See an error or missing feature? <a href="/contact/">Let us know</a>.</p>
     </div>
   </div>
