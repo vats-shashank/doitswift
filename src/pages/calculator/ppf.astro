@@ -5,7 +5,7 @@ import { buildCalculatorJsonLd, calculatorCanonical } from '../../lib/calculator
 const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
 
 const pageDescription =
-  'Free PPF calculator (India): yearly contribution up to ₹1.5 lakh, 15–50 year horizon, editable notified interest rate (default 7.1%). Maturity estimate, total invested, interest, bars, and year-by-year balance. Illustrative — verify limits and rates with your bank/post office.';
+  'Free PPF calculator with editable interest rate and 15-50 year tenure. See maturity, total interest, and year-by-year balance. Educational tool — verify with your bank.';
 
 const jsonLd = buildCalculatorJsonLd({
   site: Astro.site,
@@ -17,62 +17,106 @@ const jsonLd = buildCalculatorJsonLd({
   webAppDescription:
     'Model Public Provident Fund (PPF) style growth with yearly contributions within the annual ceiling, user-editable interest rate, and tenure. Shows maturity amount, total invested, interest, visualization, and year-by-year closing balance. Does not model personal 80C tax savings or extension rules in full — educational estimate only.',
   featureList: [
-    'Yearly investment from ₹500 up to ₹1,50,000 (typical ceiling — confirm current rules)',
-    'Tenure 15 to 50 years',
-    'Annual interest rate field with default — update when GOI notifies new rate',
+    'Yearly investment from ₹500 up to ₹1,50,000 — current PPF ceiling',
+    'Editable interest rate field (default 7.1% as notified for current period)',
+    'Tenure 15 to 50 years — covers initial term plus extension blocks',
     'Maturity amount, total invested, and total interest',
-    'Invested versus interest bar comparison',
-    'Year-by-year breakdown table',
-    'Runs locally in the browser',
+    'Year-by-year closing balance schedule',
+    'Visual bar comparison of invested vs interest',
+    'INR currency formatting (Indian numbering: lakh, crore)',
+    'Annual compound model — confirm with bank for monthly minimum balance accuracy',
+    'Runs entirely in your browser — no signup, no data sent to any server',
+    'Free for personal use, no usage limits',
   ],
   faqs: [
     {
-      question: 'What is PPF?',
-      answer:
-        'PPF (Public Provident Fund) is a long-term government-backed savings scheme in India with tax benefits under Section 80C for qualifying contributions and tax-free interest subject to rules.',
+      question: 'What is a PPF calculator and how does it work?',
+      answer: `A PPF calculator estimates the maturity amount of a Public Provident Fund account in India based on three inputs: your yearly contribution (between ₹500 and ₹1,50,000), the tenure (typically 15 years, extendable in 5-year blocks), and the notified interest rate (set quarterly by the Government of India). The calculator applies compound interest annually to model how your contributions grow over time. The DoItSwift PPF Calculator uses an annual-compound model: each year's contribution is added at the start of the year, then interest is applied for the full year. Real PPF accounts use a monthly minimum balance rule (the lowest balance between the 5th and last day of the month), so passbook results may vary slightly. The tool runs entirely in your browser — no data is sent to any server.`,
     },
     {
       question: 'What is the current PPF interest rate?',
-      answer:
-        'The government notifies the rate quarterly. This calculator defaults to 7.1% — edit the field when the notified rate changes.',
+      answer: `The Public Provident Fund interest rate is notified by the Department of Economic Affairs (Ministry of Finance) every quarter. The rate has been 7.1% per annum from April 2020 through the most recent reviewed period and is widely cited at 7.1% in 2025-2026, but confirm the current notification at the official source before relying on it. The DoItSwift PPF Calculator defaults to 7.1% but lets you edit the rate to match the current notification or to model "what if" scenarios at different rates.`,
     },
     {
-      question: 'Is PPF maturity guaranteed?',
-      answer:
-        'PPF uses notified rates that can change; principal is sovereign-backed subject to scheme rules. Returns are not fixed forever.',
+      question: 'How is PPF interest calculated month by month?',
+      answer: `Real PPF interest accrual uses a monthly minimum balance rule: for each month, interest is calculated on the lowest balance between the 5th and the last day of that month, and the cumulative interest is credited to your account at the end of the financial year (March 31). This means deposits made before the 5th of the month earn interest for that month, while deposits made after the 5th do not earn interest until the following month. The DoItSwift calculator uses an annual-compound simplification, so it may slightly overestimate maturity for accounts where contributions are made later in the year.`,
     },
     {
-      question: 'Can I invest monthly instead of yearly?',
-      answer:
-        'Many people deposit monthly; this tool uses a yearly total for simplicity. Check your bank or post office for rules.',
+      question: 'What is the maturity amount of PPF for ₹1.5 lakh per year for 15 years?',
+      answer: `At a 7.1% notified interest rate with a yearly contribution of ₹1,50,000 for 15 years, the maturity amount is approximately ₹40.68 lakh, of which ₹22.5 lakh is your total invested principal and ₹18.18 lakh is interest earned. These numbers assume the rate remains 7.1% for the entire tenure, which is unlikely in practice — PPF rates have ranged from 7.1% to 12% over the scheme's history. Use the DoItSwift PPF Calculator to model the actual scenario with the rate you expect, or to test multiple rate scenarios.`,
     },
     {
-      question: 'Does this include tax saved under Section 80C?',
-      answer:
-        'No — it shows corpus growth only, not your personal deduction benefit.',
+      question: 'Can I extend my PPF account beyond 15 years?',
+      answer: `Yes. After the initial 15-year tenure, a PPF account can be extended in blocks of 5 years, either with or without further contributions. Extension with contributions allows continued tax-deductible deposits up to the 80C limit. Extension without contributions lets the existing balance continue earning interest at the current notified rate. The DoItSwift calculator models tenures up to 50 years specifically to help with extension planning. Confirm the operational extension process and forms with your bank or post office.`,
+    },
+    {
+      question: 'Is PPF better than fixed deposit (FD)?',
+      answer: `PPF and FDs serve different purposes. PPF offers tax-free interest under current law and tax-deductible contributions under Section 80C in the old tax regime, but it has a 15-year lock-in. Fixed deposits are fully liquid (or have shorter lock-ins), but interest is fully taxable as per your slab and there is no Section 80C benefit on most FDs (only specific 5-year tax-saving FDs qualify). PPF is generally better for long-term retirement-oriented savings; FDs are better for short-term goals or emergency funds. Use the DoItSwift FD calculator and PPF calculator to compare specific scenarios.`,
+    },
+    {
+      question: 'Is PPF or NPS better for retirement?',
+      answer: `PPF is fully tax-free at maturity and has a 15-year lock-in (extendable). NPS has partial tax-free withdrawal (60% lump sum tax-free, 40% mandatory annuity which is taxable as income) and a longer lock-in until age 60. NPS is market-linked through equity, government bonds, and corporate debt — historically higher returns but with market risk. PPF is debt-only with sovereign-linked notified rates. Most financial planning frameworks suggest using both: PPF for the guaranteed-return portion of retirement savings and NPS for the equity-exposure portion. This is general information, not personal advice — consult a SEBI-registered financial advisor for your situation.`,
+    },
+    {
+      question: 'Can I withdraw money from PPF before 15 years?',
+      answer: `Partial withdrawals are allowed from the 7th financial year onwards, capped at 50% of the balance at the end of the 4th preceding year or the previous year, whichever is lower. Premature account closure is permitted only in specific circumstances: a serious medical condition affecting the account holder or dependents, higher education expenses for the account holder or children, or change in residency status. Premature closure incurs a 1% interest rate penalty. The DoItSwift calculator does not model partial withdrawals — confirm withdrawal rules and forms with your bank.`,
+    },
+    {
+      question: 'Are PPF contributions tax-deductible?',
+      answer: `Contributions to PPF up to ₹1,50,000 per financial year qualify for deduction under Section 80C of the Income Tax Act under the old tax regime. The 80C limit is shared with other instruments (EPF, ELSS, life insurance premiums, principal repayment on home loans, etc.), so the total 80C deduction across all eligible investments is capped at ₹1.5 lakh. PPF interest and maturity proceeds have been tax-free under current law for qualifying accounts. The new tax regime does not allow Section 80C deductions, so the tax benefit of PPF contributions disappears under the new regime — but the tax-free maturity treatment continues. This is general information; consult a chartered accountant for your specific filing.`,
+    },
+    {
+      question: 'Does this PPF calculator work for SBI, HDFC, ICICI, or post office accounts?',
+      answer: `Yes. PPF is a single Government of India scheme — the rules, interest rate, contribution limits, and maturity calculations are identical regardless of whether you opened the account at SBI, HDFC, ICICI, Punjab National Bank, post office, or any other authorized institution. Banks may offer different convenience features (online deposits, auto-debit) but the underlying scheme math is the same. The DoItSwift PPF Calculator works for all PPF accounts.`,
+    },
+    {
+      question: 'Are my entries in this calculator stored or shared?',
+      answer: `No. The DoItSwift PPF Calculator runs entirely in your browser. Your contribution amount, tenure, interest rate, and any other inputs never leave your device. We do not store, log, or share your inputs. There is no signup, no account, and no analytics tied to your specific calculations. You can verify this by opening browser developer tools and checking the Network tab — recalculating shows no outbound requests carrying your inputs.`,
+    },
+    {
+      question: 'Why does my passbook balance differ from this calculator?',
+      answer: `Real PPF accounts use a monthly minimum balance rule (interest is calculated on the lowest balance between the 5th and last day of each month, then credited annually). This calculator uses an annual-compound simplification, applying interest at the end of each year on the contribution made at the start of the year. The two approaches produce small differences, especially when contributions are made late in the financial year (after the 5th of any month). Use this calculator for planning and comparison; rely on your bank's official statement for the exact balance.`,
+    },
+    {
+      question: 'Who maintains this tool and how is the methodology checked?',
+      answer: `DoItSwift's tools and educational content are maintained by DoItSwift Editorial under a published editorial standard. The PPF calculator uses standard compound-interest mathematics applied annually. PPF scheme rules referenced on this page (contribution limits, tenure, extension, Section 80C treatment) are based on the Public Provident Fund Scheme as notified under the Government Savings Promotion Act, 1873 and subsequent amendments. PPF interest rates are reviewed quarterly by the Government of India, and we update the default rate when notifications change. You can read the full editorial policy, research methodology, and fact-checking standards at /about/editorial-policy/, /about/how-we-research/, and /about/fact-checking/. This is an educational tool, not financial or tax advice — consult a qualified chartered accountant or SEBI-registered financial advisor for decisions specific to your situation.`,
     },
   ],
 });
 ---
 
 <MainLayout
-  title="PPF Calculator 2026 — Maturity, Interest & Year-by-Year Balance | DoItSwift"
+  title="PPF Calculator 2026 — Maturity, Interest & Yearly Schedule"
   description={pageDescription}
-  keywords="PPF calculator, PPF maturity calculator India, public provident fund calculator, PPF interest rate calculator, PPF yearly contribution calculator"
+  keywords="PPF calculator, PPF maturity calculator, public provident fund calculator, PPF interest calculator, PPF yearly contribution calculator, PPF calculator India, PPF calculator 2026, PPF calculator with interest rate, PPF maturity amount calculator, PPF returns calculator, PPF investment calculator, PPF calculator 15 years, PPF calculator 25 years, PPF year by year breakdown, PPF compound interest calculator, what is PPF maturity amount, how is PPF interest calculated, PPF calculator 7.1%, PPF calculator post office, PPF calculator SBI, PPF calculator HDFC, PPF vs FD, PPF vs NPS, PPF tax benefit calculator, 80C investment calculator, PPF extension calculator, PPF lock-in calculator, PPF retirement calculator, PPF calculator excel, PPF calculator monthly contribution, free PPF calculator, PPF calculator no signup"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
-  <nav class="breadcrumb container" aria-label="Breadcrumb">
+  <script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Calculate PPF Maturity Amount",
+  "description": "Estimate the maturity amount of a Public Provident Fund (PPF) account in India based on yearly contribution, tenure, and notified interest rate.",
+  "totalTime": "PT30S",
+  "step": [
+    { "@type": "HowToStep", "position": 1, "name": "Enter your yearly contribution", "text": "Type the amount you plan to contribute every year, between ₹500 and ₹1,50,000. The PPF annual ceiling is ₹1,50,000 — contributions above this are not allowed." },
+    { "@type": "HowToStep", "position": 2, "name": "Set the tenure", "text": "Choose between 15 and 50 years. The default PPF tenure is 15 years; extension blocks of 5 years can be added to model longer horizons." },
+    { "@type": "HowToStep", "position": 3, "name": "Set the interest rate", "text": "The default rate is 7.1%, the notified PPF rate widely cited for 2025-2026. Update this field whenever the Government of India publishes a new quarterly notification." },
+    { "@type": "HowToStep", "position": 4, "name": "Review the results", "text": "The calculator displays total invested, total interest earned, final maturity amount, and a year-by-year balance schedule. Use the visual bar to see the proportion of interest vs principal." }
+  ]
+})} />
+
+  <nav class="breadcrumb container container--tool" aria-label="Breadcrumb">
     <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>PPF Calculator</span>
   </nav>
 
   <section class="hero">
     <div class="container">
       <div class="badge">🧮 Free Calculator</div>
-      <h1>PPF Calculator</h1>
+      <h1>PPF Calculator — Estimate Your Public Provident Fund Maturity</h1>
       <p class="subtitle">
-        Model yearly contributions (up to ₹1.5 lakh/year), tenure, and annual interest. See total invested, interest, maturity, and a year-by-year breakdown — illustrative only; verify with your bank or post office.
+        The DoItSwift PPF Calculator estimates the maturity amount of a Public Provident Fund (PPF) account in India based on your yearly contribution, tenure, and the current notified interest rate. Adjust the contribution between ₹500 and ₹1,50,000 per year, set the tenure between 15 and 50 years, and edit the interest rate when the Government of India publishes a new quarterly notification. The tool shows total invested, total interest earned, final maturity amount, and a year-by-year balance schedule. All calculations run in your browser — no signup, no data sent to any server. This is an educational estimator; confirm the current ceiling, interest rate, and scheme rules with your bank or post office before making investment decisions.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> No signup</span>
@@ -135,6 +179,19 @@ const jsonLd = buildCalculatorJsonLd({
 
   <section class="edu">
     <div class="container">
+      <h2 class="section-title">How to use the PPF calculator</h2>
+      <ol class="ppf-steps">
+        <li><strong>Enter your yearly contribution.</strong> Set the amount you plan to deposit each year, between ₹500 and ₹1,50,000. The annual PPF ceiling is ₹1,50,000 — the system will round to multiples of ₹500 to match how PPF actually accepts contributions.</li>
+        <li><strong>Set the tenure.</strong> Choose between 15 years (the default PPF maturity period) and 50 years (to model multiple 5-year extension blocks). Most planning starts with 15 or 25 years.</li>
+        <li><strong>Edit the interest rate if needed.</strong> The default is 7.1%, the rate notified for the most recent reviewed period. Update this field when the Government of India publishes a new quarterly notification — current and historical rates are available on the official Department of Economic Affairs website.</li>
+        <li><strong>Read the results.</strong> The calculator shows total invested, total interest earned, final maturity amount, and a year-by-year breakdown. The bar visualization shows the proportion of interest in your final corpus.</li>
+      </ol>
+      <p class="ppf-steps-note">All inputs and results stay in your browser. Nothing is sent to any server, no signup is required, and there are no usage limits.</p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
       <h2 class="section-title">Understanding the Public Provident Fund (PPF)</h2>
       <p>
         The <strong>Public Provident Fund</strong> is one of India’s most popular long-term debt instruments for individuals who want a government-backed wrapper with tax advantages. You can open a PPF account at designated banks and post offices, subject to eligibility (resident individuals; rules for minors via guardian). The account has a <strong>minimum tenure</strong> (often quoted as 15 years) with options to extend in blocks — this calculator lets you set any horizon between 15 and 50 years so you can stress-test retirement planning scenarios, but always confirm extension mechanics with your account provider.
@@ -154,22 +211,107 @@ const jsonLd = buildCalculatorJsonLd({
     </div>
   </section>
 
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">How PPF interest is calculated (and why your passbook may differ)</h2>
+      <p>
+        Real PPF interest accrual uses a <strong>monthly minimum balance rule</strong>. For each month, interest is calculated on the lowest account balance between the <strong>5th and the last day</strong> of that month. The cumulative monthly interest is credited to your account on <strong>March 31</strong> at the end of each financial year. This means a deposit made on the 1st of any month earns interest for that month, while a deposit made on the 6th does not — it only starts earning from the next month.
+      </p>
+      <p>
+        The DoItSwift PPF Calculator uses an <strong>annual-compound simplification</strong>: it assumes your full yearly contribution is made at the start of the year, then applies the interest rate to the full year. This is a teaching-friendly model that produces planning-grade estimates within a few thousand rupees of the actual passbook for most contribution patterns.
+      </p>
+      <p>
+        Where the simplified model differs from reality:
+      </p>
+      <ul>
+        <li>If you contribute later in the year (especially after the 5th of a month), the actual interest earned will be lower than this calculator shows.</li>
+        <li>If the notified rate changes mid-year, the actual interest is calculated against each rate for its applicable months — this calculator uses a single rate for the full tenure.</li>
+        <li>Partial withdrawals (allowed from year 7) reduce the principal mid-year, which this calculator does not model.</li>
+      </ul>
+      <p>
+        For planning and comparison, the simplified model is sufficient. For the exact balance, rely on your bank's PPF passbook or the official portal of your account-holding bank or post office. The mathematical principle behind PPF interest is the same compound-interest formula explained in our <a href="/blog/compound-interest-explained/">compound interest guide</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">PPF vs FD vs NPS: which is right for your goal?</h2>
+      <p>
+        The three most common Indian fixed-income or retirement-linked savings instruments — Public Provident Fund, Fixed Deposit, and National Pension System — are often compared by users planning long-term savings. They differ on lock-in, tax treatment, return type, and risk profile.
+      </p>
+      <table class="ppf-compare">
+        <thead>
+          <tr><th>Feature</th><th>PPF</th><th>Fixed Deposit (FD)</th><th>NPS Tier I</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Return type</td><td>Notified rate (currently 7.1%)</td><td>Bank-set rate, fixed at deposit</td><td>Market-linked (equity + debt)</td></tr>
+          <tr><td>Lock-in</td><td>15 years (extendable)</td><td>None to 5 years (varies)</td><td>Until age 60</td></tr>
+          <tr><td>Section 80C deduction</td><td>Yes — up to ₹1.5 lakh</td><td>Only 5-year tax-saving FDs — up to ₹1.5 lakh</td><td>Yes — under 80CCD(1) and 80CCD(1B)</td></tr>
+          <tr><td>Tax on returns</td><td>Tax-free interest and maturity</td><td>Interest taxed as per slab</td><td>60% lump-sum tax-free at maturity, 40% mandatory annuity (taxable)</td></tr>
+          <tr><td>Risk</td><td>Sovereign-backed</td><td>DICGC insured up to ₹5 lakh per bank</td><td>Market risk on equity component</td></tr>
+          <tr><td>Best for</td><td>Long-term retirement, debt allocation</td><td>Short-term goals, emergency fund</td><td>Retirement with equity exposure</td></tr>
+        </tbody>
+      </table>
+      <p>
+        Many financial planning frameworks suggest combining instruments rather than choosing one. PPF can serve the guaranteed-return portion of long-term savings; NPS can add equity exposure for retirement; FDs can hold short-term and emergency funds. Use the DoItSwift <a href="/calculator/fd/">FD Calculator</a>, <a href="/calculator/nps/">NPS Calculator</a>, and <a href="/calculator/retirement/">Retirement Calculator</a> to model specific scenarios. This is general information, not personal financial advice — consult a SEBI-registered financial advisor for allocation decisions specific to your situation.
+      </p>
+    </div>
+  </section>
+
   <section class="faq">
     <div class="container">
       <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item"><h4>Is maturity guaranteed?</h4><p>PPF is a defined contribution scheme with notified rates; returns aren’t “guaranteed” forever because rates change, but principal is sovereign-backed subject to scheme rules.</p></div>
-        <div class="faq-item"><h4>Can I invest monthly?</h4><p>Many people deposit monthly; this calculator aggregates to a yearly total for simplicity. Spread contributions before the 5th if you follow common optimization advice — validate with your bank.</p></div>
-        <div class="faq-item"><h4>Does this include tax saved on 80C?</h4><p>No — it shows corpus growth only, not your personal tax benefit from deduction.</p></div>
+        <div class="faq-item"><h4>What is a PPF calculator and how does it work?</h4><p>A PPF calculator estimates the maturity amount of a Public Provident Fund account in India based on three inputs: your yearly contribution (between ₹500 and ₹1,50,000), the tenure (typically 15 years, extendable in 5-year blocks), and the notified interest rate (set quarterly by the Government of India). The calculator applies compound interest annually to model how your contributions grow over time. The DoItSwift PPF Calculator uses an annual-compound model: each year's contribution is added at the start of the year, then interest is applied for the full year. Real PPF accounts use a monthly minimum balance rule (the lowest balance between the 5th and last day of the month), so passbook results may vary slightly. The tool runs entirely in your browser — no data is sent to any server.</p></div>
+        <div class="faq-item"><h4>What is the current PPF interest rate?</h4><p>The Public Provident Fund interest rate is notified by the Department of Economic Affairs (Ministry of Finance) every quarter. The rate has been 7.1% per annum from April 2020 through the most recent reviewed period and is widely cited at 7.1% in 2025-2026, but confirm the current notification at the official source before relying on it. The DoItSwift PPF Calculator defaults to 7.1% but lets you edit the rate to match the current notification or to model "what if" scenarios at different rates.</p></div>
+        <div class="faq-item"><h4>How is PPF interest calculated month by month?</h4><p>Real PPF interest accrual uses a monthly minimum balance rule: for each month, interest is calculated on the lowest balance between the 5th and the last day of that month, and the cumulative interest is credited to your account at the end of the financial year (March 31). This means deposits made before the 5th of the month earn interest for that month, while deposits made after the 5th do not earn interest until the following month. The DoItSwift calculator uses an annual-compound simplification, so it may slightly overestimate maturity for accounts where contributions are made later in the year.</p></div>
+        <div class="faq-item"><h4>What is the maturity amount of PPF for ₹1.5 lakh per year for 15 years?</h4><p>At a 7.1% notified interest rate with a yearly contribution of ₹1,50,000 for 15 years, the maturity amount is approximately ₹40.68 lakh, of which ₹22.5 lakh is your total invested principal and ₹18.18 lakh is interest earned. These numbers assume the rate remains 7.1% for the entire tenure, which is unlikely in practice — PPF rates have ranged from 7.1% to 12% over the scheme's history. Use the DoItSwift PPF Calculator to model the actual scenario with the rate you expect, or to test multiple rate scenarios.</p></div>
+        <div class="faq-item"><h4>Can I extend my PPF account beyond 15 years?</h4><p>Yes. After the initial 15-year tenure, a PPF account can be extended in blocks of 5 years, either with or without further contributions. Extension with contributions allows continued tax-deductible deposits up to the 80C limit. Extension without contributions lets the existing balance continue earning interest at the current notified rate. The DoItSwift calculator models tenures up to 50 years specifically to help with extension planning. Confirm the operational extension process and forms with your bank or post office.</p></div>
+        <div class="faq-item"><h4>Is PPF better than fixed deposit (FD)?</h4><p>PPF and FDs serve different purposes. PPF offers tax-free interest under current law and tax-deductible contributions under Section 80C in the old tax regime, but it has a 15-year lock-in. Fixed deposits are fully liquid (or have shorter lock-ins), but interest is fully taxable as per your slab and there is no Section 80C benefit on most FDs (only specific 5-year tax-saving FDs qualify). PPF is generally better for long-term retirement-oriented savings; FDs are better for short-term goals or emergency funds. Use the DoItSwift <a href="/calculator/fd/">FD calculator</a> and PPF calculator to compare specific scenarios.</p></div>
+        <div class="faq-item"><h4>Is PPF or NPS better for retirement?</h4><p>PPF is fully tax-free at maturity and has a 15-year lock-in (extendable). NPS has partial tax-free withdrawal (60% lump sum tax-free, 40% mandatory annuity which is taxable as income) and a longer lock-in until age 60. NPS is market-linked through equity, government bonds, and corporate debt — historically higher returns but with market risk. PPF is debt-only with sovereign-linked notified rates. Most financial planning frameworks suggest using both: PPF for the guaranteed-return portion of retirement savings and NPS for the equity-exposure portion. This is general information, not personal advice — consult a SEBI-registered financial advisor for your situation.</p></div>
+        <div class="faq-item"><h4>Can I withdraw money from PPF before 15 years?</h4><p>Partial withdrawals are allowed from the 7th financial year onwards, capped at 50% of the balance at the end of the 4th preceding year or the previous year, whichever is lower. Premature account closure is permitted only in specific circumstances: a serious medical condition affecting the account holder or dependents, higher education expenses for the account holder or children, or change in residency status. Premature closure incurs a 1% interest rate penalty. The DoItSwift calculator does not model partial withdrawals — confirm withdrawal rules and forms with your bank.</p></div>
+        <div class="faq-item"><h4>Are PPF contributions tax-deductible?</h4><p>Contributions to PPF up to ₹1,50,000 per financial year qualify for deduction under Section 80C of the Income Tax Act under the old tax regime. The 80C limit is shared with other instruments (EPF, ELSS, life insurance premiums, principal repayment on home loans, etc.), so the total 80C deduction across all eligible investments is capped at ₹1.5 lakh. PPF interest and maturity proceeds have been tax-free under current law for qualifying accounts. The new tax regime does not allow Section 80C deductions, so the tax benefit of PPF contributions disappears under the new regime — but the tax-free maturity treatment continues. This is general information; consult a chartered accountant for your specific filing.</p></div>
+        <div class="faq-item"><h4>Does this PPF calculator work for SBI, HDFC, ICICI, or post office accounts?</h4><p>Yes. PPF is a single Government of India scheme — the rules, interest rate, contribution limits, and maturity calculations are identical regardless of whether you opened the account at SBI, HDFC, ICICI, Punjab National Bank, post office, or any other authorized institution. Banks may offer different convenience features (online deposits, auto-debit) but the underlying scheme math is the same. The DoItSwift PPF Calculator works for all PPF accounts.</p></div>
+        <div class="faq-item"><h4>Are my entries in this calculator stored or shared?</h4><p>No. The DoItSwift PPF Calculator runs entirely in your browser. Your contribution amount, tenure, interest rate, and any other inputs never leave your device. We do not store, log, or share your inputs. There is no signup, no account, and no analytics tied to your specific calculations. You can verify this by opening browser developer tools and checking the Network tab — recalculating shows no outbound requests carrying your inputs.</p></div>
+        <div class="faq-item"><h4>Why does my passbook balance differ from this calculator?</h4><p>Real PPF accounts use a monthly minimum balance rule (interest is calculated on the lowest balance between the 5th and last day of each month, then credited annually). This calculator uses an annual-compound simplification, applying interest at the end of each year on the contribution made at the start of the year. The two approaches produce small differences, especially when contributions are made late in the financial year (after the 5th of any month). Use this calculator for planning and comparison; rely on your bank's official statement for the exact balance.</p></div>
+        <div class="faq-item"><h4>Who maintains this tool and how is the methodology checked?</h4><p>DoItSwift's tools and educational content are maintained by DoItSwift Editorial under a published editorial standard. The PPF calculator uses standard compound-interest mathematics applied annually. PPF scheme rules referenced on this page (contribution limits, tenure, extension, Section 80C treatment) are based on the Public Provident Fund Scheme as notified under the Government Savings Promotion Act, 1873 and subsequent amendments. PPF interest rates are reviewed quarterly by the Government of India, and we update the default rate when notifications change. You can read the full editorial policy, research methodology, and fact-checking standards at <a href="/about/editorial-policy/">editorial policy</a>, <a href="/about/how-we-research/">research methodology</a>, and <a href="/about/fact-checking/">fact-checking standards</a>. This is an educational tool, not financial or tax advice — consult a qualified chartered accountant or SEBI-registered financial advisor for decisions specific to your situation.</p></div>
       </div>
     </div>
   </section>
+
+  <div class="tool-editorial">
+    <div class="container container--tool">
+      <p>
+        <strong>Reviewed by DoItSwift Editorial.</strong> This calculator uses standard annual-compound interest mathematics applied to yearly contributions. Public Provident Fund scheme rules referenced on this page (contribution limits, tenure, extension provisions, Section 80C tax treatment) are based on the PPF Scheme as notified under the Government Savings Promotion Act, 1873 and subsequent amendments by the Department of Economic Affairs, Ministry of Finance, Government of India. PPF interest rates are notified quarterly; the default rate in this tool is updated when notifications change. Read our <a href="/about/editorial-policy/">editorial policy</a>, <a href="/about/how-we-research/">research methodology</a>, and <a href="/about/fact-checking/">fact-checking standards</a>.
+      </p>
+      <p>
+        <strong>Important — not financial or tax advice.</strong> The DoItSwift PPF Calculator is an educational estimator. Real PPF accrual uses monthly minimum-balance rules and the rate may change quarterly, so passbook balances will differ from this calculator's output. Section 80C deduction depends on your chosen tax regime, total 80C investments, and other eligibility conditions. Before opening, contributing to, withdrawing from, or extending a PPF account, consult a qualified chartered accountant or SEBI-registered financial advisor and verify current rules with your bank or post office.
+      </p>
+      <p class="tool-editorial-meta">Last reviewed: April 2026 · DoItSwift Editorial</p>
+      <p class="tool-editorial-meta">See an outdated rate, rule, or feature? <a href="/contact/">Let us know</a>.</p>
+    </div>
+  </div>
 
   <section class="related">
     <div class="container">
       <h2 class="section-title">Related calculators</h2>
       <p class="related-links">
-        <a href="/calculator/sip/">SIP Calculator</a> · <a href="/calculator/fd/">FD Calculator</a> · <a href="/calculator/lumpsum/">Lumpsum Calculator</a>
+        <a href="/calculator/sip/">SIP Calculator</a> ·
+        <a href="/calculator/fd/">FD Calculator</a> ·
+        <a href="/calculator/nps/">NPS Calculator</a> ·
+        <a href="/calculator/lumpsum/">Lumpsum Calculator</a> ·
+        <a href="/calculator/rd/">RD Calculator</a> ·
+        <a href="/calculator/retirement/">Retirement Calculator</a> ·
+        <a href="/calculator/income-tax/">Income Tax Calculator</a> ·
+        <a href="/calculator/hra/">HRA Calculator</a>
+      </p>
+      <h2 class="section-title section-title-sub">Related guides</h2>
+      <p class="related-links">
+        <a href="/blog/old-vs-new-tax-regime/">Old vs New Tax Regime</a> ·
+        <a href="/blog/how-much-to-retire-india/">How Much to Retire in India</a> ·
+        <a href="/blog/compound-interest-explained/">Compound Interest Explained</a> ·
+        <a href="/blog/sip-vs-lumpsum/">SIP vs Lumpsum</a>
       </p>
     </div>
   </section>

@@ -1,29 +1,34 @@
 ---
+import MainLayout from '../../layouts/MainLayout.astro';
+
 const redirectUrl = '/pdf/image-to-pdf/';
-const absolute = 'https://doitswift.com' + redirectUrl;
+const canonical = Astro.site ? new URL(redirectUrl, Astro.site).href : 'https://doitswift.com/pdf/image-to-pdf/';
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="refresh" content={`0;url=${redirectUrl}`} />
-    <link rel="canonical" href={absolute} />
-    <title>Redirecting…</title>
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HFRCW0V7Y1"></script>
-    <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-HFRCW0V7Y1', {
-        anonymize_ip: true,
-        cookie_flags: 'SameSite=None;Secure'
-      });
-    </script>
-  </head>
-  <body>
-    <p>Redirecting to <a href={redirectUrl}>{redirectUrl}</a></p>
-  </body>
-</html>
+<MainLayout
+  title="JPG to PDF — Redirecting…"
+  description="This page redirects to our Image to PDF tool — combine JPG and other images into one PDF in your browser."
+  canonical={canonical}
+>
+  <meta slot="head" http-equiv="refresh" content={`0;url=${redirectUrl}`} />
+
+  <div class="container container--tool jpg-to-pdf-redirect-note">
+    <p>
+      Redirecting to <a href={redirectUrl}>Image to PDF</a> (<code>{redirectUrl}</code>)…
+    </p>
+  </div>
+
+  <section class="jpg-to-pdf-related tool-related" aria-label="Related PDF tools and guides">
+    <div class="container container--tool">
+      <h2 class="section-title">Related PDF Tools</h2>
+      <ul class="jpg-to-pdf-related-grid">
+        <li><a href="/pdf/image-to-pdf/">Image to PDF</a> — Combine multiple images into a single PDF</li>
+        <li><a href="/pdf/pdf-to-jpg/">PDF to JPG</a> — Extract pages from a PDF as JPG images</li>
+        <li><a href="/pdf/merge-pdf/">Merge PDF</a> — Combine multiple PDFs into one</li>
+        <li><a href="/pdf/split-pdf/">Split PDF</a> — Split a PDF into separate files</li>
+        <li><a href="/pdf/compress-pdf/">Compress PDF</a> — Reduce PDF file size</li>
+        <li><a href="/image/image-compressor/">Image Compressor</a> — Compress images before converting to PDF</li>
+      </ul>
+    </div>
+  </section>
+</MainLayout>

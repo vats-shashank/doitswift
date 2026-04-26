@@ -3,56 +3,89 @@ import MainLayout from '../../layouts/MainLayout.astro';
 ---
 
 <MainLayout
-  title="AVIF to JPG Converter Online — Free, Private & Batch | DoItSwift"
-  description="Convert AVIF to JPG in your browser — native AVIF decode, JPEG quality presets (100%, 85%, 70%), before/after sizes, batch ZIP. No uploads. For when you need JPEG compatibility from AVIF photos or graphics."
-  keywords="avif to jpg, avif to jpeg, convert avif to jpg, avif converter online, what is avif, avif vs jpg, avif format, save avif as jpg, free avif converter, batch avif to jpeg, browser avif decode"
+  title="Free AVIF to JPG Converter — Batch & Private"
+  description="Convert AVIF to JPG instantly in your browser. Batch convert unlimited files, no uploads, no signup. Free, private, works on mobile. AVIF vs JPG explained."
+  keywords="avif to jpg, avif to jpeg, avif converter, convert avif to jpg, convert avif to jpeg, avif to jpg converter, free avif to jpg, online avif to jpg, batch avif to jpg, avif to jpg online free, what is avif, avif vs jpg, avif vs jpeg, avif vs webp, avif file format, av1 image format, avif to jpg without uploading, avif to jpg no signup, avif to jpg private, avif to jpg browser, avif to jpg android, avif to jpg iphone, avif to jpg mac, avif to jpg windows, change avif to jpg, save avif as jpg, open avif file, avif not supported, why convert avif to jpg, avif transparency to jpg, multiple avif to jpg, avif to jpg unlimited, avif to jpg no watermark, avif image converter, avif decoder browser"
   canonical={new URL(Astro.url.pathname, Astro.site).toString()}
 >
   <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "DoItSwift AVIF to JPG Converter",
-    "description": "Free client-side AVIF to JPEG converter. Uses the browser's built-in AVIF decoder (createImageBitmap or Image), exports JPEG with adjustable quality, batch ZIP download, no server upload.",
-    "url": "https://doitswift.com/image/avif-to-jpg/",
-    "applicationCategory": "MultimediaApplication",
-    "operatingSystem": "Web browser with AVIF support",
-    "browserRequirements": "Requires AVIF decode support (modern Chrome, Edge, Firefox, Safari)",
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "featureList": [
-      "Decode AVIF using native browser codecs",
-      "Export JPEG at maximum, balanced (85%), or small-file (70%) quality",
-      "White background compositing for transparent AVIF content",
-      "Batch conversion with ZIP download",
-      "Files processed locally — not uploaded",
-      "Shows original vs converted file size per file"
-    ]
-  })} />
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "DoItSwift AVIF to JPG Converter",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any (Web Browser)",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Free browser-based AVIF to JPG converter. Batch convert unlimited AVIF images to JPEG with quality presets. Works on Windows, Mac, Linux, iPhone, and Android — provided the browser supports AVIF decoding. 100% client-side — no uploads, no signup, no watermarks.",
+      "url": "https://doitswift.com/image/avif-to-jpg/",
+      "featureList": [
+        "Convert AVIF images to JPEG entirely in browser",
+        "Uses browser native AVIF decoder (createImageBitmap or Image element)",
+        "Batch convert multiple AVIF files at once",
+        "Drag and drop folder support",
+        "Quality presets (Maximum 100%, Balanced 85%, Small file 70%)",
+        "Download converted files individually or as a ZIP",
+        "Transparent AVIF composited onto white background",
+        "Works on iPhone, iPad, Android, Windows, Mac, Linux",
+        "Shows original vs converted file size per file",
+        "No signup, no watermarks, no usage caps",
+        "Browser-based privacy (files never uploaded)"
+      ],
+      "browserRequirements": "Requires JavaScript and native AVIF decode support. Compatible with current Chrome, Edge, Firefox, Safari (iOS 16+ on mobile)."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "Is AVIF to JPG conversion free and unlimited?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. No signup, watermarks, or usage caps. Conversion runs entirely in your browser." }},
+        { "@type": "Question", "name": "Are my AVIF files uploaded to a server?", "acceptedAnswer": { "@type": "Answer", "text": "No. Files stay on your device. Decoding uses the browser's native AVIF support; JPEG is produced with the Canvas API locally." }},
+        { "@type": "Question", "name": "What is AVIF and why convert it to JPG?", "acceptedAnswer": { "@type": "Answer", "text": "AVIF is a modern image format based on AV1 compression — often smaller than JPEG at similar quality. You convert to JPG when a workflow requires universal compatibility: email, older software, print, or upload forms that only accept JPEG." }},
+        { "@type": "Question", "name": "Which browsers can convert AVIF here?", "acceptedAnswer": { "@type": "Answer", "text": "Your browser must decode AVIF natively. Current Chrome, Edge, Firefox, and recent Safari generally work. If conversion fails, update the browser or try another device — the tool cannot decode AVIF without OS/browser codec support." }},
+        { "@type": "Question", "name": "What happens to AVIF transparency?", "acceptedAnswer": { "@type": "Answer", "text": "JPEG does not support alpha transparency. Transparent areas are composited on a white background before export, which is standard for AVIF to JPG conversion." }},
+        { "@type": "Question", "name": "Will the JPG file be larger than the AVIF?", "acceptedAnswer": { "@type": "Answer", "text": "Often yes. AVIF is highly efficient; JPEG is chosen here for compatibility. At maximum quality, the JPG can be several times larger than the original AVIF — that is expected." }},
+        { "@type": "Question", "name": "What JPEG quality should I use?", "acceptedAnswer": { "@type": "Answer", "text": "Default is 100% for closest visual match. Use 85% for smaller files with minimal visible loss, or 70% when file size is the priority." }},
+        { "@type": "Question", "name": "Can I batch convert many AVIF files?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Select or drag multiple .avif files, then download each JPG or all files in one ZIP archive." }},
+        { "@type": "Question", "name": "Does it work on mobile?", "acceptedAnswer": { "@type": "Answer", "text": "Yes on mobile browsers that support AVIF decoding and Canvas — typically current iOS Safari and Chrome on Android. Very large files may be slower." }},
+        { "@type": "Question", "name": "Is there a monthly conversion limit?", "acceptedAnswer": { "@type": "Answer", "text": "No accounts, no quotas, and no premium tier. Use the converter as often as you need." }},
+        { "@type": "Question", "name": "How do I convert AVIF to JPG on my iPhone or Android phone?", "acceptedAnswer": { "@type": "Answer", "text": "This tool works directly in your phone's browser if your browser supports AVIF decoding — Safari on iOS 16+ and Chrome on Android both support AVIF natively. Open the page in your mobile browser, tap the dropzone to pick a .avif file from your photo library or Files app, choose a JPEG quality preset, and tap to download. Conversion runs entirely on your device, so no app installation is required. If your browser cannot decode AVIF, the tool shows an error — try updating the browser or use a desktop browser instead." }},
+        { "@type": "Question", "name": "Why does my browser save images as .avif instead of .jpg?", "acceptedAnswer": { "@type": "Answer", "text": "Modern websites serve AVIF versions of their images automatically when your browser supports the format, because AVIF files are typically smaller than JPG and even smaller than WebP at similar visual quality. Your browser doesn't choose the format — the website's server detects browser support via the Accept header and delivers AVIF if available. When you 'save image as' or right-click to download, you get the file the server sent, which may be .avif. To use the image in tools that need JPG (email, older software, upload forms), convert it with this tool." }},
+        { "@type": "Question", "name": "Who maintains this tool and how is the methodology checked?", "acceptedAnswer": { "@type": "Answer", "text": "DoItSwift's tools and educational content are maintained by DoItSwift Editorial under a published editorial standard. The AVIF to JPG converter uses the browser's native AVIF decoder via the createImageBitmap or Image element, then re-encodes with the Canvas API as JPEG. AVIF is the AV1 Image File Format, standardized by the Alliance for Open Media. JPEG quality presets follow standard quantization conventions: 100% retains maximum fidelity, 85% balances size and quality, 70% prioritizes smaller file size. You can read the full editorial policy, research methodology, and fact-checking standards at /about/editorial-policy/, /about/how-we-research/, and /about/fact-checking/." }}
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://doitswift.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Image Tools", "item": "https://doitswift.com/image/" },
+        { "@type": "ListItem", "position": 3, "name": "AVIF to JPG", "item": "https://doitswift.com/image/avif-to-jpg/" }
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "name": "How to Convert AVIF to JPG in Your Browser",
+      "description": "Convert AVIF images to JPEG entirely in your browser, with batch support and quality presets.",
+      "totalTime": "PT15S",
+      "step": [
+        { "@type": "HowToStep", "position": 1, "name": "Add your AVIF files", "text": "Drop .avif files onto the converter or click to browse. Single file or batch supported." },
+        { "@type": "HowToStep", "position": 2, "name": "Choose JPEG quality", "text": "Default is 100% maximum quality. Open Advanced options to switch to Balanced (85%) or Small file (70%)." },
+        { "@type": "HowToStep", "position": 3, "name": "Download the result", "text": "Save each JPG individually, or click 'Download All as ZIP' for batch downloads." }
+      ]
+    }
+  ]
+})} />
 
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      { "@type": "Question", "name": "Is AVIF to JPG conversion free and unlimited?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. No signup, watermarks, or usage caps. Conversion runs entirely in your browser." }},
-      { "@type": "Question", "name": "Are my AVIF files uploaded to a server?", "acceptedAnswer": { "@type": "Answer", "text": "No. Files stay on your device. Decoding uses the browser's native AVIF support; JPEG is produced with the Canvas API locally." }},
-      { "@type": "Question", "name": "What is AVIF and why convert it to JPG?", "acceptedAnswer": { "@type": "Answer", "text": "AVIF is a modern image format based on AV1 compression — often smaller than JPEG at similar quality. You convert to JPG when a workflow requires universal compatibility: email, older software, print, or upload forms that only accept JPEG." }},
-      { "@type": "Question", "name": "Which browsers can convert AVIF here?", "acceptedAnswer": { "@type": "Answer", "text": "Your browser must decode AVIF natively. Current Chrome, Edge, Firefox, and recent Safari generally work. If conversion fails, update the browser or try another device — the tool cannot decode AVIF without OS/browser codec support." }},
-      { "@type": "Question", "name": "What happens to AVIF transparency?", "acceptedAnswer": { "@type": "Answer", "text": "JPEG does not support alpha transparency. Transparent areas are composited on a white background before export, which is standard for AVIF to JPG conversion." }},
-      { "@type": "Question", "name": "Will the JPG file be larger than the AVIF?", "acceptedAnswer": { "@type": "Answer", "text": "Often yes. AVIF is highly efficient; JPEG is chosen here for compatibility. At maximum quality, the JPG can be several times larger than the original AVIF — that is expected." }},
-      { "@type": "Question", "name": "What JPEG quality should I use?", "acceptedAnswer": { "@type": "Answer", "text": "Default is 100% for closest visual match. Use 85% for smaller files with minimal visible loss, or 70% when file size is the priority." }},
-      { "@type": "Question", "name": "Can I batch convert many AVIF files?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Select or drag multiple .avif files, then download each JPG or all files in one ZIP archive." }},
-      { "@type": "Question", "name": "Does it work on mobile?", "acceptedAnswer": { "@type": "Answer", "text": "Yes on mobile browsers that support AVIF decoding and Canvas — typically current iOS Safari and Chrome on Android. Very large files may be slower." }},
-      { "@type": "Question", "name": "Is there a monthly conversion limit?", "acceptedAnswer": { "@type": "Answer", "text": "No accounts, no quotas, and no premium tier. Use the converter as often as you need." }}
-    ]
-  })} />
+  <nav class="breadcrumb container container--tool" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/image/">Image Tools</a> › <span>AVIF to JPG</span>
+  </nav>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" is:inline></script>
 
   <section class="hero">
     <div class="container">
       <div class="badge">🔒 100% Private — Files Never Leave Your Device</div>
-      <h1>AVIF to JPG Converter</h1>
+      <h1>Free AVIF to JPG Converter — Convert Unlimited Files in Your Browser</h1>
       <p class="subtitle">
-        Turn AVIF files into JPEG using your browser’s native decoder — quality presets, batch ZIP, before/after sizes. Nothing is uploaded; AVIF support required.
+        The DoItSwift AVIF to JPG Converter is a free online tool that turns AV1-based AVIF images into universal JPEG files entirely in your browser. Convert one file or batch-convert hundreds at once — drop your AVIF files, set a JPEG quality preset, download each as JPG or all of them as a ZIP. The tool uses your browser's native AVIF decoder, so nothing is uploaded to any server. No signup, no watermark, no file-count limit. Works on Windows, Mac, Linux, iPhone, and Android — provided your browser supports AVIF (most modern browsers do).
       </p>
       <div class="trust">
         <span><span class="check">✓</span> Unlimited files</span>
@@ -130,6 +163,27 @@ import MainLayout from '../../layouts/MainLayout.astro';
         </p>
         <p>
           <strong>Why convert AVIF to JPG?</strong> Many desktop apps, email clients, print services, and legacy upload forms still expect <strong>JPEG</strong>. Converting gives you a universally accepted file — at the cost of larger size versus AVIF, which is normal.
+        </p>
+      </section>
+
+      <section class="avif-edu-block">
+        <h2 id="why-browser-avif">Why your browser saves images as .avif instead of .jpg</h2>
+        <p>
+          When you right-click an image on a modern website and choose <strong>Save Image As</strong>, your browser saves the file your browser actually downloaded — and on performance-optimized sites, that file may now be a <strong>.avif</strong>, not a <strong>.jpg</strong> or even <strong>.webp</strong>.
+        </p>
+        <p>
+          Your browser does not choose this format. The website's server picks it. When your browser requests an image, it sends an <code>Accept</code> HTTP header listing which formats it supports. If AVIF is on the list and the server has an AVIF version of the image, the server sends AVIF because it is typically the smallest of the modern formats — often smaller than WebP, much smaller than JPG. You receive an AVIF file and your browser saves it with the <code>.avif</code> extension.
+        </p>
+        <p>
+          This is excellent for page-load performance but inconvenient when you need the image in a tool that does not understand AVIF yet — older Photoshop versions, email clients, print labs, or upload forms restricted to JPG and PNG. Three options:
+        </p>
+        <ul>
+          <li><strong>Convert it.</strong> Use this AVIF to JPG converter — drop the file, get a JPG back.</li>
+          <li><strong>Use a screenshot.</strong> Crop and screenshot the image; the screenshot is saved in your OS's default format (usually PNG).</li>
+          <li><strong>Try a different download path.</strong> Some sites offer a "download original" link that bypasses the AVIF optimization.</li>
+        </ul>
+        <p>
+          Conversion is the most reliable option for maintaining image quality. AVIF is harder to handle than WebP because adoption is newer — many tools added WebP support years ago but still don't recognize AVIF.
         </p>
       </section>
 
@@ -218,24 +272,40 @@ import MainLayout from '../../layouts/MainLayout.astro';
         <div class="faq-item"><h4>Can I batch convert many AVIF files?</h4><p>Yes. Select or drag multiple .avif files, then download each JPG or all files in one ZIP archive.</p></div>
         <div class="faq-item"><h4>Does it work on mobile?</h4><p>Yes on mobile browsers that support AVIF decoding and Canvas — typically current iOS Safari and Chrome on Android. Very large files may be slower.</p></div>
         <div class="faq-item"><h4>Is there a monthly conversion limit?</h4><p>No accounts, no quotas, and no premium tier. Use the converter as often as you need.</p></div>
+        <div class="faq-item"><h4>How do I convert AVIF to JPG on my iPhone or Android phone?</h4><p>This tool works directly in your phone's browser if your browser supports AVIF decoding — Safari on iOS 16+ and Chrome on Android both support AVIF natively. Open the page in your mobile browser, tap the dropzone to pick a .avif file from your photo library or Files app, choose a JPEG quality preset, and tap to download. Conversion runs entirely on your device, so no app installation is required. If your browser cannot decode AVIF, the tool shows an error — try updating the browser or use a desktop browser instead.</p></div>
+        <div class="faq-item"><h4>Why does my browser save images as .avif instead of .jpg?</h4><p>Modern websites serve AVIF versions of their images automatically when your browser supports the format, because AVIF files are typically smaller than JPG and even smaller than WebP at similar visual quality. Your browser doesn't choose the format — the website's server detects browser support via the Accept header and delivers AVIF if available. When you "save image as" or right-click to download, you get the file the server sent, which may be .avif. To use the image in tools that need JPG (email, older software, upload forms), convert it with this tool.</p></div>
+        <div class="faq-item"><h4>Who maintains this tool and how is the methodology checked?</h4><p>DoItSwift's tools and educational content are maintained by DoItSwift Editorial under a published editorial standard. The AVIF to JPG converter uses the browser's native AVIF decoder via the createImageBitmap or Image element, then re-encodes with the Canvas API as JPEG. AVIF is the AV1 Image File Format, standardized by the Alliance for Open Media. JPEG quality presets follow standard quantization conventions: 100% retains maximum fidelity, 85% balances size and quality, 70% prioritizes smaller file size. You can read the full editorial policy, research methodology, and fact-checking standards at <a href="/about/editorial-policy/">editorial policy</a>, <a href="/about/how-we-research/">research methodology</a>, and <a href="/about/fact-checking/">fact-checking standards</a>.</p></div>
       </div>
     </div>
   </section>
 
-  <section class="avif-related" aria-label="Related tools and guides">
-    <div class="container">
-      <h2 class="section-title">Related tools</h2>
+  <div class="tool-editorial">
+    <div class="container container--tool">
+      <p>
+        <strong>Reviewed by DoItSwift Editorial.</strong> Conversion uses the browser's native AVIF decoder (via createImageBitmap or Image element) and re-encodes with the Canvas API as JPEG. AVIF is the AV1 Image File Format, standardized by the Alliance for Open Media (specification at aomediacodec.github.io/av1-avif). JPEG quality presets follow standard quantization conventions documented in the JPEG specification (ITU-T T.81 / ISO/IEC 10918). Read our <a href="/about/editorial-policy/">editorial policy</a>, <a href="/about/how-we-research/">research methodology</a>, and <a href="/about/fact-checking/">fact-checking standards</a>.
+      </p>
+      <p class="tool-editorial-meta">Last reviewed: April 2026 · DoItSwift Editorial</p>
+      <p class="tool-editorial-meta">See an error or missing feature? <a href="/contact/">Let us know</a>.</p>
+    </div>
+  </div>
+
+  <section class="avif-related tool-related" aria-label="Related image tools and guides">
+    <div class="container container--tool">
+      <h2 class="section-title">Related Image Tools</h2>
       <ul class="avif-related-grid">
-        <li><a href="/image/webp-to-jpg/">WebP to JPG Converter</a></li>
-        <li><a href="/image/heic-to-jpg/">HEIC to JPG Converter</a></li>
-        <li><a href="/image/image-compressor/">Image Compressor</a></li>
-        <li><a href="/image/image-resizer/">Image Resizer</a></li>
+        <li><a href="/image/webp-to-jpg/">WebP to JPG Converter</a> — Convert WebP images to universal JPG</li>
+        <li><a href="/image/heic-to-jpg/">HEIC to JPG Converter</a> — Convert iPhone HEIC photos to JPG</li>
+        <li><a href="/image/image-compressor/">Image Compressor</a> — Reduce JPG, PNG, and WebP file sizes</li>
+        <li><a href="/image/image-resizer/">Image Resizer</a> — Resize images to exact dimensions</li>
+        <li><a href="/image/svg-to-png/">SVG to PNG Converter</a> — Rasterize vector graphics</li>
+        <li><a href="/image/image-to-base64/">Image to Base64</a> — Embed small images directly in HTML/CSS</li>
       </ul>
-      <h2 class="section-title section-title-sub">Related guides</h2>
+      <h2 class="section-title section-title-sub">Related Guides</h2>
       <ul class="avif-related-grid avif-related-guides">
-        <li><a href="/blog/best-image-format-for-web/">Best Image Format for Websites (AVIF vs WebP vs JPG)</a></li>
+        <li><a href="/blog/best-image-format-for-web/">Best Image Format for Websites: WebP vs AVIF vs JPG vs PNG</a></li>
         <li><a href="/blog/heic-vs-jpg/">HEIC vs JPG: Complete Comparison</a></li>
-        <li><a href="/blog/convert-iphone-photos-to-jpg/">Convert iPhone Photos to JPG</a></li>
+        <li><a href="/blog/convert-iphone-photos-to-jpg/">How to Convert iPhone Photos to JPG</a></li>
+        <li><a href="/blog/open-heic-windows-11/">How to Open HEIC Files on Windows 11</a></li>
       </ul>
     </div>
   </section>

@@ -22,12 +22,12 @@ const tools = [
     coming: false,
   },
   {
-    href: null,
+    href: '/generator/lorem-ipsum/',
     icon: '📃',
     title: 'Lorem Ipsum Generator',
-    desc: 'Generate placeholder text for design mockups. Customize length, paragraphs, or specific word counts.',
-    live: false,
-    coming: true,
+    desc: 'UI-shaped placeholder text in 8 languages with privacy-first browser-based generation',
+    live: true,
+    coming: false,
   },
   {
     href: null,
@@ -56,7 +56,7 @@ const tools = [
 ];
 
 const pageDescription =
-  'Free online text tools that run entirely in your browser. Count words, convert case between 17+ formats, format JSON, generate placeholder text. No signup, no data upload, completely private.';
+  'Free online text tools that run entirely in your browser. Count words, convert case between 17+ formats, generate UI-shaped Lorem Ipsum in 8 languages, format JSON. No signup, no data upload, completely private.';
 
 // Head JSON-LD (slot="head"). FAQ answers match visible FAQ on this page.
 const textHubBreadcrumbLd = {
@@ -100,7 +100,7 @@ const textHubItemListLd = {
     {
       '@type': 'ListItem',
       position: 3,
-      url: 'https://doitswift.com/text/lorem-ipsum-generator/',
+      url: 'https://doitswift.com/generator/lorem-ipsum/',
       name: 'Lorem Ipsum Generator',
     },
     {
@@ -193,7 +193,7 @@ const textCollectionJsonLd = {
       '@type': 'WebPage',
       '@id': `${canonical}#webpage`,
       url: canonical,
-      name: 'Free Text Tools — Word Counter, Case Converter, JSON Formatter | DoItSwift',
+      name: 'Free Text Tools — Word Counter, Case Converter, Lorem Ipsum | DoItSwift',
       description: pageDescription,
       about: { '@id': `${canonical}#collection` },
       ...(siteRoot ? { isPartOf: { '@type': 'WebSite', name: 'DoItSwift', url: siteRoot } } : {}),
@@ -212,7 +212,7 @@ const textCollectionJsonLd = {
 ---
 
 <MainLayout
-  title="Free Text Tools — Word Counter, Case Converter, JSON Formatter | DoItSwift"
+  title="Free Text Tools — Word Counter, Case Converter, Lorem Ipsum | DoItSwift"
   description={pageDescription}
   keywords="free text tools, online text utilities, text converter, word counter, text formatter, browser text tools, privacy text tools, doitswift"
   canonical={canonical}
@@ -286,7 +286,7 @@ const textCollectionJsonLd = {
           Reliability is another reason teams reach for in-browser tools: the same build works in Chrome, Edge, Firefox, and Safari, desktop or phone, with no version skew across machines. We focus on the essentials — counting, case changes, diffing, formatting — so you can work without another subscription or sign-up wall.
         </p>
         <p>
-          Compared to extension stores or marketplaces, an open page on DoItSwift leaves <strong>no new permissions</strong> to approve on your system; just bookmark the tool you use most. This hub will grow: word counting and case conversion are live; lorem text, JSON formatting, and more are on the way.
+          Compared to extension stores or marketplaces, an open page on DoItSwift leaves <strong>no new permissions</strong> to approve on your system; just bookmark the tool you use most. This hub will grow: word counting, case conversion, and the Lorem Ipsum Generator are live; JSON formatting and more are on the way.
         </p>
       </div>
     </div>

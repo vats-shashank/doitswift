@@ -1,0 +1,1040 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import LoremComponentPreviews from '../../components/LoremComponentPreviews.astro';
+import { loremPageJsonLd } from '../../lib/loremPageSchema';
+
+const pageTitle = 'Free Lorem Ipsum Generator — UI Templates & 8 Languages';
+const pageDescription = 'Lorem Ipsum that fits your design — templates for hero sections, product cards, FAQs & more. 8 languages including Hindi, Arabic, Chinese. No trackers.';
+const pageKeywords =
+  'lorem ipsum, lorem ipsum generator, free lorem ipsum, lorem ipsum text, dummy text generator, placeholder text, lorem ipsum copy, lorem ipsum paragraphs, lorem ipsum words, lorem ipsum sentences, lorem ipsum characters, lorem ipsum hindi, lorem ipsum arabic, lorem ipsum chinese, designer lorem ipsum, lorem ipsum no ads, lorem ipsum private, lorem ipsum browser, dummy text in hindi, dummy text in arabic, dummy text in chinese, lorem ipsum for figma, lorem ipsum for sketch, lorem ipsum for adobe xd, placeholder text generator, lorem ipsum tracker free';
+---
+
+<MainLayout title={pageTitle} description={pageDescription} keywords={pageKeywords} canonical="https://doitswift.com/generator/lorem-ipsum/">
+  <script type="application/ld+json" set:html={JSON.stringify(loremPageJsonLd)} />
+
+  <nav class="breadcrumb container container--tool" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/generator/">Generators</a> › <span>Lorem Ipsum Generator</span>
+  </nav>
+
+  <section class="tool-hero">
+    <div class="container container--tool">
+      <h1>Lorem Ipsum Generator — Placeholder Text That Fits Your Design</h1>
+      <p class="subtitle">
+        The DoItSwift Lorem Ipsum Generator creates placeholder text shaped for real UI components — page heroes, product cards, FAQs, navigation menus, pricing tiers, and more — instead of arbitrary paragraphs you have to trim. Generate Lorem Ipsum, real-feel English, or placeholder text in Hindi, Arabic, Chinese, Bengali, Spanish, and Cyrillic scripts. Set an exact word, character, or paragraph target and get text that stops cleanly at the right length. Everything runs in your browser — no signup, no analytics, no third-party trackers.
+      </p>
+      <div class="trust-signals">
+        <span><span class="check">✓</span> Browser-based · No trackers</span>
+        <span><span class="check">✓</span> 8 languages including Latin</span>
+        <span><span class="check">✓</span> Designer-shaped templates</span>
+        <span><span class="check">✓</span> No signup, no ads</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="tool-section">
+    <div class="container container--tool">
+      <!-- Input controls -->
+      <div class="lorem-controls">
+        <div class="lorem-mode-toggle" role="tablist" aria-label="Generation mode">
+          <button type="button" class="lorem-mode-tab is-active" data-mode-group="standard" role="tab" aria-selected="true">
+            Standard
+          </button>
+          <button type="button" class="lorem-mode-tab" data-mode-group="templates" role="tab" aria-selected="false">
+            UI Templates
+          </button>
+        </div>
+
+        <div class="lorem-standard-panel" id="loremStandardPanel">
+          <div class="lorem-row">
+            <label class="lorem-field">
+              <span class="lorem-label">Language</span>
+              <select id="loremLanguage" class="lorem-input">
+                <!-- Populated by script from LANGUAGES config -->
+              </select>
+            </label>
+
+            <label class="lorem-field">
+              <span class="lorem-label">Generate</span>
+              <select id="loremMode" class="lorem-input">
+                <option value="paragraphs" selected>Paragraphs</option>
+                <option value="sentences">Sentences</option>
+                <option value="words">Words</option>
+                <option value="characters">Characters</option>
+                <option value="bytes">Bytes</option>
+              </select>
+            </label>
+
+            <label class="lorem-field">
+              <span class="lorem-label">Count</span>
+              <input id="loremCount" type="number" min="1" max="10000" value="3" class="lorem-input" />
+            </label>
+          </div>
+
+          <div class="lorem-row lorem-row-toggle" id="starterRow" style="display:none;">
+            <label class="lorem-checkbox">
+              <input id="loremStarter" type="checkbox" checked />
+              <span>Start with "Lorem ipsum dolor sit amet"</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="lorem-templates-panel" id="loremTemplatesPanel" style="display:none;">
+          <div class="lorem-row">
+            <label class="lorem-field">
+              <span class="lorem-label">Template</span>
+              <select id="loremTemplate" class="lorem-input">
+                <!-- Populated by script -->
+              </select>
+            </label>
+
+            <label class="lorem-field" id="loremTemplateCountField" style="display:none;">
+              <span class="lorem-label" id="loremTemplateCountLabel">Count</span>
+              <input id="loremTemplateCount" type="number" min="1" max="50" value="5" class="lorem-input" />
+            </label>
+          </div>
+          <p class="lorem-template-desc" id="loremTemplateDesc"></p>
+          <LoremComponentPreviews />
+        </div>
+
+        <div class="lorem-row lorem-row-actions">
+          <button id="loremGenerate" class="btn btn-primary">Generate</button>
+          <button id="loremCopy" class="btn btn-secondary">Copy</button>
+          <span id="loremStatus" class="lorem-status" role="status" aria-live="polite"></span>
+          <button type="button" id="loremSettingsBtn" class="lorem-settings-btn" aria-label="Settings" title="Settings">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="lorem-settings-panel" id="loremSettingsPanel" hidden>
+          <h3 class="lorem-settings-heading">Settings</h3>
+          <label class="lorem-checkbox">
+            <input id="loremAutoCopy" type="checkbox" />
+            <span>Auto-copy to clipboard after each generation</span>
+          </label>
+          <p class="lorem-settings-hint">Settings apply to your current session only. Nothing is saved across page reloads to keep this tool tracker-free.</p>
+        </div>
+      </div>
+
+      <!-- Output -->
+      <div class="lorem-output-wrap">
+        <!-- Output format tabs (only shown for templates mode) -->
+        <div class="lorem-output-tabs" id="loremOutputTabs" style="display:none;" role="tablist" aria-label="Output format">
+          <button type="button" class="lorem-output-tab is-active" data-output-tab="text" role="tab" aria-selected="true">Text</button>
+          <button type="button" class="lorem-output-tab" data-output-tab="html" role="tab" aria-selected="false">HTML</button>
+          <button type="button" class="lorem-output-tab" data-output-tab="json" role="tab" aria-selected="false">JSON</button>
+        </div>
+
+        <div class="lorem-output-tabs" id="loremStandardOutputTabs" role="tablist" aria-label="Standard output format">
+          <button type="button" class="lorem-output-tab is-active" data-standard-tab="plain" role="tab" aria-selected="true">Plain</button>
+          <button type="button" class="lorem-output-tab" data-standard-tab="html" role="tab" aria-selected="false">HTML</button>
+          <button type="button" class="lorem-output-tab" data-standard-tab="markdown" role="tab" aria-selected="false">Markdown</button>
+        </div>
+
+        <textarea id="loremOutput" class="lorem-output" readonly dir="ltr" aria-label="Generated lorem ipsum text"></textarea>
+
+        <p class="lorem-output-meta">
+          <span id="loremStats">Click Generate to create placeholder text</span>
+          <span class="lorem-shortcut-hint" aria-hidden="true">
+            <kbd>Ctrl</kbd>+<kbd>G</kbd> to regenerate · <kbd>Ctrl</kbd>+<kbd>C</kbd> to copy
+          </span>
+        </p>
+
+        <div class="lorem-item-copy-row" id="loremItemCopyHost"></div>
+      </div>
+    </div>
+  </section>
+
+  <article class="lorem-edu" aria-label="Guide: Lorem Ipsum placeholder text">
+    <div class="container container--tool lorem-edu-inner">
+      <section class="lorem-edu-block">
+        <h2>What is Lorem Ipsum and where did it come from?</h2>
+        <p>
+          Lorem Ipsum is scrambled placeholder text that designers and developers use to fill layouts before real content is written. Despite looking like nonsense, it traces to a real Latin source: a passage from Cicero's <em>De finibus bonorum et malorum</em> (sections 1.10.32-33), a philosophical work written around 45 BCE about the nature of pleasure and pain. The first words "Lorem ipsum dolor sit amet" come from a sentence beginning with "neque porro quisquam est qui dolorem ipsum quia dolor sit amet…" — the original phrase has been chopped, jumbled, and lightly modified over centuries.
+        </p>
+        <p>
+          The scrambled version became standard typesetting fare in the 1500s when an unknown printer scrambled type from a Cicero specimen book to test typefaces. Letraset, the dry-transfer lettering company, popularized the modern Lorem Ipsum form in the 1960s by including it on rub-down sheets for graphic designers. Desktop publishing software like Aldus PageMaker built it into templates in the 1980s, and by the time the web emerged in the 1990s, Lorem Ipsum was the default placeholder text everywhere.
+        </p>
+        <p>
+          The reason designers still use Latin gibberish in 2026 is simple: it forces reviewers to focus on visual layout instead of getting distracted by what the words say. Real English copy invites comments like "this paragraph is too long" or "I don't agree with this tagline" — comments about content rather than design. Lorem Ipsum sidesteps this by being unmistakably placeholder.
+        </p>
+      </section>
+
+      <section class="lorem-edu-block">
+        <h2>When to use Lorem Ipsum vs real-feel English vs your real content</h2>
+        <p>
+          Three common placeholder-text choices each fit different review contexts:
+        </p>
+        <ul>
+          <li><strong>Classic Latin Lorem Ipsum</strong> works best for internal design reviews and when stakeholders are familiar with placeholder conventions. It signals "this is a layout, not finished content" without requiring explanation.</li>
+          <li><strong>Real-feel English</strong> works best for client previews and reviews with non-technical stakeholders. Some clients see Latin lorem and assume the page is broken, untranslated, or unfinished. English-shaped placeholder text reads naturally enough that clients focus on layout without flagging the "broken" copy.</li>
+          <li><strong>Real content (or close approximation)</strong> works best for final-stage user testing, accessibility audits, and SEO analysis. Real copy reveals real problems — paragraphs that are too long, headings that don't reflect content hierarchy, microcopy that's missing context. If you can write a draft, that's almost always better than placeholder for late-stage review.</li>
+        </ul>
+        <p>
+          A practical workflow: use Lorem Ipsum during early wireframing and prototyping, switch to real-feel English when sharing with clients, then replace with real content as soon as messaging is locked. The DoItSwift Lorem Ipsum Generator supports both Latin and real-feel modes from a single language selector, so you can move between them without changing tools.
+        </p>
+      </section>
+
+      <section class="lorem-edu-block">
+        <h2>Designing for non-Latin scripts: why placeholder text matters</h2>
+        <p>
+          Latin Lorem Ipsum is useless for testing layouts in Hindi, Arabic, Chinese, Bengali, or other non-Latin scripts. The character density, line-height behavior, ascender and descender shapes, and horizontal text width are completely different from Latin scripts — and those differences matter for layout.
+        </p>
+        <p>
+          Devanagari (Hindi, Marathi, Sanskrit) text typically takes about 30% more vertical space than equivalent Latin text because of the headstroke (the horizontal bar above each character) and the diacritical marks below. Chinese characters are roughly square and take less horizontal width per glyph but no inter-word spaces — line breaks happen at character boundaries. Arabic flows right-to-left, joining characters mid-word, with text alignment that mirrors LTR layouts. Bengali shares Devanagari's vertical weight characteristics. Designers who skip script-appropriate placeholder text discover these differences late, when real translation copy arrives and the layout breaks.
+        </p>
+        <p>
+          The DoItSwift Lorem Ipsum Generator addresses this by offering placeholder text in 8 scripts, including automatic right-to-left rendering for Arabic. This lets you test layouts during the design phase rather than discovering script-specific issues after content lands. For Indian designers building bilingual or trilingual interfaces (English + Hindi, English + Bengali, English + Tamil), generating side-by-side English and Devanagari placeholder text makes layout decisions much easier than placeholder Latin in both columns.
+        </p>
+      </section>
+    </div>
+  </article>
+
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <div class="faq-item"><h4>What is Lorem Ipsum and where does it come from?</h4><p>Lorem Ipsum is placeholder text used by designers and developers to fill layouts before real content is written. The classic Latin version is sourced from a passage in Cicero's <em>De finibus bonorum et malorum</em> (sections 1.10.32-33), written around 45 BCE. Designers have used the scrambled version since the 1500s, and digital designers adopted it widely in the 1980s when desktop publishing emerged. The scrambled words look like real text without distracting readers with meaning, which lets reviewers focus on the visual layout rather than the words.</p></div>
+        <div class="faq-item"><h4>How is the DoItSwift Lorem Ipsum Generator different from other lorem ipsum tools?</h4><p>Most lorem ipsum tools generate generic paragraphs. The DoItSwift Lorem Ipsum Generator adds three things competitors typically don't: UI component templates that produce text shaped for specific layouts (page heroes, product card grids, FAQ sections, pricing tiers, etc.), 8 language and script options including Hindi, Arabic, Chinese, and Bengali for designers building non-Latin interfaces, and a privacy-first promise of no signup, no analytics, and no third-party trackers. The tool also uses real-feel English by default — placeholder text that looks like English at a glance, which clients sometimes prefer over Latin.</p></div>
+        <div class="faq-item"><h4>What is real-feel English mode?</h4><p>Real-feel English uses common English words to produce placeholder text that looks like real English at a glance. It is grammatically meaningless but reads more naturally than scrambled Latin. This is useful when previewing layouts to clients or non-technical stakeholders who might not recognize Latin lorem ipsum and assume the page is broken or untranslated. To use the original Latin, switch the language selector to Latin (classic Lorem Ipsum).</p></div>
+        <div class="faq-item"><h4>Which UI component templates are available?</h4><p>Ten templates: Page Hero (H1 plus subtitle plus two CTA buttons), Blog Post Structure (H1, byline, four H2 sections with body paragraphs), FAQ Section (count-selectable Q&amp;A pairs), Product Cards (count-selectable cards with title, price, description, CTA), Navigation Menu (short labels), Form Labels &amp; Placeholders (label and placeholder pairs), Email Subject + Preview (length-targeted subject and preview text), Social Media Post (Twitter, Instagram, and LinkedIn variants at appropriate lengths), Testimonial Cards (quote, name, title), and Pricing Tier (tier name, price, feature bullets). Each template generates output in plain text, HTML, or JSON format.</p></div>
+        <div class="faq-item"><h4>Can I generate Lorem Ipsum in Hindi, Arabic, or Chinese?</h4><p>Yes. The DoItSwift Lorem Ipsum Generator supports 8 languages and scripts: English (real-feel), classic Latin, Hindi (Devanagari), Arabic (with right-to-left rendering), Chinese Simplified, Bengali, Spanish, and Russian (Cyrillic). For Arabic, the output area automatically switches to right-to-left text direction so designers can evaluate RTL layout behavior. The non-Latin word lists use everyday vocabulary to produce text with realistic character density and line-break behavior in the target script.</p></div>
+        <div class="faq-item"><h4>How do I generate exactly N characters or words of placeholder text?</h4><p>In Standard mode, choose Characters or Words from the Generate dropdown and enter your target count. The generator builds enough text to exceed the target, then trims cleanly at the last word boundary that fits — no mid-word truncation. For exact byte limits (useful for SMS character limits, database VARCHAR fields, or meta description budgets), use the Bytes mode. Note that for non-Latin scripts (Hindi, Arabic, Chinese, Bengali, Russian), each character is typically 2-3 UTF-8 bytes, so byte counts will produce fewer visible characters than they would in English.</p></div>
+        <div class="faq-item"><h4>Does the tool work on mobile?</h4><p>Yes. The DoItSwift Lorem Ipsum Generator works in any modern mobile browser — Safari on iOS, Chrome on Android, and others. No app installation is required. The interface stacks vertically on narrow screens, the language dropdown stays accessible, and the Generate and Copy buttons are sized for touch. Both standard and UI templates modes work identically on mobile.</p></div>
+        <div class="faq-item"><h4>Does this tool collect or send my data anywhere?</h4><p>No. The DoItSwift Lorem Ipsum Generator runs entirely in your browser. The only network requests are to fetch word-list JSON files from the same origin (doitswift.com). No generated text, copy actions, language selections, or template choices are sent to any server. There is no signup, no account, no third-party analytics on this specific tool, and no advertising trackers anywhere on the site. You can verify this in your browser's developer tools Network tab — generating text triggers zero outbound requests.</p></div>
+        <div class="faq-item"><h4>Why are some pricing tier names always English (like Starter, Pro, Premium)?</h4><p>The pricing tier template uses standard tier-naming convention because designers building pricing pages typically want recognizable tier names regardless of the body language. The tier names (Starter, Basic, Pro, Premium, etc.), prices, and currency symbols stay in their conventional English form, while the feature bullets generate in your selected language. This matches how multilingual SaaS pricing pages actually work — the tier naming is often kept in English even when the rest of the site is localized.</p></div>
+        <div class="faq-item"><h4>Can I use this Lorem Ipsum text in client work or commercial projects?</h4><p>Yes. The placeholder text generated by this tool is free to use in any personal or commercial project, including client work, mockups, prototypes, published websites, printed materials, and design-system documentation. The classic Latin Lorem Ipsum text traces to a public-domain passage from Cicero. The non-Latin word lists are everyday-vocabulary words with no copyright restrictions. The DoItSwift tool itself imposes no license, attribution requirement, or usage cap.</p></div>
+        <div class="faq-item"><h4>How do I copy just one card or one FAQ from a multi-item output?</h4><p>When you generate a multi-item template like Product Cards, FAQ Section, Testimonial Cards, or Pricing Tiers, numbered copy buttons appear below the output text in Text view. Click the number for the item you want to copy, and just that single item's data is copied to your clipboard as JSON. This is useful when you want to paste a specific testimonial or product card into your design tool without grabbing the entire batch. The per-item buttons appear only in Text view; HTML and JSON views give you the whole structured output.</p></div>
+        <div class="faq-item"><h4>What keyboard shortcuts are available?</h4><p>The DoItSwift Lorem Ipsum Generator supports two keyboard shortcuts: Cmd+G (Mac) or Ctrl+G (Windows/Linux) regenerates fresh text in the current mode and template, and Cmd+C or Ctrl+C copies the current output to your clipboard when no text is selected. Both shortcuts work from anywhere on the page so you can rapidly iterate without clicking buttons.</p></div>
+        <div class="faq-item"><h4>Who maintains this tool and how is the methodology checked?</h4><p>DoItSwift's tools and educational content are maintained by DoItSwift Editorial under a published editorial standard. The classic Latin Lorem Ipsum word list is sourced from Cicero's <em>De finibus bonorum et malorum</em> (sections 1.10.32-33), the original passage that became standard placeholder text and is in the public domain. The English real-feel word list is curated from common English vocabulary. Non-Latin word lists use everyday-vocabulary words from the respective languages — they produce text with realistic character density and line-break behavior for layout testing, which is the purpose of placeholder text. You can read the full editorial policy, research methodology, and fact-checking standards at <a href="/about/editorial-policy/">editorial policy</a>, <a href="/about/how-we-research/">research methodology</a>, and <a href="/about/fact-checking/">fact-checking standards</a>.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="tool-editorial">
+    <div class="container container--tool">
+      <p>
+        <strong>Reviewed by DoItSwift Editorial.</strong> The classic Latin word list is sourced from Cicero's <em>De finibus bonorum et malorum</em> (sections 1.10.32-33), the original passage that became the standard "Lorem Ipsum" placeholder text and is in the public domain. The English real-feel word list is curated from common English vocabulary. Non-Latin word lists for Hindi, Arabic, Chinese Simplified, Bengali, Spanish, and Russian use everyday-vocabulary words from the respective languages — they produce text with realistic character density and line-break behavior for layout testing, which is the purpose of placeholder text. Generation runs entirely in your browser using native JavaScript and the browser's Fetch API to load word lists from this same site — no text or input is sent to any server. Read our <a href="/about/editorial-policy/">editorial policy</a>, <a href="/about/how-we-research/">research methodology</a>, and <a href="/about/fact-checking/">fact-checking standards</a>.
+      </p>
+      <p class="tool-editorial-meta">Last reviewed: April 2026 · DoItSwift Editorial</p>
+      <p class="tool-editorial-meta">See an issue or missing feature? <a href="/contact/">Let us know</a>.</p>
+    </div>
+  </div>
+
+  <section class="lorem-related tool-related" aria-label="Related generators and text tools">
+    <div class="container container--tool">
+      <h2 class="section-title">Related Generators &amp; Text Tools</h2>
+      <ul class="lorem-related-grid">
+        <li><a href="/generator/password-generator/">Password Generator</a> — Secure random passwords generated entirely in your browser</li>
+        <li><a href="/text/word-counter/">Word Counter</a> — Count words, characters, sentences, and reading time</li>
+        <li><a href="/text/case-converter/">Case Converter</a> — Convert text between 15 capitalization formats</li>
+        <li><a href="/image/favicon-generator/">Favicon Generator</a> — Create multi-size favicons from any image</li>
+        <li><a href="/image/image-to-base64/">Image to Base64</a> — Embed small images directly in HTML or CSS</li>
+        <li><a href="/generator/">All Generators</a> — Browse every generator on DoItSwift</li>
+      </ul>
+    </div>
+  </section>
+
+  <script>
+    import {
+      generate,
+      loadWordList,
+      getLanguageMeta,
+      LANGUAGES,
+      type GenerateMode,
+      type WordList,
+    } from '../../lib/loremGenerator';
+    import { COMPONENT_TEMPLATES, generateComponent, type ComponentOutput } from '../../lib/loremComponents';
+
+    // Standard mode elements
+    const langSel = document.getElementById('loremLanguage') as HTMLSelectElement;
+    const modeSel = document.getElementById('loremMode') as HTMLSelectElement;
+    const countInput = document.getElementById('loremCount') as HTMLInputElement;
+    const starterRow = document.getElementById('starterRow') as HTMLDivElement;
+    const starterCheckbox = document.getElementById('loremStarter') as HTMLInputElement;
+    const standardPanel = document.getElementById('loremStandardPanel') as HTMLDivElement;
+
+    // Template mode elements
+    const templatesPanel = document.getElementById('loremTemplatesPanel') as HTMLDivElement;
+    const templateSel = document.getElementById('loremTemplate') as HTMLSelectElement;
+    const templateCountField = document.getElementById('loremTemplateCountField') as HTMLDivElement;
+    const templateCountLabel = document.getElementById('loremTemplateCountLabel') as HTMLSpanElement;
+    const templateCountInput = document.getElementById('loremTemplateCount') as HTMLInputElement;
+    const templateDesc = document.getElementById('loremTemplateDesc') as HTMLParagraphElement;
+
+    // Mode toggle
+    const modeTabs = document.querySelectorAll<HTMLButtonElement>('.lorem-mode-tab');
+
+    // Output
+    const outputTabs = document.getElementById('loremOutputTabs') as HTMLDivElement;
+    const outputTabBtns = document.querySelectorAll<HTMLButtonElement>('#loremOutputTabs .lorem-output-tab[data-output-tab]');
+    const standardOutputTabs = document.getElementById('loremStandardOutputTabs') as HTMLDivElement;
+    const standardOutputTabBtns = document.querySelectorAll<HTMLButtonElement>(
+      '#loremStandardOutputTabs [data-standard-tab]'
+    );
+    const output = document.getElementById('loremOutput') as HTMLTextAreaElement;
+    const stats = document.getElementById('loremStats') as HTMLSpanElement;
+    const status = document.getElementById('loremStatus') as HTMLSpanElement;
+
+    // Action buttons
+    const generateBtn = document.getElementById('loremGenerate') as HTMLButtonElement;
+    const copyBtn = document.getElementById('loremCopy') as HTMLButtonElement;
+    const settingsBtn = document.getElementById('loremSettingsBtn') as HTMLButtonElement;
+    const settingsPanel = document.getElementById('loremSettingsPanel') as HTMLDivElement;
+    const autoCopyCheckbox = document.getElementById('loremAutoCopy') as HTMLInputElement;
+
+    // State
+    let currentList: WordList | null = null;
+    let currentMode: 'standard' | 'templates' = 'standard';
+    let lastComponentOutput: ComponentOutput | null = null;
+    let activeOutputTab: 'text' | 'html' | 'json' = 'text';
+    let activeStandardFormat: 'plain' | 'html' | 'markdown' = 'plain';
+    let lastStandardOutput: string = '';
+    let settingAutoCopy = false;
+
+    // ─── Word list loading ────────────────────────────────────────────────────
+    async function ensureWordList(language: string): Promise<WordList> {
+      currentList = await loadWordList(language);
+      return currentList;
+    }
+
+    function updateStarterVisibility() {
+      if (currentMode !== 'standard') {
+        starterRow.style.display = 'none';
+        return;
+      }
+      const meta = getLanguageMeta(langSel.value);
+      starterRow.style.display = meta && meta.hasStarter ? 'flex' : 'none';
+    }
+
+    // ─── Status + stats ──────────────────────────────────────────────────────
+    function setStatus(msg: string, persistMs = 2000) {
+      status.textContent = msg;
+      if (persistMs > 0) {
+        setTimeout(() => {
+          if (status.textContent === msg) status.textContent = '';
+        }, persistMs);
+      }
+    }
+
+    function updateStats(text: string) {
+      const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+      const charCount = text.length;
+      const byteCount = new TextEncoder().encode(text).length;
+      let line = `${wordCount.toLocaleString()} words · ${charCount.toLocaleString()} characters · ${byteCount.toLocaleString()} bytes`;
+      if (currentMode === 'standard') {
+        const m = modeSel.value;
+        if (m === 'characters') line += ' · Exact character target (no mid-word cut)';
+        if (m === 'bytes') line += ' · Exact UTF-8 byte target (no mid-word cut)';
+      }
+      stats.textContent = line;
+    }
+
+    function populateLanguageSelect() {
+      langSel.innerHTML = '';
+      for (const lang of LANGUAGES) {
+        const opt = document.createElement('option');
+        opt.value = lang.id;
+        opt.textContent = lang.label;
+        if (lang.id === 'english-realfeel') opt.selected = true;
+        langSel.appendChild(opt);
+      }
+    }
+
+    function applyLanguageDirection(languageId: string) {
+      const meta = getLanguageMeta(languageId);
+      if (!meta) return;
+      output.dir = meta.direction;
+      // Optional: also adjust text alignment for RTL so it reads naturally
+      output.style.textAlign = meta.direction === 'rtl' ? 'right' : 'left';
+    }
+
+    // ─── Templates dropdown ──────────────────────────────────────────────────
+    function populateTemplateSelect() {
+      templateSel.innerHTML = '';
+      for (const t of COMPONENT_TEMPLATES) {
+        const opt = document.createElement('option');
+        opt.value = t.id;
+        opt.textContent = t.enabled ? t.name : `${t.name} (coming soon)`;
+        opt.disabled = !t.enabled;
+        templateSel.appendChild(opt);
+      }
+      // Default to first enabled
+      const firstEnabled = COMPONENT_TEMPLATES.find((t) => t.enabled);
+      if (firstEnabled) templateSel.value = firstEnabled.id;
+      updateTemplateMeta();
+    }
+
+    function getCurrentTemplate() {
+      return COMPONENT_TEMPLATES.find((t) => t.id === templateSel.value);
+    }
+
+    function updateTemplateMeta() {
+      const t = getCurrentTemplate();
+      if (!t) return;
+      templateDesc.textContent = t.description;
+      if (t.hasCount) {
+        templateCountField.style.display = 'flex';
+        templateCountLabel.textContent = t.countLabel || 'Count';
+        templateCountInput.min = String(t.minCount ?? 1);
+        templateCountInput.max = String(t.maxCount ?? 50);
+        templateCountInput.value = String(t.defaultCount ?? 5);
+      } else {
+        templateCountField.style.display = 'none';
+      }
+
+      // Show the matching SVG preview, hide the others
+      const previews = document.querySelectorAll('.lorem-preview-svg');
+      previews.forEach((p) => {
+        const el = p as HTMLElement;
+        const matches = el.dataset.preview === t.id;
+        el.classList.toggle('is-visible', matches);
+      });
+    }
+
+    // ─── Mode switching ──────────────────────────────────────────────────────
+    function switchMode(newMode: 'standard' | 'templates') {
+      currentMode = newMode;
+      modeTabs.forEach((tab) => {
+        const isActive = tab.dataset.modeGroup === newMode;
+        tab.classList.toggle('is-active', isActive);
+        tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+      standardPanel.style.display = newMode === 'standard' ? 'block' : 'none';
+      templatesPanel.style.display = newMode === 'templates' ? 'block' : 'none';
+      outputTabs.style.display = newMode === 'templates' ? 'flex' : 'none';
+      standardOutputTabs.style.display = newMode === 'standard' ? 'flex' : 'none';
+      const itemCopyHost = document.getElementById('loremItemCopyHost');
+      if (itemCopyHost) itemCopyHost.innerHTML = '';
+      updateStarterVisibility();
+      handleGenerate();
+    }
+
+    modeTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const group = tab.dataset.modeGroup as 'standard' | 'templates';
+        if (group) switchMode(group);
+      });
+    });
+
+    // ─── Output tabs (templates mode only) ───────────────────────────────────
+    outputTabBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const tab = btn.dataset.outputTab as 'text' | 'html' | 'json';
+        if (!tab) return;
+        activeOutputTab = tab;
+        outputTabBtns.forEach((b) => {
+          const isActive = b.dataset.outputTab === tab;
+          b.classList.toggle('is-active', isActive);
+          b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+        renderComponentOutput();
+      });
+    });
+
+    standardOutputTabBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const tab = btn.dataset.standardTab as 'plain' | 'html' | 'markdown';
+        if (!tab) return;
+        activeStandardFormat = tab;
+        standardOutputTabBtns.forEach((b) => {
+          const isActive = b.dataset.standardTab === tab;
+          b.classList.toggle('is-active', isActive);
+          b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+        renderStandardOutput();
+      });
+    });
+
+    function renderComponentOutput() {
+      if (!lastComponentOutput) return;
+      let text = '';
+      if (activeOutputTab === 'text') text = lastComponentOutput.text;
+      else if (activeOutputTab === 'html') text = lastComponentOutput.html;
+      else if (activeOutputTab === 'json') text = JSON.stringify(lastComponentOutput.data, null, 2);
+      output.value = text;
+      updateStats(text);
+      renderItemCopyButtons();
+    }
+
+    function escapeHtml(s: string): string {
+      return s
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function wrapStandardOutput(plainText: string, format: 'plain' | 'html' | 'markdown', mode: GenerateMode): string {
+      if (format === 'plain') return plainText;
+
+      const blocks = mode === 'paragraphs' ? plainText.split(/\n\n+/) : [plainText];
+
+      if (format === 'html') {
+        return blocks.map((b) => `<p>${escapeHtml(b)}</p>`).join('\n');
+      }
+      if (format === 'markdown') {
+        return blocks.join('\n\n');
+      }
+      return plainText;
+    }
+
+    function renderStandardOutput() {
+      if (currentMode !== 'standard' || !lastStandardOutput) return;
+      const mode = modeSel.value as GenerateMode;
+      const rendered = wrapStandardOutput(lastStandardOutput, activeStandardFormat, mode);
+      output.value = rendered;
+      updateStats(rendered);
+    }
+
+    function renderItemCopyButtons() {
+      // Per-component copy: only show for templates whose data has an items / cards / tiers / fields array
+      const container = document.getElementById('loremItemCopyHost');
+      if (!container) return;
+      container.innerHTML = '';
+      if (!lastComponentOutput || activeOutputTab !== 'text') return;
+      const data: any = lastComponentOutput.data;
+      let arrayKey: string | null = null;
+      if (Array.isArray(data?.items)) arrayKey = 'items';
+      else if (Array.isArray(data?.cards)) arrayKey = 'cards';
+      else if (Array.isArray(data?.tiers)) arrayKey = 'tiers';
+      else if (Array.isArray(data?.fields)) arrayKey = 'fields';
+      if (!arrayKey) return;
+      const items = data[arrayKey];
+      if (items.length < 2) return;
+      const label = document.createElement('span');
+      label.className = 'lorem-item-copy-label';
+      label.textContent = `Copy single ${arrayKey.replace(/s$/, '')}:`;
+      container.appendChild(label);
+      items.forEach((it: any, i: number) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'lorem-item-copy-btn';
+        btn.textContent = `${i + 1}`;
+        btn.title = `Copy ${arrayKey.replace(/s$/, '')} ${i + 1}`;
+        btn.addEventListener('click', async () => {
+          const single = JSON.stringify(it, null, 2);
+          try {
+            await navigator.clipboard.writeText(single);
+          } catch {
+            /* graceful */
+          }
+          setStatus(`Copied ${arrayKey.replace(/s$/, '')} ${i + 1}`, 1500);
+        });
+        container.appendChild(btn);
+      });
+    }
+
+    // ─── Generation ──────────────────────────────────────────────────────────
+    async function handleGenerate() {
+      try {
+        const list = await ensureWordList(langSel.value);
+        updateStarterVisibility();
+
+        if (currentMode === 'standard') {
+          const mode = modeSel.value as GenerateMode;
+          const count = Math.max(1, parseInt(countInput.value || '1', 10));
+          const plain = generate({
+            mode,
+            count,
+            wordList: list,
+            startWithStarter: !!list.starter && starterCheckbox.checked,
+          });
+          lastStandardOutput = plain;
+          const rendered = wrapStandardOutput(plain, activeStandardFormat, mode);
+          output.value = rendered;
+          updateStats(rendered);
+          setStatus('Generated', 1500);
+          lastComponentOutput = null;
+          renderItemCopyButtons();
+          if (settingAutoCopy) {
+            void handleCopy();
+          }
+        } else {
+          // Templates mode
+          const t = getCurrentTemplate();
+          if (!t || !t.enabled) {
+            setStatus('Template not yet available', 2500);
+            return;
+          }
+          const count = t.hasCount
+            ? Math.min(
+                t.maxCount ?? 50,
+                Math.max(t.minCount ?? 1, parseInt(templateCountInput.value || String(t.defaultCount ?? 5), 10))
+              )
+            : undefined;
+          lastComponentOutput = generateComponent(t.id, list, count);
+          renderComponentOutput();
+          setStatus('Generated', 1500);
+        }
+      } catch (err) {
+        console.error(err);
+        setStatus('Error generating text. Please retry.', 4000);
+      }
+    }
+
+    async function handleCopy() {
+      if (!output.value) {
+        setStatus('Nothing to copy yet — generate first.', 2000);
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(output.value);
+        setStatus('Copied to clipboard', 1500);
+      } catch {
+        output.select();
+        document.execCommand('copy');
+        setStatus('Copied to clipboard', 1500);
+      }
+    }
+
+    settingsBtn.addEventListener('click', () => {
+      const isHidden = settingsPanel.hasAttribute('hidden');
+      if (isHidden) {
+        settingsPanel.removeAttribute('hidden');
+      } else {
+        settingsPanel.setAttribute('hidden', '');
+      }
+    });
+
+    autoCopyCheckbox.addEventListener('change', () => {
+      settingAutoCopy = autoCopyCheckbox.checked;
+    });
+
+    // Wire up
+    generateBtn.addEventListener('click', handleGenerate);
+    copyBtn.addEventListener('click', handleCopy);
+    langSel.addEventListener('change', async () => {
+      applyLanguageDirection(langSel.value);
+      await ensureWordList(langSel.value);
+      updateStarterVisibility();
+      handleGenerate();
+    });
+    templateSel.addEventListener('change', () => {
+      updateTemplateMeta();
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      const cmd = e.metaKey || e.ctrlKey;
+      if (cmd && e.key.toLowerCase() === 'g') {
+        e.preventDefault();
+        handleGenerate();
+      }
+      if (cmd && !e.shiftKey && e.key.toLowerCase() === 'c' && document.activeElement === document.body) {
+        e.preventDefault();
+        handleCopy();
+      }
+    });
+
+    // Initial setup
+    (async () => {
+      populateLanguageSelect();
+      populateTemplateSelect();
+      applyLanguageDirection(langSel.value);
+      await ensureWordList(langSel.value);
+      updateStarterVisibility();
+      handleGenerate();
+    })();
+  </script>
+
+  <style>
+    .trust-signals {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .trust-signals > span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .trust-signals .check {
+      color: var(--green);
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .lorem-controls {
+      background: var(--bg-subtle, #f8fafc);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    [data-theme='dark'] .lorem-controls {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    .lorem-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: end;
+      margin-bottom: 16px;
+    }
+    .lorem-row:last-child {
+      margin-bottom: 0;
+    }
+    .lorem-row-actions {
+      align-items: center;
+      width: 100%;
+    }
+    .lorem-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1 1 160px;
+    }
+    .lorem-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .lorem-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 15px;
+    }
+    .lorem-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .lorem-status {
+      color: var(--text-muted);
+      font-size: 14px;
+      min-height: 20px;
+    }
+    .lorem-output-wrap {
+      margin-top: 16px;
+    }
+    .lorem-output {
+      width: 100%;
+      min-height: 320px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, 'Segoe UI', 'Noto Sans', 'Noto Sans Devanagari', 'Noto Sans Bengali',
+        'Noto Sans Arabic', 'Noto Sans SC', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      resize: vertical;
+    }
+    .lorem-output-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .lorem-settings-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-muted);
+      border-radius: 8px;
+      cursor: pointer;
+      margin-left: auto;
+      transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    }
+    .lorem-settings-btn:hover {
+      color: var(--text);
+      background: var(--bg-subtle, #f1f5f9);
+    }
+    [data-theme='dark'] .lorem-settings-btn:hover {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    .lorem-settings-panel {
+      margin-top: 12px;
+      padding: 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .lorem-settings-heading {
+      font-size: 14px;
+      font-weight: 600;
+      margin: 0 0 12px 0;
+      color: var(--text);
+    }
+    .lorem-settings-hint {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+    .lorem-shortcut-hint {
+      margin-left: auto;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+    .lorem-shortcut-hint kbd {
+      display: inline-block;
+      padding: 2px 6px;
+      background: var(--bg-subtle, #f1f5f9);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    [data-theme='dark'] .lorem-shortcut-hint kbd {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    .faq {
+      padding: 60px 0;
+    }
+    .faq .container {
+      max-width: 820px;
+    }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
+    }
+    .faq-item h4 {
+      font-size: 16px;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .faq-item p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin: 0;
+    }
+    .faq-item a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .faq-item a:hover {
+      color: var(--blue-dark);
+    }
+
+    .lorem-edu {
+      padding: 20px 0 8px;
+    }
+    .lorem-edu-block {
+      margin-bottom: 2.75rem;
+    }
+    .lorem-edu-block:last-child {
+      margin-bottom: 0;
+    }
+    .lorem-edu h2 {
+      font-size: clamp(1.35rem, 2.5vw, 1.6rem);
+      line-height: 1.3;
+      margin: 0 0 1rem;
+      color: var(--text);
+      text-align: left;
+    }
+    .lorem-edu p {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text);
+      margin: 0 0 1rem;
+    }
+    .lorem-edu p:last-child {
+      margin-bottom: 0;
+    }
+    .lorem-edu ul {
+      margin: 0 0 1rem;
+      padding-left: 1.35rem;
+    }
+    .lorem-edu ul li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+    .lorem-edu ul li:last-child {
+      margin-bottom: 0;
+    }
+    .lorem-edu strong {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .lorem-related-grid {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+    @media (min-width: 520px) {
+      .lorem-related-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .lorem-related-grid li {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text);
+    }
+    .lorem-related-grid a {
+      display: block;
+      padding: 14px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--blue);
+      font-weight: 600;
+      font-size: 15px;
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .lorem-related-grid a:hover {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+    [data-theme='dark'] .lorem-related-grid a:hover {
+      background: rgba(0, 102, 255, 0.12);
+    }
+
+    .lorem-mode-toggle {
+      display: inline-flex;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 16px;
+      gap: 4px;
+    }
+    .lorem-mode-tab {
+      padding: 8px 16px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .lorem-mode-tab.is-active {
+      background: var(--accent, #2563eb);
+      color: white;
+    }
+    .lorem-mode-tab:not(.is-active):hover {
+      background: var(--bg-subtle, #f1f5f9);
+      color: var(--text);
+    }
+    [data-theme='dark'] .lorem-mode-tab:not(.is-active):hover {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+
+    .lorem-templates-panel {
+      margin-bottom: 16px;
+    }
+    .lorem-template-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    .lorem-output-tabs {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .lorem-output-tab {
+      padding: 8px 14px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+    .lorem-output-tab.is-active {
+      color: var(--accent, #2563eb);
+      border-bottom-color: var(--accent, #2563eb);
+    }
+    .lorem-output-tab:not(.is-active):hover {
+      color: var(--text);
+    }
+
+    .lorem-item-copy-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .lorem-item-copy-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-right: 4px;
+    }
+    .lorem-item-copy-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+    .lorem-item-copy-btn:hover {
+      background: var(--bg-subtle, #f1f5f9);
+      transform: translateY(-1px);
+    }
+    [data-theme='dark'] .lorem-item-copy-btn:hover {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+
+    @media (max-width: 640px) {
+      .lorem-shortcut-hint {
+        display: none;
+      }
+      .lorem-mode-toggle {
+        flex-wrap: wrap;
+        width: 100%;
+      }
+      .lorem-mode-tab {
+        flex: 1 1 auto;
+        text-align: center;
+      }
+      .lorem-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .lorem-field {
+        flex: 1 1 100%;
+      }
+    }
+  </style>
+</MainLayout>

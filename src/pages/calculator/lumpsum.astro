@@ -6,7 +6,7 @@ import { buildCalculatorJsonLd, calculatorCanonical } from '../../lib/calculator
 const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
 
 const pageDescription =
-  'Free lumpsum investment calculator: one-time principal, assumed annual return %, 1–40 years. See maturity value, estimated profit, invested vs returns bars, and year-by-year balance. Currency formats display only. Compare with SIP; not financial advice. Runs in your browser.';
+  'Free lumpsum investment calculator. See how a one-time investment grows with compound interest. 31 currency formats, 1-40 year horizons. SIP vs lumpsum comparison.';
 
 const jsonLd = buildCalculatorJsonLd({
   site: Astro.site,
@@ -18,62 +18,108 @@ const jsonLd = buildCalculatorJsonLd({
   webAppDescription:
     'Project wealth from a single upfront investment using annual compounding at an assumed rate. Adjustable principal, return, and horizon; optional currency formatting for display. Shows maturity, estimated returns, visualization, and year-by-year balance. Does not model tax, fees, or market volatility — educational illustration only.',
   featureList: [
-    'One-time principal and expected annual return (illustrative)',
+    'One-time principal investment with assumed annual return rate',
     'Investment horizon from 1 to 40 years',
-    'Maturity value and estimated returns',
-    'Principal versus returns bar comparison',
-    'Year-by-year compounded balance table',
-    'Multi-currency number formatting (not FX conversion)',
-    'All calculations run locally in the browser',
+    'Standard compound interest formula (FV = P × (1 + r)^n)',
+    'Maturity value and estimated total returns',
+    'Principal-versus-returns visual bar comparison',
+    'Year-by-year compounded balance schedule',
+    '31-currency display formatting (INR, USD, EUR, GBP, JPY, AUD, SGD, AED, and 23 more)',
+    'No FX conversion — math is currency-agnostic',
+    'Runs entirely in your browser — no signup, no data sent to any server',
+    'Free for personal use, no usage limits',
+    'Educational estimator — does not model tax, fees, or market volatility',
   ],
   faqs: [
     {
       question: 'What is a lumpsum investment?',
-      answer:
-        'A lumpsum is a single upfront investment instead of periodic SIPs; the full amount compounds from the start subject to market or rate assumptions.',
+      answer: `A lumpsum investment is a single, one-time deposit of money into a financial instrument such as a mutual fund, fixed deposit, or savings account, where the entire amount starts compounding from day one. This is the opposite of a Systematic Investment Plan (SIP), where smaller amounts are deposited regularly over time. Lumpsum suits investors who have received a large amount at once — a bonus, inheritance, asset sale proceeds, or accumulated savings — and want to deploy it immediately rather than spreading it across months. The key trade-off versus SIP is exposure to single-point market timing risk in exchange for full upside if markets move favorably.`,
     },
     {
-      question: 'Is the return shown fixed or guaranteed?',
-      answer:
-        'No. The percentage you enter is an assumption. Actual mutual fund or portfolio returns vary.',
+      question: 'How does this lumpsum calculator work?',
+      answer: `The DoItSwift Lumpsum Calculator applies a standard compound interest formula to a single one-time investment: Final Value = Principal × (1 + Annual Rate)^Years. Enter your principal amount, an assumed annual return rate (for example, 8% or 12%), and a horizon between 1 and 40 years. The tool shows the projected maturity value, total returns earned, principal-vs-returns visual breakdown, and a year-by-year balance schedule. The math runs entirely in your browser — no data is sent to any server, no signup is required, and there are no usage limits.`,
     },
     {
-      question: 'Does this lumpsum calculator include tax?',
-      answer:
-        'No. It shows gross growth before capital gains tax and other charges.',
+      question: 'What is a realistic return rate to use in this calculator?',
+      answer: `Return assumptions depend on the asset class you're modeling. For Indian equity mutual funds, historical long-term averages around 10-12% per annum are commonly cited based on Nifty 50 returns over 15-20 year periods, though past performance does not guarantee future results. For US large-cap equity (S&P 500), long-term averages around 9-10% per annum nominal are commonly cited. For debt instruments like PPF, FD, or bonds, current yields range from 6-8% in India and vary by country and rate environment. Always model with conservative AND optimistic scenarios — try 8%, 10%, and 12% to see the range. The DoItSwift Lumpsum Calculator does not predict returns; it simply applies the rate you choose.`,
     },
     {
-      question: 'Does the currency dropdown convert exchange rates?',
-      answer:
-        'No. It only changes how numbers are formatted on screen.',
+      question: 'What will ₹10 lakh / $10,000 grow to in 10 years at 12% annual return?',
+      answer: `At a 12% annual compound return, ₹10 lakh grows to approximately ₹31.06 lakh in 10 years (returns of ₹21.06 lakh on the original ₹10 lakh principal). The same calculation works in any currency at the same rate — $10,000 at 12% for 10 years grows to approximately $31,058. These are illustrative compound-interest projections, not forecasts. Use the DoItSwift Lumpsum Calculator to test different principal amounts, return rates, and time horizons in your preferred currency.`,
     },
     {
-      question: 'How does lumpsum compare to SIP?',
-      answer:
-        'A lumpsum deploys all principal immediately; SIP spreads purchases over time. Use our SIP calculator and the SIP vs lumpsum blog for scenarios.',
+      question: 'Is lumpsum better than SIP?',
+      answer: `Neither is universally better — the right choice depends on three factors: how much money you have available right now, current market valuations, and your behavioral comfort with timing risk. Lumpsum deploys all capital immediately, which is mathematically optimal in a rising market because every rupee or dollar earns returns from day one. SIP spreads investments across months, which reduces the impact of bad timing on a single large purchase. Studies of historical equity returns generally favor lumpsum in long-running upward markets, but lumpsum performs worse than SIP if invested at a market peak just before a correction. For most retail investors deploying significant savings, splitting the amount (some lumpsum + some SIP over 6-12 months) is a common compromise. See our SIP vs Lumpsum guide for scenario walkthroughs.`,
+    },
+    {
+      question: 'Does this calculator account for inflation?',
+      answer: `No, the calculator shows nominal returns — the headline percentage you enter is treated as the actual rate of growth without adjusting for inflation. To see the real (inflation-adjusted) value, subtract your assumed inflation rate from your return rate before entering it. For example, if you expect 10% nominal returns and 6% inflation, enter 4% to see real purchasing-power growth. This is a simplification; rigorous real-return modeling requires period-by-period inflation data that varies by country.`,
+    },
+    {
+      question: 'Does this lumpsum calculator account for taxes or fees?',
+      answer: `No. The calculator shows gross compound returns before any taxes, mutual fund expense ratios, exit loads, transaction fees, or capital gains taxes. Actual after-tax returns will be lower. In India, equity mutual fund gains held over 12 months are subject to long-term capital gains tax above the prevailing exempt threshold; debt fund gains are taxed at slab rates as of recent rules. Tax treatment varies by jurisdiction and holding period. Consult a qualified tax professional for net return calculations specific to your situation.`,
+    },
+    {
+      question: 'Why does the currency dropdown not change the maturity amount?',
+      answer: `The currency selector changes only how numbers are formatted — it does not perform foreign exchange conversion. The same math runs regardless of currency, because compound interest applied to 100,000 produces the same final number whether displayed as ₹100,000, $100,000, or €100,000. To compare investments in different currencies with FX, you would need a separate currency converter and time-of-investment exchange rates. This calculator handles compound growth, not currency conversion.`,
+    },
+    {
+      question: 'How is this different from a SIP calculator?',
+      answer: `A SIP calculator models periodic monthly investments compounded over time. A lumpsum calculator models a single one-time investment compounded over time. The math is different: SIP uses the future value of a series formula (each contribution compounds for a different duration), while lumpsum uses a straight compound interest formula. Use a SIP calculator when you plan to invest a fixed amount every month; use the lumpsum calculator when you plan to invest one large amount once. Many investors compare both with the same target amount to understand the trade-off.`,
+    },
+    {
+      question: 'Does this work for fixed deposits, recurring deposits, and other instruments?',
+      answer: `This calculator models any one-time investment that earns a constant compound return — including bank fixed deposits, corporate bonds held to maturity, and notional fixed-rate growth scenarios. It assumes annual compounding; some real instruments (like fixed deposits) may compound quarterly or monthly, which produces slightly higher results. For Indian PPF and FD specifically, use the dedicated DoItSwift PPF Calculator or FD Calculator, which model those instruments' specific rules.`,
+    },
+    {
+      question: 'Are my entries in this calculator stored or shared?',
+      answer: `No. The DoItSwift Lumpsum Calculator runs entirely in your browser. Your principal amount, return rate, tenure, and any other inputs never leave your device. We do not store, log, or share your inputs. There is no signup, no account, and no analytics tied to your specific calculations. You can verify this by opening browser developer tools and checking the Network tab — recalculating shows no outbound requests carrying your inputs.`,
+    },
+    {
+      question: 'Why does my actual mutual fund return not match this calculator?',
+      answer: `This calculator assumes a constant annual return for the full tenure, but real markets deliver variable returns — some years gain 20%, some lose 10%. Two different return paths with the same average produce different final amounts because of how compounding interacts with sequence of returns. The calculator's output is the expected value if returns were perfectly constant; real returns vary. For more realistic projections, run the calculator with multiple rate scenarios (conservative 7%, moderate 10%, optimistic 13%) to bracket the likely range.`,
+    },
+    {
+      question: 'Who maintains this tool and how is the methodology checked?',
+      answer: `DoItSwift's tools and educational content are maintained by DoItSwift Editorial under a published editorial standard. The Lumpsum Calculator uses the standard compound interest formula (FV = P × (1 + r)^n) applied annually. Currency formatting uses the browser's built-in Intl.NumberFormat API with locale-appropriate symbols and number grouping for 31 supported currencies — no exchange rate conversion is performed. You can read the full editorial policy, research methodology, and fact-checking standards at /about/editorial-policy/, /about/how-we-research/, and /about/fact-checking/. This is an educational tool, not financial or tax advice — consult a qualified financial advisor in your jurisdiction for decisions specific to your situation.`,
     },
   ],
 });
 ---
 
 <MainLayout
-  title="Lumpsum Calculator India — One-Time Investment Growth & Year-by-Year | DoItSwift"
+  title="Free Lumpsum Calculator — One-Time Investment Growth"
   description={pageDescription}
-  keywords="lumpsum calculator, one time investment calculator, mutual fund lumpsum calculator, lumpsum return calculator India, single investment compound calculator, SIP vs lumpsum"
+  keywords="lumpsum calculator, lumpsum investment calculator, mutual fund lumpsum calculator, lumpsum return calculator, one time investment calculator, single investment compound calculator, lumpsum vs sip calculator, lumpsum calculator India, lumpsum calculator USD, future value calculator one time, compound interest lump sum, what is lumpsum investment, lumpsum maturity calculator, lumpsum sip comparison, lumpsum calculator with returns, mutual fund one time investment calculator, lumpsum profit calculator, lumpsum returns calculator, free lumpsum calculator, lumpsum calculator no signup, lumpsum calculator browser, lumpsum calculator multi currency, expected return calculator, investment growth calculator, lump sum investment growth, future value of lump sum, lumpsum calculator 10 years, lumpsum calculator 15 years, lumpsum calculator 20 years, lumpsum calculator excel, how much will lump sum grow, lumpsum vs SIP which is better"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
-  <nav class="breadcrumb container" aria-label="Breadcrumb">
+  <script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Calculate Lumpsum Investment Growth",
+  "description": "Estimate how a one-time investment grows over time using compound interest, with adjustable principal, return rate, and tenure.",
+  "totalTime": "PT30S",
+  "step": [
+    { "@type": "HowToStep", "position": 1, "name": "Enter your principal amount", "text": "Type the one-time investment amount you plan to deploy. There is no minimum or maximum imposed by the tool." },
+    { "@type": "HowToStep", "position": 2, "name": "Set the expected annual return rate", "text": "Enter an assumed annual compound return as a percentage. Common assumptions: 6-8% for debt instruments, 10-12% for Indian equity, 9-10% for US equity (long-term historical averages, not forecasts)." },
+    { "@type": "HowToStep", "position": 3, "name": "Set the investment horizon", "text": "Choose between 1 and 40 years for the time you plan to stay invested." },
+    { "@type": "HowToStep", "position": 4, "name": "Choose your display currency", "text": "Select from 31 supported currency formats. The selector changes display only — it does not perform foreign exchange conversion." },
+    { "@type": "HowToStep", "position": 5, "name": "Review the results", "text": "The tool shows projected maturity value, total estimated returns, principal-vs-returns visual, and year-by-year balance schedule." }
+  ]
+})} />
+
+  <nav class="breadcrumb container container--tool" aria-label="Breadcrumb">
     <a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>Lumpsum Calculator</span>
   </nav>
 
   <section class="hero">
     <div class="container">
       <div class="badge">🧮 Free Calculator</div>
-      <h1>Lumpsum Calculator</h1>
+      <h1>Lumpsum Calculator — Calculate One-Time Investment Growth in 31 Currencies</h1>
       <p class="subtitle">
-        Enter a one-time principal, expected annual return, and years invested. See maturity, profit, and how the balance could grow each year with compounding — not a promise of future performance.
+        The DoItSwift Lumpsum Calculator estimates how a single one-time investment grows over time using compound interest. Enter your principal amount, an assumed annual return percentage, and a horizon between 1 and 40 years to see the projected maturity value, total estimated returns, and a year-by-year balance schedule. Display amounts in your preferred currency from 31 supported formats including INR, USD, EUR, GBP, JPY, and SGD. The tool runs entirely in your browser — no signup, nothing uploaded, no data stored. This is an educational estimator that assumes a constant return rate; actual mutual fund or market returns vary, so results should not be treated as financial advice or a guarantee of future performance.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> No signup</span>
@@ -136,6 +182,54 @@ const jsonLd = buildCalculatorJsonLd({
 
   <section class="edu">
     <div class="container">
+      <h2 class="section-title">How to use the lumpsum calculator</h2>
+      <ol class="lumpsum-steps">
+        <li><strong>Enter your principal amount.</strong> Type the one-time investment amount you plan to deploy. There is no minimum or maximum cap imposed by the tool.</li>
+        <li><strong>Set the expected annual return rate.</strong> Enter an assumed compound annual return as a percentage. Common assumptions: 6-8% for debt instruments, 10-12% for Indian equity over long horizons, 9-10% for US equity. These are commonly cited historical averages, not forecasts.</li>
+        <li><strong>Set the investment horizon.</strong> Choose between 1 and 40 years.</li>
+        <li><strong>Choose your display currency.</strong> Select from 31 supported currency formats — INR, USD, EUR, GBP, JPY, AUD, SGD, AED, and 23 more. The selector changes display formatting only; the underlying math is identical regardless of currency.</li>
+        <li><strong>Read the results.</strong> The tool shows projected maturity value, total estimated returns, a principal-vs-returns visual, and a year-by-year balance schedule.</li>
+      </ol>
+      <p class="lumpsum-steps-note">All inputs and results stay in your browser. Nothing is sent to any server, no signup is required, and there are no usage limits.</p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">What is a lumpsum investment?</h2>
+      <p>
+        A lumpsum investment is a single, one-time deposit of money into a financial instrument — most commonly a mutual fund, fixed deposit, bond, or stock — where the full amount begins compounding from the moment it is invested. The term is used in retail investing globally, but is especially common in Indian financial vocabulary as the counterpart to a Systematic Investment Plan (SIP), where smaller amounts are deposited periodically over time.
+      </p>
+      <p>
+        Lumpsum investing typically applies in three situations: when you receive a large one-time sum (annual bonus, inheritance, sale of an asset, accumulated savings); when you decide to deploy existing idle capital sitting in a low-yield account; or when you want maximum exposure to a market opportunity at a specific point in time.
+      </p>
+      <p>
+        The mathematical advantage of lumpsum versus periodic investing is that all capital starts compounding immediately, so in a steadily rising market every rupee or dollar earns returns from day one. The trade-off is concentration of timing risk — the entire investment is exposed to whatever the market does next, with no averaging effect. SIP, by contrast, spreads timing risk across many entry points but sacrifices early compounding on the unspent portion.
+      </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">How compound interest grows a lumpsum investment</h2>
+      <p>
+        The DoItSwift Lumpsum Calculator uses the standard compound interest formula for a single principal:
+      </p>
+      <p class="lumpsum-formula"><strong>Final Value (FV) = Principal (P) × (1 + Annual Rate (r))<sup>Years (n)</sup></strong></p>
+      <p>
+        For example, ₹1,00,000 invested at 10% annual return for 20 years grows to ₹1,00,000 × (1.10)<sup>20</sup> = approximately ₹6,72,750. The same formula in any other currency: $100,000 at 10% for 20 years grows to approximately $672,750.
+      </p>
+      <p>
+        The power of compound growth comes from earning returns on previously earned returns. In year one, you earn 10% on ₹1 lakh = ₹10,000. In year two, you earn 10% on ₹1.10 lakh = ₹11,000. By year 20, the annual return is roughly ₹61,000 on a balance approaching ₹6.7 lakh. This non-linear growth is why long-horizon investing has a disproportionate impact on final wealth — the last 5 years of a 20-year horizon often produce more absolute return than the first 10.
+      </p>
+      <p>
+        The calculator on this page applies this formula annually. Some real instruments (like fixed deposits) compound more frequently — quarterly or monthly — which produces slightly higher final values for the same nominal annual rate. For deeper coverage of how compounding works across different frequencies, see our <a href="/blog/compound-interest-explained/">compound interest guide</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
       <h2 class="section-title">Lumpsum versus SIP — how to think about it</h2>
       <p>
         A <strong>lumpsum</strong> deploys your entire principal immediately, so every rupee begins compounding from day one at the assumed rate. A <strong>SIP</strong> spreads entries over time, which can reduce timing risk (you buy more units when markets are lower) but delays full deployment. Neither approach is universally “better” — it depends on horizon, market valuations, cash-flow discipline, and fees.
@@ -155,24 +249,84 @@ const jsonLd = buildCalculatorJsonLd({
     </div>
   </section>
 
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Lumpsum calculator for different time horizons</h2>
+      <p>
+        The same principal and rate produce dramatically different final values depending on how long you stay invested. The table below shows ₹1 lakh and $1,000 at 10% annual return across common horizons:
+      </p>
+      <table class="lumpsum-horizon-table">
+        <thead>
+          <tr><th>Horizon</th><th>₹1 lakh at 10%</th><th>$1,000 at 10%</th><th>Multiple of principal</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>5 years</td><td>~₹1.61 lakh</td><td>~$1,611</td><td>1.6×</td></tr>
+          <tr><td>10 years</td><td>~₹2.59 lakh</td><td>~$2,594</td><td>2.6×</td></tr>
+          <tr><td>15 years</td><td>~₹4.18 lakh</td><td>~$4,177</td><td>4.2×</td></tr>
+          <tr><td>20 years</td><td>~₹6.73 lakh</td><td>~$6,728</td><td>6.7×</td></tr>
+          <tr><td>25 years</td><td>~₹10.83 lakh</td><td>~$10,835</td><td>10.8×</td></tr>
+          <tr><td>30 years</td><td>~₹17.45 lakh</td><td>~$17,449</td><td>17.5×</td></tr>
+          <tr><td>40 years</td><td>~₹45.26 lakh</td><td>~$45,259</td><td>45.3×</td></tr>
+        </tbody>
+      </table>
+      <p>
+        The non-linear growth illustrates why starting early matters more than starting big. A ₹1 lakh investment held for 30 years at 10% produces ~₹17.45 lakh; the same ₹1 lakh held for only 15 years produces ~₹4.18 lakh — barely a quarter of the 30-year outcome despite being half the time. Use the calculator above to test your own principal, rate, and horizon combinations.
+      </p>
+    </div>
+  </section>
+
   <section class="faq">
     <div class="container">
       <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item"><h4>What is a lumpsum investment?</h4><p>A single upfront amount invested at once, compared with spreading investments via SIP.</p></div>
-        <div class="faq-item"><h4>Is return fixed?</h4><p>No — the percentage is your assumption; markets fluctuate.</p></div>
-        <div class="faq-item"><h4>Does this include tax?</h4><p>No — it shows gross growth before capital gains tax rules.</p></div>
-        <div class="faq-item"><h4>Does the currency setting convert FX?</h4><p>No — it only formats numbers; the same math applies.</p></div>
-        <div class="faq-item"><h4>Lumpsum vs SIP?</h4><p>See our <a href="/calculator/sip/">SIP calculator</a> and <a href="/blog/sip-vs-lumpsum/">SIP vs lumpsum</a> article.</p></div>
+        <div class="faq-item"><h4>What is a lumpsum investment?</h4><p>A lumpsum investment is a single, one-time deposit of money into a financial instrument such as a mutual fund, fixed deposit, or savings account, where the entire amount starts compounding from day one. This is the opposite of a Systematic Investment Plan (SIP), where smaller amounts are deposited regularly over time. Lumpsum suits investors who have received a large amount at once — a bonus, inheritance, asset sale proceeds, or accumulated savings — and want to deploy it immediately rather than spreading it across months. The key trade-off versus SIP is exposure to single-point market timing risk in exchange for full upside if markets move favorably.</p></div>
+        <div class="faq-item"><h4>How does this lumpsum calculator work?</h4><p>The DoItSwift Lumpsum Calculator applies a standard compound interest formula to a single one-time investment: Final Value = Principal × (1 + Annual Rate)^Years. Enter your principal amount, an assumed annual return rate (for example, 8% or 12%), and a horizon between 1 and 40 years. The tool shows the projected maturity value, total returns earned, principal-vs-returns visual breakdown, and a year-by-year balance schedule. The math runs entirely in your browser — no data is sent to any server, no signup is required, and there are no usage limits.</p></div>
+        <div class="faq-item"><h4>What is a realistic return rate to use in this calculator?</h4><p>Return assumptions depend on the asset class you're modeling. For Indian equity mutual funds, historical long-term averages around 10-12% per annum are commonly cited based on Nifty 50 returns over 15-20 year periods, though past performance does not guarantee future results. For US large-cap equity (S&P 500), long-term averages around 9-10% per annum nominal are commonly cited. For debt instruments like PPF, FD, or bonds, current yields range from 6-8% in India and vary by country and rate environment. Always model with conservative AND optimistic scenarios — try 8%, 10%, and 12% to see the range. The DoItSwift Lumpsum Calculator does not predict returns; it simply applies the rate you choose.</p></div>
+        <div class="faq-item"><h4>What will ₹10 lakh / $10,000 grow to in 10 years at 12% annual return?</h4><p>At a 12% annual compound return, ₹10 lakh grows to approximately ₹31.06 lakh in 10 years (returns of ₹21.06 lakh on the original ₹10 lakh principal). The same calculation works in any currency at the same rate — $10,000 at 12% for 10 years grows to approximately $31,058. These are illustrative compound-interest projections, not forecasts. Use the DoItSwift Lumpsum Calculator to test different principal amounts, return rates, and time horizons in your preferred currency.</p></div>
+        <div class="faq-item"><h4>Is lumpsum better than SIP?</h4><p>Neither is universally better — the right choice depends on three factors: how much money you have available right now, current market valuations, and your behavioral comfort with timing risk. Lumpsum deploys all capital immediately, which is mathematically optimal in a rising market because every rupee or dollar earns returns from day one. SIP spreads investments across months, which reduces the impact of bad timing on a single large purchase. Studies of historical equity returns generally favor lumpsum in long-running upward markets, but lumpsum performs worse than SIP if invested at a market peak just before a correction. For most retail investors deploying significant savings, splitting the amount (some lumpsum + some SIP over 6-12 months) is a common compromise. See our <a href="/blog/sip-vs-lumpsum/">SIP vs Lumpsum guide</a> for scenario walkthroughs.</p></div>
+        <div class="faq-item"><h4>Does this calculator account for inflation?</h4><p>No, the calculator shows nominal returns — the headline percentage you enter is treated as the actual rate of growth without adjusting for inflation. To see the real (inflation-adjusted) value, subtract your assumed inflation rate from your return rate before entering it. For example, if you expect 10% nominal returns and 6% inflation, enter 4% to see real purchasing-power growth. This is a simplification; rigorous real-return modeling requires period-by-period inflation data that varies by country.</p></div>
+        <div class="faq-item"><h4>Does this lumpsum calculator account for taxes or fees?</h4><p>No. The calculator shows gross compound returns before any taxes, mutual fund expense ratios, exit loads, transaction fees, or capital gains taxes. Actual after-tax returns will be lower. In India, equity mutual fund gains held over 12 months are subject to long-term capital gains tax above the prevailing exempt threshold; debt fund gains are taxed at slab rates as of recent rules. Tax treatment varies by jurisdiction and holding period. Consult a qualified tax professional for net return calculations specific to your situation.</p></div>
+        <div class="faq-item"><h4>Why does the currency dropdown not change the maturity amount?</h4><p>The currency selector changes only how numbers are formatted — it does not perform foreign exchange conversion. The same math runs regardless of currency, because compound interest applied to 100,000 produces the same final number whether displayed as ₹100,000, $100,000, or €100,000. To compare investments in different currencies with FX, you would need a separate currency converter and time-of-investment exchange rates. This calculator handles compound growth, not currency conversion.</p></div>
+        <div class="faq-item"><h4>How is this different from a SIP calculator?</h4><p>A SIP calculator models periodic monthly investments compounded over time. A lumpsum calculator models a single one-time investment compounded over time. The math is different: SIP uses the future value of a series formula (each contribution compounds for a different duration), while lumpsum uses a straight compound interest formula. Use a <a href="/calculator/sip/">SIP calculator</a> when you plan to invest a fixed amount every month; use the lumpsum calculator when you plan to invest one large amount once. Many investors compare both with the same target amount to understand the trade-off.</p></div>
+        <div class="faq-item"><h4>Does this work for fixed deposits, recurring deposits, and other instruments?</h4><p>This calculator models any one-time investment that earns a constant compound return — including bank fixed deposits, corporate bonds held to maturity, and notional fixed-rate growth scenarios. It assumes annual compounding; some real instruments (like fixed deposits) may compound quarterly or monthly, which produces slightly higher results. For Indian PPF and FD specifically, use the dedicated DoItSwift <a href="/calculator/ppf/">PPF Calculator</a> or <a href="/calculator/fd/">FD Calculator</a>, which model those instruments' specific rules.</p></div>
+        <div class="faq-item"><h4>Are my entries in this calculator stored or shared?</h4><p>No. The DoItSwift Lumpsum Calculator runs entirely in your browser. Your principal amount, return rate, tenure, and any other inputs never leave your device. We do not store, log, or share your inputs. There is no signup, no account, and no analytics tied to your specific calculations. You can verify this by opening browser developer tools and checking the Network tab — recalculating shows no outbound requests carrying your inputs.</p></div>
+        <div class="faq-item"><h4>Why does my actual mutual fund return not match this calculator?</h4><p>This calculator assumes a constant annual return for the full tenure, but real markets deliver variable returns — some years gain 20%, some lose 10%. Two different return paths with the same average produce different final amounts because of how compounding interacts with sequence of returns. The calculator's output is the expected value if returns were perfectly constant; real returns vary. For more realistic projections, run the calculator with multiple rate scenarios (conservative 7%, moderate 10%, optimistic 13%) to bracket the likely range.</p></div>
+        <div class="faq-item"><h4>Who maintains this tool and how is the methodology checked?</h4><p>DoItSwift's tools and educational content are maintained by DoItSwift Editorial under a published editorial standard. The Lumpsum Calculator uses the standard compound interest formula (FV = P × (1 + r)^n) applied annually. Currency formatting uses the browser's built-in Intl.NumberFormat API with locale-appropriate symbols and number grouping for 31 supported currencies — no exchange rate conversion is performed. You can read the full editorial policy, research methodology, and fact-checking standards at <a href="/about/editorial-policy/">editorial policy</a>, <a href="/about/how-we-research/">research methodology</a>, and <a href="/about/fact-checking/">fact-checking standards</a>. This is an educational tool, not financial or tax advice — consult a qualified financial advisor in your jurisdiction for decisions specific to your situation.</p></div>
       </div>
     </div>
   </section>
+
+  <div class="tool-editorial">
+    <div class="container container--tool">
+      <p>
+        <strong>Reviewed by DoItSwift Editorial.</strong> This calculator uses the standard compound interest formula (FV = P × (1 + r)^n) applied annually to a one-time principal investment. Currency formatting uses the browser's built-in Intl.NumberFormat API with locale-appropriate symbols and number grouping for 31 supported currencies — no foreign exchange conversion is performed. Historical return averages referenced in the educational content (such as long-term Nifty 50 and S&P 500 averages) are based on publicly reported index returns over multi-decade periods. Read our <a href="/about/editorial-policy/">editorial policy</a>, <a href="/about/how-we-research/">research methodology</a>, and <a href="/about/fact-checking/">fact-checking standards</a>.
+      </p>
+      <p>
+        <strong>Important — not financial or investment advice.</strong> The DoItSwift Lumpsum Calculator is an educational estimator. Real mutual fund and market returns vary year-to-year and are not constant; this calculator does not model market volatility, sequence-of-returns risk, taxes, fees, expense ratios, or exit loads. Past performance does not guarantee future results. Before making investment decisions, consult a qualified financial advisor (in India, a SEBI-registered investment advisor; in other jurisdictions, a licensed equivalent) and review your goals, risk tolerance, and tax situation.
+      </p>
+      <p class="tool-editorial-meta">Last reviewed: April 2026 · DoItSwift Editorial</p>
+      <p class="tool-editorial-meta">See an error or missing feature? <a href="/contact/">Let us know</a>.</p>
+    </div>
+  </div>
 
   <section class="related">
     <div class="container">
       <h2 class="section-title">Related calculators</h2>
       <p class="related-links">
-        <a href="/calculator/sip/">SIP Calculator</a> · <a href="/calculator/emi/">EMI Calculator</a> · <a href="/calculator/ppf/">PPF Calculator</a>
+        <a href="/calculator/sip/">SIP Calculator</a> ·
+        <a href="/calculator/compound-interest/">Compound Interest Calculator</a> ·
+        <a href="/calculator/ppf/">PPF Calculator</a> ·
+        <a href="/calculator/fd/">FD Calculator</a> ·
+        <a href="/calculator/nps/">NPS Calculator</a> ·
+        <a href="/calculator/rd/">RD Calculator</a> ·
+        <a href="/calculator/swp/">SWP Calculator</a> ·
+        <a href="/calculator/retirement/">Retirement Calculator</a>
+      </p>
+      <h2 class="section-title section-title-sub">Related guides</h2>
+      <p class="related-links">
+        <a href="/blog/sip-vs-lumpsum/">SIP vs Lumpsum</a> ·
+        <a href="/blog/compound-interest-explained/">Compound Interest Explained</a> ·
+        <a href="/blog/how-much-to-retire-india/">How Much to Retire in India</a>
       </p>
     </div>
   </section>

@@ -5,7 +5,7 @@ import { buildCalculatorJsonLd, calculatorCanonical } from '../../lib/calculator
 const canonical = calculatorCanonical(Astro.site, Astro.url.pathname);
 
 const pageDescription =
-  'Free fixed deposit (FD) calculator for India: enter principal in ₹, annual rate ~1–15%, tenure up to 10 years, and compounding (monthly, quarterly, half-yearly, yearly). See maturity amount, interest earned, and year-by-year balance. A = P(1+r/n)^(nt). No signup; runs locally.';
+  'Free FD calculator with monthly, quarterly, half-yearly & yearly compounding. See maturity amount and year-by-year balance using A = P(1+r/n)^(nt). No signup.';
 
 const jsonLd = buildCalculatorJsonLd({
   site: Astro.site,
@@ -17,60 +17,106 @@ const jsonLd = buildCalculatorJsonLd({
   webAppDescription:
     'Estimate bank fixed deposit maturity using compound interest A = P(1 + r/n)^(n×t). Enter principal, nominal annual rate, tenure in years, and compounding frequency. Shows interest earned, maturity value, and optional year-by-year balance growth. Does not model TDS, senior citizen rates, or cumulative vs payout options — verify with your bank.',
   featureList: [
+    'Compound interest formula: A = P × (1 + r/n)^(n×t)',
+    'Four compounding frequencies: monthly, quarterly, half-yearly, yearly',
     'Principal from ₹1,000 to ₹10 crore',
-    'Annual interest rate approximately 1–15%',
+    'Annual interest rate 1% to 15%',
     'Tenure from about one month up to 10 years',
-    'Compounding: monthly, quarterly, half-yearly, or yearly',
     'Maturity amount and total interest earned',
     'Expandable year-by-year balance table',
-    'All calculations run in the browser',
+    'Indian rupee display (math is currency-agnostic)',
+    'Runs entirely in your browser — no signup, no data sent to any server',
+    'Free for personal use, no usage limits',
+    'Educational estimator — does not model TDS, senior citizen rates, or premature withdrawal',
   ],
   faqs: [
     {
-      question: 'What is a fixed deposit (FD)?',
-      answer:
-        'An FD locks a lump sum with a bank or NBFC for a fixed tenure at a stated interest rate. Interest may compound per the bank’s rules (monthly, quarterly, etc.).',
+      question: 'What is a fixed deposit (FD) and how does it work?',
+      answer: `A fixed deposit is a savings instrument offered by banks and Non-Banking Financial Companies (NBFCs) where you deposit a lump sum for a fixed tenure at a stated annual interest rate. The bank holds the money for the tenure you choose (typically 7 days to 10 years) and pays interest at the agreed rate, compounded at the bank's stated frequency — usually quarterly in India. At maturity, you receive the principal plus accumulated interest. FDs are popular for predictable returns, low risk, and ease of opening. In India, bank FDs are insured by the DICGC (Deposit Insurance and Credit Guarantee Corporation) up to ₹5 lakh per depositor per bank.`,
     },
     {
-      question: 'Is FD return guaranteed?',
-      answer:
-        'Bank FDs follow the bank’s terms; deposits are subject to DICGC insurance limits in India. Always confirm rates and terms with your bank.',
+      question: 'How does this FD calculator work?',
+      answer: `The DoItSwift FD Calculator applies the standard compound interest formula A = P × (1 + r/n)^(n×t), where P is the principal, r is the annual interest rate as a decimal, n is the number of compounding periods per year, and t is the tenure in years. Enter your principal (₹1,000 to ₹10 crore), annual rate (1% to 15%), tenure (about a month to 10 years), and compounding frequency (monthly, quarterly, half-yearly, or yearly). The tool shows the maturity amount, total interest earned, and a year-by-year balance schedule. All math runs in your browser — no signup, no data sent to any server.`,
     },
     {
-      question: 'Does this FD calculator include TDS or senior citizen rates?',
-      answer:
-        'No. Enter the rate you expect after discussing with your bank. TDS on interest and special senior rates are not applied automatically.',
+      question: 'What is the standard compounding frequency for FDs in India?',
+      answer: `Most Indian banks compound FD interest quarterly by default. Some banks offer monthly compounding on specific deposit types or longer tenures, and some offer half-yearly or yearly compounding for non-cumulative (regular payout) options. The exact frequency is specified in your FD certificate or terms. Check with your bank before using this calculator — entering the wrong frequency produces small but real differences in the maturity amount, especially over longer tenures.`,
     },
     {
       question: 'How does compounding frequency affect FD maturity?',
-      answer:
-        'More frequent compounding (e.g. monthly vs yearly) slightly increases maturity for the same nominal annual rate, because interest is credited more often.',
+      answer: `More frequent compounding produces a slightly higher maturity amount for the same nominal annual rate, because interest is credited and starts earning interest sooner. For example, ₹1,00,000 at 7% for 5 years produces about ₹1,40,255 with yearly compounding, ₹1,41,062 with half-yearly, ₹1,41,478 with quarterly, and ₹1,41,763 with monthly — a spread of about ₹1,500 between yearly and monthly. The effect compounds over longer tenures and larger principals. Always compare the effective annual yield, not just the nominal rate, when choosing between FDs at different banks.`,
     },
     {
-      question: 'Is the FD calculator free and private?',
-      answer:
-        'Yes, it is free with no signup. Inputs are processed in your browser and are not uploaded to DoItSwift.',
+      question: 'What will ₹1 lakh grow to in an FD at 7% for 5 years?',
+      answer: `At 7% annual interest with quarterly compounding (the Indian bank default), ₹1,00,000 grows to approximately ₹1,41,478 in 5 years, earning ₹41,478 in interest. With monthly compounding, the same FD grows to about ₹1,41,763 — an extra ₹285 of interest. With yearly compounding, it grows to about ₹1,40,255. These projections do not include TDS or senior citizen rate bonuses; for senior citizens earning the typical 0.5% bonus rate at 7.5%, the same ₹1 lakh at 7.5% for 5 years quarterly compounds to approximately ₹1,44,995.`,
+    },
+    {
+      question: 'Are senior citizen FD rates included in this calculator?',
+      answer: `No, the calculator does not automatically apply senior citizen bonus rates. Most Indian banks offer 0.25% to 0.50% higher rates on FDs for depositors aged 60 and above, but the bonus and the eligibility age vary by bank. To model a senior citizen FD, simply add the bonus rate to your bank's standard rate before entering it. For example, if the bank offers 7.0% standard and 7.5% senior, enter 7.5% in the rate field.`,
+    },
+    {
+      question: 'Does this calculator account for TDS on FD interest?',
+      answer: `No, the calculator shows gross interest earned. In India, banks deduct Tax Deducted at Source (TDS) on FD interest at 10% if your annual interest from FDs at that bank exceeds ₹40,000 for non-senior citizens or ₹50,000 for senior citizens (figures based on current rules — verify the latest threshold for your assessment year). TDS does not change the maturity amount the bank credits; it changes the after-tax amount you receive. To estimate after-tax maturity, subtract estimated TDS from total interest. Submit Form 15G or 15H if eligible to avoid TDS deduction on lower incomes.`,
+    },
+    {
+      question: 'Is FD better than recurring deposit (RD)?',
+      answer: `FDs and RDs serve different cash flow patterns. FD requires a lump sum deposited once — you must already have the full principal. RD lets you deposit a smaller fixed amount monthly, building up the principal over time. FDs typically offer slightly higher rates than RDs at the same bank for the same tenure, because the bank gets the full principal upfront. FDs suit lump-sum deployments (bonus, sale proceeds, accumulated savings); RDs suit disciplined monthly saving. Use the DoItSwift FD Calculator and RD Calculator to compare specific scenarios.`,
+    },
+    {
+      question: 'Is FD better than PPF for long-term savings?',
+      answer: `PPF and FDs serve different goals. PPF has a 15-year lock-in but offers tax-deductible contributions under Section 80C in the old tax regime, and interest plus maturity are tax-free. FD is liquid (or has shorter lock-ins) but interest is fully taxed at your slab. PPF rates are notified quarterly by the Government of India and are sovereign-backed; FD rates are set by the bank and DICGC-insured up to ₹5 lakh per bank. PPF is generally better for long-horizon retirement-oriented savings; FD is better for short-to-medium term goals or emergency funds. Compare with the DoItSwift PPF Calculator.`,
+    },
+    {
+      question: 'Does this FD calculator work for SBI, HDFC, ICICI, or Post Office FDs?',
+      answer: `Yes. The compound interest math is identical across banks — only the rate and the bank's compounding frequency policy differ. Enter the rate your specific bank quotes for your tenure and the compounding frequency the bank uses (most banks compound quarterly), and the calculator produces the same maturity figure the bank's own FD calculator would show. The DoItSwift FD Calculator works for SBI, HDFC, ICICI, Punjab National Bank, post office FDs, NBFC deposits, and any other fixed-rate term deposit. Bank-specific calculators add no math advantage.`,
+    },
+    {
+      question: 'Are my entries in this calculator stored or shared?',
+      answer: `No. The DoItSwift FD Calculator runs entirely in your browser. Your principal, rate, tenure, and any other inputs never leave your device. We do not store, log, or share your inputs. There is no signup, no account, and no analytics tied to your specific calculations. You can verify this by opening browser developer tools and checking the Network tab — recalculating shows no outbound requests carrying your inputs.`,
+    },
+    {
+      question: 'Why is the calculator showing rupees (₹)? Can I use it for FDs in another currency?',
+      answer: `The DoItSwift FD Calculator displays amounts in Indian rupees because the audience is primarily Indian FD holders. The underlying math is currency-agnostic — compound interest applied to 100,000 produces the same multiplier whether you treat it as ₹100,000, £100,000, S$100,000, or any other currency. So if you hold a fixed deposit in another country, enter the principal as a number and read the maturity number with your currency's symbol mentally substituted. The proportions, percentages, and growth schedule are the same.`,
+    },
+    {
+      question: 'Who maintains this tool and how is the methodology checked?',
+      answer: `DoItSwift's tools and educational content are maintained by DoItSwift Editorial under a published editorial standard. The FD Calculator uses the standard compound interest formula A = P × (1 + r/n)^(n×t) with the four compounding frequencies offered by Indian banks (monthly, quarterly, half-yearly, yearly). FD scheme references on this page (DICGC insurance limits, TDS thresholds, senior citizen rate bonuses) are based on rules notified by the Reserve Bank of India and the Income Tax Department of India as of the most recent reviewed period. You can read the full editorial policy, research methodology, and fact-checking standards at /about/editorial-policy/, /about/how-we-research/, and /about/fact-checking/. This is an educational tool, not financial or tax advice — consult a qualified chartered accountant or your bank for decisions specific to your situation.`,
     },
   ],
 });
 ---
 
 <MainLayout
-  title="FD Calculator India — Fixed Deposit Maturity & Compound Interest | DoItSwift"
+  title="FD Calculator — Fixed Deposit Maturity & Compound Interest"
   description={pageDescription}
-  keywords="FD calculator, fixed deposit calculator India, FD maturity calculator, compound interest FD, bank FD calculator, quarterly compounding FD, FD interest calculator online"
+  keywords="FD calculator, fixed deposit calculator, FD maturity calculator, FD interest calculator, fixed deposit maturity calculator, bank FD calculator, FD calculator online, FD calculator India, free FD calculator, FD return calculator, FD interest rate calculator, FD calculator with compounding, FD compound interest calculator, quarterly compounding FD, monthly compounding FD, FD calculator quarterly, FD calculator monthly, FD calculator yearly, FD calculator senior citizen, FD calculator SBI, FD calculator HDFC, FD calculator ICICI, FD calculator post office, FD vs PPF, FD vs RD, FD vs mutual fund, FD vs lumpsum, recurring deposit vs fixed deposit, what is FD maturity, how to calculate FD interest, FD calculator no signup, FD calculator browser, FD calculator excel"
   canonical={canonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
-  <nav class="breadcrumb container" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>FD Calculator</span></nav>
+  <script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Calculate Fixed Deposit Maturity",
+  "description": "Estimate the maturity amount of a bank fixed deposit using compound interest with adjustable principal, rate, tenure, and compounding frequency.",
+  "totalTime": "PT30S",
+  "step": [
+    { "@type": "HowToStep", "position": 1, "name": "Enter your principal", "text": "Type the lump sum amount you plan to deposit, between ₹1,000 and ₹10 crore." },
+    { "@type": "HowToStep", "position": 2, "name": "Set the annual interest rate", "text": "Enter the rate your bank quotes for your chosen tenure, between 1% and 15%. For senior citizens, add the bank's bonus rate (typically 0.25-0.50%) to the standard rate." },
+    { "@type": "HowToStep", "position": 3, "name": "Set the tenure", "text": "Choose between about a month and 10 years." },
+    { "@type": "HowToStep", "position": 4, "name": "Choose compounding frequency", "text": "Most Indian banks compound quarterly by default. Confirm with your bank — choosing the wrong frequency produces small but real differences in maturity." },
+    { "@type": "HowToStep", "position": 5, "name": "Review the results", "text": "The tool shows total interest earned, final maturity value, and a year-by-year balance schedule. TDS and senior citizen bonuses are not automatically applied — adjust your inputs accordingly." }
+  ]
+})} />
+
+  <nav class="breadcrumb container container--tool" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/calculator/">Calculators</a> › <span>FD Calculator</span></nav>
 
   <section class="hero">
     <div class="container">
       <div class="badge">🧮 Free Calculator</div>
-      <h1>Fixed Deposit (FD) Calculator</h1>
+      <h1>FD Calculator — Estimate Fixed Deposit Maturity with Compound Interest</h1>
       <p class="subtitle">
-        <strong>Compound interest</strong> FD maturity: A = P × (1 + r/n)<sup>n×t</sup> — see <strong>maturity</strong>, <strong>interest earned</strong>, and <strong>year-by-year balance</strong> for your principal, rate, tenure, and compounding.
+        The DoItSwift FD Calculator estimates the maturity amount of a fixed deposit using compound interest, with adjustable compounding frequency: monthly, quarterly, half-yearly, or yearly. Enter your principal, the annual interest rate offered by your bank, and the tenure (from about a month up to 10 years) to see total interest earned, final maturity value, and a year-by-year balance schedule. The math uses the standard compound interest formula A = P × (1 + r/n)<sup>n×t</sup>, where most Indian banks compound quarterly by default. The tool runs entirely in your browser — no signup, nothing uploaded, no data stored. Amounts display in Indian rupees; the underlying math applies to any currency since compound interest is currency-agnostic. This is an educational estimator that does not include TDS, senior-citizen rate bonuses, or non-cumulative payout options — confirm those with your bank.
       </p>
       <div class="trust"><span><span class="check">✓</span> No signup</span><span><span class="check">✓</span> Instant results</span><span><span class="check">✓</span> Works offline</span></div>
     </div>
@@ -116,9 +162,117 @@ const jsonLd = buildCalculatorJsonLd({
 
   <section class="edu">
     <div class="container">
-      <h2 class="section-title">Compound interest on FDs</h2>
-      <p>Banks quote an annual rate but credit interest per compounding period. More frequent compounding (monthly vs yearly) slightly increases the effective yield for the same nominal rate. This calculator uses the standard formula A = P(1 + r/n)<sup>nt</sup> with r as the nominal annual rate in decimal, n compounding periods per year, and t in years.</p>
-      <p>TDS and senior-citizen bonus rates are not applied here — enter the rate you expect after talking to your bank. Compare cumulative vs non-cumulative options at the branch.</p>
+      <h2 class="section-title">How to use the FD calculator</h2>
+      <ol class="fd-steps">
+        <li><strong>Enter your principal.</strong> Type the lump sum you plan to deposit. The tool accepts amounts from ₹1,000 to ₹10 crore.</li>
+        <li><strong>Set the annual interest rate.</strong> Enter the rate your bank quotes for your tenure, between 1% and 15%. For senior citizens, add the bank's bonus rate (typically 0.25-0.50%) to the standard rate.</li>
+        <li><strong>Set the tenure.</strong> Choose between about one month and 10 years. The default is 3 years.</li>
+        <li><strong>Choose compounding frequency.</strong> Most Indian banks compound quarterly by default. Some banks offer monthly compounding on specific schemes or longer tenures, and some use half-yearly or yearly for non-cumulative (regular payout) FDs. Confirm with your bank — choosing the wrong frequency produces small but real differences over longer tenures.</li>
+        <li><strong>Read the results.</strong> The tool shows total interest earned, final maturity value, and an expandable year-by-year balance schedule.</li>
+      </ol>
+      <p class="fd-steps-note">All inputs and results stay in your browser. Nothing is sent to any server, no signup is required, and there are no usage limits.</p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">What is a fixed deposit and how does FD interest work?</h2>
+      <p>
+        A <strong>fixed deposit (FD)</strong> is a savings instrument offered by banks and Non-Banking Financial Companies (NBFCs) where a depositor places a lump sum for a fixed tenure at a stated annual interest rate. The bank holds the principal for the agreed period — typically 7 days to 10 years — and pays interest compounded at the bank's stated frequency. At maturity, the depositor receives the principal plus accumulated interest. FDs are popular for predictability, low risk, and minimal effort to open.
+      </p>
+      <p>
+        In India, bank FDs are insured by the <strong>Deposit Insurance and Credit Guarantee Corporation (DICGC)</strong> up to ₹5 lakh per depositor per bank, covering both principal and interest. This means even if a bank fails, depositors are protected up to that limit. NBFC deposits are not covered by DICGC and carry the credit risk of the issuing NBFC. FD interest is set by each bank based on RBI policy rates, market liquidity, and the bank's own funding needs — rates vary across banks and across tenures.
+      </p>
+      <p>
+        Fixed deposit terminology and structure are similar across many countries — Singapore, UAE, Australia, South Africa, the UK, and others use the same compound-interest math. The DoItSwift FD Calculator displays amounts in Indian rupees, but the formula applies to any currency. In the United States, the equivalent product is called a Certificate of Deposit (CD); the math is the same, only the regulatory framework and insurance scheme (FDIC) differ.
+      </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">Compound interest on FDs: how the math works</h2>
+      <p>
+        Banks quote a nominal annual rate but credit interest per compounding period. More frequent compounding (monthly vs yearly) slightly increases the effective yield for the same nominal rate because interest is credited sooner and starts earning further interest. The standard formula:
+      </p>
+      <p class="fd-formula"><strong>A = P × (1 + r/n)<sup>n×t</sup></strong></p>
+      <p>
+        Where <strong>A</strong> is the maturity amount, <strong>P</strong> is the principal, <strong>r</strong> is the nominal annual rate as a decimal (7% = 0.07), <strong>n</strong> is the number of compounding periods per year (12 monthly, 4 quarterly, 2 half-yearly, 1 yearly), and <strong>t</strong> is the tenure in years.
+      </p>
+      <p>
+        Worked example: a ₹1,00,000 FD at 7% for 5 years with quarterly compounding produces A = 1,00,000 × (1 + 0.07/4)^(4×5) = 1,00,000 × (1.0175)^20 ≈ ₹1,41,478. Total interest is ₹41,478. The same FD with yearly compounding produces only ₹1,40,255 — a difference of ₹1,223 from the choice of compounding frequency alone. Over longer tenures and larger principals, the gap widens.
+      </p>
+      <p>
+        For deeper coverage of compound interest mathematics across different instruments, see our <a href="/blog/compound-interest-explained/">compound interest guide</a>. For a one-time investment with assumed annual returns (similar to FD math but for mutual funds and other instruments), use the <a href="/calculator/lumpsum/">Lumpsum Calculator</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">How compounding frequency changes your FD maturity</h2>
+      <p>
+        The same principal, rate, and tenure produce different maturity amounts depending on the compounding frequency. The table below shows ₹1,00,000 at 7% across all four frequencies for common tenures:
+      </p>
+      <table class="fd-compound-table">
+        <thead>
+          <tr><th>Tenure</th><th>Yearly</th><th>Half-yearly</th><th>Quarterly</th><th>Monthly</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1 year</td><td>₹1,07,000</td><td>₹1,07,123</td><td>₹1,07,186</td><td>₹1,07,229</td></tr>
+          <tr><td>3 years</td><td>₹1,22,504</td><td>₹1,22,926</td><td>₹1,23,144</td><td>₹1,23,293</td></tr>
+          <tr><td>5 years</td><td>₹1,40,255</td><td>₹1,41,062</td><td>₹1,41,478</td><td>₹1,41,763</td></tr>
+          <tr><td>7 years</td><td>₹1,60,578</td><td>₹1,61,869</td><td>₹1,62,536</td><td>₹1,62,994</td></tr>
+          <tr><td>10 years</td><td>₹1,96,715</td><td>₹1,98,979</td><td>₹2,00,160</td><td>₹2,00,966</td></tr>
+        </tbody>
+      </table>
+      <p>
+        The pattern is consistent: monthly compounding produces the highest maturity, yearly the lowest. The spread is small in absolute terms but grows with tenure — at 10 years, the difference between yearly and monthly is over ₹4,000 on a ₹1 lakh deposit. When comparing FDs across banks, ask each bank what compounding frequency they use, not just the headline rate. Banks that quote the same nominal rate but compound more frequently deliver a higher effective annual yield.
+      </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">TDS, senior citizen rates, and what this calculator does NOT model</h2>
+      <p>
+        The DoItSwift FD Calculator shows gross maturity — the full amount the bank credits before any tax or deduction. Several real-world factors affect the after-tax amount you actually receive:
+      </p>
+      <ul>
+        <li><strong>TDS on FD interest.</strong> Under Section 194A, banks deduct Tax Deducted at Source (TDS) at 10% on FD interest if your annual interest from a single bank exceeds ₹40,000 for non-senior citizens or ₹50,000 for senior citizens (figures based on current rules — verify the latest threshold for your assessment year). TDS does not change the bank's maturity calculation; it changes the after-tax amount you receive. If your total annual taxable income is below the basic exemption limit, submit Form 15G (under 60) or Form 15H (60 and above) to avoid TDS deduction.</li>
+        <li><strong>Senior citizen bonus rates.</strong> Most Indian banks offer 0.25% to 0.50% higher rates on FDs for depositors aged 60 and above. The bonus and eligibility age vary by bank. The calculator does not auto-apply this — add the bonus to the standard rate before entering it. For example, at 7.0% standard and 0.5% senior bonus, enter 7.5%.</li>
+        <li><strong>Cumulative vs non-cumulative options.</strong> A cumulative FD pays all interest at maturity (this calculator's default assumption). A non-cumulative FD pays interest periodically (monthly, quarterly, etc.) and the principal at maturity — the rate may differ between options, and total interest is typically lower for non-cumulative because there is no compounding on paid-out interest.</li>
+        <li><strong>Premature withdrawal penalty.</strong> Breaking an FD before maturity typically incurs a penalty of 0.5% to 1% on the applicable interest rate, plus the rate paid is recalculated to whatever rate was effective for the actual holding period. The calculator does not model this — it assumes the FD runs to maturity.</li>
+        <li><strong>Tax on interest at slab rate.</strong> FD interest is fully taxable as "Income from Other Sources" at your applicable income tax slab. TDS is just an advance — if your slab is higher than 10%, you owe additional tax; if lower, you can claim a refund. See the DoItSwift <a href="/calculator/income-tax/">Income Tax Calculator</a> to estimate your slab.</li>
+      </ul>
+      <p>
+        For an estimate that accounts for these factors, use this calculator's gross output and then adjust manually for TDS, slab tax, and any premature withdrawal cost. Confirm exact rules with your bank or a chartered accountant before locking in funds.
+      </p>
+    </div>
+  </section>
+
+  <section class="edu">
+    <div class="container">
+      <h2 class="section-title">FD vs RD vs PPF vs liquid funds: which fits your goal?</h2>
+      <p>
+        Indian retail savers commonly compare FDs against three alternatives — recurring deposits (RDs), Public Provident Fund (PPF), and liquid mutual funds. Each fits a different goal:
+      </p>
+      <table class="fd-compare-table">
+        <thead>
+          <tr><th>Feature</th><th>FD</th><th>RD</th><th>PPF</th><th>Liquid Funds</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Cash flow</td><td>One-time lump sum</td><td>Monthly contributions</td><td>Yearly up to ₹1.5 lakh</td><td>Anytime, any amount</td></tr>
+          <tr><td>Lock-in</td><td>Tenure-based, premature penalty</td><td>Tenure-based, premature penalty</td><td>15 years (extendable)</td><td>None</td></tr>
+          <tr><td>Return type</td><td>Bank-set fixed rate</td><td>Bank-set fixed rate</td><td>Notified rate (currently 7.1%)</td><td>Market-linked (typically 5-7%)</td></tr>
+          <tr><td>Tax treatment</td><td>Interest taxed at slab</td><td>Interest taxed at slab</td><td>Tax-free (Section 80C eligible old regime)</td><td>Capital gains (varies by holding period)</td></tr>
+          <tr><td>Insurance/backing</td><td>DICGC up to ₹5 lakh</td><td>DICGC up to ₹5 lakh</td><td>Sovereign-backed</td><td>SEBI-regulated, no insurance</td></tr>
+          <tr><td>Best for</td><td>Lump-sum short-medium term</td><td>Disciplined monthly saving</td><td>Long-term retirement, debt allocation</td><td>Emergency fund, parking idle cash</td></tr>
+        </tbody>
+      </table>
+      <p>
+        Many financial planners suggest using a combination: FD for medium-term goals with predictable maturity, RD for habit-building monthly savings, PPF for long-term tax-free debt allocation, and liquid funds for the emergency fund and idle-cash management. Use the DoItSwift <a href="/calculator/rd/">RD Calculator</a>, <a href="/calculator/ppf/">PPF Calculator</a>, and <a href="/calculator/lumpsum/">Lumpsum Calculator</a> to model specific scenarios across instruments.
+      </p>
     </div>
   </section>
 
@@ -126,15 +280,58 @@ const jsonLd = buildCalculatorJsonLd({
     <div class="container">
       <h2 class="section-title">Frequently asked questions</h2>
       <div class="faq-list">
-        <div class="faq-item"><h4>What is a fixed deposit (FD)?</h4><p>An FD locks a lump sum for a fixed tenure at a stated rate; interest compounds per the bank’s rules.</p></div>
-        <div class="faq-item"><h4>Is FD return guaranteed?</h4><p>Bank FDs are subject to bank rules and DICGC insurance limits — verify with your bank.</p></div>
-        <div class="faq-item"><h4>Does this include TDS or senior citizen rates?</h4><p>No — enter the rate you expect; TDS and special rates are not modeled here.</p></div>
-        <div class="faq-item"><h4>How does compounding affect maturity?</h4><p>More frequent compounding usually increases maturity slightly for the same nominal annual rate.</p></div>
-        <div class="faq-item"><h4>Is this calculator free and private?</h4><p>Yes. It runs in your browser; inputs are not sent to our servers.</p></div>
+        <div class="faq-item"><h4>What is a fixed deposit (FD) and how does it work?</h4><p>A fixed deposit is a savings instrument offered by banks and Non-Banking Financial Companies (NBFCs) where you deposit a lump sum for a fixed tenure at a stated annual interest rate. The bank holds the money for the tenure you choose (typically 7 days to 10 years) and pays interest at the agreed rate, compounded at the bank's stated frequency — usually quarterly in India. At maturity, you receive the principal plus accumulated interest. FDs are popular for predictable returns, low risk, and ease of opening. In India, bank FDs are insured by the DICGC (Deposit Insurance and Credit Guarantee Corporation) up to ₹5 lakh per depositor per bank.</p></div>
+        <div class="faq-item"><h4>How does this FD calculator work?</h4><p>The DoItSwift FD Calculator applies the standard compound interest formula A = P × (1 + r/n)^(n×t), where P is the principal, r is the annual interest rate as a decimal, n is the number of compounding periods per year, and t is the tenure in years. Enter your principal (₹1,000 to ₹10 crore), annual rate (1% to 15%), tenure (about a month to 10 years), and compounding frequency (monthly, quarterly, half-yearly, or yearly). The tool shows the maturity amount, total interest earned, and a year-by-year balance schedule. All math runs in your browser — no signup, no data sent to any server.</p></div>
+        <div class="faq-item"><h4>What is the standard compounding frequency for FDs in India?</h4><p>Most Indian banks compound FD interest quarterly by default. Some banks offer monthly compounding on specific deposit types or longer tenures, and some offer half-yearly or yearly compounding for non-cumulative (regular payout) options. The exact frequency is specified in your FD certificate or terms. Check with your bank before using this calculator — entering the wrong frequency produces small but real differences in the maturity amount, especially over longer tenures.</p></div>
+        <div class="faq-item"><h4>How does compounding frequency affect FD maturity?</h4><p>More frequent compounding produces a slightly higher maturity amount for the same nominal annual rate, because interest is credited and starts earning interest sooner. For example, ₹1,00,000 at 7% for 5 years produces about ₹1,40,255 with yearly compounding, ₹1,41,062 with half-yearly, ₹1,41,478 with quarterly, and ₹1,41,763 with monthly — a spread of about ₹1,500 between yearly and monthly. The effect compounds over longer tenures and larger principals. Always compare the effective annual yield, not just the nominal rate, when choosing between FDs at different banks.</p></div>
+        <div class="faq-item"><h4>What will ₹1 lakh grow to in an FD at 7% for 5 years?</h4><p>At 7% annual interest with quarterly compounding (the Indian bank default), ₹1,00,000 grows to approximately ₹1,41,478 in 5 years, earning ₹41,478 in interest. With monthly compounding, the same FD grows to about ₹1,41,763 — an extra ₹285 of interest. With yearly compounding, it grows to about ₹1,40,255. These projections do not include TDS or senior citizen rate bonuses; for senior citizens earning the typical 0.5% bonus rate at 7.5%, the same ₹1 lakh at 7.5% for 5 years quarterly compounds to approximately ₹1,44,995.</p></div>
+        <div class="faq-item"><h4>Are senior citizen FD rates included in this calculator?</h4><p>No, the calculator does not automatically apply senior citizen bonus rates. Most Indian banks offer 0.25% to 0.50% higher rates on FDs for depositors aged 60 and above, but the bonus and the eligibility age vary by bank. To model a senior citizen FD, simply add the bonus rate to your bank's standard rate before entering it. For example, if the bank offers 7.0% standard and 7.5% senior, enter 7.5% in the rate field.</p></div>
+        <div class="faq-item"><h4>Does this calculator account for TDS on FD interest?</h4><p>No, the calculator shows gross interest earned. In India, banks deduct Tax Deducted at Source (TDS) on FD interest at 10% if your annual interest from FDs at that bank exceeds ₹40,000 for non-senior citizens or ₹50,000 for senior citizens (figures based on current rules — verify the latest threshold for your assessment year). TDS does not change the maturity amount the bank credits; it changes the after-tax amount you receive. To estimate after-tax maturity, subtract estimated TDS from total interest. Submit Form 15G or 15H if eligible to avoid TDS deduction on lower incomes.</p></div>
+        <div class="faq-item"><h4>Is FD better than recurring deposit (RD)?</h4><p>FDs and RDs serve different cash flow patterns. FD requires a lump sum deposited once — you must already have the full principal. RD lets you deposit a smaller fixed amount monthly, building up the principal over time. FDs typically offer slightly higher rates than RDs at the same bank for the same tenure, because the bank gets the full principal upfront. FDs suit lump-sum deployments (bonus, sale proceeds, accumulated savings); RDs suit disciplined monthly saving. Use the DoItSwift FD Calculator and <a href="/calculator/rd/">RD Calculator</a> to compare specific scenarios.</p></div>
+        <div class="faq-item"><h4>Is FD better than PPF for long-term savings?</h4><p>PPF and FDs serve different goals. PPF has a 15-year lock-in but offers tax-deductible contributions under Section 80C in the old tax regime, and interest plus maturity are tax-free. FD is liquid (or has shorter lock-ins) but interest is fully taxed at your slab. PPF rates are notified quarterly by the Government of India and are sovereign-backed; FD rates are set by the bank and DICGC-insured up to ₹5 lakh per bank. PPF is generally better for long-horizon retirement-oriented savings; FD is better for short-to-medium term goals or emergency funds. Compare with the DoItSwift <a href="/calculator/ppf/">PPF Calculator</a>.</p></div>
+        <div class="faq-item"><h4>Does this FD calculator work for SBI, HDFC, ICICI, or Post Office FDs?</h4><p>Yes. The compound interest math is identical across banks — only the rate and the bank's compounding frequency policy differ. Enter the rate your specific bank quotes for your tenure and the compounding frequency the bank uses (most banks compound quarterly), and the calculator produces the same maturity figure the bank's own FD calculator would show. The DoItSwift FD Calculator works for SBI, HDFC, ICICI, Punjab National Bank, post office FDs, NBFC deposits, and any other fixed-rate term deposit. Bank-specific calculators add no math advantage.</p></div>
+        <div class="faq-item"><h4>Are my entries in this calculator stored or shared?</h4><p>No. The DoItSwift FD Calculator runs entirely in your browser. Your principal, rate, tenure, and any other inputs never leave your device. We do not store, log, or share your inputs. There is no signup, no account, and no analytics tied to your specific calculations. You can verify this by opening browser developer tools and checking the Network tab — recalculating shows no outbound requests carrying your inputs.</p></div>
+        <div class="faq-item"><h4>Why is the calculator showing rupees (₹)? Can I use it for FDs in another currency?</h4><p>The DoItSwift FD Calculator displays amounts in Indian rupees because the audience is primarily Indian FD holders. The underlying math is currency-agnostic — compound interest applied to 100,000 produces the same multiplier whether you treat it as ₹100,000, £100,000, S$100,000, or any other currency. So if you hold a fixed deposit in another country, enter the principal as a number and read the maturity number with your currency's symbol mentally substituted. The proportions, percentages, and growth schedule are the same.</p></div>
+        <div class="faq-item"><h4>Who maintains this tool and how is the methodology checked?</h4><p>DoItSwift's tools and educational content are maintained by DoItSwift Editorial under a published editorial standard. The FD Calculator uses the standard compound interest formula A = P × (1 + r/n)^(n×t) with the four compounding frequencies offered by Indian banks (monthly, quarterly, half-yearly, yearly). FD scheme references on this page (DICGC insurance limits, TDS thresholds, senior citizen rate bonuses) are based on rules notified by the Reserve Bank of India and the Income Tax Department of India as of the most recent reviewed period. You can read the full editorial policy, research methodology, and fact-checking standards at <a href="/about/editorial-policy/">editorial policy</a>, <a href="/about/how-we-research/">research methodology</a>, and <a href="/about/fact-checking/">fact-checking standards</a>. This is an educational tool, not financial or tax advice — consult a qualified chartered accountant or your bank for decisions specific to your situation.</p></div>
       </div>
     </div>
   </section>
-  <section class="related"><div class="container"><h2 class="section-title">Related</h2><p class="related-links"><a href="/calculator/sip/">SIP</a> · <a href="/calculator/emi/">EMI</a> · <a href="/calculator/gst/">GST</a></p></div></section>
+
+  <div class="tool-editorial">
+    <div class="container container--tool">
+      <p>
+        <strong>Reviewed by DoItSwift Editorial.</strong> This calculator uses the standard compound interest formula A = P × (1 + r/n)<sup>n×t</sup> applied at the user-selected compounding frequency (monthly, quarterly, half-yearly, or yearly). FD scheme references on this page — including DICGC deposit insurance limits, TDS thresholds for FD interest, and senior citizen rate bonuses — are based on rules notified by the Reserve Bank of India, the Deposit Insurance and Credit Guarantee Corporation, and the Income Tax Department of India as of the most recent reviewed period. Read our <a href="/about/editorial-policy/">editorial policy</a>, <a href="/about/how-we-research/">research methodology</a>, and <a href="/about/fact-checking/">fact-checking standards</a>.
+      </p>
+      <p>
+        <strong>Important — not financial or tax advice.</strong> The DoItSwift FD Calculator is an educational estimator. It does not automatically apply TDS, senior citizen bonus rates, premature withdrawal penalties, or distinguish between cumulative and non-cumulative payout options. DICGC insurance covers bank deposits up to ₹5 lakh per depositor per bank; deposits above this limit at a single bank carry counterparty risk if the bank fails. Before opening or breaking a fixed deposit, confirm current rates, TDS treatment, and terms with your bank, and consult a qualified chartered accountant for tax decisions specific to your situation.
+      </p>
+      <p class="tool-editorial-meta">Last reviewed: April 2026 · DoItSwift Editorial</p>
+      <p class="tool-editorial-meta">See an outdated rate, rule, or feature? <a href="/contact/">Let us know</a>.</p>
+    </div>
+  </div>
+
+  <section class="related tool-related" aria-label="Related financial calculators and guides">
+    <div class="container container--tool">
+      <h2 class="section-title">Related Financial Calculators</h2>
+      <p class="related-links">
+        <a href="/calculator/rd/">RD Calculator</a> ·
+        <a href="/calculator/ppf/">PPF Calculator</a> ·
+        <a href="/calculator/nps/">NPS Calculator</a> ·
+        <a href="/calculator/sip/">SIP Calculator</a> ·
+        <a href="/calculator/lumpsum/">Lumpsum Calculator</a> ·
+        <a href="/calculator/compound-interest/">Compound Interest Calculator</a> ·
+        <a href="/calculator/income-tax/">Income Tax Calculator</a> ·
+        <a href="/calculator/emi/">EMI Calculator</a>
+      </p>
+      <h2 class="section-title section-title-sub">Related guides</h2>
+      <p class="related-links">
+        <a href="/blog/compound-interest-explained/">Compound Interest Explained</a> ·
+        <a href="/blog/old-vs-new-tax-regime/">Old vs New Tax Regime</a> ·
+        <a href="/blog/sip-vs-lumpsum/">SIP vs Lumpsum</a> ·
+        <a href="/blog/how-much-to-retire-india/">How Much to Retire in India</a>
+      </p>
+    </div>
+  </section>
 
   <script is:inline>
     (function () {

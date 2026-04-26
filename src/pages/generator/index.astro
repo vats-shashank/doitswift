@@ -22,6 +22,14 @@ const tools = [
     coming: false,
   },
   {
+    href: '/generator/lorem-ipsum/',
+    icon: '📝',
+    title: 'Lorem Ipsum Generator',
+    desc: 'Designer-first placeholder text in 8 languages, with templates for real UI components.',
+    live: true,
+    coming: false,
+  },
+  {
     href: null,
     icon: '🔑',
     title: 'UUID Generator',
@@ -34,14 +42,6 @@ const tools = [
     icon: '📊',
     title: 'Barcode Generator',
     desc: 'Generate Code 128, Code 39, EAN-13, and other barcode formats. Download as PNG or SVG.',
-    live: false,
-    coming: true,
-  },
-  {
-    href: null,
-    icon: '📝',
-    title: 'Lorem Ipsum Generator',
-    desc: 'Generate placeholder text for designs. Control paragraph count, word count, or sentence structure.',
     live: false,
     coming: true,
   },
@@ -199,8 +199,8 @@ const genCollectionJsonLd = {
     <div class="container">
       <h2 class="section-title">All generator tools</h2>
       <p class="section-sub">
-        Pick a tool — output stays in your session. <strong>Password</strong> and <strong>QR Code</strong> generators are
-        live; four more are planned.
+        Pick a tool — output stays in your session. <strong>Password</strong>, <strong>QR Code</strong>, and
+        <strong>Lorem Ipsum</strong> are live; three more are planned.
       </p>
       <div class="grid">
         {tools.map((tool) =>

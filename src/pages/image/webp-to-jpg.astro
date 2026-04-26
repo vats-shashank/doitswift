@@ -3,37 +3,89 @@ import MainLayout from '../../layouts/MainLayout.astro';
 ---
 
 <MainLayout
-  title="WebP to JPG Converter — Free, Private & Unlimited | DoItSwift"
-  description="Convert WebP to JPG instantly in your browser — free, private, unlimited. Learn what WebP is, why sites use it, when you need JPEG instead, WebP vs JPG differences, transparency handling, and step-by-step conversion. No uploads."
-  keywords="webp to jpg, webp to jpeg, webp converter, convert webp to jpg, what is webp, webp vs jpg, webp format, google webp, free webp converter, batch webp to jpg, webp compatibility, save webp as jpg"
+  title="Free WebP to JPG Converter — Unlimited & Private"
+  description="Convert WebP to JPG instantly in your browser. Batch convert unlimited files, no uploads, no signup. Free, private, works on mobile. WebP vs JPG explained."
+  keywords="webp to jpg, webp to jpeg, webp converter, convert webp to jpg, convert webp to jpeg, webp to jpg converter, free webp to jpg, online webp to jpg, batch webp to jpg, webp to jpg online free, what is webp, webp vs jpg, webp vs jpeg, webp file format, webp format, webp to jpg without uploading, webp to jpg no signup, webp to jpg private, webp to jpg browser, webp to jpg offline, webp to jpg android, webp to jpg iphone, webp to jpg mac, webp to jpg windows, change webp to jpg, save webp as jpg, open webp file, webp not supported, why convert webp to jpg, webp to jpg google, webp transparency to jpg, webp to png alternative, multiple webp to jpg, webp to jpg unlimited, webp to jpg no watermark"
   canonical={new URL(Astro.url.pathname, Astro.site).toString()}
 >
   <!-- Schema markup for SEO (aligned with on-page FAQ) -->
   <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      { "@type": "Question", "name": "Is this really free and unlimited?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. No limits, no signup, no watermarks. The converter runs entirely in your browser." }},
-      { "@type": "Question", "name": "Are my files safe?", "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. Files never leave your device. We can't see, store, or access them." }},
-      { "@type": "Question", "name": "What is WebP and why convert it to JPG?", "acceptedAnswer": { "@type": "Answer", "text": "WebP is Google's modern image format for the web — smaller than JPEG at similar quality. You convert to JPG when a workflow needs universal compatibility: email, older desktop apps, print labs, or upload forms that only accept JPEG." }},
-      { "@type": "Question", "name": "Will I lose image quality?", "acceptedAnswer": { "@type": "Answer", "text": "Default is maximum (100%) JPEG quality. Use Advanced options for Balanced (85%) or Small file (70%) if you need a smaller download." }},
-      { "@type": "Question", "name": "What happens to WebP transparency?", "acceptedAnswer": { "@type": "Answer", "text": "JPEG does not support alpha transparency. This tool composites transparent pixels onto a white background before export, which is standard for WebP to JPG conversion." }},
-      { "@type": "Question", "name": "Does it work on mobile?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — works on iPhone, iPad, Android, and any modern mobile browser that supports the Canvas API." }},
-      { "@type": "Question", "name": "What's the maximum file size?", "acceptedAnswer": { "@type": "Answer", "text": "There's no imposed limit — it's bound by your device's RAM. Typical WebP images convert instantly. Very large files (50MB+) may take a few seconds." }},
-      { "@type": "Question", "name": "Can I batch convert multiple WebP files?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — select multiple files or drag a folder onto the dropzone. Download each JPG individually or all at once as a ZIP." }},
-      { "@type": "Question", "name": "Why are my JPG files larger than the WebP originals?", "acceptedAnswer": { "@type": "Answer", "text": "WebP is usually more efficient than JPEG for photos. Re-encoding as JPG at high quality often produces a larger file — that's expected when prioritizing compatibility over size." }},
-      { "@type": "Question", "name": "Is there a monthly conversion limit?", "acceptedAnswer": { "@type": "Answer", "text": "No. Convert as many files as you want, as often as you want. There are no accounts, no quotas, and no premium tiers." }}
-    ]
-  })} />
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "DoItSwift WebP to JPG Converter",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any (Web Browser)",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Free browser-based WebP to JPG converter. Batch convert unlimited WebP images to JPEG with quality presets. Works on Windows, Mac, Linux, iPhone, and Android. 100% client-side — no uploads, no signup, no watermarks.",
+      "url": "https://doitswift.com/image/webp-to-jpg/",
+      "featureList": [
+        "Convert WebP images to JPEG entirely in browser",
+        "Batch convert multiple WebP files at once",
+        "Drag and drop folder support",
+        "Quality presets (Maximum 100%, Balanced 85%, Small file 70%)",
+        "Download converted files individually or as a ZIP",
+        "Transparent WebP composited onto white background",
+        "Works on iPhone, iPad, Android, Windows, Mac, Linux",
+        "No file size or count limits (bounded by device memory)",
+        "No signup, no watermarks, no usage caps",
+        "Browser-based privacy (files never uploaded)"
+      ],
+      "browserRequirements": "Requires JavaScript and Canvas API support. Compatible with Chrome, Firefox, Safari, Edge."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "Is this really free and unlimited?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. No limits, no signup, no watermarks. The converter runs entirely in your browser." }},
+        { "@type": "Question", "name": "Are my files safe?", "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. Files never leave your device. We can't see, store, or access them." }},
+        { "@type": "Question", "name": "What is WebP and why convert it to JPG?", "acceptedAnswer": { "@type": "Answer", "text": "WebP is Google's modern image format for the web — smaller than JPEG at similar quality. You convert to JPG when a workflow needs universal compatibility: email, older desktop apps, print labs, or upload forms that only accept JPEG." }},
+        { "@type": "Question", "name": "Will I lose image quality?", "acceptedAnswer": { "@type": "Answer", "text": "Default is maximum (100%) JPEG quality. Use Advanced options for Balanced (85%) or Small file (70%) if you need a smaller download." }},
+        { "@type": "Question", "name": "What happens to WebP transparency?", "acceptedAnswer": { "@type": "Answer", "text": "JPEG does not support alpha transparency. This tool composites transparent pixels onto a white background before export, which is standard for WebP to JPG conversion." }},
+        { "@type": "Question", "name": "Does it work on mobile?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — works on iPhone, iPad, Android, and any modern mobile browser that supports the Canvas API." }},
+        { "@type": "Question", "name": "What's the maximum file size?", "acceptedAnswer": { "@type": "Answer", "text": "There's no imposed limit — it's bound by your device's RAM. Typical WebP images convert instantly. Very large files (50MB+) may take a few seconds." }},
+        { "@type": "Question", "name": "Can I batch convert multiple WebP files?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — select multiple files or drag a folder onto the dropzone. Download each JPG individually or all at once as a ZIP." }},
+        { "@type": "Question", "name": "Why are my JPG files larger than the WebP originals?", "acceptedAnswer": { "@type": "Answer", "text": "WebP is usually more efficient than JPEG for photos. Re-encoding as JPG at high quality often produces a larger file — that's expected when prioritizing compatibility over size." }},
+        { "@type": "Question", "name": "Is there a monthly conversion limit?", "acceptedAnswer": { "@type": "Answer", "text": "No. Convert as many files as you want, as often as you want. There are no accounts, no quotas, and no premium tiers." }},
+        { "@type": "Question", "name": "How do I convert WebP to JPG on my iPhone or Android phone?", "acceptedAnswer": { "@type": "Answer", "text": "This tool works directly in your phone's browser — open the page in Safari, Chrome, or any modern mobile browser, tap the dropzone to pick a WebP file from your photo library or Files app, choose a quality preset, and tap to download the JPG. Conversion runs locally on your device, so it works the same on iPhone, iPad, and Android without installing an app. The downloaded JPG saves to your Downloads folder or Photos depending on your browser settings." }},
+        { "@type": "Question", "name": "Why does my browser save images as .webp instead of .jpg?", "acceptedAnswer": { "@type": "Answer", "text": "Modern websites serve WebP versions of their images automatically when your browser supports the format, because WebP files are typically 25-35% smaller than JPG, which makes pages load faster. Your browser doesn't choose the format — the website's server detects browser support via the Accept header and delivers WebP if available. When you 'save image as' or right-click to download, you get the file the server sent, which is now usually .webp. To use the image in tools that need JPG (email, older software, upload forms), convert it with this tool." }},
+        { "@type": "Question", "name": "Who maintains this tool and how is the methodology checked?", "acceptedAnswer": { "@type": "Answer", "text": "DoItSwift's tools and educational content are maintained by DoItSwift Editorial under a published editorial standard. The WebP to JPG converter uses the browser's native Canvas API to decode WebP and re-encode as JPEG — the same approach used by browser developer tools and many offline photo apps. Quality presets follow standard JPEG quantization conventions: 100% retains maximum fidelity, 85% balances size and quality, 70% prioritizes smaller file size. You can read the full editorial policy, research methodology, and fact-checking standards at /about/editorial-policy/, /about/how-we-research/, and /about/fact-checking/." }}
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://doitswift.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Image Tools", "item": "https://doitswift.com/image/" },
+        { "@type": "ListItem", "position": 3, "name": "WebP to JPG", "item": "https://doitswift.com/image/webp-to-jpg/" }
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "name": "How to Convert WebP to JPG in Your Browser",
+      "description": "Convert WebP images to JPEG entirely in your browser, with batch support and quality presets.",
+      "totalTime": "PT15S",
+      "step": [
+        { "@type": "HowToStep", "position": 1, "name": "Add your WebP files", "text": "Drop .webp files onto the converter or click to browse. Single file or batch supported." },
+        { "@type": "HowToStep", "position": 2, "name": "Choose JPEG quality", "text": "Default is 100% maximum quality. Open Advanced options to switch to Balanced (85%) or Small file (70%)." },
+        { "@type": "HowToStep", "position": 3, "name": "Download the result", "text": "Save each JPG individually, or click 'Download All as ZIP' for batch downloads." }
+      ]
+    }
+  ]
+})} />
+
+  <nav class="breadcrumb container container--tool" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/image/">Image Tools</a> › <span>WebP to JPG</span>
+  </nav>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" is:inline></script>
 
   <section class="hero">
     <div class="container">
       <div class="badge">🔒 100% Private — Files Never Leave Your Device</div>
-      <h1>WebP to JPG Converter</h1>
+      <h1>Free WebP to JPG Converter — Convert Unlimited Files in Your Browser</h1>
       <p class="subtitle">
-        Convert WebP images to JPG instantly. No uploads, no limits, no signup — processing stays in your browser.
+        The DoItSwift WebP to JPG Converter is a free online tool that turns Google's WebP images into universal JPEG files entirely in your browser. Convert one file or batch-convert hundreds at once — drag a folder, set a quality preset, download each JPG or all of them as a ZIP. No upload, no signup, no watermark, and no character or file-count limit. Works on Windows, Mac, Linux, iPhone, and Android. Free for personal and commercial use.
       </p>
       <div class="trust">
         <span><span class="check">✓</span> Unlimited files</span>
@@ -155,6 +207,27 @@ import MainLayout from '../../layouts/MainLayout.astro';
       </section>
 
       <section class="webp-edu-block">
+        <h2 id="why-browser-webp">Why your browser saves images as .webp instead of .jpg</h2>
+        <p>
+          When you right-click a website image and choose <strong>Save Image As</strong>, your browser saves the file your browser actually downloaded — and on modern websites, that file is increasingly a <strong>.webp</strong>, not a <strong>.jpg</strong>.
+        </p>
+        <p>
+          Your browser does not choose this format. The website's server picks it. When your browser requests an image, it sends an <code>Accept</code> HTTP header advertising which formats it supports. If WebP is on the list and the server has a WebP version available, the server delivers WebP because it is typically <strong>25-35% smaller</strong> than the equivalent JPG, which speeds up the page. You receive a WebP file and your browser saves it with the <code>.webp</code> extension.
+        </p>
+        <p>
+          This is great for performance but inconvenient when you want to email the image, paste it into older software, or upload it to a system that only accepts JPG or PNG. Three ways to handle it:
+        </p>
+        <ul>
+          <li><strong>Convert it.</strong> Use this WebP to JPG converter — paste or drop the file, get a JPG back.</li>
+          <li><strong>Use a screenshot.</strong> Crop and screenshot the image; the screenshot is saved in your OS's default format (usually PNG).</li>
+          <li><strong>Try a different download path.</strong> Some sites offer a "download original" link that bypasses the WebP optimization.</li>
+        </ul>
+        <p>
+          Conversion is the most reliable option for maintaining image quality. Screenshotting reduces resolution; "download original" depends on whether the site exposes one.
+        </p>
+      </section>
+
+      <section class="webp-edu-block">
         <h2 id="webp-vs-jpg">WebP vs JPG: Key differences</h2>
         <div class="webp-table-wrap">
           <table class="webp-compare-table">
@@ -235,24 +308,40 @@ import MainLayout from '../../layouts/MainLayout.astro';
         <div class="faq-item"><h4>Can I batch convert multiple WebP files?</h4><p>Yes — select multiple files or drag a folder onto the dropzone. Download each JPG individually or all at once as a ZIP.</p></div>
         <div class="faq-item"><h4>Why are my JPG files larger than the WebP originals?</h4><p>WebP is usually more efficient than JPEG for photos. Re-encoding as JPG at high quality often produces a larger file — that's expected when prioritizing compatibility over size.</p></div>
         <div class="faq-item"><h4>Is there a monthly conversion limit?</h4><p>No. Convert as many files as you want, as often as you want. There are no accounts, no quotas, and no premium tiers.</p></div>
+        <div class="faq-item"><h4>How do I convert WebP to JPG on my iPhone or Android phone?</h4><p>This tool works directly in your phone's browser — open the page in Safari, Chrome, or any modern mobile browser, tap the dropzone to pick a WebP file from your photo library or Files app, choose a quality preset, and tap to download the JPG. Conversion runs locally on your device, so it works the same on iPhone, iPad, and Android without installing an app. The downloaded JPG saves to your Downloads folder or Photos depending on your browser settings.</p></div>
+        <div class="faq-item"><h4>Why does my browser save images as .webp instead of .jpg?</h4><p>Modern websites serve WebP versions of their images automatically when your browser supports the format, because WebP files are typically 25-35% smaller than JPG, which makes pages load faster. Your browser doesn't choose the format — the website's server detects browser support via the Accept header and delivers WebP if available. When you "save image as" or right-click to download, you get the file the server sent, which is now usually .webp. To use the image in tools that need JPG (email, older software, upload forms), convert it with this tool.</p></div>
+        <div class="faq-item"><h4>Who maintains this tool and how is the methodology checked?</h4><p>DoItSwift's tools and educational content are maintained by DoItSwift Editorial under a published editorial standard. The WebP to JPG converter uses the browser's native Canvas API to decode WebP and re-encode as JPEG — the same approach used by browser developer tools and many offline photo apps. Quality presets follow standard JPEG quantization conventions: 100% retains maximum fidelity, 85% balances size and quality, 70% prioritizes smaller file size. You can read the full editorial policy, research methodology, and fact-checking standards at <a href="/about/editorial-policy/">editorial policy</a>, <a href="/about/how-we-research/">research methodology</a>, and <a href="/about/fact-checking/">fact-checking standards</a>.</p></div>
       </div>
     </div>
   </section>
 
-  <section class="webp-related" aria-label="Related tools and guides">
-    <div class="container">
-      <h2 class="section-title">Related tools</h2>
+  <div class="tool-editorial">
+    <div class="container container--tool">
+      <p>
+        <strong>Reviewed by DoItSwift Editorial.</strong> Conversion uses the browser's native Canvas API to decode WebP and re-encode as JPEG. WebP was developed by Google and announced on September 30, 2010, with the specification maintained at developers.google.com/speed/webp. JPEG quality presets follow standard quantization conventions documented in the JPEG specification (ITU-T T.81 / ISO/IEC 10918). Read our <a href="/about/editorial-policy/">editorial policy</a>, <a href="/about/how-we-research/">research methodology</a>, and <a href="/about/fact-checking/">fact-checking standards</a>.
+      </p>
+      <p class="tool-editorial-meta">Last reviewed: April 2026 · DoItSwift Editorial</p>
+      <p class="tool-editorial-meta">See an error or missing feature? <a href="/contact/">Let us know</a>.</p>
+    </div>
+  </div>
+
+  <section class="webp-related tool-related" aria-label="Related image tools and guides">
+    <div class="container container--tool">
+      <h2 class="section-title">Related Image Tools</h2>
       <ul class="webp-related-grid">
-        <li><a href="/image/heic-to-jpg/">HEIC to JPG Converter</a></li>
-        <li><a href="/image/avif-to-jpg/">AVIF to JPG Converter</a></li>
-        <li><a href="/image/image-compressor/">Image Compressor</a></li>
-        <li><a href="/image/image-resizer/">Image Resizer</a></li>
+        <li><a href="/image/heic-to-jpg/">HEIC to JPG Converter</a> — Convert iPhone HEIC photos to JPG</li>
+        <li><a href="/image/avif-to-jpg/">AVIF to JPG Converter</a> — Convert next-gen AVIF format to JPG</li>
+        <li><a href="/image/image-compressor/">Image Compressor</a> — Reduce JPG, PNG, and WebP file sizes</li>
+        <li><a href="/image/image-resizer/">Image Resizer</a> — Resize images to exact dimensions</li>
+        <li><a href="/image/svg-to-png/">SVG to PNG Converter</a> — Rasterize vector graphics</li>
+        <li><a href="/image/image-to-base64/">Image to Base64</a> — Embed small images directly in HTML/CSS</li>
       </ul>
-      <h2 class="section-title section-title-sub">Related guides</h2>
+      <h2 class="section-title section-title-sub">Related Guides</h2>
       <ul class="webp-related-grid webp-related-guides">
-        <li><a href="/blog/best-image-format-for-web/">Best Image Format for Websites (WebP vs AVIF vs JPG)</a></li>
+        <li><a href="/blog/best-image-format-for-web/">Best Image Format for Websites: WebP vs AVIF vs JPG vs PNG</a></li>
         <li><a href="/blog/heic-vs-jpg/">HEIC vs JPG: Complete Comparison</a></li>
-        <li><a href="/blog/convert-iphone-photos-to-jpg/">Convert iPhone Photos to JPG</a></li>
+        <li><a href="/blog/convert-iphone-photos-to-jpg/">How to Convert iPhone Photos to JPG</a></li>
+        <li><a href="/blog/open-heic-windows-11/">How to Open HEIC Files on Windows 11</a></li>
       </ul>
     </div>
   </section>
