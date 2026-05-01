@@ -48,7 +48,7 @@ const ogImageUrl =
     ? ogImageProp.startsWith('http')
       ? ogImageProp
       : new URL(ogImageProp.startsWith('/') ? ogImageProp : `/${ogImageProp}`, site).href
-    : new URL('/og-default.svg', site).href);
+    : new URL('/og-default.png', site).href);
 
 const siteRootUrl = site ? new URL('/', site).href : null;
 /** Organization only — homepage adds WebSite via `websiteSchemaLd` slot to avoid duplicate WebSite JSON-LD. */

@@ -30,12 +30,12 @@ const tools = [
     coming: false,
   },
   {
-    href: null,
+    href: '/text/json-formatter/',
     icon: '🔧',
-    title: 'JSON Formatter',
-    desc: 'Format, validate, and minify JSON. Syntax highlighting and tree view for developers.',
-    live: false,
-    coming: true,
+    title: 'JSON Formatter & Validator',
+    desc: 'Format, validate, and minify JSON entirely in your browser with smart error messages.',
+    live: true,
+    coming: false,
   },
   {
     href: null,
@@ -107,7 +107,7 @@ const textHubItemListLd = {
       '@type': 'ListItem',
       position: 4,
       url: 'https://doitswift.com/text/json-formatter/',
-      name: 'JSON Formatter',
+      name: 'JSON Formatter & Validator',
     },
     {
       '@type': 'ListItem',
@@ -193,7 +193,7 @@ const textCollectionJsonLd = {
       '@type': 'WebPage',
       '@id': `${canonical}#webpage`,
       url: canonical,
-      name: 'Free Text Tools — Word Counter, Case Converter, Lorem Ipsum | DoItSwift',
+      name: 'Free Text Tools — Word Counter, Case Converter, Lorem Ipsum, JSON | DoItSwift',
       description: pageDescription,
       about: { '@id': `${canonical}#collection` },
       ...(siteRoot ? { isPartOf: { '@type': 'WebSite', name: 'DoItSwift', url: siteRoot } } : {}),
@@ -212,7 +212,7 @@ const textCollectionJsonLd = {
 ---
 
 <MainLayout
-  title="Free Text Tools — Word Counter, Case Converter, Lorem Ipsum | DoItSwift"
+  title="Free Text Tools — Word Counter, Case Converter, Lorem Ipsum, JSON | DoItSwift"
   description={pageDescription}
   keywords="free text tools, online text utilities, text converter, word counter, text formatter, browser text tools, privacy text tools, doitswift"
   canonical={canonical}
@@ -240,8 +240,8 @@ const textCollectionJsonLd = {
     <div class="container">
       <h2 class="section-title">All text tools</h2>
       <p class="section-sub">
-        Pick a tool — your text stays on your device. <strong>Two tools are live</strong> (Word Counter and Case
-        Converter); four more text utilities are in development.
+        Pick a tool — your text stays on your device. <strong>Four tools are live</strong> (Word Counter, Case
+        Converter, Lorem Ipsum Generator, and JSON Formatter &amp; Validator); two more text utilities are in development.
       </p>
       <div class="grid">
         {tools.map((tool) =>
@@ -286,7 +286,7 @@ const textCollectionJsonLd = {
           Reliability is another reason teams reach for in-browser tools: the same build works in Chrome, Edge, Firefox, and Safari, desktop or phone, with no version skew across machines. We focus on the essentials — counting, case changes, diffing, formatting — so you can work without another subscription or sign-up wall.
         </p>
         <p>
-          Compared to extension stores or marketplaces, an open page on DoItSwift leaves <strong>no new permissions</strong> to approve on your system; just bookmark the tool you use most. This hub will grow: word counting, case conversion, and the Lorem Ipsum Generator are live; JSON formatting and more are on the way.
+          Compared to extension stores or marketplaces, an open page on DoItSwift leaves <strong>no new permissions</strong> to approve on your system; just bookmark the tool you use most. This hub will grow: word counting, case conversion, the Lorem Ipsum Generator, and the JSON Formatter &amp; Validator are live; diffing and Markdown preview are on the way.
         </p>
       </div>
     </div>

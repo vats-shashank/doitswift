@@ -1,0 +1,3662 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const pageTitle = 'Free JSON Formatter & Validator — Privacy-First, No Upload';
+const pageDescription =
+  'Format, validate & transform JSON entirely in your browser. Real error explanations, custom syntax highlighting. No upload, no signup, no trackers.';
+const pageKeywords =
+  'json formatter, json validator, json beautifier, json prettifier, json minifier, online json formatter, json formatter online, free json formatter, json parser, json formatter no upload, json formatter private, json formatter browser, validate json, format json, prettify json, minify json, json syntax checker, json error checker, json formatter with line numbers, json formatter no signup, json formatter no ads, json formatter privacy, json beautify online, json validator online, json formatter offline, large json formatter, json formatter chrome, json formatter mac, json formatter windows';
+
+const sampleJson = `{
+  "name": "DoItSwift JSON Formatter",
+  "version": "1.0.0",
+  "private": true,
+  "features": [
+    "browser-based",
+    "no upload",
+    "smart errors"
+  ],
+  "config": {
+    "indent": 2,
+    "sortKeys": false,
+    "lenient": false
+  },
+  "stats": {
+    "users": null,
+    "trackers": 0
+  }
+}`;
+---
+
+<MainLayout title={pageTitle} description={pageDescription} keywords={pageKeywords} canonical="https://doitswift.com/text/json-formatter/">
+  <!-- Schema graph - placeholder for Session 7 -->
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'DoItSwift JSON Formatter & Validator',
+      applicationCategory: 'UtilitiesApplication',
+      operatingSystem: 'Any (Web Browser)',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      url: 'https://doitswift.com/text/json-formatter/',
+      description:
+        'Privacy-first JSON formatter, validator, and beautifier. Runs entirely in your browser with smart error messages.',
+    })}
+  />
+
+  <nav class="breadcrumb container container--tool" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/text/">Text Tools</a> › <span>JSON Formatter</span>
+  </nav>
+
+  <section class="tool-hero">
+    <div class="container container--tool">
+      <h1>JSON Formatter &amp; Validator — Privacy-First, Browser-Based</h1>
+      <p class="subtitle">
+        The DoItSwift JSON Formatter formats, validates, and minifies JSON entirely in your browser — your data never leaves your device. Get human-readable error messages that tell you exactly what is wrong, not just <code>Unexpected token at position 1247</code>. No signup, no analytics, no third-party trackers — verifiable in your browser's DevTools Network tab.
+      </p>
+      <div class="trust-signals">
+        <span><span class="check">✓</span> Browser-based · No upload</span>
+        <span><span class="check">✓</span> Smart error messages</span>
+        <span><span class="check">✓</span> Syntax highlighting</span>
+        <span><span class="check">✓</span> No signup, no ads</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="tool-section">
+    <div class="container container--tool">
+      <div class="jf-mode-toggle" role="tablist" aria-label="Tool mode">
+        <button type="button" class="jf-mode-tab is-active" data-mode-group="format" role="tab" aria-selected="true">Format</button>
+        <button type="button" class="jf-mode-tab" data-mode-group="convert" role="tab" aria-selected="false">Convert</button>
+        <button type="button" class="jf-mode-tab" data-mode-group="validate" role="tab" aria-selected="false">Validate</button>
+        <button type="button" class="jf-mode-tab" data-mode-group="diff" role="tab" aria-selected="false">Diff</button>
+        <button type="button" class="jf-mode-tab" data-mode-group="query" role="tab" aria-selected="false">Query</button>
+      </div>
+
+      <!-- Action bar -->
+      <div class="jf-actions">
+        <button id="jfFormat" class="btn btn-primary">Format</button>
+        <button id="jfMinify" class="btn btn-secondary">Minify</button>
+        <button id="jfValidate" class="btn btn-secondary">Validate</button>
+        <button id="jfClear" class="btn btn-tertiary">Clear</button>
+
+        <span id="jfStatus" class="jf-status" role="status" aria-live="polite"></span>
+
+        <button type="button" id="jfSettingsBtn" class="jf-settings-btn" aria-label="Settings" title="Settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Settings panel (hidden by default) -->
+      <div class="jf-settings-panel" id="jfSettingsPanel" hidden>
+        <h3 class="jf-settings-heading">Settings</h3>
+        <div class="jf-settings-grid">
+          <label class="jf-field">
+            <span class="jf-label">Indent</span>
+            <select id="jfIndent" class="jf-input">
+              <option value="2" selected>2 spaces</option>
+              <option value="4">4 spaces</option>
+              <option value="tab">Tab</option>
+            </select>
+          </label>
+          <label class="jf-checkbox">
+            <input id="jfSortKeys" type="checkbox" />
+            <span>Sort keys alphabetically</span>
+          </label>
+          <label class="jf-checkbox">
+            <input id="jfLenient" type="checkbox" />
+            <span>Lenient mode (allow comments &amp; trailing commas)</span>
+          </label>
+          <label class="jf-checkbox">
+            <input id="jfAutoFormat" type="checkbox" checked />
+            <span>Auto-format on paste</span>
+          </label>
+        </div>
+        <p class="jf-settings-hint">Settings apply to your current session only. Nothing is saved across page reloads to keep this tool tracker-free.</p>
+      </div>
+
+      <div class="jf-convert-controls" id="jfConvertControls" hidden>
+        <div class="jf-convert-row">
+          <label class="jf-field">
+            <span class="jf-label">Direction</span>
+            <select id="jfConvertDirection" class="jf-input">
+              <option value="json-to-x" selected>JSON → Other Format</option>
+              <option value="x-to-json">Other Format → JSON</option>
+            </select>
+          </label>
+          <label class="jf-field">
+            <span class="jf-label">Format</span>
+            <select id="jfConvertFormat" class="jf-input">
+              <option value="typescript" selected>TypeScript Interface</option>
+              <option value="csv">CSV</option>
+              <option value="yaml">YAML</option>
+            </select>
+          </label>
+          <button id="jfConvert" class="btn btn-primary jf-convert-btn">Convert</button>
+        </div>
+        <p class="jf-convert-hint" id="jfConvertHint">
+          JSON to TypeScript: produces interface declarations with optional fields detected across array items.
+        </p>
+      </div>
+
+      <div class="jf-validate-controls" id="jfValidateControls" hidden>
+        <div class="jf-validate-row">
+          <button id="jfValidateRun" class="btn btn-primary">Validate JSON Against Schema</button>
+          <button id="jfGenerateSchema" class="btn btn-secondary" type="button">Generate Schema From JSON</button>
+        </div>
+        <p class="jf-validate-hint">
+          Paste your JSON in the left pane and your JSON Schema in the right pane. Supports JSON Schema draft-07 and 2020-12 for common keywords.
+        </p>
+      </div>
+
+      <div class="jf-diff-controls" id="jfDiffControls" hidden>
+        <div class="jf-diff-row">
+          <button id="jfDiffRun" class="btn btn-primary">Compare JSON Documents</button>
+          <div class="jf-diff-view-toggle" role="tablist" aria-label="Diff view">
+            <button type="button" class="jf-diff-view-tab is-active" data-diff-view="side-by-side" role="tab" aria-selected="true">Side-by-side</button>
+            <button type="button" class="jf-diff-view-tab" data-diff-view="change-list" role="tab" aria-selected="false">Change list</button>
+          </div>
+        </div>
+        <p class="jf-diff-hint">
+          Paste the original JSON in the left pane and the modified JSON in the right pane. Arrays are compared index-by-index — semantic reordering may appear as differences.
+        </p>
+      </div>
+
+      <div class="jf-query-controls" id="jfQueryControls" hidden>
+        <div class="jf-query-row">
+          <label class="jf-field jf-query-input-field">
+            <span class="jf-label">JSONPath Query</span>
+            <input
+              id="jfQueryInput"
+              type="text"
+              class="jf-input jf-query-input"
+              placeholder="$.users[*].name"
+              autocomplete="off"
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck="false"
+            />
+          </label>
+          <button id="jfQueryRun" class="btn btn-primary jf-query-btn">Run Query</button>
+          <button type="button" id="jfQueryHelpBtn" class="btn-icon" aria-label="Show JSONPath syntax reference" title="Syntax reference">?</button>
+        </div>
+
+        <div class="jf-query-view-toggle" role="tablist" aria-label="Query result view">
+          <button type="button" class="jf-query-view-tab is-active" data-query-view="matches" role="tab" aria-selected="true">Matches list</button>
+          <button type="button" class="jf-query-view-tab" data-query-view="highlighted" role="tab" aria-selected="false">Highlighted source</button>
+        </div>
+
+        <div class="jf-query-help" id="jfQueryHelp" hidden>
+          <h4>Supported JSONPath Syntax</h4>
+          <table class="jf-query-help-table">
+            <tr><td><code>$</code></td><td>Root of the document</td></tr>
+            <tr><td><code>.key</code> or <code>['key']</code></td><td>Child by name</td></tr>
+            <tr><td><code>['k1','k2']</code></td><td>Multiple children</td></tr>
+            <tr><td><code>[0]</code> or <code>[-1]</code></td><td>Array index (negative from end)</td></tr>
+            <tr><td><code>[1:5]</code> or <code>[::2]</code></td><td>Array slice</td></tr>
+            <tr><td><code>[*]</code> or <code>.*</code></td><td>All children (wildcard)</td></tr>
+            <tr><td><code>..key</code> or <code>..['key']</code></td><td>Recursive descent</td></tr>
+            <tr>
+              <td><code>[?(@.x &gt; 5)]</code></td>
+              <td>Filter (comparison: == != &lt; &lt;= &gt; &gt;=, logical: &amp;&amp; ||)</td>
+            </tr>
+          </table>
+          <p class="jf-query-help-note">
+            <strong>Examples:</strong> <code>$.store.book[*].author</code> · <code>$..price</code> · <code>$.users[?(@.age &gt;= 18)]</code> · <code>$..book[?(@.category == 'fiction')]</code>
+          </p>
+          <p class="jf-query-help-note">
+            <strong>Not supported:</strong> script expressions like <code>[(@.length-1)]</code>, function calls like <code>length()</code>, regex match
+            operators.
+          </p>
+        </div>
+      </div>
+
+      <p class="jf-privacy-banner" role="status">
+        Nothing you paste or upload is sent to any server — parsing, formatting, and validation run only in this tab.
+      </p>
+
+      <!-- Input / schema / output panes -->
+      <div class="jf-panes">
+        <!-- Input pane (JSON) -->
+        <div class="jf-pane">
+          <div class="jf-pane-header">
+            <span class="jf-pane-label" id="jfInputLabel">Input</span>
+            <span id="jfInputStats" class="jf-pane-stats">0 chars · 0 bytes</span>
+            <div class="jf-pane-actions">
+              <button id="jfFileBtn" class="btn-icon" type="button" title="Upload .json or .txt file" aria-label="Upload file">Upload</button>
+              <input id="jfFileInput" type="file" accept=".json,.txt,application/json,text/plain" hidden />
+            </div>
+          </div>
+          <div class="jf-dropzone" id="jfDropzone">
+            <div id="jfInputEditor" class="jf-input-editor"></div>
+            <div class="jf-dropzone-overlay" id="jfDropzoneOverlay" aria-hidden="true">
+              <div class="jf-dropzone-message">Drop a .json or .txt file to load it</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Schema pane (visible only in Validate mode) -->
+        <div class="jf-pane jf-schema-pane" id="jfSchemaPane" hidden>
+          <div class="jf-pane-header">
+            <span class="jf-pane-label">JSON Schema</span>
+            <span id="jfSchemaStats" class="jf-pane-stats">0 chars · 0 bytes</span>
+            <div class="jf-pane-actions">
+              <button id="jfSchemaFileBtn" class="btn-icon" type="button" title="Upload schema file" aria-label="Upload schema file">Upload</button>
+              <input id="jfSchemaFileInput" type="file" accept=".json,.txt,application/json,text/plain" hidden />
+            </div>
+          </div>
+          <textarea
+            id="jfSchemaInput"
+            class="jf-textarea"
+            spellcheck="false"
+            autocapitalize="off"
+            autocomplete="off"
+            autocorrect="off"
+            aria-label="JSON Schema input"
+            placeholder="Paste your JSON Schema here. Example:&#10;{&#10;  &quot;type&quot;: &quot;object&quot;,&#10;  &quot;properties&quot;: { &quot;name&quot;: { &quot;type&quot;: &quot;string&quot; } },&#10;  &quot;required&quot;: [&quot;name&quot;]&#10;}"
+          ></textarea>
+        </div>
+
+        <!-- Output pane -->
+        <div class="jf-pane">
+          <div class="jf-pane-header">
+            <span class="jf-pane-label" id="jfOutputLabel">Output</span>
+            <div class="jf-view-tabs" role="tablist" aria-label="Output view">
+              <button type="button" class="jf-view-tab is-active" data-view="text" role="tab" aria-selected="true">Text</button>
+              <button type="button" class="jf-view-tab" data-view="tree" role="tab" aria-selected="false">Tree</button>
+            </div>
+            <span id="jfOutputStats" class="jf-pane-stats">0 chars · 0 bytes</span>
+            <div class="jf-pane-actions">
+              <button id="jfTreeExpand" class="btn-icon" type="button" hidden title="Expand all nodes" aria-label="Expand all nodes">Expand</button>
+              <button id="jfTreeCollapse" class="btn-icon" type="button" hidden title="Collapse all nodes" aria-label="Collapse all nodes">Collapse</button>
+              <button id="jfCopy" class="btn-icon" type="button" title="Copy output" aria-label="Copy output">Copy</button>
+              <button id="jfDownload" class="btn-icon" type="button" title="Download" aria-label="Download">Download</button>
+            </div>
+          </div>
+          <div id="jfOutputWrap" class="jf-output-wrap">
+            <pre id="jfOutput" class="jf-output" aria-label="Formatted JSON output" tabindex="0"></pre>
+            <div id="jfTreeView" class="jf-tree-view" hidden aria-label="JSON tree view"></div>
+            <div id="jfValidationResults" class="jf-validation-results" hidden aria-label="Validation results"></div>
+            <div id="jfDiffSideBySide" class="jf-diff-side-by-side" hidden aria-label="Diff side-by-side view">
+              <div id="jfDiffSummaryWrap" class="jf-diff-summary-wrap"></div>
+              <div class="jf-diff-grid">
+                <div class="jf-diff-pane">
+                  <div class="jf-diff-pane-header">Original (Left)</div>
+                  <pre id="jfDiffLeft" class="jf-diff-rendered jf-diff-placeholder">Click "Compare JSON Documents" to see differences.</pre>
+                </div>
+                <div class="jf-diff-pane">
+                  <div class="jf-diff-pane-header">Modified (Right)</div>
+                  <pre id="jfDiffRight" class="jf-diff-rendered jf-diff-placeholder"></pre>
+                </div>
+              </div>
+            </div>
+            <div id="jfDiffChangeList" class="jf-diff-change-list" hidden aria-label="Diff change list view"></div>
+            <div id="jfQueryMatches" class="jf-query-matches" hidden aria-label="JSONPath matches"></div>
+            <div id="jfQueryHighlighted" class="jf-query-highlighted" hidden aria-label="JSONPath highlighted source"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Error panel (hidden by default) -->
+      <div id="jfErrorPanel" class="jf-error-panel" hidden role="alert">
+        <div class="jf-error-header">
+          <strong>JSON Error</strong>
+          <span id="jfErrorPosition" class="jf-error-position"></span>
+        </div>
+        <p id="jfErrorFriendly" class="jf-error-friendly"></p>
+        <pre id="jfErrorExcerpt" class="jf-error-excerpt"></pre>
+        <p class="jf-error-raw">Raw: <code id="jfErrorRaw"></code></p>
+      </div>
+
+      <div class="jf-privacy-badge-wrap">
+        <button type="button" id="jfPrivacyBadge" class="jf-privacy-badge" aria-haspopup="dialog">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <path d="M9 12l2 2 4-4"></path>
+          </svg>
+          <span>Privacy Verified — Verify in your browser</span>
+        </button>
+      </div>
+
+      <!-- Keyboard shortcut hints -->
+      <p class="jf-shortcut-hint" aria-hidden="true">
+        <kbd>Ctrl</kbd>+<kbd>B</kbd> Format · <kbd>Ctrl</kbd>+<kbd>M</kbd> Minify · <kbd>Ctrl</kbd>+<kbd>K</kbd> Clear
+      </p>
+    </div>
+  </section>
+
+  <!-- Editorial footer (placeholder; expanded in Session 7) -->
+  <div class="tool-editorial">
+    <div class="container container--tool">
+      <p>
+        <strong>Reviewed by DoItSwift Editorial.</strong> This tool uses the browser's native <code>JSON.parse</code> and <code>JSON.stringify</code> to format and validate JSON. Lenient mode preprocesses input to strip <code>//</code> and <code>/* */</code> comments and trailing commas before parsing. Syntax highlighting and error positioning run entirely in your browser using vanilla JavaScript — no JSON content is sent to any server. Read our <a href="/about/editorial-policy/">editorial policy</a>, <a href="/about/how-we-research/">research methodology</a>, and <a href="/about/fact-checking/">fact-checking standards</a>.
+      </p>
+      <p class="tool-editorial-meta">Last reviewed: April 2026 · DoItSwift Editorial</p>
+      <p class="tool-editorial-meta">See an issue or missing feature? <a href="/contact/">Let us know</a>.</p>
+    </div>
+  </div>
+
+  <!-- Related tools (placeholder; expanded in Session 7) -->
+  <section class="jf-related tool-related" aria-label="Related text tools and developer utilities">
+    <div class="container container--tool">
+      <h2 class="section-title">Related Text Tools</h2>
+      <ul class="jf-related-grid">
+        <li><a href="/text/word-counter/">Word Counter</a> — Count words, characters, sentences, and reading time</li>
+        <li><a href="/text/case-converter/">Case Converter</a> — Convert text between 15 capitalization formats</li>
+        <li><a href="/generator/lorem-ipsum/">Lorem Ipsum Generator</a> — UI-shaped placeholder text in 8 languages</li>
+      </ul>
+    </div>
+  </section>
+
+  <div id="jfPrivacyModal" class="jf-modal" hidden role="dialog" aria-labelledby="jfPrivacyModalTitle" aria-modal="true">
+    <div class="jf-modal-backdrop" id="jfPrivacyModalBackdrop"></div>
+    <div class="jf-modal-content">
+      <div class="jf-modal-header">
+        <h3 id="jfPrivacyModalTitle">Verify Privacy in Your Browser</h3>
+        <button type="button" id="jfPrivacyModalClose" class="jf-modal-close" aria-label="Close">×</button>
+      </div>
+      <div class="jf-modal-body">
+        <p>
+          This JSON Formatter runs entirely in your browser. No JSON content, file uploads, or settings ever leave your device. You can verify this yourself in 30 seconds:
+        </p>
+        <ol class="jf-privacy-steps">
+          <li>
+            <strong>Open DevTools.</strong> Right-click anywhere on this page and choose <em>Inspect</em>, or press <kbd>F12</kbd> (Windows/Linux) or <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>I</kbd> (Mac).
+          </li>
+          <li>
+            <strong>Go to the Network tab</strong> in the DevTools panel.
+          </li>
+          <li>
+            <strong>Clear the existing requests</strong> (the 🚫 or trash icon). Make sure recording is on (red dot).
+          </li>
+          <li>
+            <strong>Paste any JSON into the input area and click Format.</strong>
+          </li>
+          <li>
+            <strong>Look at the Network tab.</strong> You will see <strong>zero new outbound requests</strong>. The formatting, validation, and syntax highlighting all happen locally in JavaScript.
+          </li>
+        </ol>
+        <p class="jf-privacy-compare">
+          <strong>Compare with other JSON formatters:</strong> Many "browser-based" tools actually send your JSON to their servers for processing. Some bundle analytics or ad scripts that capture page interaction. The DoItSwift JSON Formatter has none of these — confirmed by the verification above.
+        </p>
+        <p class="jf-privacy-source">
+          Want to read the source code? The page and all libraries are visible in DevTools → Sources tab. The repository is also publicly available — see our <a href="/about/editorial-policy/">editorial policy</a> for details.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import { format, minify, validate, type FormatOptions, type FormatOutcome } from '../../lib/jsonFormatter';
+    import { highlightJson } from '../../lib/jsonHighlighter';
+    import { JsonCodeEditor } from '../../lib/jsonCodeEditor';
+    import { renderTree, expandAll, collapseAll } from '../../lib/jsonTreeView';
+    import { jsonToTypeScript, jsonToCsv, csvToJson, jsonToYaml, yamlToJson } from '../../lib/jsonTransforms';
+    import { validateAgainstSchema, generateSchemaFromSample, type ValidationResult } from '../../lib/jsonSchema';
+    import { diffJson, renderDiffSideBySide, type DiffResult } from '../../lib/jsonDiff';
+    import { executeQuery, type PathMatch } from '../../lib/jsonPath';
+
+    const SAMPLE_JSON = `{
+  "name": "DoItSwift JSON Formatter",
+  "version": "1.0.0",
+  "private": true,
+  "features": [
+    "browser-based",
+    "no upload",
+    "smart errors"
+  ],
+  "config": {
+    "indent": 2,
+    "sortKeys": false,
+    "lenient": false
+  },
+  "stats": {
+    "users": null,
+    "trackers": 0
+  }
+}`;
+
+    // Element refs
+    const inputHost = document.getElementById('jfInputEditor') as HTMLDivElement;
+    let editor: JsonCodeEditor;
+
+    // Create a Proxy-like compatibility object so existing code that reads input.value / sets input.value continues to work
+    const input = {
+      get value() {
+        return editor ? editor.getValue() : '';
+      },
+      set value(v: string) {
+        if (editor) editor.setValue(v);
+      },
+      focus() {
+        editor?.focus();
+      },
+      setSelectionRange(start: number, end: number) {
+        editor?.setSelectionRange(start, end);
+      },
+      // Used by some keyboard/event handlers — return the underlying textarea element
+      get element() {
+        return editor?.element;
+      },
+      // For event listeners that were attached to the old textarea — attach them to the new internal textarea via initEditor wiring instead
+      addEventListener: (...args: any[]) => editor?.element.addEventListener(...(args as [any, any, any])),
+      removeEventListener: (...args: any[]) => editor?.element.removeEventListener(...(args as [any, any, any])),
+    } as any;
+    const output = document.getElementById('jfOutput') as HTMLPreElement;
+    const inputStats = document.getElementById('jfInputStats') as HTMLSpanElement;
+    const outputStats = document.getElementById('jfOutputStats') as HTMLSpanElement;
+    const status = document.getElementById('jfStatus') as HTMLSpanElement;
+
+    const formatBtn = document.getElementById('jfFormat') as HTMLButtonElement;
+    const minifyBtn = document.getElementById('jfMinify') as HTMLButtonElement;
+    const validateBtn = document.getElementById('jfValidate') as HTMLButtonElement;
+    const clearBtn = document.getElementById('jfClear') as HTMLButtonElement;
+    const copyBtn = document.getElementById('jfCopy') as HTMLButtonElement;
+    const downloadBtn = document.getElementById('jfDownload') as HTMLButtonElement;
+    const formatActionBtns = [formatBtn, minifyBtn, validateBtn];
+
+    const settingsBtn = document.getElementById('jfSettingsBtn') as HTMLButtonElement;
+    const settingsPanel = document.getElementById('jfSettingsPanel') as HTMLDivElement;
+    const indentSel = document.getElementById('jfIndent') as HTMLSelectElement;
+    const sortKeysCb = document.getElementById('jfSortKeys') as HTMLInputElement;
+    const lenientCb = document.getElementById('jfLenient') as HTMLInputElement;
+    const autoFormatCb = document.getElementById('jfAutoFormat') as HTMLInputElement;
+
+    const errorPanel = document.getElementById('jfErrorPanel') as HTMLDivElement;
+    const errorPosition = document.getElementById('jfErrorPosition') as HTMLSpanElement;
+    const errorFriendly = document.getElementById('jfErrorFriendly') as HTMLParagraphElement;
+    const errorExcerpt = document.getElementById('jfErrorExcerpt') as HTMLPreElement;
+    const errorRaw = document.getElementById('jfErrorRaw') as HTMLElement;
+
+    // View toggle
+    const viewTabs = document.querySelectorAll<HTMLButtonElement>('.jf-view-tab');
+    const treeView = document.getElementById('jfTreeView') as HTMLDivElement;
+    const treeExpandBtn = document.getElementById('jfTreeExpand') as HTMLButtonElement;
+    const treeCollapseBtn = document.getElementById('jfTreeCollapse') as HTMLButtonElement;
+
+    // File upload
+    const fileBtn = document.getElementById('jfFileBtn') as HTMLButtonElement;
+    const fileInput = document.getElementById('jfFileInput') as HTMLInputElement;
+    const dropzone = document.getElementById('jfDropzone') as HTMLDivElement;
+    const dropzoneOverlay = document.getElementById('jfDropzoneOverlay') as HTMLDivElement;
+
+    // Privacy badge / modal
+    const privacyBadge = document.getElementById('jfPrivacyBadge') as HTMLButtonElement;
+    const privacyModal = document.getElementById('jfPrivacyModal') as HTMLDivElement;
+    const privacyModalClose = document.getElementById('jfPrivacyModalClose') as HTMLButtonElement;
+    const privacyModalBackdrop = document.getElementById('jfPrivacyModalBackdrop') as HTMLDivElement;
+
+    // Mode toggle
+    const modeTabs = document.querySelectorAll<HTMLButtonElement>('.jf-mode-tab');
+    const convertControls = document.getElementById('jfConvertControls') as HTMLDivElement;
+    const convertDirection = document.getElementById('jfConvertDirection') as HTMLSelectElement;
+    const convertFormat = document.getElementById('jfConvertFormat') as HTMLSelectElement;
+    const convertBtn = document.getElementById('jfConvert') as HTMLButtonElement;
+    const convertHint = document.getElementById('jfConvertHint') as HTMLParagraphElement;
+    const inputLabel = document.getElementById('jfInputLabel') as HTMLSpanElement;
+    const outputLabel = document.getElementById('jfOutputLabel') as HTMLSpanElement;
+
+    // Validate mode
+    const validateControls = document.getElementById('jfValidateControls') as HTMLDivElement;
+    const validateRunBtn = document.getElementById('jfValidateRun') as HTMLButtonElement;
+    const generateSchemaBtn = document.getElementById('jfGenerateSchema') as HTMLButtonElement;
+    const schemaPane = document.getElementById('jfSchemaPane') as HTMLDivElement;
+    const schemaInput = document.getElementById('jfSchemaInput') as HTMLTextAreaElement;
+    const schemaStats = document.getElementById('jfSchemaStats') as HTMLSpanElement;
+    const schemaFileBtn = document.getElementById('jfSchemaFileBtn') as HTMLButtonElement;
+    const schemaFileInput = document.getElementById('jfSchemaFileInput') as HTMLInputElement;
+    const validationResults = document.getElementById('jfValidationResults') as HTMLDivElement;
+
+    // Diff mode
+    const diffControls = document.getElementById('jfDiffControls') as HTMLDivElement;
+    const diffRunBtn = document.getElementById('jfDiffRun') as HTMLButtonElement;
+    const diffViewTabs = document.querySelectorAll<HTMLButtonElement>('.jf-diff-view-tab');
+    const diffSideBySide = document.getElementById('jfDiffSideBySide') as HTMLDivElement;
+    const diffLeft = document.getElementById('jfDiffLeft') as HTMLPreElement;
+    const diffRight = document.getElementById('jfDiffRight') as HTMLPreElement;
+    const diffChangeList = document.getElementById('jfDiffChangeList') as HTMLDivElement;
+
+    // Query mode
+    const queryControls = document.getElementById('jfQueryControls') as HTMLDivElement;
+    const queryInput = document.getElementById('jfQueryInput') as HTMLInputElement;
+    const queryRunBtn = document.getElementById('jfQueryRun') as HTMLButtonElement;
+    const queryHelpBtn = document.getElementById('jfQueryHelpBtn') as HTMLButtonElement;
+    const queryHelp = document.getElementById('jfQueryHelp') as HTMLDivElement;
+    const queryViewTabs = document.querySelectorAll<HTMLButtonElement>('.jf-query-view-tab');
+    const queryMatches = document.getElementById('jfQueryMatches') as HTMLDivElement;
+    const queryHighlighted = document.getElementById('jfQueryHighlighted') as HTMLDivElement;
+
+    // State
+    let currentMode: 'format' | 'convert' | 'validate' | 'diff' | 'query' = 'format';
+    let activeView: 'text' | 'tree' = 'text';
+    let lastParsed: any = null;
+    let lastOutputPlain = '';
+
+    let activeDiffView: 'side-by-side' | 'change-list' = 'side-by-side';
+    let lastDiffResult: DiffResult | null = null;
+    let lastDiffOldVal: any = null;
+    let lastDiffNewVal: any = null;
+
+    let activeQueryView: 'matches' | 'highlighted' = 'matches';
+    let lastQueryMatches: PathMatch[] | null = null;
+    let lastQueryRoot: any = null;
+
+    // Helpers
+    function setStatus(msg: string, kind: 'ok' | 'err' | '' = '', persistMs = 2000) {
+      status.textContent = msg;
+      status.dataset.kind = kind;
+      if (persistMs > 0) {
+        setTimeout(() => {
+          if (status.textContent === msg) {
+            status.textContent = '';
+            status.dataset.kind = '';
+          }
+        }, persistMs);
+      }
+    }
+
+    function updateInputStats() {
+      const text = input.value;
+      const chars = text.length;
+      const bytes = new TextEncoder().encode(text).length;
+      inputStats.textContent = `${chars.toLocaleString()} chars · ${bytes.toLocaleString()} bytes`;
+    }
+
+    function updateOutputStats(text: string) {
+      const chars = text.length;
+      const bytes = new TextEncoder().encode(text).length;
+      outputStats.textContent = `${chars.toLocaleString()} chars · ${bytes.toLocaleString()} bytes`;
+    }
+
+    function getOptions(): FormatOptions {
+      const indentRaw = indentSel.value;
+      const indent: number | 'tab' = indentRaw === 'tab' ? 'tab' : parseInt(indentRaw, 10);
+      return {
+        indent,
+        sortKeys: sortKeysCb.checked,
+        lenient: lenientCb.checked,
+      };
+    }
+
+    function jumpToInputLine(line: number, column: number) {
+      const lines = input.value.split('\n');
+      if (line < 1 || line > lines.length) return;
+
+      let offset = 0;
+      for (let i = 0; i < line - 1; i++) {
+        offset += lines[i].length + 1;
+      }
+      const lineStart = offset;
+      const lineEnd = lineStart + (lines[line - 1]?.length ?? 0);
+
+      input.setSelectionRange(lineStart, lineEnd);
+    }
+
+    function showError(err: Extract<FormatOutcome, { ok: false }>) {
+      lastParsed = null;
+      lastOutputPlain = '';
+      treeView.innerHTML = '';
+      treeView.style.display = 'none';
+      if (currentMode === 'format') {
+        treeView.setAttribute('hidden', '');
+        output.style.display = '';
+        treeExpandBtn.setAttribute('hidden', '');
+        treeCollapseBtn.setAttribute('hidden', '');
+      }
+      errorPanel.removeAttribute('hidden');
+      errorPosition.textContent =
+        err.error.line && err.error.column
+          ? `Line ${err.error.line}, Column ${err.error.column}`
+          : err.error.line
+            ? `Line ${err.error.line}`
+            : '';
+      errorFriendly.textContent = err.error.friendly;
+      errorExcerpt.textContent = err.error.excerpt || '';
+      errorExcerpt.style.display = err.error.excerpt ? 'block' : 'none';
+
+      if (err.error.line) {
+        errorExcerpt.style.cursor = 'pointer';
+        errorExcerpt.title = `Click to jump to line ${err.error.line} in input`;
+        errorExcerpt.onclick = () => {
+          jumpToInputLine(err.error.line!, err.error.column ?? 1);
+        };
+      } else {
+        errorExcerpt.style.cursor = '';
+        errorExcerpt.title = '';
+        errorExcerpt.onclick = null;
+      }
+
+      errorRaw.textContent = err.error.message;
+      if (currentMode === 'format') {
+        output.innerHTML = '';
+        validationResults.setAttribute('hidden', '');
+        validationResults.style.display = 'none';
+        updateOutputStats('');
+      }
+    }
+
+    function hideError() {
+      errorPanel.setAttribute('hidden', '');
+    }
+
+    function renderOutput(text: string, parsed: any) {
+      hideError();
+      lastParsed = parsed;
+      lastOutputPlain = text;
+
+      if (activeView === 'text') {
+        output.innerHTML = highlightJson(text);
+        output.style.display = '';
+        treeView.style.display = 'none';
+        treeView.setAttribute('hidden', '');
+        treeExpandBtn.setAttribute('hidden', '');
+        treeCollapseBtn.setAttribute('hidden', '');
+      } else {
+        output.style.display = 'none';
+        treeView.removeAttribute('hidden');
+        treeView.style.display = '';
+        treeView.innerHTML = renderTree(parsed);
+        treeExpandBtn.removeAttribute('hidden');
+        treeCollapseBtn.removeAttribute('hidden');
+      }
+      updateOutputStats(text);
+    }
+
+    // Actions
+    function doFormat() {
+      if (currentMode !== 'format') return;
+      const result = format(input.value, getOptions());
+      if (!result.ok) {
+        showError(result);
+        setStatus('Invalid JSON', 'err', 3000);
+        return;
+      }
+      renderOutput(result.output, result.parsed);
+      setStatus('Formatted', 'ok', 1500);
+    }
+
+    function doMinify() {
+      if (currentMode !== 'format') return;
+      const result = minify(input.value, lenientCb.checked);
+      if (!result.ok) {
+        showError(result);
+        setStatus('Invalid JSON', 'err', 3000);
+        return;
+      }
+      renderOutput(result.output, result.parsed);
+      setStatus('Minified', 'ok', 1500);
+    }
+
+    function doValidate() {
+      if (currentMode !== 'format') return;
+      const result = validate(input.value, lenientCb.checked);
+      if (!result.ok) {
+        showError(result);
+        setStatus('Invalid JSON', 'err', 3000);
+        return;
+      }
+      renderOutput(result.output, result.parsed);
+      setStatus('Valid JSON', 'ok', 2000);
+    }
+
+    function doClear() {
+      input.value = '';
+      schemaInput.value = '';
+      output.innerHTML = '';
+      treeView.innerHTML = '';
+      lastParsed = null;
+      lastOutputPlain = '';
+      output.style.display = '';
+      treeView.style.display = 'none';
+      treeView.setAttribute('hidden', '');
+      treeExpandBtn.setAttribute('hidden', '');
+      treeCollapseBtn.setAttribute('hidden', '');
+      validationResults.innerHTML = '';
+      validationResults.setAttribute('hidden', '');
+      validationResults.style.display = 'none';
+      const diffSummaryWrap = document.getElementById('jfDiffSummaryWrap');
+      if (diffSummaryWrap) diffSummaryWrap.innerHTML = '';
+      diffLeft.textContent = 'Click "Compare JSON Documents" to see differences.';
+      diffLeft.classList.add('jf-diff-placeholder');
+      diffRight.textContent = '';
+      diffRight.classList.add('jf-diff-placeholder');
+      diffChangeList.innerHTML = '';
+      diffSideBySide.setAttribute('hidden', '');
+      diffChangeList.setAttribute('hidden', '');
+      lastDiffResult = null;
+      lastDiffOldVal = null;
+      lastDiffNewVal = null;
+      queryInput.value = '';
+      const queryPlaceholder = '<p class="jf-query-placeholder">Type a JSONPath expression and click "Run Query".</p>';
+      queryMatches.innerHTML = queryPlaceholder;
+      queryHighlighted.innerHTML = queryPlaceholder;
+      lastQueryMatches = null;
+      lastQueryRoot = null;
+      if (!queryHelp.hasAttribute('hidden')) queryHelp.setAttribute('hidden', '');
+      hideError();
+      updateInputStats();
+      updateSchemaStats();
+      updateOutputStats('');
+      setStatus('Cleared', '', 1500);
+      input.focus();
+    }
+
+    async function doCopy() {
+      const text = lastOutputPlain;
+      if (!text) {
+        setStatus('Nothing to copy — generate output first', '', 2000);
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(text);
+        setStatus('Copied to clipboard', 'ok', 1500);
+      } catch {
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = lastOutputPlain;
+          ta.style.position = 'fixed';
+          ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          setStatus('Copied to clipboard', 'ok', 1500);
+        } catch {
+          setStatus('Copy failed — try Text view or copy manually', 'err', 2500);
+        }
+      }
+    }
+
+    function doDownload() {
+      const text = lastOutputPlain || output.textContent || '';
+      if (!text) {
+        setStatus('Nothing to download — generate output first', '', 2000);
+        return;
+      }
+
+      let extension = 'json';
+      let mimeType = 'application/json';
+
+      if (currentMode === 'convert') {
+        const direction = convertDirection.value;
+        const fmt = convertFormat.value;
+        if (direction === 'json-to-x') {
+          if (fmt === 'typescript') {
+            extension = 'ts';
+            mimeType = 'text/typescript';
+          } else if (fmt === 'csv') {
+            extension = 'csv';
+            mimeType = 'text/csv';
+          } else if (fmt === 'yaml') {
+            extension = 'yaml';
+            mimeType = 'text/yaml';
+          }
+        }
+      }
+
+      const blob = new Blob([text], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `converted.${extension}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      setStatus('Downloaded', 'ok', 1500);
+    }
+
+    function getDirectionLabel(): { input: string; output: string } {
+      const direction = convertDirection.value;
+      const fmt = convertFormat.value;
+      const fmtName =
+        fmt === 'typescript' ? 'TypeScript' : fmt === 'csv' ? 'CSV' : fmt === 'yaml' ? 'YAML' : fmt;
+      if (direction === 'json-to-x') {
+        return { input: 'JSON Input', output: `${fmtName} Output` };
+      }
+      return { input: `${fmtName} Input`, output: 'JSON Output' };
+    }
+
+    function updateConvertHint() {
+      const direction = convertDirection.value;
+      const fmt = convertFormat.value;
+      const hints: Record<string, string> = {
+        'json-to-x_typescript':
+          'JSON to TypeScript: produces interface declarations with optional fields detected across array items.',
+        'json-to-x_csv':
+          'JSON to CSV: flattens nested objects with dot notation (user.address.city). Top-level arrays become rows.',
+        'json-to-x_yaml':
+          'JSON to YAML: produces block-style YAML. Multi-line strings use literal block scalars.',
+        'x-to-json_typescript': 'TypeScript to JSON: not supported. Choose CSV or YAML for reverse conversion.',
+        'x-to-json_csv': 'CSV to JSON: parses headers as keys; dot notation in headers reconstructs nested objects.',
+        'x-to-json_yaml':
+          'YAML to JSON: parses common YAML — maps, sequences, scalars, quoted strings. Anchors and merge keys are not supported.',
+      };
+      const key = `${direction}_${fmt}`;
+      convertHint.textContent = hints[key] || '';
+    }
+
+    function applyConvertModeUI() {
+      const labels = getDirectionLabel();
+      inputLabel.textContent = labels.input;
+      outputLabel.textContent = labels.output;
+      const direction = convertDirection.value;
+      const fmt = convertFormat.value;
+      const tsReverse = direction === 'x-to-json' && fmt === 'typescript';
+      convertBtn.disabled = tsReverse;
+      if (tsReverse) {
+        convertBtn.title = 'TypeScript to JSON is not supported';
+      } else {
+        convertBtn.title = 'Convert';
+      }
+      updateConvertHint();
+    }
+
+    function syncPlainConvertOutput(result: string) {
+      output.innerHTML = '';
+      output.textContent = result;
+      lastOutputPlain = result;
+      lastParsed = null;
+      treeView.innerHTML = '';
+      treeView.style.display = 'none';
+      treeView.setAttribute('hidden', '');
+      output.style.display = '';
+      treeExpandBtn.setAttribute('hidden', '');
+      treeCollapseBtn.setAttribute('hidden', '');
+    }
+
+    function doConvert() {
+      if (currentMode !== 'convert') return;
+      const direction = convertDirection.value;
+      const fmt = convertFormat.value;
+      const inputText = input.value;
+
+      if (!inputText.trim()) {
+        setStatus('Input is empty', 'err', 2000);
+        return;
+      }
+
+      try {
+        if (direction === 'json-to-x') {
+          const parsed = JSON.parse(inputText);
+          let result = '';
+          if (fmt === 'typescript') result = jsonToTypeScript(parsed);
+          else if (fmt === 'csv') result = jsonToCsv(parsed);
+          else if (fmt === 'yaml') result = jsonToYaml(parsed);
+          syncPlainConvertOutput(result);
+          hideError();
+          updateOutputStats(result);
+          setStatus(`Converted to ${fmt.toUpperCase()}`, 'ok', 1500);
+        } else {
+          let parsed: any;
+          if (fmt === 'csv') {
+            parsed = csvToJson(inputText);
+          } else if (fmt === 'yaml') {
+            parsed = yamlToJson(inputText);
+          } else {
+            setStatus('TypeScript to JSON is not supported', 'err', 3000);
+            return;
+          }
+          const opts = getOptions();
+          const indentChar = opts.indent === 'tab' ? '\t' : opts.indent;
+          const result = JSON.stringify(parsed, null, indentChar as number | string);
+          lastOutputPlain = result;
+          lastParsed = parsed;
+          hideError();
+          if (activeView === 'text') {
+            output.innerHTML = highlightJson(result);
+            output.style.display = '';
+            treeView.style.display = 'none';
+            treeView.setAttribute('hidden', '');
+            treeExpandBtn.setAttribute('hidden', '');
+            treeCollapseBtn.setAttribute('hidden', '');
+          } else {
+            output.style.display = 'none';
+            treeView.removeAttribute('hidden');
+            treeView.style.display = '';
+            treeView.innerHTML = renderTree(parsed);
+            treeExpandBtn.removeAttribute('hidden');
+            treeCollapseBtn.removeAttribute('hidden');
+          }
+          updateOutputStats(result);
+          setStatus('Converted to JSON', 'ok', 1500);
+        }
+      } catch (err: any) {
+        const msg = err?.message || String(err);
+        setStatus(`Conversion failed: ${msg}`, 'err', 4000);
+      }
+    }
+
+    function switchMode(newMode: 'format' | 'convert' | 'validate' | 'diff' | 'query') {
+      currentMode = newMode;
+      modeTabs.forEach((tab) => {
+        const isActive = tab.dataset.modeGroup === newMode;
+        tab.classList.toggle('is-active', isActive);
+        tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+
+      convertControls.setAttribute('hidden', '');
+      validateControls.setAttribute('hidden', '');
+      diffControls.setAttribute('hidden', '');
+      queryControls.setAttribute('hidden', '');
+      schemaPane.setAttribute('hidden', '');
+      validationResults.setAttribute('hidden', '');
+      validationResults.style.display = 'none';
+      diffSideBySide.setAttribute('hidden', '');
+      diffChangeList.setAttribute('hidden', '');
+      queryMatches.setAttribute('hidden', '');
+      queryHighlighted.setAttribute('hidden', '');
+      errorPanel.setAttribute('hidden', '');
+      formatActionBtns.forEach((b) => {
+        b.style.display = '';
+      });
+
+      inputLabel.textContent = 'Input';
+      outputLabel.textContent = 'Output';
+      const schemaLabel = schemaPane.querySelector('.jf-pane-label') as HTMLSpanElement;
+      if (schemaLabel) schemaLabel.textContent = 'JSON Schema';
+
+      const viewTabsContainer = document.querySelector('.jf-view-tabs') as HTMLDivElement;
+
+      if (newMode === 'convert') {
+        convertControls.removeAttribute('hidden');
+        formatActionBtns.forEach((b) => {
+          b.style.display = 'none';
+        });
+        activeView = 'text';
+        viewTabs.forEach((t) => {
+          const isText = t.dataset.view === 'text';
+          t.classList.toggle('is-active', isText);
+          t.setAttribute('aria-selected', isText ? 'true' : 'false');
+        });
+        applyConvertModeUI();
+        if (viewTabsContainer) viewTabsContainer.style.display = 'none';
+        treeView.style.display = 'none';
+        treeView.setAttribute('hidden', '');
+        treeExpandBtn.setAttribute('hidden', '');
+        treeCollapseBtn.setAttribute('hidden', '');
+        output.style.display = '';
+        if (lastOutputPlain) {
+          if (lastParsed !== null) {
+            output.innerHTML = highlightJson(lastOutputPlain);
+          } else {
+            output.innerHTML = '';
+            output.textContent = lastOutputPlain;
+          }
+        }
+      } else if (newMode === 'validate') {
+        validateControls.removeAttribute('hidden');
+        schemaPane.removeAttribute('hidden');
+        formatActionBtns.forEach((b) => {
+          b.style.display = 'none';
+        });
+        inputLabel.textContent = 'JSON Input';
+        outputLabel.textContent = 'Validation Result';
+        if (viewTabsContainer) viewTabsContainer.style.display = 'none';
+        output.style.display = 'none';
+        treeView.setAttribute('hidden', '');
+        treeView.style.display = 'none';
+        validationResults.style.display = '';
+        validationResults.removeAttribute('hidden');
+        if (!validationResults.innerHTML.trim()) {
+          validationResults.innerHTML =
+            '<p class="jf-validation-placeholder">Click "Validate JSON Against Schema" to check your JSON against the schema.</p>';
+        }
+      } else if (newMode === 'diff') {
+        diffControls.removeAttribute('hidden');
+        schemaPane.removeAttribute('hidden');
+        formatActionBtns.forEach((b) => {
+          b.style.display = 'none';
+        });
+        inputLabel.textContent = 'Original (Left)';
+        if (schemaLabel) schemaLabel.textContent = 'Modified (Right)';
+        outputLabel.textContent = 'Diff Result';
+        if (viewTabsContainer) viewTabsContainer.style.display = 'none';
+        output.style.display = 'none';
+        treeView.setAttribute('hidden', '');
+        treeView.style.display = 'none';
+        validationResults.setAttribute('hidden', '');
+        validationResults.style.display = 'none';
+        if (activeDiffView === 'side-by-side') {
+          diffSideBySide.removeAttribute('hidden');
+          diffChangeList.setAttribute('hidden', '');
+        } else {
+          diffChangeList.removeAttribute('hidden');
+          diffSideBySide.setAttribute('hidden', '');
+        }
+        if (!lastDiffResult) {
+          const sw = document.getElementById('jfDiffSummaryWrap');
+          if (sw) sw.innerHTML = '';
+          const leftEl = document.getElementById('jfDiffLeft');
+          const rightEl = document.getElementById('jfDiffRight');
+          if (leftEl) {
+            leftEl.textContent = 'Click "Compare JSON Documents" to see differences.';
+            leftEl.classList.add('jf-diff-placeholder');
+          }
+          if (rightEl) {
+            rightEl.textContent = '';
+            rightEl.classList.add('jf-diff-placeholder');
+          }
+          diffChangeList.innerHTML =
+            '<p class="jf-diff-placeholder">Click "Compare JSON Documents" to see the change list.</p>';
+        } else {
+          paintDiffUIFromCache();
+        }
+      } else if (newMode === 'query') {
+        queryControls.removeAttribute('hidden');
+        formatActionBtns.forEach((b) => {
+          b.style.display = 'none';
+        });
+        inputLabel.textContent = 'JSON Input';
+        outputLabel.textContent = 'Query Result';
+        if (viewTabsContainer) viewTabsContainer.style.display = 'none';
+        output.style.display = 'none';
+        treeView.setAttribute('hidden', '');
+        treeView.style.display = 'none';
+        validationResults.setAttribute('hidden', '');
+        validationResults.style.display = 'none';
+        if (activeQueryView === 'matches') {
+          queryMatches.removeAttribute('hidden');
+          queryHighlighted.setAttribute('hidden', '');
+        } else {
+          queryHighlighted.removeAttribute('hidden');
+          queryMatches.setAttribute('hidden', '');
+        }
+        if (lastQueryMatches === null) {
+          queryMatches.innerHTML = '<p class="jf-query-placeholder">Type a JSONPath expression and click "Run Query".</p>';
+          queryHighlighted.innerHTML = '<p class="jf-query-placeholder">Type a JSONPath expression and click "Run Query".</p>';
+        } else {
+          paintQueryUIFromCache();
+        }
+      } else {
+        if (viewTabsContainer) viewTabsContainer.style.display = '';
+        output.style.display = '';
+        validationResults.setAttribute('hidden', '');
+        validationResults.style.display = 'none';
+        if (lastParsed !== null && lastOutputPlain) {
+          renderOutput(lastOutputPlain, lastParsed);
+        } else if (lastOutputPlain && lastParsed === null) {
+          output.innerHTML = '';
+          output.textContent = lastOutputPlain;
+          treeView.innerHTML = '';
+          treeView.style.display = 'none';
+          treeView.setAttribute('hidden', '');
+          treeExpandBtn.setAttribute('hidden', '');
+          treeCollapseBtn.setAttribute('hidden', '');
+        }
+      }
+    }
+
+    function renderDiffSummary(result: DiffResult): string {
+      const { added, removed, changed, typeChanged, total } = result.summary;
+      if (total === 0) {
+        return '<div class="jf-diff-summary jf-diff-summary-equal"><strong>✓ Identical</strong><span> The two documents are structurally equal.</span></div>';
+      }
+      const parts: string[] = [];
+      if (added > 0) parts.push(`<span class="jf-diff-stat jf-diff-stat-added">+${added} added</span>`);
+      if (removed > 0) parts.push(`<span class="jf-diff-stat jf-diff-stat-removed">−${removed} removed</span>`);
+      if (changed > 0) parts.push(`<span class="jf-diff-stat jf-diff-stat-changed">~${changed} changed</span>`);
+      if (typeChanged > 0) parts.push(`<span class="jf-diff-stat jf-diff-stat-typechanged">⇄${typeChanged} type changed</span>`);
+      return `<div class="jf-diff-summary"><strong>${total} difference${total === 1 ? '' : 's'}</strong>${parts.join('')}</div>`;
+    }
+
+    function renderDiffChangeList(result: DiffResult): string {
+      if (result.entries.length === 0) {
+        return renderDiffSummary(result);
+      }
+      let html = renderDiffSummary(result);
+      html += '<ul class="jf-diff-entries">';
+      for (const e of result.entries) {
+        const pathDisplay = e.path === '' ? '<em>(root)</em>' : `<code>${escapeHtmlValue(e.path)}</code>`;
+        const kindLabel =
+          e.kind === 'added'
+            ? 'Added'
+            : e.kind === 'removed'
+              ? 'Removed'
+              : e.kind === 'changed'
+                ? 'Changed'
+                : 'Type changed';
+        html += `<li class="jf-diff-entry jf-diff-entry-${e.kind}" data-diff-path="${escapeHtmlValue(e.path)}">
+      <div class="jf-de-header">
+        <span class="jf-de-kind">${kindLabel}</span>
+        <span class="jf-de-path">at ${pathDisplay}</span>
+      </div>`;
+        if (e.kind === 'added') {
+          html += `<p class="jf-de-detail">New value: <code>${escapeHtmlValue(JSON.stringify(e.newValue))}</code></p>`;
+        } else if (e.kind === 'removed') {
+          html += `<p class="jf-de-detail">Removed value: <code>${escapeHtmlValue(JSON.stringify(e.oldValue))}</code></p>`;
+        } else if (e.kind === 'changed') {
+          html += `<p class="jf-de-detail">From: <code>${escapeHtmlValue(JSON.stringify(e.oldValue))}</code></p>`;
+          html += `<p class="jf-de-detail">To: <code>${escapeHtmlValue(JSON.stringify(e.newValue))}</code></p>`;
+        } else if (e.kind === 'type-changed') {
+          html += `<p class="jf-de-detail">Old type: <code>${escapeHtmlValue(e.oldType)}</code> = <code>${escapeHtmlValue(JSON.stringify(e.oldValue))}</code></p>`;
+          html += `<p class="jf-de-detail">New type: <code>${escapeHtmlValue(e.newType)}</code> = <code>${escapeHtmlValue(JSON.stringify(e.newValue))}</code></p>`;
+        }
+        html += '</li>';
+      }
+      html += '</ul>';
+      return html;
+    }
+
+    function showDiffSideBySide(oldVal: any, newVal: any, result: DiffResult) {
+      const { leftHtml, rightHtml } = renderDiffSideBySide(oldVal, newVal, result);
+      const summaryWrap = document.getElementById('jfDiffSummaryWrap');
+      if (summaryWrap) summaryWrap.innerHTML = renderDiffSummary(result);
+      const leftEl = document.getElementById('jfDiffLeft');
+      const rightEl = document.getElementById('jfDiffRight');
+      if (leftEl) {
+        leftEl.innerHTML = leftHtml;
+        leftEl.classList.remove('jf-diff-placeholder');
+      }
+      if (rightEl) {
+        rightEl.innerHTML = rightHtml;
+        rightEl.classList.remove('jf-diff-placeholder');
+      }
+    }
+
+    function refreshDiffChangeList(result: DiffResult) {
+      diffChangeList.innerHTML = renderDiffChangeList(result);
+    }
+
+    function paintDiffUIFromCache() {
+      if (lastDiffResult === null) return;
+      showDiffSideBySide(lastDiffOldVal, lastDiffNewVal, lastDiffResult);
+      refreshDiffChangeList(lastDiffResult);
+      if (activeDiffView === 'side-by-side') {
+        diffSideBySide.removeAttribute('hidden');
+        diffChangeList.setAttribute('hidden', '');
+      } else {
+        diffChangeList.removeAttribute('hidden');
+        diffSideBySide.setAttribute('hidden', '');
+      }
+    }
+
+    function doDiff() {
+      const leftText = input.value.trim();
+      const rightText = schemaInput.value.trim();
+
+      if (!leftText) {
+        setStatus('Paste original JSON in the left pane', 'err', 2500);
+        return;
+      }
+      if (!rightText) {
+        setStatus('Paste modified JSON in the right pane', 'err', 2500);
+        return;
+      }
+
+      let oldVal: any;
+      let newVal: any;
+      try {
+        oldVal = JSON.parse(leftText);
+      } catch (e: any) {
+        setStatus(`Left pane parse error: ${e?.message || 'invalid JSON'}`, 'err', 4000);
+        return;
+      }
+      try {
+        newVal = JSON.parse(rightText);
+      } catch (e: any) {
+        setStatus(`Right pane parse error: ${e?.message || 'invalid JSON'}`, 'err', 4000);
+        return;
+      }
+
+      const result = diffJson(oldVal, newVal);
+      lastDiffResult = result;
+      lastDiffOldVal = oldVal;
+      lastDiffNewVal = newVal;
+
+      showDiffSideBySide(oldVal, newVal, result);
+      refreshDiffChangeList(result);
+
+      if (activeDiffView === 'side-by-side') {
+        diffSideBySide.removeAttribute('hidden');
+        diffChangeList.setAttribute('hidden', '');
+      } else {
+        diffSideBySide.setAttribute('hidden', '');
+        diffChangeList.removeAttribute('hidden');
+      }
+
+      if (result.summary.total === 0) {
+        setStatus('Documents are identical', 'ok', 2000);
+      } else {
+        setStatus(`${result.summary.total} difference${result.summary.total === 1 ? '' : 's'}`, '', 2500);
+      }
+    }
+
+    function escapeHtmlValue(s: any): string {
+      const str = typeof s === 'string' ? s : JSON.stringify(s);
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function wireQueryCopyButtons(matches: PathMatch[]) {
+      queryMatches.querySelectorAll<HTMLButtonElement>('.jf-qm-copy').forEach((btn) => {
+        btn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const idx = parseInt(btn.dataset.matchIndex || '0', 10);
+          const match = matches[idx];
+          if (!match) return;
+          try {
+            await navigator.clipboard.writeText(JSON.stringify(match.value, null, 2));
+            setStatus(`Copied match ${idx + 1}`, 'ok', 1500);
+          } catch {
+            setStatus('Copy failed', 'err', 2000);
+          }
+        });
+      });
+    }
+
+    function renderMatchesView(matches: PathMatch[]): string {
+      if (matches.length === 0) {
+        return '<p class="jf-query-placeholder">No matches found.</p>';
+      }
+      let html = `<div class="jf-query-summary"><strong>${matches.length} match${matches.length === 1 ? '' : 'es'}</strong></div>`;
+      html += '<ul class="jf-query-match-list">';
+      for (let i = 0; i < matches.length; i++) {
+        const m = matches[i];
+        const valueStr = JSON.stringify(m.value, null, 2);
+        const pathDisplay = m.path === '' ? '<em>(root)</em>' : `<code>${escapeHtmlValue(m.path)}</code>`;
+        const pathTitle = 'Path: ' + (m.path === '' ? '(root)' : m.path);
+        html += `<li class="jf-query-match" data-match-index="${i}" title="${escapeHtmlValue(pathTitle)}">
+      <div class="jf-qm-header">
+        <span class="jf-qm-num">${i + 1}</span>
+        <span class="jf-qm-path">${pathDisplay}</span>
+        <button type="button" class="btn-icon jf-qm-copy" data-match-index="${i}" title="Copy this match" aria-label="Copy this match">Copy</button>
+      </div>
+      <pre class="jf-qm-value">${escapeHtmlValue(valueStr)}</pre>
+    </li>`;
+      }
+      html += '</ul>';
+      return html;
+    }
+
+    function renderHighlightedView(root: any, matches: PathMatch[]): string {
+      if (matches.length === 0) {
+        return '<p class="jf-query-placeholder">No matches found in source.</p>';
+      }
+      const matchedPaths = new Set(matches.map((m) => m.path));
+
+      function renderInner(value: any, segments: (string | number)[], indent: number): string {
+        const path =
+          segments.length === 0
+            ? ''
+            : '/' +
+              segments
+                .map((s) => {
+                  if (typeof s === 'number') return String(s);
+                  return s.replace(/~/g, '~0').replace(/\//g, '~1');
+                })
+                .join('/');
+        const isMatched = matchedPaths.has(path);
+
+        let inner: string;
+        if (value === null) inner = '<span class="jh-null">null</span>';
+        else if (typeof value === 'boolean') inner = `<span class="jh-bool">${value}</span>`;
+        else if (typeof value === 'number') inner = `<span class="jh-number">${value}</span>`;
+        else if (typeof value === 'string') inner = `<span class="jh-string">"${escapeHtmlValue(value)}"</span>`;
+        else if (Array.isArray(value)) {
+          if (value.length === 0) inner = '<span class="jh-punct">[]</span>';
+          else {
+            const childPad = '  '.repeat(indent + 1);
+            const lines: string[] = ['<span class="jh-punct">[</span>'];
+            for (let i = 0; i < value.length; i++) {
+              const childInner = renderInner(value[i], [...segments, i], indent + 1);
+              const comma = i < value.length - 1 ? '<span class="jh-punct">,</span>' : '';
+              lines.push(`${childPad}${childInner}${comma}`);
+            }
+            lines.push(`${'  '.repeat(indent)}<span class="jh-punct">]</span>`);
+            inner = lines.join('\n');
+          }
+        } else if (value !== null && typeof value === 'object') {
+          const keys = Object.keys(value);
+          if (keys.length === 0) inner = '<span class="jh-punct">{}</span>';
+          else {
+            const childPad = '  '.repeat(indent + 1);
+            const lines: string[] = ['<span class="jh-punct">{</span>'];
+            for (let i = 0; i < keys.length; i++) {
+              const k = keys[i];
+              const keyHtml = `<span class="jh-key">"${escapeHtmlValue(k)}"</span><span class="jh-punct">: </span>`;
+              const childInner = renderInner(value[k], [...segments, k], indent + 1);
+              const comma = i < keys.length - 1 ? '<span class="jh-punct">,</span>' : '';
+              lines.push(`${childPad}${keyHtml}${childInner}${comma}`);
+            }
+            lines.push(`${'  '.repeat(indent)}<span class="jh-punct">}</span>`);
+            inner = lines.join('\n');
+          }
+        } else inner = '';
+
+        if (isMatched) {
+          return `<span class="jq-match" data-query-path="${escapeHtmlValue(path)}">${inner}</span>`;
+        }
+        return inner;
+      }
+
+      let html = `<div class="jf-query-summary"><strong>${matches.length} match${matches.length === 1 ? '' : 'es'}</strong> highlighted in source</div>`;
+      html += `<pre class="jf-query-source">${renderInner(root, [], 0)}</pre>`;
+      return html;
+    }
+
+    function paintQueryUIFromCache() {
+      if (lastQueryMatches === null) return;
+      queryMatches.innerHTML = renderMatchesView(lastQueryMatches);
+      queryHighlighted.innerHTML = renderHighlightedView(lastQueryRoot, lastQueryMatches);
+      wireQueryCopyButtons(lastQueryMatches);
+      if (activeQueryView === 'matches') {
+        queryMatches.removeAttribute('hidden');
+        queryHighlighted.setAttribute('hidden', '');
+      } else {
+        queryMatches.setAttribute('hidden', '');
+        queryHighlighted.removeAttribute('hidden');
+      }
+    }
+
+    function doQuery() {
+      const jsonText = input.value.trim();
+      const queryText = queryInput.value.trim();
+
+      if (!jsonText) {
+        setStatus('Paste JSON in the input pane', 'err', 2500);
+        return;
+      }
+      if (!queryText) {
+        setStatus('Type a JSONPath query', 'err', 2500);
+        return;
+      }
+
+      let parsed: any;
+      try {
+        parsed = JSON.parse(jsonText);
+      } catch (e: any) {
+        const errMsg = e?.message || 'invalid JSON';
+        const errHtml = `<div class="jf-query-error"><strong>JSON parse error:</strong> ${escapeHtmlValue(errMsg)}</div>`;
+        queryMatches.innerHTML = errHtml;
+        queryHighlighted.innerHTML = errHtml;
+        queryMatches.removeAttribute('hidden');
+        queryHighlighted.setAttribute('hidden', '');
+        lastQueryMatches = null;
+        lastQueryRoot = null;
+        setStatus(`JSON parse error: ${errMsg}`, 'err', 4000);
+        return;
+      }
+
+      const result = executeQuery(parsed, queryText);
+      if (!result.ok) {
+        queryMatches.innerHTML = `<div class="jf-query-error"><strong>Query error:</strong> ${escapeHtmlValue(result.message)}</div>`;
+        queryHighlighted.innerHTML = `<div class="jf-query-error"><strong>Query error:</strong> ${escapeHtmlValue(result.message)}</div>`;
+        queryMatches.removeAttribute('hidden');
+        queryHighlighted.setAttribute('hidden', '');
+        setStatus('Query parse error', 'err', 3000);
+        return;
+      }
+
+      lastQueryMatches = result.matches;
+      lastQueryRoot = parsed;
+
+      queryMatches.innerHTML = renderMatchesView(result.matches);
+      queryHighlighted.innerHTML = renderHighlightedView(parsed, result.matches);
+      wireQueryCopyButtons(result.matches);
+
+      if (activeQueryView === 'matches') {
+        queryMatches.removeAttribute('hidden');
+        queryHighlighted.setAttribute('hidden', '');
+      } else {
+        queryMatches.setAttribute('hidden', '');
+        queryHighlighted.removeAttribute('hidden');
+      }
+
+      setStatus(`${result.matches.length} match${result.matches.length === 1 ? '' : 'es'}`, 'ok', 2000);
+    }
+
+    function renderValidationResults(result: ValidationResult) {
+      validationResults.removeAttribute('hidden');
+      validationResults.style.display = '';
+
+      if (result.valid) {
+        let html =
+          '<div class="jf-validation-ok"><strong>✓ Valid</strong><span> JSON satisfies the schema.</span></div>';
+        if (result.unsupportedKeywords.length > 0) {
+          html += `<p class="jf-validation-warn"><strong>Note:</strong> the schema uses keywords this lightweight validator does not check: ${result.unsupportedKeywords.map((k) => `<code>${escapeHtmlValue(k)}</code>`).join(', ')}. Validation succeeded for the supported keywords only.</p>`;
+        }
+        validationResults.innerHTML = html;
+        return;
+      }
+
+      let html = `<div class="jf-validation-fail"><strong>✗ Invalid</strong><span> ${result.errors.length} error${result.errors.length === 1 ? '' : 's'} found.</span></div>`;
+      html += '<ul class="jf-validation-errors">';
+      for (const err of result.errors) {
+        const pathDisplay = err.path === '' ? '<em>(root)</em>' : `<code>${escapeHtmlValue(err.path)}</code>`;
+        html += `<li class="jf-validation-error">
+      <div class="jf-vee-header">
+        <span class="jf-vee-keyword">${escapeHtmlValue(err.keyword)}</span>
+        <span class="jf-vee-path">at ${pathDisplay}</span>
+      </div>
+      <p class="jf-vee-message">${escapeHtmlValue(err.message)}</p>`;
+        if (err.expected !== undefined) {
+          html += `<p class="jf-vee-detail">Expected: <code>${escapeHtmlValue(err.expected)}</code></p>`;
+        }
+        if (err.actual !== undefined) {
+          html += `<p class="jf-vee-detail">Actual: <code>${escapeHtmlValue(err.actual)}</code></p>`;
+        }
+        html += '</li>';
+      }
+      html += '</ul>';
+      if (result.unsupportedKeywords.length > 0) {
+        html += `<p class="jf-validation-warn"><strong>Note:</strong> the schema uses keywords this lightweight validator does not check: ${result.unsupportedKeywords.map((k) => `<code>${escapeHtmlValue(k)}</code>`).join(', ')}.</p>`;
+      }
+      validationResults.innerHTML = html;
+    }
+
+    function doValidateAgainstSchema() {
+      const jsonText = input.value.trim();
+      const schemaText = schemaInput.value.trim();
+
+      if (!jsonText) {
+        setStatus('Paste JSON in the left pane', 'err', 2500);
+        return;
+      }
+      if (!schemaText) {
+        setStatus('Paste a JSON Schema in the middle pane', 'err', 2500);
+        return;
+      }
+
+      let parsedJson: any;
+      let parsedSchema: any;
+      try {
+        parsedJson = JSON.parse(jsonText);
+      } catch (e: any) {
+        validationResults.innerHTML = `<div class="jf-validation-fail"><strong>✗ Invalid input</strong><span> JSON is not valid: ${escapeHtmlValue(e?.message || 'parse error')}</span></div>`;
+        validationResults.removeAttribute('hidden');
+        validationResults.style.display = '';
+        setStatus('JSON parse error', 'err', 3000);
+        return;
+      }
+      try {
+        parsedSchema = JSON.parse(schemaText);
+      } catch (e: any) {
+        validationResults.innerHTML = `<div class="jf-validation-fail"><strong>✗ Invalid schema</strong><span> The schema is not valid JSON: ${escapeHtmlValue(e?.message || 'parse error')}</span></div>`;
+        validationResults.removeAttribute('hidden');
+        validationResults.style.display = '';
+        setStatus('Schema parse error', 'err', 3000);
+        return;
+      }
+
+      const result = validateAgainstSchema(parsedJson, parsedSchema);
+      renderValidationResults(result);
+      setStatus(
+        result.valid ? 'Valid' : `${result.errors.length} validation error${result.errors.length === 1 ? '' : 's'}`,
+        result.valid ? 'ok' : 'err',
+        3000
+      );
+    }
+
+    function doGenerateSchemaFromSample() {
+      const jsonText = input.value.trim();
+      if (!jsonText) {
+        setStatus('Paste JSON to generate a schema from', 'err', 2500);
+        return;
+      }
+      let parsed: any;
+      try {
+        parsed = JSON.parse(jsonText);
+      } catch {
+        setStatus('JSON parse error — fix the input first', 'err', 3000);
+        return;
+      }
+      const inferred = generateSchemaFromSample(parsed);
+      schemaInput.value = JSON.stringify(inferred, null, 2);
+      updateSchemaStats();
+      setStatus('Schema generated', 'ok', 1500);
+    }
+
+    function updateSchemaStats() {
+      const text = schemaInput.value;
+      const chars = text.length;
+      const bytes = new TextEncoder().encode(text).length;
+      schemaStats.textContent = `${chars.toLocaleString()} chars · ${bytes.toLocaleString()} bytes`;
+    }
+
+    function openPrivacyModal() {
+      privacyModal.removeAttribute('hidden');
+      document.body.style.overflow = 'hidden';
+      privacyModalClose.focus();
+    }
+
+    function closePrivacyModal() {
+      privacyModal.setAttribute('hidden', '');
+      document.body.style.overflow = '';
+      privacyBadge.focus();
+    }
+
+    async function loadFile(file: File) {
+      const MAX_SIZE = 10 * 1024 * 1024;
+      if (file.size > MAX_SIZE) {
+        setStatus(`File too large (${(file.size / 1024 / 1024).toFixed(1)} MB > 10 MB limit)`, 'err', 4000);
+        return;
+      }
+      try {
+        const text = await file.text();
+        input.value = text;
+        updateInputStats();
+        setStatus(`Loaded ${file.name}`, 'ok', 1500);
+        if (autoFormatCb.checked && currentMode === 'format') doFormat();
+      } catch {
+        setStatus('Failed to read file', 'err', 3000);
+      }
+    }
+
+    // Wire up
+    formatBtn.addEventListener('click', doFormat);
+    minifyBtn.addEventListener('click', doMinify);
+    validateBtn.addEventListener('click', doValidate);
+    clearBtn.addEventListener('click', doClear);
+    copyBtn.addEventListener('click', doCopy);
+    downloadBtn.addEventListener('click', doDownload);
+
+    modeTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const group = tab.dataset.modeGroup as 'format' | 'convert' | 'validate' | 'diff' | 'query';
+        if (group) switchMode(group);
+      });
+    });
+
+    convertDirection.addEventListener('change', applyConvertModeUI);
+    convertFormat.addEventListener('change', applyConvertModeUI);
+    convertBtn.addEventListener('click', doConvert);
+
+    validateRunBtn.addEventListener('click', doValidateAgainstSchema);
+    generateSchemaBtn.addEventListener('click', doGenerateSchemaFromSample);
+    schemaInput.addEventListener('input', updateSchemaStats);
+
+    schemaFileBtn.addEventListener('click', () => schemaFileInput.click());
+    schemaFileInput.addEventListener('change', async () => {
+      const file = schemaFileInput.files?.[0];
+      if (!file) return;
+      const MAX_SIZE = 10 * 1024 * 1024;
+      if (file.size > MAX_SIZE) {
+        setStatus(`Schema file too large (max 10 MB)`, 'err', 4000);
+        return;
+      }
+      try {
+        const text = await file.text();
+        schemaInput.value = text;
+        updateSchemaStats();
+        setStatus(`Loaded schema: ${file.name}`, 'ok', 1500);
+      } catch {
+        setStatus('Failed to read schema file', 'err', 3000);
+      }
+      schemaFileInput.value = '';
+    });
+
+    diffRunBtn.addEventListener('click', doDiff);
+
+    diffViewTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const view = tab.dataset.diffView as 'side-by-side' | 'change-list';
+        if (!view) return;
+        activeDiffView = view;
+        diffViewTabs.forEach((t) => {
+          const isActive = t.dataset.diffView === view;
+          t.classList.toggle('is-active', isActive);
+          t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+        if (view === 'side-by-side') {
+          diffSideBySide.removeAttribute('hidden');
+          diffChangeList.setAttribute('hidden', '');
+          if (lastDiffResult !== null) {
+            showDiffSideBySide(lastDiffOldVal, lastDiffNewVal, lastDiffResult);
+          }
+        } else {
+          diffSideBySide.setAttribute('hidden', '');
+          diffChangeList.removeAttribute('hidden');
+          if (lastDiffResult) {
+            refreshDiffChangeList(lastDiffResult);
+          }
+        }
+      });
+    });
+
+    diffChangeList.addEventListener('click', (ev) => {
+      const entry = (ev.target as HTMLElement).closest('.jf-diff-entry');
+      if (!entry || currentMode !== 'diff') return;
+      const path = entry.getAttribute('data-diff-path');
+      if (path === null) return;
+
+      activeDiffView = 'side-by-side';
+      diffViewTabs.forEach((t) => {
+        const isActive = t.dataset.diffView === 'side-by-side';
+        t.classList.toggle('is-active', isActive);
+        t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+      diffSideBySide.removeAttribute('hidden');
+      diffChangeList.setAttribute('hidden', '');
+      if (lastDiffResult !== null) {
+        showDiffSideBySide(lastDiffOldVal, lastDiffNewVal, lastDiffResult);
+      }
+
+      setTimeout(() => {
+        const target = diffSideBySide.querySelector(`[data-diff-path="${CSS.escape(path)}"]`) as HTMLElement | null;
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          target.classList.add('jdf-flash');
+          setTimeout(() => target.classList.remove('jdf-flash'), 1500);
+        }
+      }, 50);
+    });
+
+    queryRunBtn.addEventListener('click', doQuery);
+    queryInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        doQuery();
+      }
+    });
+
+    queryHelpBtn.addEventListener('click', () => {
+      if (queryHelp.hasAttribute('hidden')) {
+        queryHelp.removeAttribute('hidden');
+      } else {
+        queryHelp.setAttribute('hidden', '');
+      }
+    });
+
+    queryViewTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const view = tab.dataset.queryView as 'matches' | 'highlighted';
+        if (!view) return;
+        activeQueryView = view;
+        queryViewTabs.forEach((t) => {
+          const isActive = t.dataset.queryView === view;
+          t.classList.toggle('is-active', isActive);
+          t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+        if (view === 'matches') {
+          queryMatches.removeAttribute('hidden');
+          queryHighlighted.setAttribute('hidden', '');
+        } else {
+          queryMatches.setAttribute('hidden', '');
+          queryHighlighted.removeAttribute('hidden');
+        }
+      });
+    });
+
+    viewTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        if (currentMode !== 'format') return;
+        const view = tab.dataset.view as 'text' | 'tree';
+        if (!view) return;
+        activeView = view;
+        viewTabs.forEach((t) => {
+          const isActive = t.dataset.view === view;
+          t.classList.toggle('is-active', isActive);
+          t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+        if (lastParsed !== null) {
+          renderOutput(lastOutputPlain, lastParsed);
+        }
+      });
+    });
+
+    treeExpandBtn.addEventListener('click', () => {
+      if (currentMode === 'format' && activeView === 'tree') expandAll(treeView);
+    });
+
+    treeCollapseBtn.addEventListener('click', () => {
+      if (currentMode === 'format' && activeView === 'tree') collapseAll(treeView);
+    });
+
+    fileBtn.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', async () => {
+      const file = fileInput.files?.[0];
+      if (!file) return;
+      await loadFile(file);
+      fileInput.value = '';
+    });
+
+    let dragCounter = 0;
+
+    dropzone.addEventListener('dragenter', (e) => {
+      e.preventDefault();
+      dragCounter++;
+      dropzoneOverlay.classList.add('is-active');
+    });
+
+    dropzone.addEventListener('dragleave', (e) => {
+      e.preventDefault();
+      dragCounter--;
+      if (dragCounter <= 0) {
+        dragCounter = 0;
+        dropzoneOverlay.classList.remove('is-active');
+      }
+    });
+
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+    });
+
+    dropzone.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      dragCounter = 0;
+      dropzoneOverlay.classList.remove('is-active');
+      const file = e.dataTransfer?.files?.[0];
+      if (file) await loadFile(file);
+    });
+
+    privacyBadge.addEventListener('click', openPrivacyModal);
+    privacyModalClose.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      closePrivacyModal();
+    });
+    privacyModalBackdrop.addEventListener('click', (e) => {
+      e.preventDefault();
+      closePrivacyModal();
+    });
+
+    // Settings panel toggle
+    settingsBtn.addEventListener('click', () => {
+      if (settingsPanel.hasAttribute('hidden')) {
+        settingsPanel.removeAttribute('hidden');
+      } else {
+        settingsPanel.setAttribute('hidden', '');
+      }
+    });
+
+    function syncEditorIndent() {
+      if (!editor) return;
+      const v = indentSel.value;
+      editor.setIndentSize(v === 'tab' ? 4 : parseInt(v, 10) || 2);
+    }
+
+    // Re-format when settings change (if there's existing valid input)
+    [indentSel, sortKeysCb, lenientCb].forEach((el) => {
+      el.addEventListener('change', () => {
+        syncEditorIndent();
+        if (currentMode !== 'format') return;
+        if (input.value.trim() && !errorPanel.hasAttribute('hidden')) {
+          doFormat();
+        } else if (input.value.trim() && lastOutputPlain) {
+          doFormat();
+        }
+      });
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !privacyModal.hasAttribute('hidden')) {
+        closePrivacyModal();
+        return;
+      }
+      const cmd = e.metaKey || e.ctrlKey;
+      if (!cmd) return;
+      const key = e.key.toLowerCase();
+      if (key === 'b') {
+        e.preventDefault();
+        doFormat();
+      } else if (key === 'm') {
+        e.preventDefault();
+        doMinify();
+      } else if (key === 'k') {
+        e.preventDefault();
+        doClear();
+      }
+    });
+
+    window.addEventListener('beforeunload', () => {
+      // Defensive: ensure body scroll is restored if modal was left open
+      if (document.body.style.overflow === 'hidden') {
+        document.body.style.overflow = '';
+      }
+    });
+
+    // Initialize the editor with the sample JSON
+    (async () => {
+      editor = new JsonCodeEditor(inputHost, {
+        initialValue: SAMPLE_JSON,
+        indentSize: 2,
+        autoPairBrackets: true,
+        onChange: () => {
+          updateInputStats();
+          inputHost.setAttribute('data-empty', editor.getValue() === '' ? 'true' : 'false');
+        },
+        onPaste: () => {
+          updateInputStats();
+          if (currentMode === 'format' && autoFormatCb.checked && input.value.trim()) {
+            doFormat();
+          }
+        },
+      });
+
+      editor.element.placeholder = 'Paste or type JSON here, or drop a .json file...';
+      syncEditorIndent();
+      inputHost.setAttribute('data-empty', editor.getValue() === '' ? 'true' : 'false');
+
+      updateInputStats();
+      updateSchemaStats();
+      if (currentMode === 'format') {
+        doFormat();
+      }
+    })();
+  </script>
+
+  <style>
+    .trust-signals {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .trust-signals > span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .trust-signals .check {
+      color: var(--green);
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    /* Action bar */
+    .jf-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .btn-tertiary {
+      padding: 8px 14px;
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 0.15s ease, background 0.15s ease;
+    }
+    .btn-tertiary:hover {
+      color: var(--text);
+      background: var(--bg-subtle, #f1f5f9);
+    }
+    [data-theme='dark'] .btn-tertiary:hover {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    .jf-status {
+      font-size: 14px;
+      color: var(--text-muted);
+      min-height: 20px;
+      flex: 1;
+    }
+    .jf-status[data-kind='ok'] {
+      color: #16a34a;
+    }
+    [data-theme='dark'] .jf-status[data-kind='ok'] {
+      color: #4ade80;
+    }
+    .jf-status[data-kind='err'] {
+      color: #dc2626;
+    }
+    [data-theme='dark'] .jf-status[data-kind='err'] {
+      color: #f87171;
+    }
+    .jf-settings-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-muted);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: color 0.15s ease, background 0.15s ease;
+    }
+    .jf-settings-btn:hover {
+      color: var(--text);
+      background: var(--bg-subtle, #f1f5f9);
+    }
+    [data-theme='dark'] .jf-settings-btn:hover {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+
+    /* Settings panel */
+    .jf-settings-panel {
+      margin-bottom: 16px;
+      padding: 16px;
+      background: var(--bg-subtle, #f8fafc);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    [data-theme='dark'] .jf-settings-panel {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    .jf-settings-heading {
+      font-size: 14px;
+      font-weight: 600;
+      margin: 0 0 12px 0;
+    }
+    .jf-settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .jf-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .jf-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .jf-input {
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+    }
+    .jf-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .jf-settings-hint {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .jf-privacy-banner {
+      margin: 0 0 16px 0;
+      padding: 8px 12px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text-muted);
+      text-align: center;
+      background: var(--bg-subtle, #f8fafc);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    [data-theme='dark'] .jf-privacy-banner {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+
+    /* Two-pane layout */
+    .jf-panes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 768px) {
+      .jf-panes {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Three-pane layout in validate mode */
+    .jf-panes:has(#jfSchemaPane:not([hidden])) {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    @media (max-width: 1100px) {
+      .jf-panes:has(#jfSchemaPane:not([hidden])) {
+        grid-template-columns: 1fr 1fr;
+      }
+      .jf-panes:has(#jfSchemaPane:not([hidden])) > .jf-pane:nth-child(3) {
+        grid-column: span 2;
+      }
+    }
+    @media (max-width: 768px) {
+      .jf-panes:has(#jfSchemaPane:not([hidden])) {
+        grid-template-columns: 1fr;
+      }
+      .jf-panes:has(#jfSchemaPane:not([hidden])) > .jf-pane:nth-child(3) {
+        grid-column: 1;
+      }
+    }
+
+    .jf-schema-pane .jf-textarea {
+      flex: 1;
+      min-height: 400px;
+      resize: vertical;
+    }
+
+    /* Validate controls panel */
+    .jf-validate-controls {
+      margin-bottom: 16px;
+      padding: 14px 16px;
+      background: var(--bg-subtle, #f8fafc);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    [data-theme='dark'] .jf-validate-controls {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    .jf-validate-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .jf-validate-hint {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Diff controls panel */
+    .jf-diff-controls {
+      margin-bottom: 16px;
+      padding: 14px 16px;
+      background: var(--bg-subtle, #f8fafc);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    [data-theme='dark'] .jf-diff-controls {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    .jf-diff-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+    .jf-diff-hint {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Diff view toggle */
+    .jf-diff-view-toggle {
+      display: inline-flex;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 3px;
+      gap: 3px;
+      margin-left: auto;
+    }
+    .jf-diff-view-tab {
+      padding: 6px 12px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 5px;
+      cursor: pointer;
+      transition:
+        background 0.15s ease,
+        color 0.15s ease;
+    }
+    .jf-diff-view-tab.is-active {
+      background: var(--accent, #2563eb);
+      color: white;
+    }
+    .jf-diff-view-tab:not(.is-active):hover {
+      background: var(--bg-subtle, #f1f5f9);
+      color: var(--text);
+    }
+    [data-theme='dark'] .jf-diff-view-tab:not(.is-active):hover {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+
+    /* Diff side-by-side layout */
+    .jf-diff-side-by-side {
+      padding: 12px;
+    }
+    .jf-diff-summary-wrap {
+      margin-bottom: 12px;
+    }
+    .jf-diff-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 768px) {
+      .jf-diff-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .jf-diff-pane {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--bg);
+    }
+    .jf-diff-pane-header {
+      padding: 6px 12px;
+      background: var(--bg-subtle, #f8fafc);
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    [data-theme='dark'] .jf-diff-pane-header {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    .jf-diff-rendered {
+      margin: 0;
+      padding: 12px;
+      font-family:
+        ui-monospace,
+        'SF Mono',
+        Menlo,
+        Consolas,
+        monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text);
+      white-space: pre;
+      overflow-x: auto;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    .jf-diff-placeholder {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Diff highlight colors */
+    .jdf-added {
+      background: rgba(34, 197, 94, 0.15);
+      border-radius: 3px;
+      padding: 1px 2px;
+    }
+    .jdf-removed {
+      background: rgba(239, 68, 68, 0.15);
+      border-radius: 3px;
+      padding: 1px 2px;
+      text-decoration: line-through;
+      text-decoration-thickness: 1px;
+    }
+    .jdf-changed {
+      background: rgba(234, 179, 8, 0.18);
+      border-radius: 3px;
+      padding: 1px 2px;
+    }
+    .jdf-type-changed {
+      background: rgba(168, 85, 247, 0.18);
+      border-radius: 3px;
+      padding: 1px 2px;
+    }
+    .jdf-missing {
+      color: var(--text-muted);
+      opacity: 0.5;
+      font-style: italic;
+    }
+    .jdf-flash {
+      animation: jdfFlash 1.5s ease;
+    }
+    @keyframes jdfFlash {
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+      }
+      20% {
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.5);
+      }
+    }
+
+    /* Diff change list */
+    .jf-diff-change-list {
+      padding: 12px 16px;
+    }
+    .jf-diff-summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 14px;
+      background: var(--bg-subtle, #f8fafc);
+      border-left: 4px solid var(--accent, #2563eb);
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+    [data-theme='dark'] .jf-diff-summary {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    .jf-diff-summary-equal {
+      border-left-color: #16a34a;
+      color: #16a34a;
+    }
+    [data-theme='dark'] .jf-diff-summary-equal {
+      color: #4ade80;
+    }
+    .jf-diff-stat {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family:
+        ui-monospace,
+        'SF Mono',
+        monospace;
+    }
+    .jf-diff-stat-added {
+      background: rgba(34, 197, 94, 0.15);
+      color: #15803d;
+    }
+    .jf-diff-stat-removed {
+      background: rgba(239, 68, 68, 0.15);
+      color: #b91c1c;
+    }
+    .jf-diff-stat-changed {
+      background: rgba(234, 179, 8, 0.18);
+      color: #a16207;
+    }
+    .jf-diff-stat-typechanged {
+      background: rgba(168, 85, 247, 0.18);
+      color: #7c3aed;
+    }
+    [data-theme='dark'] .jf-diff-stat-added {
+      color: #4ade80;
+    }
+    [data-theme='dark'] .jf-diff-stat-removed {
+      color: #f87171;
+    }
+    [data-theme='dark'] .jf-diff-stat-changed {
+      color: #facc15;
+    }
+    [data-theme='dark'] .jf-diff-stat-typechanged {
+      color: #c084fc;
+    }
+
+    .jf-diff-entries {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .jf-diff-entry {
+      padding: 10px 14px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition:
+        border-color 0.15s ease,
+        transform 0.1s ease;
+    }
+    .jf-diff-entry:hover {
+      border-color: var(--accent, #2563eb);
+      transform: translateY(-1px);
+    }
+    .jf-de-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+    }
+    .jf-de-kind {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family:
+        ui-monospace,
+        'SF Mono',
+        monospace;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .jf-diff-entry-added .jf-de-kind {
+      background: rgba(34, 197, 94, 0.15);
+      color: #15803d;
+    }
+    .jf-diff-entry-removed .jf-de-kind {
+      background: rgba(239, 68, 68, 0.15);
+      color: #b91c1c;
+    }
+    .jf-diff-entry-changed .jf-de-kind {
+      background: rgba(234, 179, 8, 0.18);
+      color: #a16207;
+    }
+    .jf-diff-entry-type-changed .jf-de-kind {
+      background: rgba(168, 85, 247, 0.18);
+      color: #7c3aed;
+    }
+    [data-theme='dark'] .jf-diff-entry-added .jf-de-kind {
+      color: #4ade80;
+    }
+    [data-theme='dark'] .jf-diff-entry-removed .jf-de-kind {
+      color: #f87171;
+    }
+    [data-theme='dark'] .jf-diff-entry-changed .jf-de-kind {
+      color: #facc15;
+    }
+    [data-theme='dark'] .jf-diff-entry-type-changed .jf-de-kind {
+      color: #c084fc;
+    }
+    .jf-de-path {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .jf-de-path code {
+      font-family:
+        ui-monospace,
+        'SF Mono',
+        monospace;
+      background: var(--bg-subtle, #f1f5f9);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 12px;
+      color: var(--text);
+    }
+    [data-theme='dark'] .jf-de-path code {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    .jf-de-detail {
+      margin: 4px 0;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .jf-de-detail code {
+      font-family:
+        ui-monospace,
+        'SF Mono',
+        monospace;
+      background: var(--bg-subtle, #f1f5f9);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 11px;
+      color: var(--text);
+    }
+    [data-theme='dark'] .jf-de-detail code {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+
+    /* Query controls panel */
+    .jf-query-controls {
+      margin-bottom: 16px;
+      padding: 14px 16px;
+      background: var(--bg-subtle, #f8fafc);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    [data-theme='dark'] .jf-query-controls {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    .jf-query-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 12px;
+    }
+    .jf-query-input-field {
+      flex: 1 1 320px;
+    }
+    .jf-query-input {
+      font-family:
+        ui-monospace,
+        'SF Mono',
+        Menlo,
+        Consolas,
+        monospace;
+      font-size: 14px;
+    }
+    .jf-query-btn {
+      align-self: end;
+    }
+    .jf-query-view-toggle {
+      display: inline-flex;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 3px;
+      gap: 3px;
+    }
+    .jf-query-view-tab {
+      padding: 6px 12px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 5px;
+      cursor: pointer;
+      transition:
+        background 0.15s ease,
+        color 0.15s ease;
+    }
+    .jf-query-view-tab.is-active {
+      background: var(--accent, #2563eb);
+      color: white;
+    }
+    .jf-query-view-tab:not(.is-active):hover {
+      background: var(--bg-subtle, #f1f5f9);
+      color: var(--text);
+    }
+    [data-theme='dark'] .jf-query-view-tab:not(.is-active):hover {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+
+    /* Help panel */
+    .jf-query-help {
+      margin-top: 12px;
+      padding: 14px 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .jf-query-help h4 {
+      margin: 0 0 10px 0;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .jf-query-help-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+    .jf-query-help-table td {
+      padding: 4px 8px;
+      vertical-align: top;
+      border-bottom: 1px solid var(--border);
+    }
+    .jf-query-help-table td:first-child {
+      white-space: nowrap;
+      width: 30%;
+    }
+    .jf-query-help-table code {
+      font-family:
+        ui-monospace,
+        'SF Mono',
+        monospace;
+      background: var(--bg-subtle, #f1f5f9);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 12px;
+    }
+    [data-theme='dark'] .jf-query-help-table code {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    .jf-query-help-note {
+      margin: 8px 0;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .jf-query-help-note code {
+      font-family:
+        ui-monospace,
+        'SF Mono',
+        monospace;
+      background: var(--bg-subtle, #f1f5f9);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 12px;
+      color: var(--text);
+    }
+    [data-theme='dark'] .jf-query-help-note code {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+
+    /* Query results — matches list */
+    .jf-query-matches,
+    .jf-query-highlighted {
+      padding: 12px 16px;
+    }
+    .jf-query-placeholder {
+      color: var(--text-muted);
+      font-style: italic;
+      margin: 0;
+    }
+    .jf-query-summary {
+      padding: 10px 14px;
+      background: var(--bg-subtle, #f8fafc);
+      border-left: 4px solid var(--accent, #2563eb);
+      border-radius: 8px;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+    [data-theme='dark'] .jf-query-summary {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    .jf-query-error {
+      padding: 12px 14px;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      color: #991b1b;
+      font-size: 14px;
+    }
+    [data-theme='dark'] .jf-query-error {
+      background: rgba(220, 38, 38, 0.1);
+      border-color: rgba(248, 113, 113, 0.3);
+      border-left-color: #f87171;
+      color: #f87171;
+    }
+    .jf-query-match-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .jf-query-match {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      overflow: hidden;
+    }
+    .jf-qm-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      background: var(--bg-subtle, #f8fafc);
+      border-bottom: 1px solid var(--border);
+    }
+    [data-theme='dark'] .jf-qm-header {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    .jf-qm-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      background: var(--accent, #2563eb);
+      color: white;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .jf-qm-path {
+      flex: 1;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .jf-qm-path code {
+      font-family:
+        ui-monospace,
+        'SF Mono',
+        monospace;
+      background: var(--bg);
+      padding: 1px 6px;
+      border-radius: 3px;
+      border: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text);
+    }
+    .jf-qm-copy {
+      padding: 3px 10px;
+      font-size: 11px;
+    }
+    .jf-qm-value {
+      margin: 0;
+      padding: 12px 14px;
+      font-family:
+        ui-monospace,
+        'SF Mono',
+        Menlo,
+        monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text);
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    /* Query highlighted source */
+    .jf-query-source {
+      margin: 0;
+      padding: 12px 14px;
+      font-family:
+        ui-monospace,
+        'SF Mono',
+        Menlo,
+        monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      white-space: pre;
+      overflow: auto;
+      max-height: 600px;
+    }
+    .jq-match {
+      background: rgba(37, 99, 235, 0.18);
+      border-radius: 3px;
+      padding: 1px 3px;
+      outline: 1px solid rgba(37, 99, 235, 0.4);
+    }
+    [data-theme='dark'] .jq-match {
+      background: rgba(96, 165, 250, 0.25);
+      outline-color: rgba(147, 197, 253, 0.5);
+    }
+
+    @media (max-width: 640px) {
+      .jf-query-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .jf-query-input-field {
+        flex: 1 1 100%;
+      }
+      .jf-query-btn {
+        width: 100%;
+      }
+    }
+
+    /* Validation results */
+    .jf-validation-results {
+      flex: 1;
+      min-height: 100px;
+      padding: 16px;
+      background: var(--bg);
+    }
+    .jf-validation-placeholder {
+      color: var(--text-muted);
+      font-style: italic;
+      margin: 0;
+    }
+    .jf-validation-ok {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      color: #15803d;
+      font-size: 14px;
+    }
+    .jf-validation-ok strong {
+      font-size: 15px;
+    }
+    [data-theme='dark'] .jf-validation-ok {
+      background: rgba(22, 163, 74, 0.1);
+      border-color: rgba(74, 222, 128, 0.3);
+      border-left-color: #4ade80;
+      color: #4ade80;
+    }
+    .jf-validation-fail {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      color: #991b1b;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+    .jf-validation-fail strong {
+      font-size: 15px;
+    }
+    [data-theme='dark'] .jf-validation-fail {
+      background: rgba(220, 38, 38, 0.1);
+      border-color: rgba(248, 113, 113, 0.3);
+      border-left-color: #f87171;
+      color: #f87171;
+    }
+    .jf-validation-warn {
+      margin: 12px 0 0 0;
+      padding: 10px 14px;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-left: 4px solid #ca8a04;
+      border-radius: 8px;
+      color: #854d0e;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .jf-validation-warn code {
+      background: rgba(202, 138, 4, 0.1);
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 12px;
+    }
+    [data-theme='dark'] .jf-validation-warn {
+      background: rgba(202, 138, 4, 0.1);
+      border-color: rgba(250, 204, 21, 0.3);
+      border-left-color: #facc15;
+      color: #facc15;
+    }
+    [data-theme='dark'] .jf-validation-warn code {
+      background: rgba(250, 204, 21, 0.15);
+    }
+    .jf-validation-errors {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .jf-validation-error {
+      padding: 12px 14px;
+      background: var(--bg-subtle, #f8fafc);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    [data-theme='dark'] .jf-validation-error {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    .jf-vee-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+    .jf-vee-keyword {
+      display: inline-block;
+      padding: 2px 8px;
+      background: #fef2f2;
+      color: #dc2626;
+      border-radius: 4px;
+      font-family: ui-monospace, 'SF Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    [data-theme='dark'] .jf-vee-keyword {
+      background: rgba(220, 38, 38, 0.15);
+      color: #f87171;
+    }
+    .jf-vee-path {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .jf-vee-path code {
+      font-family: ui-monospace, 'SF Mono', monospace;
+      background: var(--bg);
+      padding: 1px 6px;
+      border-radius: 3px;
+      border: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text);
+    }
+    .jf-vee-message {
+      margin: 0 0 6px 0;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .jf-vee-detail {
+      margin: 4px 0;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .jf-vee-detail code {
+      font-family: ui-monospace, 'SF Mono', monospace;
+      background: var(--bg);
+      padding: 1px 5px;
+      border-radius: 3px;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .jf-pane {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--bg);
+    }
+    .jf-pane-header {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 8px 12px;
+      background: var(--bg-subtle, #f8fafc);
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    [data-theme='dark'] .jf-pane-header {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    .jf-pane-label {
+      font-weight: 600;
+      color: var(--text);
+    }
+    .jf-pane-stats {
+      color: var(--text-muted);
+      font-size: 12px;
+      flex: 1;
+    }
+    .jf-pane-actions {
+      display: flex;
+      gap: 6px;
+    }
+    .btn-icon {
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-muted);
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 0.15s ease, background 0.15s ease;
+    }
+    .btn-icon:hover {
+      color: var(--text);
+      background: var(--bg-subtle, #f1f5f9);
+    }
+    [data-theme='dark'] .btn-icon:hover {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    /* ────────────────────────────────────────────────────────────────────────── */
+    /* JSON Code Editor                                                            */
+    /* ────────────────────────────────────────────────────────────────────────── */
+
+    .jf-input-editor {
+      position: relative;
+      display: flex;
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      min-height: 380px;
+      background: var(--bg);
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 14px;
+      line-height: 21px; /* MUST match JsonCodeEditor.lineHeight */
+      overflow: hidden;
+    }
+    .jf-input-editor.is-focused {
+      outline: 2px solid var(--accent, #2563eb);
+      outline-offset: -2px;
+    }
+
+    .jce-host {
+      display: flex;
+      flex: 1;
+      min-height: 380px;
+      position: relative;
+    }
+
+    /* Gutter */
+    .jce-gutter {
+      flex: 0 0 auto;
+      width: 48px;
+      padding: 12px 8px 12px 0;
+      background: var(--bg-subtle, #f8fafc);
+      border-right: 1px solid var(--border);
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 12px;
+      line-height: 21px;
+      text-align: right;
+      user-select: none;
+      overflow: hidden;
+    }
+    [data-theme='dark'] .jce-gutter {
+      background: var(--bg-subtle-dark, #111827);
+    }
+    .jce-line-num {
+      height: 21px;
+      padding-right: 4px;
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+    .jce-line-num.is-active {
+      color: var(--text);
+      opacity: 1;
+      font-weight: 600;
+    }
+
+    /* Editor area */
+    .jce-area {
+      position: relative;
+      flex: 1;
+      overflow: hidden;
+    }
+    .jce-layer {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    /* Highlight layer (the visible colored text) */
+    .jce-highlight {
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: 0;
+      padding: 12px;
+      width: max-content;
+      min-width: 100%;
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      color: var(--text);
+      white-space: pre;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Current line highlight */
+    .jce-current-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 21px;
+      background: rgba(37, 99, 235, 0.06);
+      pointer-events: none;
+      z-index: 1;
+    }
+    [data-theme='dark'] .jce-current-line {
+      background: rgba(96, 165, 250, 0.08);
+    }
+    .jce-host:not(.is-focused) .jce-current-line {
+      opacity: 0;
+    }
+
+    /* Bracket match markers */
+    .jce-bracket-highlights {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .jce-bracket-marker {
+      position: absolute;
+      background: rgba(234, 179, 8, 0.25);
+      border: 1px solid rgba(234, 179, 8, 0.6);
+      border-radius: 2px;
+      pointer-events: none;
+    }
+    [data-theme='dark'] .jce-bracket-marker {
+      background: rgba(250, 204, 21, 0.2);
+      border-color: rgba(250, 204, 21, 0.5);
+    }
+
+    /* Textarea (transparent overlay capturing input) */
+    .jce-textarea {
+      position: absolute;
+      inset: 0;
+      margin: 0;
+      padding: 12px;
+      border: none;
+      background: transparent;
+      color: transparent;
+      caret-color: var(--text);
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      resize: none;
+      outline: none;
+      white-space: pre;
+      overflow: auto;
+      z-index: 3;
+      /* Selection should still be visible — use a tinted color */
+    }
+    .jce-textarea::selection {
+      background: rgba(37, 99, 235, 0.25);
+      color: transparent;
+    }
+    [data-theme='dark'] .jce-textarea::selection {
+      background: rgba(96, 165, 250, 0.3);
+    }
+
+    /* The textarea must scroll, but the highlight layer stays in sync via JS-driven transform */
+    .jce-textarea {
+      scrollbar-width: thin;
+    }
+
+    /* Hide the placeholder when the editor has content; show otherwise.
+       Since we swap the textarea visibility for a real editor, the placeholder
+       is rendered via a pseudo on the host instead. */
+    .jce-host[data-empty='true'] .jce-textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 640px) {
+      .jce-gutter { width: 36px; font-size: 11px; }
+      .jce-highlight, .jce-textarea { padding: 10px; font-size: 13px; }
+    }
+
+    .jf-textarea {
+      min-height: 480px;
+      padding: 12px;
+      border: none;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      resize: vertical;
+      outline: none;
+      tab-size: 2;
+      white-space: pre;
+      overflow: auto;
+    }
+    .jf-dropzone .jf-textarea {
+      flex: 1;
+      width: 100%;
+    }
+    .jf-output-wrap {
+      display: flex;
+      flex-direction: column;
+      min-height: 480px;
+      max-height: 720px;
+      overflow: auto;
+      background: var(--bg);
+    }
+    .jf-output {
+      margin: 0;
+      padding: 12px;
+      font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text);
+      tab-size: 2;
+      white-space: pre;
+    }
+
+    /* Syntax highlighting */
+    .jh-key {
+      color: #0550ae;
+      font-weight: 500;
+    }
+    .jh-string {
+      color: #032f62;
+    }
+    .jh-number {
+      color: #1a7f37;
+    }
+    .jh-bool {
+      color: #cf222e;
+      font-weight: 500;
+    }
+    .jh-null {
+      color: #6e7781;
+      font-style: italic;
+    }
+    .jh-punct {
+      color: var(--text-muted);
+    }
+
+    [data-theme='dark'] .jh-key {
+      color: #79c0ff;
+    }
+    [data-theme='dark'] .jh-string {
+      color: #a5d6ff;
+    }
+    [data-theme='dark'] .jh-number {
+      color: #56d364;
+    }
+    [data-theme='dark'] .jh-bool {
+      color: #ff7b72;
+    }
+    [data-theme='dark'] .jh-null {
+      color: #8b949e;
+    }
+
+    /* Error panel */
+    .jf-error-panel {
+      margin-top: 16px;
+      padding: 16px;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+    }
+    [data-theme='dark'] .jf-error-panel {
+      background: #2a1414;
+      border-color: #5b1e1e;
+      border-left-color: #f87171;
+    }
+    .jf-error-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .jf-error-header strong {
+      color: #dc2626;
+      font-size: 14px;
+    }
+    [data-theme='dark'] .jf-error-header strong {
+      color: #f87171;
+    }
+    .jf-error-position {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-family: ui-monospace, 'SF Mono', monospace;
+    }
+    .jf-error-friendly {
+      margin: 8px 0;
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .jf-error-excerpt {
+      margin: 8px 0;
+      padding: 10px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: ui-monospace, 'SF Mono', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text);
+      white-space: pre;
+      overflow-x: auto;
+    }
+    .jf-error-raw {
+      margin: 8px 0 0 0;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .jf-error-raw code {
+      font-family: ui-monospace, 'SF Mono', monospace;
+      background: var(--bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+
+    /* Shortcut hints */
+    .jf-shortcut-hint {
+      margin-top: 12px;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+    .jf-shortcut-hint kbd {
+      display: inline-block;
+      padding: 2px 6px;
+      background: var(--bg-subtle, #f1f5f9);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    [data-theme='dark'] .jf-shortcut-hint kbd {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    @media (max-width: 640px) {
+      .jf-shortcut-hint {
+        display: none;
+      }
+    }
+
+    /* Related tools grid (matches image tool pages) */
+    .jf-related-grid {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+    @media (min-width: 520px) {
+      .jf-related-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .jf-related-grid li {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text);
+    }
+    .jf-related-grid a {
+      display: block;
+      padding: 14px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--blue);
+      font-weight: 600;
+      font-size: 15px;
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .jf-related-grid a:hover {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+    [data-theme='dark'] .jf-related-grid a:hover {
+      background: rgba(0, 102, 255, 0.12);
+    }
+
+    /* View tabs */
+    .jf-view-tabs {
+      display: inline-flex;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px;
+      gap: 2px;
+      margin-right: 8px;
+    }
+    .jf-view-tab {
+      padding: 4px 10px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .jf-view-tab.is-active {
+      background: var(--accent, #2563eb);
+      color: white;
+    }
+    .jf-view-tab:not(.is-active):hover {
+      color: var(--text);
+      background: var(--bg-subtle, #f1f5f9);
+    }
+    [data-theme='dark'] .jf-view-tab:not(.is-active):hover {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+
+    /* Tree view */
+    .jf-tree-view {
+      margin: 0;
+      padding: 12px;
+      font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text);
+      overflow-x: auto;
+    }
+    .jt-root {
+      padding-left: 0;
+    }
+    .jt-node {
+      margin-left: 0;
+    }
+    .jt-summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 1px 0;
+      user-select: none;
+    }
+    .jt-summary::-webkit-details-marker {
+      display: none;
+    }
+    .jt-summary::before {
+      content: '▸';
+      display: inline-block;
+      width: 14px;
+      color: var(--text-muted);
+      font-size: 10px;
+      transition: transform 0.1s ease;
+    }
+    .jt-node[open] > .jt-summary::before {
+      transform: rotate(90deg);
+    }
+    .jt-children {
+      margin-left: 18px;
+      border-left: 1px solid var(--border);
+      padding-left: 8px;
+    }
+    .jt-leaf {
+      padding: 1px 0 1px 14px;
+    }
+    .jt-close {
+      padding-left: 0;
+    }
+
+    .jt-key {
+      color: #0550ae;
+      font-weight: 500;
+    }
+    .jt-string {
+      color: #032f62;
+    }
+    .jt-number {
+      color: #1a7f37;
+    }
+    .jt-bool {
+      color: #cf222e;
+      font-weight: 500;
+    }
+    .jt-null {
+      color: #6e7781;
+      font-style: italic;
+    }
+    .jt-meta {
+      color: var(--text-muted);
+      font-size: 12px;
+      font-style: italic;
+      padding: 0 4px;
+    }
+    .jt-punct {
+      color: var(--text-muted);
+    }
+
+    [data-theme='dark'] .jt-key {
+      color: #79c0ff;
+    }
+    [data-theme='dark'] .jt-string {
+      color: #a5d6ff;
+    }
+    [data-theme='dark'] .jt-number {
+      color: #56d364;
+    }
+    [data-theme='dark'] .jt-bool {
+      color: #ff7b72;
+    }
+    [data-theme='dark'] .jt-null {
+      color: #8b949e;
+    }
+
+    /* Drop zone */
+    .jf-dropzone {
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .jf-dropzone-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(37, 99, 235, 0.08);
+      border: 2px dashed var(--accent, #2563eb);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+    .jf-dropzone-overlay.is-active {
+      opacity: 1;
+    }
+    .jf-dropzone-message {
+      background: var(--bg);
+      padding: 16px 24px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent, #2563eb);
+    }
+
+    /* Privacy badge */
+    .jf-privacy-badge-wrap {
+      margin-top: 12px;
+      text-align: center;
+    }
+    .jf-privacy-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: var(--bg-subtle, #f0fdf4);
+      color: #16a34a;
+      border: 1px solid #bbf7d0;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+    .jf-privacy-badge:hover {
+      background: #dcfce7;
+      transform: translateY(-1px);
+    }
+    [data-theme='dark'] .jf-privacy-badge {
+      background: rgba(22, 163, 74, 0.1);
+      color: #4ade80;
+      border-color: rgba(74, 222, 128, 0.3);
+    }
+    [data-theme='dark'] .jf-privacy-badge:hover {
+      background: rgba(22, 163, 74, 0.2);
+    }
+
+    /* Modal */
+    .jf-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      overscroll-behavior: contain;
+    }
+    .jf-modal[hidden] {
+      display: none;
+    }
+    .jf-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: rgba(0, 0, 0, 0.5);
+    }
+    .jf-modal-content {
+      position: relative;
+      z-index: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      max-width: 560px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    }
+    .jf-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: var(--bg);
+    }
+    .jf-modal-header h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      min-width: 0;
+      flex: 1;
+    }
+    .jf-modal-close {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .jf-modal-close:hover {
+      background: var(--bg-subtle, #f1f5f9);
+      color: var(--text);
+    }
+    [data-theme='dark'] .jf-modal-close:hover {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    .jf-modal-body {
+      padding: 20px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text);
+    }
+    .jf-modal-body p {
+      margin: 0 0 14px 0;
+    }
+    .jf-privacy-steps {
+      margin: 14px 0;
+      padding-left: 24px;
+      line-height: 1.7;
+    }
+    .jf-privacy-steps li {
+      margin-bottom: 12px;
+    }
+    .jf-privacy-steps kbd {
+      display: inline-block;
+      padding: 1px 6px;
+      background: var(--bg-subtle, #f1f5f9);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    [data-theme='dark'] .jf-privacy-steps kbd {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    .jf-privacy-compare {
+      margin-top: 16px;
+      padding: 12px;
+      background: var(--bg-subtle, #f8fafc);
+      border-left: 3px solid var(--accent, #2563eb);
+      border-radius: 6px;
+      font-size: 13px;
+    }
+    [data-theme='dark'] .jf-privacy-compare {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    .jf-privacy-source {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Top-level mode toggle */
+    .jf-mode-toggle {
+      display: inline-flex;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 16px;
+      gap: 4px;
+    }
+    .jf-mode-tab {
+      padding: 8px 18px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .jf-mode-tab.is-active {
+      background: var(--accent, #2563eb);
+      color: white;
+    }
+    .jf-mode-tab:not(.is-active):hover {
+      background: var(--bg-subtle, #f1f5f9);
+      color: var(--text);
+    }
+    [data-theme='dark'] .jf-mode-tab:not(.is-active):hover {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+
+    /* Convert controls */
+    .jf-convert-controls {
+      margin-bottom: 16px;
+      padding: 14px 16px;
+      background: var(--bg-subtle, #f8fafc);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    [data-theme='dark'] .jf-convert-controls {
+      background: var(--bg-subtle-dark, #1f2937);
+    }
+    .jf-convert-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: end;
+    }
+    .jf-convert-btn {
+      align-self: end;
+    }
+    .jf-convert-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .jf-convert-hint {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 640px) {
+      .jf-convert-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .jf-convert-row .jf-field {
+        width: 100%;
+      }
+      .jf-convert-btn {
+        width: 100%;
+      }
+      .jf-view-tabs {
+        margin-right: 4px;
+      }
+      .jf-pane-actions {
+        gap: 4px;
+      }
+      .btn-icon {
+        padding: 4px 8px;
+        font-size: 11px;
+      }
+    }
+  </style>
+</MainLayout>
