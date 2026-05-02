@@ -77,6 +77,7 @@ export class JsonCodeEditor {
     this.textarea.autocomplete = 'off';
     this.textarea.setAttribute('autocorrect', 'off');
     this.textarea.setAttribute('aria-label', 'JSON input');
+    this.textarea.placeholder = 'Paste or type JSON here, or drop a .json file...';
 
     // Z-stack inside .jce-area: bracket bg < current line < highlighted text < textarea
     this.layer.appendChild(this.bracketHighlights);
@@ -100,11 +101,13 @@ export class JsonCodeEditor {
       this.handleKeydown(e);
     });
 
-    this.textarea.addEventListener('paste', (e) => {
-      // Let the paste happen, then notify and repaint
+    this.textarea.addEventListener('paste', () => {
+      // After default paste runs: some environments fire `input` inconsistently; always sync.
       setTimeout(() => {
+        const v = this.textarea.value;
         this.repaint();
-        this.options.onPaste(this.textarea.value);
+        this.options.onChange(v);
+        this.options.onPaste(v);
       }, 0);
     });
 

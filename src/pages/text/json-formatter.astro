@@ -51,9 +51,9 @@ const sampleJson = `{
 
   <section class="tool-hero">
     <div class="container container--tool">
-      <h1>JSON Formatter &amp; Validator — Privacy-First, Browser-Based</h1>
-      <p class="subtitle">
-        The DoItSwift JSON Formatter formats, validates, and minifies JSON entirely in your browser — your data never leaves your device. Get human-readable error messages that tell you exactly what is wrong, not just <code>Unexpected token at position 1247</code>. No signup, no analytics, no third-party trackers — verifiable in your browser's DevTools Network tab.
+      <h1>JSON Formatter &amp; Validator</h1>
+      <p class="hero-subtitle">
+        Format, validate, convert, diff, and query JSON entirely in your browser. Nothing uploaded, nothing tracked.
       </p>
       <div class="trust-signals">
         <span><span class="check">✓</span> Browser-based · No upload</span>
@@ -76,10 +76,10 @@ const sampleJson = `{
 
       <!-- Action bar -->
       <div class="jf-actions">
-        <button id="jfFormat" class="btn btn-primary">Format</button>
-        <button id="jfMinify" class="btn btn-secondary">Minify</button>
-        <button id="jfValidate" class="btn btn-secondary">Validate</button>
-        <button id="jfClear" class="btn btn-tertiary">Clear</button>
+        <button id="jfFormat" type="button" class="btn btn-primary jf-format-btn">Format</button>
+        <button id="jfMinify" type="button" class="btn btn-secondary jf-format-btn">Minify</button>
+        <button id="jfValidate" type="button" class="btn btn-secondary jf-format-btn">Validate</button>
+        <button id="jfClear" type="button" class="btn btn-tertiary jf-format-btn">Clear</button>
 
         <span id="jfStatus" class="jf-status" role="status" aria-live="polite"></span>
 
@@ -156,7 +156,8 @@ const sampleJson = `{
       <div class="jf-diff-controls" id="jfDiffControls" hidden>
         <div class="jf-diff-row">
           <button id="jfDiffRun" class="btn btn-primary">Compare JSON Documents</button>
-          <div class="jf-diff-view-toggle" role="tablist" aria-label="Diff view">
+          <button id="jfDiffEditBtn" class="btn btn-secondary jf-format-btn" type="button" hidden>Edit JSON</button>
+          <div class="jf-diff-view-toggle" role="tablist" aria-label="Diff view" hidden>
             <button type="button" class="jf-diff-view-tab is-active" data-diff-view="side-by-side" role="tab" aria-selected="true">Side-by-side</button>
             <button type="button" class="jf-diff-view-tab" data-diff-view="change-list" role="tab" aria-selected="false">Change list</button>
           </div>
@@ -237,6 +238,9 @@ const sampleJson = `{
               <div class="jf-dropzone-message">Drop a .json or .txt file to load it</div>
             </div>
           </div>
+          <div id="jfInputDiffView" class="jf-diff-pane-view" hidden>
+            <pre class="jf-diff-pane-content"></pre>
+          </div>
         </div>
 
         <!-- Schema pane (visible only in Validate mode) -->
@@ -257,12 +261,15 @@ const sampleJson = `{
             autocomplete="off"
             autocorrect="off"
             aria-label="JSON Schema input"
-            placeholder="Paste your JSON Schema here. Example:&#10;{&#10;  &quot;type&quot;: &quot;object&quot;,&#10;  &quot;properties&quot;: { &quot;name&quot;: { &quot;type&quot;: &quot;string&quot; } },&#10;  &quot;required&quot;: [&quot;name&quot;]&#10;}"
+            placeholder="Paste your JSON Schema here (draft-07 or 2020-12)."
           ></textarea>
+          <div id="jfSchemaDiffView" class="jf-diff-pane-view" hidden>
+            <pre class="jf-diff-pane-content"></pre>
+          </div>
         </div>
 
         <!-- Output pane -->
-        <div class="jf-pane">
+        <div class="jf-pane" id="jfOutputPane">
           <div class="jf-pane-header">
             <span class="jf-pane-label" id="jfOutputLabel">Output</span>
             <div class="jf-view-tabs" role="tablist" aria-label="Output view">
@@ -519,6 +526,12 @@ const sampleJson = `{
     const diffLeft = document.getElementById('jfDiffLeft') as HTMLPreElement;
     const diffRight = document.getElementById('jfDiffRight') as HTMLPreElement;
     const diffChangeList = document.getElementById('jfDiffChangeList') as HTMLDivElement;
+    const outputPane = document.getElementById('jfOutputPane') as HTMLDivElement;
+    const inputDiffView = document.getElementById('jfInputDiffView') as HTMLDivElement;
+    const schemaDiffView = document.getElementById('jfSchemaDiffView') as HTMLDivElement;
+    const inputDiffContent = inputDiffView.querySelector('.jf-diff-pane-content') as HTMLPreElement;
+    const schemaDiffContent = schemaDiffView.querySelector('.jf-diff-pane-content') as HTMLPreElement;
+    const diffEditBtn = document.getElementById('jfDiffEditBtn') as HTMLButtonElement;
 
     // Query mode
     const queryControls = document.getElementById('jfQueryControls') as HTMLDivElement;
@@ -559,8 +572,8 @@ const sampleJson = `{
       }
     }
 
-    function updateInputStats() {
-      const text = input.value;
+    function updateInputStats(overrideText?: string) {
+      const text = overrideText !== undefined ? overrideText : input.value;
       const chars = text.length;
       const bytes = new TextEncoder().encode(text).length;
       inputStats.textContent = `${chars.toLocaleString()} chars · ${bytes.toLocaleString()} bytes`;
@@ -730,6 +743,7 @@ const sampleJson = `{
       lastDiffResult = null;
       lastDiffOldVal = null;
       lastDiffNewVal = null;
+      resetDiffModeToEditors();
       queryInput.value = '';
       const queryPlaceholder = '<p class="jf-query-placeholder">Type a JSONPath expression and click "Run Query".</p>';
       queryMatches.innerHTML = queryPlaceholder;
@@ -963,6 +977,10 @@ const sampleJson = `{
       const viewTabsContainer = document.querySelector('.jf-view-tabs') as HTMLDivElement;
 
       if (newMode === 'convert') {
+        outputPane.removeAttribute('hidden');
+        resetDiffModeToEditors();
+        schemaPane.setAttribute('hidden', '');
+        schemaInput.placeholder = 'Paste your JSON Schema here (draft-07 or 2020-12).';
         convertControls.removeAttribute('hidden');
         formatActionBtns.forEach((b) => {
           b.style.display = 'none';
@@ -989,6 +1007,9 @@ const sampleJson = `{
           }
         }
       } else if (newMode === 'validate') {
+        outputPane.removeAttribute('hidden');
+        resetDiffModeToEditors();
+        schemaInput.placeholder = 'Paste your JSON Schema here (draft-07 or 2020-12).';
         validateControls.removeAttribute('hidden');
         schemaPane.removeAttribute('hidden');
         formatActionBtns.forEach((b) => {
@@ -1007,6 +1028,7 @@ const sampleJson = `{
             '<p class="jf-validation-placeholder">Click "Validate JSON Against Schema" to check your JSON against the schema.</p>';
         }
       } else if (newMode === 'diff') {
+        schemaInput.placeholder = 'Paste the modified JSON here, or drop a .json file…';
         diffControls.removeAttribute('hidden');
         schemaPane.removeAttribute('hidden');
         formatActionBtns.forEach((b) => {
@@ -1021,32 +1043,29 @@ const sampleJson = `{
         treeView.style.display = 'none';
         validationResults.setAttribute('hidden', '');
         validationResults.style.display = 'none';
-        if (activeDiffView === 'side-by-side') {
-          diffSideBySide.removeAttribute('hidden');
-          diffChangeList.setAttribute('hidden', '');
-        } else {
-          diffChangeList.removeAttribute('hidden');
-          diffSideBySide.setAttribute('hidden', '');
+        diffSideBySide.setAttribute('hidden', '');
+        diffChangeList.setAttribute('hidden', '');
+        outputPane.setAttribute('hidden', '');
+        resetDiffModeToEditors();
+        const sw = document.getElementById('jfDiffSummaryWrap');
+        if (sw) sw.innerHTML = '';
+        const leftEl = document.getElementById('jfDiffLeft');
+        const rightEl = document.getElementById('jfDiffRight');
+        if (leftEl) {
+          leftEl.textContent = 'Click "Compare JSON Documents" to see differences.';
+          leftEl.classList.add('jf-diff-placeholder');
         }
-        if (!lastDiffResult) {
-          const sw = document.getElementById('jfDiffSummaryWrap');
-          if (sw) sw.innerHTML = '';
-          const leftEl = document.getElementById('jfDiffLeft');
-          const rightEl = document.getElementById('jfDiffRight');
-          if (leftEl) {
-            leftEl.textContent = 'Click "Compare JSON Documents" to see differences.';
-            leftEl.classList.add('jf-diff-placeholder');
-          }
-          if (rightEl) {
-            rightEl.textContent = '';
-            rightEl.classList.add('jf-diff-placeholder');
-          }
-          diffChangeList.innerHTML =
-            '<p class="jf-diff-placeholder">Click "Compare JSON Documents" to see the change list.</p>';
-        } else {
-          paintDiffUIFromCache();
+        if (rightEl) {
+          rightEl.textContent = '';
+          rightEl.classList.add('jf-diff-placeholder');
         }
+        diffChangeList.innerHTML =
+          '<p class="jf-diff-placeholder">Click "Compare JSON Documents" to see the change list.</p>';
       } else if (newMode === 'query') {
+        outputPane.removeAttribute('hidden');
+        resetDiffModeToEditors();
+        schemaPane.setAttribute('hidden', '');
+        schemaInput.placeholder = 'Paste your JSON Schema here (draft-07 or 2020-12).';
         queryControls.removeAttribute('hidden');
         formatActionBtns.forEach((b) => {
           b.style.display = 'none';
@@ -1073,6 +1092,10 @@ const sampleJson = `{
           paintQueryUIFromCache();
         }
       } else {
+        outputPane.removeAttribute('hidden');
+        resetDiffModeToEditors();
+        schemaPane.setAttribute('hidden', '');
+        schemaInput.placeholder = 'Paste your JSON Schema here (draft-07 or 2020-12).';
         if (viewTabsContainer) viewTabsContainer.style.display = '';
         output.style.display = '';
         validationResults.setAttribute('hidden', '');
@@ -1142,37 +1165,54 @@ const sampleJson = `{
       return html;
     }
 
+    function applyDiffToUpperPanes(leftHtml: string, rightHtml: string) {
+      inputDiffContent.innerHTML = leftHtml;
+      schemaDiffContent.innerHTML = rightHtml;
+    }
+
+    /** Show highlighted diff in the upper two panes; hide editors and entire output column. */
+    function enterDiffResultView() {
+      dropzone.setAttribute('hidden', '');
+      inputDiffView.removeAttribute('hidden');
+      schemaInput.setAttribute('hidden', '');
+      schemaDiffView.removeAttribute('hidden');
+      diffEditBtn.removeAttribute('hidden');
+      outputPane.setAttribute('hidden', '');
+      diffSideBySide.setAttribute('hidden', '');
+      diffChangeList.setAttribute('hidden', '');
+    }
+
+    /** Return to editable JSON in upper panes (still in Diff mode). */
+    function exitDiffResultView() {
+      dropzone.removeAttribute('hidden');
+      inputDiffView.setAttribute('hidden', '');
+      schemaDiffView.setAttribute('hidden', '');
+      schemaInput.removeAttribute('hidden');
+      diffEditBtn.setAttribute('hidden', '');
+      inputDiffContent.innerHTML = '';
+      schemaDiffContent.innerHTML = '';
+      updateInputStats();
+      updateSchemaStats();
+    }
+
+    /** Reset upper panes to editor mode when entering Diff tab or leaving Diff mode. */
+    function resetDiffModeToEditors() {
+      dropzone.removeAttribute('hidden');
+      inputDiffView.setAttribute('hidden', '');
+      schemaDiffView.setAttribute('hidden', '');
+      schemaInput.removeAttribute('hidden');
+      diffEditBtn.setAttribute('hidden', '');
+      inputDiffContent.innerHTML = '';
+      schemaDiffContent.innerHTML = '';
+      updateInputStats();
+      updateSchemaStats();
+    }
+
     function showDiffSideBySide(oldVal: any, newVal: any, result: DiffResult) {
       const { leftHtml, rightHtml } = renderDiffSideBySide(oldVal, newVal, result);
+      applyDiffToUpperPanes(leftHtml, rightHtml);
       const summaryWrap = document.getElementById('jfDiffSummaryWrap');
       if (summaryWrap) summaryWrap.innerHTML = renderDiffSummary(result);
-      const leftEl = document.getElementById('jfDiffLeft');
-      const rightEl = document.getElementById('jfDiffRight');
-      if (leftEl) {
-        leftEl.innerHTML = leftHtml;
-        leftEl.classList.remove('jf-diff-placeholder');
-      }
-      if (rightEl) {
-        rightEl.innerHTML = rightHtml;
-        rightEl.classList.remove('jf-diff-placeholder');
-      }
-    }
-
-    function refreshDiffChangeList(result: DiffResult) {
-      diffChangeList.innerHTML = renderDiffChangeList(result);
-    }
-
-    function paintDiffUIFromCache() {
-      if (lastDiffResult === null) return;
-      showDiffSideBySide(lastDiffOldVal, lastDiffNewVal, lastDiffResult);
-      refreshDiffChangeList(lastDiffResult);
-      if (activeDiffView === 'side-by-side') {
-        diffSideBySide.removeAttribute('hidden');
-        diffChangeList.setAttribute('hidden', '');
-      } else {
-        diffChangeList.removeAttribute('hidden');
-        diffSideBySide.setAttribute('hidden', '');
-      }
     }
 
     function doDiff() {
@@ -1208,21 +1248,18 @@ const sampleJson = `{
       lastDiffOldVal = oldVal;
       lastDiffNewVal = newVal;
 
-      showDiffSideBySide(oldVal, newVal, result);
-      refreshDiffChangeList(result);
+      const { leftHtml, rightHtml } = renderDiffSideBySide(oldVal, newVal, result);
+      applyDiffToUpperPanes(leftHtml, rightHtml);
+      enterDiffResultView();
 
-      if (activeDiffView === 'side-by-side') {
-        diffSideBySide.removeAttribute('hidden');
-        diffChangeList.setAttribute('hidden', '');
-      } else {
-        diffSideBySide.setAttribute('hidden', '');
-        diffChangeList.removeAttribute('hidden');
-      }
+      const diffLabel = `${result.summary.total} difference${result.summary.total === 1 ? '' : 's'}`;
+      inputStats.textContent = diffLabel;
+      schemaStats.textContent = diffLabel;
 
       if (result.summary.total === 0) {
-        setStatus('Documents are identical', 'ok', 2000);
+        setStatus('Diff complete: documents are identical', 'ok', 2500);
       } else {
-        setStatus(`${result.summary.total} difference${result.summary.total === 1 ? '' : 's'}`, '', 2500);
+        setStatus(`Diff complete: ${result.summary.total} change(s)`, 'ok', 2500);
       }
     }
 
@@ -1596,6 +1633,11 @@ const sampleJson = `{
 
     diffRunBtn.addEventListener('click', doDiff);
 
+    diffEditBtn.addEventListener('click', () => {
+      exitDiffResultView();
+      setStatus('Editing JSON — click Compare again when ready', '', 2500);
+    });
+
     diffViewTabs.forEach((tab) => {
       tab.addEventListener('click', () => {
         const view = tab.dataset.diffView as 'side-by-side' | 'change-list';
@@ -1606,19 +1648,7 @@ const sampleJson = `{
           t.classList.toggle('is-active', isActive);
           t.setAttribute('aria-selected', isActive ? 'true' : 'false');
         });
-        if (view === 'side-by-side') {
-          diffSideBySide.removeAttribute('hidden');
-          diffChangeList.setAttribute('hidden', '');
-          if (lastDiffResult !== null) {
-            showDiffSideBySide(lastDiffOldVal, lastDiffNewVal, lastDiffResult);
-          }
-        } else {
-          diffSideBySide.setAttribute('hidden', '');
-          diffChangeList.removeAttribute('hidden');
-          if (lastDiffResult) {
-            refreshDiffChangeList(lastDiffResult);
-          }
-        }
+        /* Legacy lower-pane diff UI is unused; diff highlights render in upper panes only. */
       });
     });
 
@@ -1634,14 +1664,18 @@ const sampleJson = `{
         t.classList.toggle('is-active', isActive);
         t.setAttribute('aria-selected', isActive ? 'true' : 'false');
       });
-      diffSideBySide.removeAttribute('hidden');
+      diffSideBySide.setAttribute('hidden', '');
       diffChangeList.setAttribute('hidden', '');
       if (lastDiffResult !== null) {
         showDiffSideBySide(lastDiffOldVal, lastDiffNewVal, lastDiffResult);
+        enterDiffResultView();
       }
 
       setTimeout(() => {
-        const target = diffSideBySide.querySelector(`[data-diff-path="${CSS.escape(path)}"]`) as HTMLElement | null;
+        const sel = `[data-diff-path="${CSS.escape(path)}"]`;
+        const target =
+          (inputDiffView.querySelector(sel) as HTMLElement | null) ||
+          (schemaDiffView.querySelector(sel) as HTMLElement | null);
         if (target) {
           target.scrollIntoView({ behavior: 'smooth', block: 'center' });
           target.classList.add('jdf-flash');
@@ -1824,13 +1858,15 @@ const sampleJson = `{
         initialValue: SAMPLE_JSON,
         indentSize: 2,
         autoPairBrackets: true,
-        onChange: () => {
-          updateInputStats();
-          inputHost.setAttribute('data-empty', editor.getValue() === '' ? 'true' : 'false');
+        onChange: (value: string) => {
+          // Use `value` here — during constructor setValue(), `editor` is not assigned yet
+          // (TDZ), and input.value would read as empty until assignment completes.
+          updateInputStats(value);
+          inputHost.setAttribute('data-empty', value === '' ? 'true' : 'false');
         },
-        onPaste: () => {
-          updateInputStats();
-          if (currentMode === 'format' && autoFormatCb.checked && input.value.trim()) {
+        onPaste: (value: string) => {
+          updateInputStats(value);
+          if (currentMode === 'format' && autoFormatCb.checked && value.trim()) {
             doFormat();
           }
         },
@@ -1869,6 +1905,14 @@ const sampleJson = `{
       font-size: 16px;
     }
 
+    .tool-hero .hero-subtitle {
+      font-size: 19px;
+      color: var(--text-muted);
+      max-width: 620px;
+      margin: 0 auto 28px;
+      line-height: 1.55;
+    }
+
     /* Action bar */
     .jf-actions {
       display: flex;
@@ -1877,23 +1921,48 @@ const sampleJson = `{
       align-items: center;
       margin-bottom: 16px;
     }
-    .btn-tertiary {
+    .jf-actions .jf-format-btn.btn-primary {
+      background: var(--accent, #2563eb);
+      color: white;
+      border: 1px solid var(--accent, #2563eb);
+    }
+    .jf-actions .jf-format-btn.btn-primary:hover {
+      background: #1d4ed8;
+      border-color: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .jf-actions .jf-format-btn.btn-secondary {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .jf-actions .jf-format-btn.btn-secondary:hover {
+      background: var(--bg-subtle, #f1f5f9);
+      border-color: var(--accent, #2563eb);
+      color: var(--accent, #2563eb);
+    }
+    [data-theme='dark'] .jf-actions .jf-format-btn.btn-secondary:hover {
+      background: var(--bg-subtle-dark, #1e293b);
+    }
+
+    .jf-actions .jf-format-btn.btn-tertiary {
       padding: 8px 14px;
       background: transparent;
       color: var(--text-muted);
-      border: 1px solid var(--border);
+      border: 1px solid transparent;
       border-radius: 8px;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      transition: color 0.15s ease, background 0.15s ease;
+      transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
     }
-    .btn-tertiary:hover {
-      color: var(--text);
+    .jf-actions .jf-format-btn.btn-tertiary:hover {
       background: var(--bg-subtle, #f1f5f9);
+      color: var(--text);
     }
-    [data-theme='dark'] .btn-tertiary:hover {
-      background: var(--bg-subtle-dark, #1f2937);
+    [data-theme='dark'] .jf-actions .jf-format-btn.btn-tertiary:hover {
+      background: var(--bg-subtle-dark, #1e293b);
     }
     .jf-status {
       font-size: 14px;
@@ -2002,37 +2071,67 @@ const sampleJson = `{
       background: var(--bg-subtle-dark, #1f2937);
     }
 
-    /* Two-pane layout */
+    /* Pane grid: 2 columns when schema hidden; input|schema + full-width output when schema visible */
+    #jfSchemaPane[hidden] {
+      display: none !important;
+    }
+
+    #jfOutputPane[hidden] {
+      display: none !important;
+    }
+
     .jf-panes {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
+      margin-top: 16px;
       margin-bottom: 16px;
     }
-    @media (max-width: 768px) {
-      .jf-panes {
-        grid-template-columns: 1fr;
-      }
+
+    .jf-panes:not(:has(#jfSchemaPane:not([hidden]))) {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas: 'input output';
     }
 
-    /* Three-pane layout in validate mode */
+    .jf-panes:not(:has(#jfSchemaPane:not([hidden]))) .jf-pane:first-child {
+      grid-area: input;
+    }
+
+    .jf-panes:not(:has(#jfSchemaPane:not([hidden]))) .jf-pane:last-child {
+      grid-area: output;
+    }
+
     .jf-panes:has(#jfSchemaPane:not([hidden])) {
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        'input schema'
+        'output output';
     }
-    @media (max-width: 1100px) {
-      .jf-panes:has(#jfSchemaPane:not([hidden])) {
-        grid-template-columns: 1fr 1fr;
-      }
-      .jf-panes:has(#jfSchemaPane:not([hidden])) > .jf-pane:nth-child(3) {
-        grid-column: span 2;
-      }
+
+    .jf-panes:has(#jfSchemaPane:not([hidden])) .jf-pane:first-child {
+      grid-area: input;
     }
+
+    .jf-panes:has(#jfSchemaPane:not([hidden])) #jfSchemaPane {
+      grid-area: schema;
+    }
+
+    .jf-panes:has(#jfSchemaPane:not([hidden])) .jf-pane:last-child {
+      grid-area: output;
+    }
+
     @media (max-width: 768px) {
-      .jf-panes:has(#jfSchemaPane:not([hidden])) {
-        grid-template-columns: 1fr;
+      .jf-panes {
+        grid-template-columns: 1fr !important;
+        grid-template-areas:
+          'input'
+          'schema'
+          'output' !important;
       }
-      .jf-panes:has(#jfSchemaPane:not([hidden])) > .jf-pane:nth-child(3) {
-        grid-column: 1;
+      .jf-panes:not(:has(#jfSchemaPane:not([hidden]))) {
+        grid-template-areas:
+          'input'
+          'output' !important;
       }
     }
 
@@ -2040,6 +2139,35 @@ const sampleJson = `{
       flex: 1;
       min-height: 400px;
       resize: vertical;
+    }
+
+    .jf-diff-pane-view {
+      flex: 1;
+      width: 100%;
+      min-height: 380px;
+      overflow: auto;
+      background: var(--bg);
+      position: relative;
+    }
+
+    .jf-pane > .jf-diff-pane-view {
+      min-height: 380px;
+    }
+
+    .jf-schema-pane .jf-diff-pane-view {
+      flex: 1;
+      min-height: 400px;
+    }
+
+    .jf-diff-pane-content {
+      margin: 0;
+      padding: 12px;
+      font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text);
+      white-space: pre;
+      tab-size: 2;
     }
 
     /* Validate controls panel */
@@ -2182,33 +2310,53 @@ const sampleJson = `{
       font-style: italic;
     }
 
-    /* Diff highlight colors */
-    .jdf-added {
-      background: rgba(34, 197, 94, 0.15);
-      border-radius: 3px;
+    /* Diff highlight colors (upper pane + any legacy diff markup) */
+    .jdf-added,
+    .jf-diff-pane-content .jdf-added {
+      background: rgba(34, 197, 94, 0.18);
+      border-radius: 2px;
       padding: 1px 2px;
     }
-    .jdf-removed {
-      background: rgba(239, 68, 68, 0.15);
-      border-radius: 3px;
+    .jdf-removed,
+    .jf-diff-pane-content .jdf-removed {
+      background: rgba(239, 68, 68, 0.18);
+      border-radius: 2px;
       padding: 1px 2px;
       text-decoration: line-through;
       text-decoration-thickness: 1px;
     }
-    .jdf-changed {
-      background: rgba(234, 179, 8, 0.18);
-      border-radius: 3px;
+    .jdf-changed,
+    .jf-diff-pane-content .jdf-changed {
+      background: rgba(234, 179, 8, 0.22);
+      border-radius: 2px;
       padding: 1px 2px;
     }
-    .jdf-type-changed {
-      background: rgba(168, 85, 247, 0.18);
-      border-radius: 3px;
+    .jdf-type-changed,
+    .jf-diff-pane-content .jdf-type-changed {
+      background: rgba(168, 85, 247, 0.22);
+      border-radius: 2px;
       padding: 1px 2px;
     }
     .jdf-missing {
       color: var(--text-muted);
       opacity: 0.5;
       font-style: italic;
+    }
+    [data-theme='dark'] .jdf-added,
+    [data-theme='dark'] .jf-diff-pane-content .jdf-added {
+      background: rgba(74, 222, 128, 0.15);
+    }
+    [data-theme='dark'] .jdf-removed,
+    [data-theme='dark'] .jf-diff-pane-content .jdf-removed {
+      background: rgba(248, 113, 113, 0.15);
+    }
+    [data-theme='dark'] .jdf-changed,
+    [data-theme='dark'] .jf-diff-pane-content .jdf-changed {
+      background: rgba(250, 204, 21, 0.18);
+    }
+    [data-theme='dark'] .jdf-type-changed,
+    [data-theme='dark'] .jf-diff-pane-content .jdf-type-changed {
+      background: rgba(192, 132, 252, 0.18);
     }
     .jdf-flash {
       animation: jdfFlash 1.5s ease;
@@ -2905,7 +3053,12 @@ const sampleJson = `{
       outline-offset: -2px;
     }
 
-    .jce-host {
+    /*
+     * JsonCodeEditor injects .jce-* nodes at runtime; they never get Astro's scoped
+     * data-astro-cid. Without :global(), rules like .jce-textarea never match and the
+     * textarea renders as a tiny default box inside the input area.
+     */
+    .jf-input-editor :global(.jce-host) {
       display: flex;
       flex: 1;
       min-height: 380px;
@@ -2913,7 +3066,7 @@ const sampleJson = `{
     }
 
     /* Gutter */
-    .jce-gutter {
+    .jf-input-editor :global(.jce-gutter) {
       flex: 0 0 auto;
       width: 48px;
       padding: 12px 8px 12px 0;
@@ -2927,35 +3080,35 @@ const sampleJson = `{
       user-select: none;
       overflow: hidden;
     }
-    [data-theme='dark'] .jce-gutter {
+    [data-theme='dark'] .jf-input-editor :global(.jce-gutter) {
       background: var(--bg-subtle-dark, #111827);
     }
-    .jce-line-num {
+    .jf-input-editor :global(.jce-line-num) {
       height: 21px;
       padding-right: 4px;
       color: var(--text-muted);
       opacity: 0.6;
     }
-    .jce-line-num.is-active {
+    .jf-input-editor :global(.jce-line-num.is-active) {
       color: var(--text);
       opacity: 1;
       font-weight: 600;
     }
 
     /* Editor area */
-    .jce-area {
+    .jf-input-editor :global(.jce-area) {
       position: relative;
       flex: 1;
       overflow: hidden;
     }
-    .jce-layer {
+    .jf-input-editor :global(.jce-layer) {
       position: absolute;
       inset: 0;
       overflow: hidden;
     }
 
     /* Highlight layer (the visible colored text) */
-    .jce-highlight {
+    .jf-input-editor :global(.jce-highlight) {
       position: absolute;
       top: 0;
       left: 0;
@@ -2973,7 +3126,7 @@ const sampleJson = `{
     }
 
     /* Current line highlight */
-    .jce-current-line {
+    .jf-input-editor :global(.jce-current-line) {
       position: absolute;
       top: 0;
       left: 0;
@@ -2983,35 +3136,35 @@ const sampleJson = `{
       pointer-events: none;
       z-index: 1;
     }
-    [data-theme='dark'] .jce-current-line {
+    [data-theme='dark'] .jf-input-editor :global(.jce-current-line) {
       background: rgba(96, 165, 250, 0.08);
     }
-    .jce-host:not(.is-focused) .jce-current-line {
+    .jf-input-editor :global(.jce-host:not(.is-focused) .jce-current-line) {
       opacity: 0;
     }
 
     /* Bracket match markers */
-    .jce-bracket-highlights {
+    .jf-input-editor :global(.jce-bracket-highlights) {
       position: absolute;
       top: 0;
       left: 0;
       pointer-events: none;
       z-index: 1;
     }
-    .jce-bracket-marker {
+    .jf-input-editor :global(.jce-bracket-marker) {
       position: absolute;
       background: rgba(234, 179, 8, 0.25);
       border: 1px solid rgba(234, 179, 8, 0.6);
       border-radius: 2px;
       pointer-events: none;
     }
-    [data-theme='dark'] .jce-bracket-marker {
+    [data-theme='dark'] .jf-input-editor :global(.jce-bracket-marker) {
       background: rgba(250, 204, 21, 0.2);
       border-color: rgba(250, 204, 21, 0.5);
     }
 
     /* Textarea (transparent overlay capturing input) */
-    .jce-textarea {
+    .jf-input-editor :global(.jce-textarea) {
       position: absolute;
       inset: 0;
       margin: 0;
@@ -3028,32 +3181,34 @@ const sampleJson = `{
       white-space: pre;
       overflow: auto;
       z-index: 3;
-      /* Selection should still be visible — use a tinted color */
+      scrollbar-width: thin;
     }
-    .jce-textarea::selection {
+    .jf-input-editor :global(.jce-textarea::selection) {
       background: rgba(37, 99, 235, 0.25);
       color: transparent;
     }
-    [data-theme='dark'] .jce-textarea::selection {
+    [data-theme='dark'] .jf-input-editor :global(.jce-textarea::selection) {
       background: rgba(96, 165, 250, 0.3);
-    }
-
-    /* The textarea must scroll, but the highlight layer stays in sync via JS-driven transform */
-    .jce-textarea {
-      scrollbar-width: thin;
     }
 
     /* Hide the placeholder when the editor has content; show otherwise.
        Since we swap the textarea visibility for a real editor, the placeholder
        is rendered via a pseudo on the host instead. */
-    .jce-host[data-empty='true'] .jce-textarea::placeholder {
+    .jf-input-editor :global(.jce-host[data-empty='true'] .jce-textarea::placeholder) {
       color: var(--text-muted);
     }
 
     /* Mobile adjustments */
     @media (max-width: 640px) {
-      .jce-gutter { width: 36px; font-size: 11px; }
-      .jce-highlight, .jce-textarea { padding: 10px; font-size: 13px; }
+      .jf-input-editor :global(.jce-gutter) {
+        width: 36px;
+        font-size: 11px;
+      }
+      .jf-input-editor :global(.jce-highlight),
+      .jf-input-editor :global(.jce-textarea) {
+        padding: 10px;
+        font-size: 13px;
+      }
     }
 
     .jf-textarea {
@@ -3092,6 +3247,16 @@ const sampleJson = `{
       color: var(--text);
       tab-size: 2;
       white-space: pre;
+    }
+
+    #jfOutput:empty::before {
+      content: 'Paste JSON in the input area and click Format to see the result here.';
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: 14px;
+      display: block;
+      padding: 24px;
+      text-align: center;
     }
 
     /* Syntax highlighting */
@@ -3574,13 +3739,21 @@ const sampleJson = `{
     /* Top-level mode toggle */
     .jf-mode-toggle {
       display: inline-flex;
-      background: var(--bg);
+      max-width: 100%;
+      flex-wrap: wrap;
+      background: var(--bg-subtle, #f1f5f9);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 4px;
+      gap: 2px;
       margin-bottom: 16px;
-      gap: 4px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
     }
+
+    [data-theme='dark'] .jf-mode-toggle {
+      background: var(--bg-subtle-dark, #1e293b);
+    }
+
     .jf-mode-tab {
       padding: 8px 18px;
       border: none;
@@ -3588,20 +3761,24 @@ const sampleJson = `{
       color: var(--text-muted);
       font-size: 14px;
       font-weight: 600;
-      border-radius: 6px;
+      border-radius: 7px;
       cursor: pointer;
-      transition: background 0.15s ease, color 0.15s ease;
+      transition: all 0.15s ease;
     }
+
+    .jf-mode-tab:hover:not(.is-active) {
+      background: rgba(0, 0, 0, 0.04);
+      color: var(--text);
+    }
+
+    [data-theme='dark'] .jf-mode-tab:hover:not(.is-active) {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
     .jf-mode-tab.is-active {
       background: var(--accent, #2563eb);
       color: white;
-    }
-    .jf-mode-tab:not(.is-active):hover {
-      background: var(--bg-subtle, #f1f5f9);
-      color: var(--text);
-    }
-    [data-theme='dark'] .jf-mode-tab:not(.is-active):hover {
-      background: var(--bg-subtle-dark, #1f2937);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
 
     /* Convert controls */
